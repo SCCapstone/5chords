@@ -11,4 +11,5 @@ The Chord button just replays the chord.
 The Check button gets the slider notes, plays them, and checks agaisnt the chord notes.
 Displays yes/no on one label and the correct slider values on the other.
 
-The fourth slider doesn't do anything, the others have values from 0-18 (3rd octive C - 4th octive F#)
+The fourth slider doesn't do anything, the others have values from 0-18 (3rd octive C - 4th octive F#).
+If you get an AudioTrack error I don't know how to fix it. It might go away if we replace SoundPool with the new SoundPool.Builder library.
