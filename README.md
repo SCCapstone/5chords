@@ -10,6 +10,6 @@ The Random button will pick a random number from 0-11, get and play the correspo
 The Chord button just replays the chord.
 The Check button gets the slider notes, plays them, and checks agaisnt the chord notes.
 Displays yes/no on one label and the correct slider values on the other.
-
 The fourth slider doesn't do anything, the others have values from 0-18 (3rd octive C - 4th octive F#).
-If you get an AudioTrack error I don't know how to fix it. It might go away if we replace SoundPool with the new SoundPool.Builder library.
+
+If you get an AudioTrack error I don't know how to fix it. It might go away if we replace SoundPool with the new SoundPool.Builder library. If you get AUDIO_OUTPUT_FLAG_FAST error the sound will still play. The internet says it has something to do with the sample rate.
