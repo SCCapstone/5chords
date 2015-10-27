@@ -1,5 +1,6 @@
 package com.example.drea.helloworld;
 
+import android.content.Intent;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.support.v7.app.AppCompatActivity;
@@ -144,6 +145,10 @@ public class MainActivity extends AppCompatActivity {
         mySound.play(chordRoot,1,1,1,0,1);
         mySound.play(chordThird,1,1,1,0,1);
         mySound.play(chordFifth,1,1,1,0,1);
+    }
+    public void ToHelpPage( View v){
+        Intent intent = new Intent(this, HelpPage.class );
+        startActivity(intent);
     }
 
 }

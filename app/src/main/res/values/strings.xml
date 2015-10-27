@@ -1,6 +1,16 @@
 <resources>
-    <string name="app_name">HelloWorld</string>
+    <string name="app_name">5Chords</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string-array name="tabs">
+        <item>Home</item>
+        <item>Main Tab</item>
+        <item>Help</item>
+        <item>Stats</item>
+    </string-array>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="title_activity_help_page">HelpPage</string>
+    <string name="helpPage">Help Page</string>
 </resources>
