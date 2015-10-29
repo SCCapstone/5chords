@@ -8,7 +8,7 @@
          android:id="@+id/hello"
          android:background="@android:color/holo_red_dark">
 
-<com.example.drea.helloworld.VerticalSeekBar
+<com.five_chords.chord_builder.VerticalSeekBar
         android:id="@+id/root"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
@@ -20,7 +20,7 @@
         android:layout_toStartOf="@+id/check"
         android:layout_above="@+id/random" />
 
-    <com.example.drea.helloworld.VerticalSeekBar
+    <com.five_chords.chord_builder.VerticalSeekBar
         android:id="@+id/third"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
@@ -32,7 +32,7 @@
         android:layout_alignRight="@+id/random"
         android:layout_alignEnd="@+id/random" />
 
-    <com.example.drea.helloworld.VerticalSeekBar
+    <com.five_chords.chord_builder.VerticalSeekBar
         android:id="@+id/fifth"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
@@ -44,7 +44,7 @@
         android:layout_alignStart="@+id/chord"
         android:layout_alignBottom="@+id/third" />
 
-    <com.example.drea.helloworld.VerticalSeekBar
+    <com.five_chords.chord_builder.VerticalSeekBar
         android:id="@+id/option"
         android:layout_width="wrap_content"
         android:layout_height="200dp"

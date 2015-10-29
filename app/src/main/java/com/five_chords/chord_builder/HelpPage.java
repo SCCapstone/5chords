@@ -1,4 +1,4 @@
-package com.example.drea.helloworld;
+package com.five_chords.chord_builder;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;

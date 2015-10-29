@@ -1,4 +1,4 @@
-package com.example.drea.helloworld;
+package com.five_chords.chord_builder;
 
 import android.content.Context;
 import android.graphics.Canvas;
