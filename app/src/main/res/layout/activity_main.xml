@@ -8,17 +8,19 @@
          android:id="@+id/hello"
          android:background="@android:color/holo_red_dark">
 
-<com.five_chords.chord_builder.VerticalSeekBar
+    <com.five_chords.chord_builder.VerticalSeekBar
         android:id="@+id/root"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
         android:indeterminate="false"
         android:max="18"
-        android:progress="1"
-        android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/check"
-        android:layout_toStartOf="@+id/check"
-        android:layout_above="@+id/random" />
+        android:progress="0"
+        android:layout_above="@+id/getChord"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="39dp"
+        android:layout_marginStart="39dp"
+        android:layout_below="@+id/rootText" />
 
     <com.five_chords.chord_builder.VerticalSeekBar
         android:id="@+id/third"
@@ -26,11 +28,11 @@
         android:layout_height="200dp"
         android:indeterminate="false"
         android:max="18"
-        android:progress="1"
-        android:layout_alignParentTop="true"
-        android:layout_alignBottom="@+id/root"
-        android:layout_alignRight="@+id/random"
-        android:layout_alignEnd="@+id/random" />
+        android:progress="0"
+        android:layout_above="@+id/getChord"
+        android:layout_toRightOf="@+id/getChord"
+        android:layout_toEndOf="@+id/getChord"
+        android:layout_alignTop="@+id/root" />
 
     <com.five_chords.chord_builder.VerticalSeekBar
         android:id="@+id/fifth"
@@ -38,85 +40,143 @@
         android:layout_height="200dp"
         android:indeterminate="false"
         android:max="18"
-        android:progress="1"
-        android:layout_alignParentTop="true"
-        android:layout_alignLeft="@+id/chord"
-        android:layout_alignStart="@+id/chord"
-        android:layout_alignBottom="@+id/third" />
+        android:progress="0"
+        android:layout_above="@+id/getChord"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/thirdText" />
 
     <com.five_chords.chord_builder.VerticalSeekBar
         android:id="@+id/option"
         android:layout_width="wrap_content"
         android:layout_height="200dp"
         android:indeterminate="false"
-        android:max="11"
-        android:progress="1"
-        android:layout_alignBottom="@+id/third"
-        android:layout_toRightOf="@+id/chord"
-        android:layout_toEndOf="@+id/chord"
-        android:layout_alignTop="@+id/third" />
+        android:max="18"
+        android:progress="0"
+        android:layout_above="@+id/chord"
+        android:layout_alignRight="@+id/spinner2"
+        android:layout_alignEnd="@+id/spinner2"
+        android:layout_marginRight="69dp"
+        android:layout_marginEnd="69dp"
+        android:layout_below="@+id/optionText" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Random"
-        android:id="@+id/random"
-        android:layout_marginLeft="54dp"
-        android:layout_marginStart="54dp"
-        android:layout_marginBottom="69dp"
-        android:layout_alignParentBottom="true"
+        android:id="@+id/getChord"
+        android:layout_above="@+id/checkChord"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:onClick="Rando" />
+        android:onClick="getChord" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="000"
         android:id="@+id/chord"
         android:textColor="@android:color/black"
         android:textSize="40dp"
-        android:layout_alignTop="@+id/random"
-        android:layout_alignLeft="@+id/answer"
-        android:layout_alignStart="@+id/answer" />
+        android:layout_below="@+id/fifth"
+        android:layout_toRightOf="@+id/third"
+        android:layout_toEndOf="@+id/third" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Check"
-        android:id="@+id/check"
+        android:id="@+id/checkChord"
         android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/random"
-        android:layout_alignStart="@+id/random"
-        android:onClick="check" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="checkChord" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="No"
         android:id="@+id/answer"
         android:textSize="40dp"
         android:textColor="@android:color/black"
         android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/check"
-        android:layout_toEndOf="@+id/check"
-        android:layout_marginLeft="50dp"
-        android:layout_marginStart="50dp" />
+        android:layout_alignLeft="@+id/chord"
+        android:layout_alignStart="@+id/chord" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="chord"
-        android:id="@+id/chordSlider"
-        android:onClick="chordAgain"
-        android:layout_alignBottom="@+id/check"
+        android:id="@+id/playChord"
+        android:onClick="playChord"
+        android:layout_below="@+id/option"
+        android:layout_alignRight="@+id/button2"
+        android:layout_alignEnd="@+id/button2" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/fifth"
+        android:layout_toStartOf="@+id/fifth"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinner2"
+        android:layout_alignTop="@+id/spinner"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/answer"
-        android:layout_below="@+id/chord"
-        android:layout_toRightOf="@+id/answer" />
+        android:layout_toRightOf="@+id/spinner"
+        android:layout_toEndOf="@+id/spinner" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/rootText"
+        android:layout_below="@+id/spinner"
+        android:layout_alignLeft="@+id/root"
+        android:layout_alignStart="@+id/root"
+        android:layout_toLeftOf="@+id/third"
+        android:layout_toStartOf="@+id/third" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/thirdText"
+        android:layout_alignTop="@+id/rootText"
+        android:layout_alignLeft="@+id/third"
+        android:layout_alignStart="@+id/third"
+        android:layout_toLeftOf="@+id/fifth"
+        android:layout_toStartOf="@+id/fifth" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/fifthText"
+        android:layout_alignTop="@+id/thirdText"
+        android:layout_toRightOf="@+id/spinner"
+        android:layout_toStartOf="@+id/optionText"
+        android:layout_toLeftOf="@+id/optionText" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:id="@+id/optionText"
+        android:layout_alignTop="@+id/fifthText"
+        android:layout_alignLeft="@+id/option"
+        android:layout_alignStart="@+id/option"
+        android:layout_alignRight="@+id/spinner2"
+        android:layout_alignEnd="@+id/spinner2" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -124,9 +184,8 @@
         android:layout_height="wrap_content"
         android:text="Help"
         android:id="@+id/button2"
-        android:layout_alignBottom="@+id/chord"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="ToHelpPage" />/>
-
+        android:onClick="toHelpPage"
+        android:layout_below="@+id/playChord"
+        android:layout_alignRight="@+id/optionText"
+        android:layout_alignEnd="@+id/optionText" />/>
 </RelativeLayout>
