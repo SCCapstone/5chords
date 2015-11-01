@@ -15,6 +15,9 @@ public class MainActivity extends AppCompatActivity {
     setUpGUI gui;
     //Score s;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +32,11 @@ public class MainActivity extends AppCompatActivity {
         gui.seekbarListeners(this);
         //gui.buttonListeners(this);
         //s.loadScores(this);
+
+        getFragmentManager()
+                .beginTransaction()
+                .add(R.id.fragmentParentViewGroup, new fragmentOne())
+                .commit();
     }
 
 

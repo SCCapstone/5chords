@@ -188,4 +188,12 @@
         android:layout_below="@+id/playChord"
         android:layout_alignRight="@+id/optionText"
         android:layout_alignEnd="@+id/optionText" />/>
+
+    <LinearLayout
+        android:id="@+id/fragmentParentViewGroup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    </LinearLayout>
+
 </RelativeLayout>
