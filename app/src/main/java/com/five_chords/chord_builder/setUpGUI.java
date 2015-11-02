@@ -10,74 +10,17 @@ public class setUpGUI extends MainActivity {
 
     String[] chordNames = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"};
 
-    public void seekbarListeners(Activity activity) {
-        SeekBar rootBar = (SeekBar) activity.findViewById(R.id.root);
-        final TextView rootBarValue = (TextView) activity.findViewById(R.id.rootText);
-
-        rootBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+    public void seekBarListener(SeekBar bar, final TextView text) {
+        bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                rootBarValue.setText(chordNames[progress % 12]);
+                text.setText(chordNames[progress % 12]);
             }
-
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-
-
-        SeekBar thirdBar = (SeekBar) activity.findViewById(R.id.third);
-        final TextView thirdBarValue = (TextView) activity.findViewById(R.id.thirdText);
-
-        thirdBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                thirdBarValue.setText(chordNames[progress % 12]);
-            }
-
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-
-
-        SeekBar fifthBar = (SeekBar) activity.findViewById(R.id.fifth);
-        final TextView fifthBarValue = (TextView) activity.findViewById(R.id.fifthText);
-
-        fifthBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                fifthBarValue.setText(chordNames[progress % 12]);
-            }
-
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
-        });
-
-
-        SeekBar optionBar = (SeekBar) activity.findViewById(R.id.option);
-        final TextView optionBarValue = (TextView) activity.findViewById(R.id.optionText);
-
-        optionBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                optionBarValue.setText(chordNames[progress % 12]);
-            }
-
-            public void onStartTrackingTouch(SeekBar seekBar) {
-            }
-
-            public void onStopTrackingTouch(SeekBar seekBar) {
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) {}
+            public void onStopTrackingTouch(SeekBar seekBar) {}
         });
     }
+
 
     public void loadSpinners(Activity activity) {
         Spinner dropdown = (Spinner) activity.findViewById(R.id.spinner);

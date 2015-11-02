@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
     /****************************
@@ -28,15 +30,22 @@ public class MainActivity extends AppCompatActivity {
         //s = new Score();
 
         cH.initialize(this);
+
         gui.loadSpinners(this);
-        gui.seekbarListeners(this);
+        gui.seekBarListener((SeekBar) findViewById(R.id.root), (TextView) findViewById(R.id.rootText));
+        gui.seekBarListener((SeekBar) findViewById(R.id.third), (TextView) findViewById(R.id.thirdText));
+        gui.seekBarListener((SeekBar) findViewById(R.id.fifth), (TextView) findViewById(R.id.fifthText));
+        gui.seekBarListener((SeekBar) findViewById(R.id.option), (TextView) findViewById(R.id.optionText));
+
         //gui.buttonListeners(this);
         //s.loadScores(this);
 
+        /*
         getFragmentManager()
                 .beginTransaction()
                 .add(R.id.fragmentParentViewGroup, new fragmentOne())
                 .commit();
+       */
     }
 
 

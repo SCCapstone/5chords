@@ -4,7 +4,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
     defaultConfig {
-        applicationId 'com.5chords.chord_builder'
+        applicationId 'com.five_chords.chord_builder'
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
