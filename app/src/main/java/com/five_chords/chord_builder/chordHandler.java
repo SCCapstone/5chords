@@ -15,6 +15,7 @@ public class chordHandler extends MainActivity {
     String[] chordNames = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"};
     SoundPool mySound;
     int LOOP =3;
+
     //Since we have a WAV file with less than 1mb all we have to change the loop parameter to -1,
     // variable LOOP is where i set the parameter to reloop the clip
     // major chords
@@ -60,9 +61,9 @@ public class chordHandler extends MainActivity {
         chordFifth = notes.get(chord[2]);
 
         //play chord
-        mySound.play(chordRoot,1,1,1,LOOP,1);
-        mySound.play(chordThird,1,1,1,LOOP,1);
-        mySound.play(chordFifth,1,1,1,LOOP,1);
+        mySound.play(chordRoot,1,1,1,LOOP,0.99f);
+        mySound.play(chordThird,1,1,1,LOOP,0.99f);
+        mySound.play(chordFifth,1,1,1,LOOP,0.99f);
 
     }
 
@@ -83,9 +84,9 @@ public class chordHandler extends MainActivity {
 
         // play the notes
         // play(SoundID, leftVolume, rightVolume, priority, loop, rate(speed))
-        mySound.play(thisRoot,1,1,1,LOOP,1);
-        mySound.play(thisThird,1,1,1,LOOP,1);
-        mySound.play(thisFifth,1,1,1,LOOP,1);
+        mySound.play(thisRoot,1,1,1,LOOP,0.99f);
+        mySound.play(thisThird,1,1,1,LOOP,0.99f);
+        mySound.play(thisFifth,1,1,1,LOOP,0.99f);
 
         // get the labels
         // show correct answer on one label
@@ -111,9 +112,9 @@ public class chordHandler extends MainActivity {
         chordLabel.setText(chordNames[chord[0]]);
 
         // play the chord again
-        mySound.play(chordRoot,1,1,1,LOOP,1);
-        mySound.play(chordThird,1,1,1,LOOP,1);
-        mySound.play(chordFifth,1,1,1,LOOP,1);
+        mySound.play(chordRoot,1,1,1,LOOP,0.99f);
+        mySound.play(chordThird,1,1,1,LOOP,0.99f);
+        mySound.play(chordFifth,1,1,1,LOOP,0.99f);
     }
 
 }
