@@ -14,7 +14,9 @@ public class chordHandler extends MainActivity {
 
     String[] chordNames = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"};
     SoundPool mySound;
-
+    int LOOP =3;
+    //Since we have a WAV file with less than 1mb all we have to change the loop parameter to -1,
+    // variable LOOP is where i set the parameter to reloop the clip
     // major chords
     int[][] chords = {{0,4,7}, {1,5,8}, {2,6,9},// C, C#, D
             {3,7,10}, {4,8,11}, {5,9,12},       // Eb, E, F
@@ -26,7 +28,7 @@ public class chordHandler extends MainActivity {
 
     public void initialize(Activity activity) {
 
-        mySound = new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
+        mySound =  new SoundPool(3, AudioManager.STREAM_MUSIC, 0);
         notes = new ArrayList<>();
 
         // Loop through raw folder for notes
@@ -58,9 +60,10 @@ public class chordHandler extends MainActivity {
         chordFifth = notes.get(chord[2]);
 
         //play chord
-        mySound.play(chordRoot,1,1,1,0,1);
-        mySound.play(chordThird,1,1,1,0,1);
-        mySound.play(chordFifth,1,1,1,0,1);
+        mySound.play(chordRoot,1,1,1,LOOP,1);
+        mySound.play(chordThird,1,1,1,LOOP,1);
+        mySound.play(chordFifth,1,1,1,LOOP,1);
+
     }
 
     /****************************************************************
@@ -80,9 +83,9 @@ public class chordHandler extends MainActivity {
 
         // play the notes
         // play(SoundID, leftVolume, rightVolume, priority, loop, rate(speed))
-        mySound.play(thisRoot,1,1,1,0,1);
-        mySound.play(thisThird,1,1,1,0,1);
-        mySound.play(thisFifth,1,1,1,0,1);
+        mySound.play(thisRoot,1,1,1,LOOP,1);
+        mySound.play(thisThird,1,1,1,LOOP,1);
+        mySound.play(thisFifth,1,1,1,LOOP,1);
 
         // get the labels
         // show correct answer on one label
@@ -108,9 +111,9 @@ public class chordHandler extends MainActivity {
         chordLabel.setText(chordNames[chord[0]]);
 
         // play the chord again
-        mySound.play(chordRoot,1,1,1,0,1);
-        mySound.play(chordThird,1,1,1,0,1);
-        mySound.play(chordFifth,1,1,1,0,1);
+        mySound.play(chordRoot,1,1,1,LOOP,1);
+        mySound.play(chordThird,1,1,1,LOOP,1);
+        mySound.play(chordFifth,1,1,1,LOOP,1);
     }
 
 }
