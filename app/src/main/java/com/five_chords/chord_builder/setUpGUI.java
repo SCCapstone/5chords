@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 
 public class setUpGUI extends MainActivity {
 
-    String[] chordNames = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"};
+    String[] chordNames = {"C","C minor","C#","C# minor","D","D minor","Eb","Eb minor","E","E minor","F","F minor","F#","F# minor","G","G minor","Ab","Ab minor","A","A minor","Bb","Bb minor","B","B minor"};
 
     public void seekBarListener(SeekBar bar, final TextView text) {
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -29,8 +29,8 @@ public class setUpGUI extends MainActivity {
         dropdown.setAdapter(adapter);
 
         dropdown = (Spinner) activity.findViewById(R.id.spinner2);
-        items = new String[]{"Random", "C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"};
-        adapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_dropdown_item, items);
+        String [] items2 = new String[]{"Random","C","C_minor","C#","C#_minor","D","D_minor","Eb","Eb_minor","E","E_minor", "F","F_minor", "F#","F#_minor", "G","G_minor", "Ab","Ab_minor", "A","A_minor", "Bb","Bb_minor", "B","B_minor"};
+        adapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_dropdown_item, items2);
         dropdown.setAdapter(adapter);
     }
 

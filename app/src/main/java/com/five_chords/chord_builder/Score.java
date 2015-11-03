@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Score extends MainActivity {
 
-    String[] chordNames = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"};
+    String[] chordNames = {"C","C_minor", "C#","C#_minor", "D","D_minor", "Eb","Eb_minor", "E","E_minor", "F","F_minor", "F#","F#_minor", "G","G_minor", "Ab","Ab_minor", "A","A_minor", "Bb","Bb_minor", "B","B_minor"};
 
     private SharedPreferences chordScores;
     public static final String CHORD_SCORES = "ScoreFile";
