@@ -15,9 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
     chordHandler cH;
     setUpGUI gui;
-    //Score s;
-
-
+    Score s;
 
 
     @Override
@@ -27,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         cH = new chordHandler();
         gui = new setUpGUI();
-        //s = new Score();
+        s = new Score();
 
         cH.initialize(this);
 
@@ -38,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         gui.seekBarListener((SeekBar) findViewById(R.id.option), (TextView) findViewById(R.id.optionText));
 
         //gui.buttonListeners(this);
-        //s.loadScores(this);
+        s.loadScores(this);
 
         /*
         getFragmentManager()
@@ -50,9 +48,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     // temporary solution to call methods in different classes
-    public void getChord(View v) { cH.getChord(); }
-    public void checkChord(View v) { cH.checkChord(this); }
-    public void playChord(View v) { cH.playChord(this); }
+    public void getChord(View v)   { cH.getChord(this); }
+    public void checkChord(View v) { cH.checkChord(this, s); }
+    public void playChord(View v)  { cH.playChord(this, cH.setChord, 0); }
 
 
     /****************************************************************

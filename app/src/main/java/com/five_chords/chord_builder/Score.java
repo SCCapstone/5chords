@@ -1,32 +1,61 @@
 package com.five_chords.chord_builder;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class Score extends MainActivity {
 
-    String[] chordNames = {"C","C_minor", "C#","C#_minor", "D","D_minor", "Eb","Eb_minor", "E","E_minor", "F","F_minor", "F#","F#_minor", "G","G_minor", "Ab","Ab_minor", "A","A_minor", "Bb","Bb_minor", "B","B_minor"};
+    static String[] chordNames = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B",
+                                  "C_minor", "C#_minor","D_minor","Eb_minor","E_minor","F_minor","F#_minor","G_minor","Ab_minor","A_minor","Bb_minor","B_minor"};
 
-    private SharedPreferences chordScores;
+    private static SharedPreferences chordScores;
     public static final String CHORD_SCORES = "ScoreFile";
 
-    int[] correctChords = new int[chordNames.length];
-    int[] totalChords = new int[chordNames.length];
+    static int[] correctChords = new int[chordNames.length];
+    static int[] totalChords = new int[chordNames.length];
+
+    RadioGroup chordClass;
+    ArrayList<TextView> textViews = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_page);
+
+        chordClass = (RadioGroup) findViewById(R.id.chordClass);
+
+        // get all every TextView for displaying score
+        RelativeLayout scorePage = (RelativeLayout) findViewById( R.id.scorePage );
+        for( int i = 0; i < scorePage.getChildCount(); i++ )
+            if( scorePage.getChildAt(i) instanceof TextView )
+                textViews.add((TextView) scorePage.getChildAt(i));
+
+        displayScores(0);
+
+        // listen for change of chord class
+        chordClass.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.major) {
+                    displayScores(0);
+                } else if (checkedId == R.id.minor) {
+                    displayScores(1);
+                }
+
+            }
+        });
+
     }
 
-    public void loadScores() {
-        chordScores = getApplication().getSharedPreferences(CHORD_SCORES, 0);
+    public void loadScores(Activity activity) {
+        chordScores = activity.getApplication().getSharedPreferences(CHORD_SCORES, 0);
         for (int i = 0; i < chordNames.length; i++) {
             correctChords[i] = chordScores.getInt("correct_" + chordNames[i], 0);
             totalChords[i] = chordScores.getInt("total_" + chordNames[i], 0);
@@ -35,28 +64,18 @@ public class Score extends MainActivity {
 
     public void setScore(int chordIndex, boolean Correct) {
         SharedPreferences.Editor scoreEditor = chordScores.edit();
-        if (Correct) scoreEditor.putInt("correct_" + chordNames[chordIndex], correctChords[chordIndex]++);
-        scoreEditor.putInt("total_" + chordNames[chordIndex], totalChords[chordIndex]++);
+
+        if (Correct) scoreEditor.putInt("correct_" + chordNames[chordIndex], (correctChords[chordIndex]++)+1);
+        scoreEditor.putInt("total_" + chordNames[chordIndex], (totalChords[chordIndex]++)+1);
+
         scoreEditor.apply();
     }
 
-    public void displayScores(View view) {
-        TextView scoreLabel;
-        ArrayList<Integer> texts = new ArrayList<>();
+    public void displayScores(int chords) {
+        int chord = 12*chords;
 
-        for (Field f : R.id.class.getFields()) {
-            try {
-                if (f.getName().contains("chord_score")) {
-                    texts.add(f.getInt(null));
-                }
-            } catch (IllegalAccessException e) {
-
-            }
-        }
-
-        for (int i = 0; i < chordNames.length; i++) {
-            scoreLabel = (TextView) findViewById(texts.get(i));
-            scoreLabel.setText(chordNames[i] + " : " + correctChords[i] + "/" + totalChords[i]);
+        for (int i = chord; i < 12+chord; i++) {
+            textViews.get(i%12).setText(chordNames[i] + " : " + correctChords[i] + "/" + totalChords[i]);
         }
     }
 
