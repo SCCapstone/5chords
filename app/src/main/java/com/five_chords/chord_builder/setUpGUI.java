@@ -1,3 +1,12 @@
+/*************************************************************************************************
+ * setUpGUI.java
+ * This class will set up user interface(GUI) for the main screen, which consist of drop-down menu
+ * of "instrument" and dropdown-menu of lists of chord. Clicking on each chord and press check will
+ * play the according chord. seekBarListener will allow user to adjust the chord manually.
+ * @version 1.0
+ * @date 06 November 2015
+ * @author: Drea,Steven,Zach,Kevin,Bo
+ */
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
@@ -10,6 +19,12 @@ public class setUpGUI extends MainActivity {
 
     String[] noteNames = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"};
 
+    /**********************************************************************************************
+     * seekBarListener function
+     * This function will allow user to adjust the chord manually using seekBar
+     * @param bar
+     * @param text
+     */
     public void seekBarListener(SeekBar bar, final TextView text) {
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -21,7 +36,12 @@ public class setUpGUI extends MainActivity {
         });
     }
 
-
+    /***********************************************************************************************
+     * loadSpinners function
+     * This functions consist of two dropdown menus, one for instruments selection and one for chord
+     * selection.
+     * @param activity
+     */
     public void loadSpinners(Activity activity) {
         Spinner dropdown = (Spinner) activity.findViewById(R.id.spinner);
         String[] items = {"Piano", "Violin", "Trombone", "Frequency Tone"};
