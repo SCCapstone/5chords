@@ -1,7 +1,7 @@
 
 /*************************************************************************************************
  * Score.java
- * This class will keep the user performance on how are they doing so far.
+ * This class will display how many tries and how many user got it correct by "_/_" format.
  * @version 1.0
  * @date 06 November 2015
  * @author: Drea,Steven,Zach,Kevin,Bo
