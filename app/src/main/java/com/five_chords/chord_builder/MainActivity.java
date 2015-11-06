@@ -1,3 +1,11 @@
+/*************************************************************************************************
+ * MainActivity.java
+ * This class is where most of the activity happened. This is where all the other class and their
+ * functions will be called from.
+ * @version 1.0
+ * @date 06 November 2015
+ * @author: Drea,Steven,Zach,Kevin,Bo
+ */
 package com.five_chords.chord_builder;
 
 import android.content.Intent;
@@ -51,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     public void getChord(View v)   { cH.getChord(this); }
     public void checkChord(View v) { cH.checkChord(this, s); }
     public void playChord(View v)  { cH.playChord(this, cH.setChord, 0); }
+
 
 
     /****************************************************************

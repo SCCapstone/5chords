@@ -1,3 +1,9 @@
+/*************************************************************************************************
+ * fragment.java
+ * @version 1.0
+ * @date 06 November 2015
+ * @author: Drea,Steven,Zach,Kevin,Bo
+ */
 package com.five_chords.chord_builder;
 
 import android.app.Fragment;

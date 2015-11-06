@@ -1,3 +1,12 @@
+/***************************************************************************************************
+ * chordHandler.java
+ * This class will loop through raw folder for each music note. User can pick a chord by either
+ * random or their selection check the chord to see if it matches.Play the user chosen chord or at
+ * random. Give back the feedback on screen "Correct" or "Wrong" accordingly.
+ * @version 1.0
+ * @date 06 November 2015
+ * @author: Drea,Steven,Zach,Kevin,Bo
+ */
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
@@ -120,7 +129,7 @@ public class chordHandler extends MainActivity {
         chordLabel.setText(chordNames[chord[0]]);
 
         // play the chord again
-        for (int i : chord) mySound.play(notes.get(i),1,1,1,Loop,0.99f);
+        for (int i : chord) mySound.play(notes.get(i),1,1,1,Loop,.99f);
     }
 
 }

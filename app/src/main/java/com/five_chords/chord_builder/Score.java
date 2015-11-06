@@ -1,3 +1,11 @@
+
+/*************************************************************************************************
+ * Score.java
+ * This class will keep the user performance on how are they doing so far.
+ * @version 1.0
+ * @date 06 November 2015
+ * @author: Drea,Steven,Zach,Kevin,Bo
+ */
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
@@ -54,6 +62,10 @@ public class Score extends MainActivity {
 
     }
 
+    /***********************************************************************************************
+     * loadScores function
+     * @param activity
+     **********************************************************************************************/
     public void loadScores(Activity activity) {
         chordScores = activity.getApplication().getSharedPreferences(CHORD_SCORES, 0);
         for (int i = 0; i < chordNames.length; i++) {
@@ -62,6 +74,11 @@ public class Score extends MainActivity {
         }
     }
 
+    /***********************************************************************************************
+     * setScore function
+     * @param chordIndex
+     * @param Correct
+     **********************************************************************************************/
     public void setScore(int chordIndex, boolean Correct) {
         SharedPreferences.Editor scoreEditor = chordScores.edit();
 
@@ -70,7 +87,10 @@ public class Score extends MainActivity {
 
         scoreEditor.apply();
     }
-
+    /***********************************************************************************************
+     * displayScores function
+     * @param chords
+     **********************************************************************************************/
     public void displayScores(int chords) {
         int chord = 12*chords;
 
@@ -78,7 +98,10 @@ public class Score extends MainActivity {
             textViews.get(i%12).setText(chordNames[i] + " : " + correctChords[i] + "/" + totalChords[i]);
         }
     }
-
+    /***********************************************************************************************
+     * BacktoMain function
+     * @param view
+     **********************************************************************************************/
     public void BackToMain(View view) {
         Intent intent = new Intent(this, MainActivity.class );
         startActivity(intent);
