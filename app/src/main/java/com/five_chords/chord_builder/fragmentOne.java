@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * used for linking the activity view
+ * used for linking the activity view and fragment
  */
 public class fragmentOne extends Fragment {
     @Override

@@ -89,7 +89,7 @@ public class chordHandler extends MainActivity {
     }
 
     /****************************************************************
-     * check chord built against random chord
+     * checks chord built against random chord
      **/
     public void checkChord(Activity activity, Score s) {
         if (setChord == null) return;
