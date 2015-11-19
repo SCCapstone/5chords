@@ -33,7 +33,8 @@ public class Score extends MainActivity {
     ArrayList<TextView> textViews = new ArrayList<>();
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_page);
 

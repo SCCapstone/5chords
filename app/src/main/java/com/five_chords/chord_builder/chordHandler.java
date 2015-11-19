@@ -50,7 +50,8 @@ public class chordHandler extends MainActivity {
             {6,9,13}, {7,10,14}, {8,11,15},      // F#, G, Ab
             {9,12,16}, {10,13,17}, {11,14,18}};  // A, Bb, B
 
-    public void initialize(Activity activity) {
+    public void initialize(Activity activity)
+    {
 
         mySound =  new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
         notes = new ArrayList<>();
@@ -76,8 +77,9 @@ public class chordHandler extends MainActivity {
 
     /****************************************************************
      * Picks a Chord. Either random, or the selected chord.
-     */
-    public void getChord(Activity activity) {
+     **/
+    public void getChord(Activity activity)
+    {
         int pos = ((Spinner) activity.findViewById(R.id.spinner2)).getSelectedItemPosition();
 
         if (pos > 0) chordIndex = pos - 1;
@@ -91,7 +93,8 @@ public class chordHandler extends MainActivity {
     /****************************************************************
      * checks chord built against random chord
      **/
-    public void checkChord(Activity activity, Score s) {
+    public void checkChord(Activity activity, Score s)
+    {
         if (setChord == null) return;
 
         // this will come in handy when we start using the fourth slider
@@ -121,7 +124,8 @@ public class chordHandler extends MainActivity {
     /****************************************************************
      * Plays a chord
      **/
-    public void playChord(Activity activity, int[] chord, int Loop) {
+    public void playChord(Activity activity, int[] chord, int Loop)
+    {
         if (chord == null) return;
 
         // show correct chord on a label

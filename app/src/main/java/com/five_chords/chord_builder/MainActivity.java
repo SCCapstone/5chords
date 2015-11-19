@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     setUpGUI gui;
     Score s;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,8 +64,18 @@ public class MainActivity extends AppCompatActivity {
     /****************************************************************
      * Go to help activity
      **/
-    public void toHelpPage( View v){
+    public void toHelpPage( View v)
+    {
         Intent intent = new Intent(this, HelpPage.class );
+        startActivity(intent);
+    }
+
+    /****************************************************************
+     * Opens the Start Page
+     **/
+    public void openStartPage()
+    {
+        Intent intent = new Intent(this, StartPage.class );
         startActivity(intent);
     }
 

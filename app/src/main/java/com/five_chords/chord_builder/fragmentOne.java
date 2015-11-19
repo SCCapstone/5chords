@@ -18,7 +18,8 @@ import android.view.ViewGroup;
 public class fragmentOne extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parentViewGroup,
-                             Bundle savedInstanceState) {
+                             Bundle savedInstanceState)
+    {
 
         return inflater.inflate(R.layout.fragment_1, parentViewGroup, false);
     }

@@ -12,7 +12,8 @@ public class VerticalSeekBar extends SeekBar {
         super(context);
     }
 
-    public VerticalSeekBar(Context context, AttributeSet attrs, int defStyle) {
+    public VerticalSeekBar(Context context, AttributeSet attrs, int defStyle)
+    {
         super(context, attrs, defStyle);
     }
 
@@ -20,17 +21,20 @@ public class VerticalSeekBar extends SeekBar {
         super(context, attrs);
     }
 
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    protected void onSizeChanged(int w, int h, int oldw, int oldh)
+    {
         super.onSizeChanged(h, w, oldh, oldw);
     }
 
     @Override
-    protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+    {
         super.onMeasure(heightMeasureSpec, widthMeasureSpec);
         setMeasuredDimension(getMeasuredHeight(), getMeasuredWidth());
     }
 
-    protected void onDraw(Canvas c) {
+    protected void onDraw(Canvas c)
+    {
         c.rotate(-90);
         c.translate(-getHeight(), 0);
 
@@ -38,8 +42,10 @@ public class VerticalSeekBar extends SeekBar {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (!isEnabled()) {
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        if (!isEnabled())
+        {
             return false;
         }
 

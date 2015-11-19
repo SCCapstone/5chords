@@ -24,11 +24,14 @@ public class setUpGUI extends MainActivity {
      * This function will allow user to adjust the chord manually using seekBar
      * @param bar
      * @param text
-     */
-    public void seekBarListener(SeekBar bar, final TextView text) {
-        bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+     **/
+    public void seekBarListener(SeekBar bar, final TextView text)
+    {
+        bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+            {
                 text.setText(noteNames[progress % 12]);
             }
             public void onStartTrackingTouch(SeekBar seekBar) {}
@@ -41,8 +44,9 @@ public class setUpGUI extends MainActivity {
      * This functions consist of two dropdown menus, one for instruments selection and one for chord
      * selection.
      * @param activity
-     */
-    public void loadSpinners(Activity activity) {
+     **/
+    public void loadSpinners(Activity activity)
+    {
         Spinner dropdown = (Spinner) activity.findViewById(R.id.spinner);
         String[] items = {"Piano", "Violin", "Trombone", "Frequency Tone"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_dropdown_item, items);
@@ -59,7 +63,7 @@ public class setUpGUI extends MainActivity {
      * Buttons can't call from other classes.
      * Solution 1: find a way to add listener
      * Solution 2: shove chord stuff in a new activity with fragments
-     **
+     **********************
      public void buttonListeners(Activity activity) {
      Button getChord = (Button) activity.findViewById(R.id.getChord);
      Button checkChord = (Button) activity.findViewById(R.id.checkChord);

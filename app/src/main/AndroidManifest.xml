@@ -24,6 +24,11 @@
             android:name=".Score"
             android:label="@string/title_activity_score_page" >
         </activity>
+        <activity
+            android:name=".StartPage"
+            android:label="@string/title_activity_start_page"
+            android:theme="@style/AppTheme.NoActionBar" >
+        </activity>
     </application>
 
 </manifest>
