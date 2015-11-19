@@ -52,7 +52,8 @@ public class Score extends MainActivity {
         chordClass.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.major) {
+                if (checkedId == R.id.major)
+                {
                     displayScores(0);
                 } else if (checkedId == R.id.minor) {
                     displayScores(1);
@@ -69,7 +70,8 @@ public class Score extends MainActivity {
      **********************************************************************************************/
     public void loadScores(Activity activity) {
         chordScores = activity.getApplication().getSharedPreferences(CHORD_SCORES, 0);
-        for (int i = 0; i < chordNames.length; i++) {
+        for (int i = 0; i < chordNames.length; i++)
+        {
             correctChords[i] = chordScores.getInt("correct_" + chordNames[i], 0);
             totalChords[i] = chordScores.getInt("total_" + chordNames[i], 0);
         }
@@ -92,10 +94,12 @@ public class Score extends MainActivity {
      * displayScores function
      * @param chords
      **********************************************************************************************/
-    public void displayScores(int chords) {
+    public void displayScores(int chords)
+    {
         int chord = 12*chords;
 
-        for (int i = chord; i < 12+chord; i++) {
+        for (int i = chord; i < 12+chord; i++)
+        {
             textViews.get(i%12).setText(chordNames[i] + " : " + correctChords[i] + "/" + totalChords[i]);
         }
     }
@@ -103,7 +107,8 @@ public class Score extends MainActivity {
      * BacktoMain function
      * @param view
      **********************************************************************************************/
-    public void BackToMain(View view) {
+    public void BackToMain(View view)
+    {
         Intent intent = new Intent(this, MainActivity.class );
         startActivity(intent);
     }

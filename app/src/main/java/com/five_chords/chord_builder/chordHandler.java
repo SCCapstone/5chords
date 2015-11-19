@@ -57,9 +57,11 @@ public class chordHandler extends MainActivity {
         notes = new ArrayList<>();
 
         // Loop through raw folder for notes
-        for (Field f : R.raw.class.getFields()) {
+        for (Field f : R.raw.class.getFields())
+        {
             try {
-                if (f.getName().contains("note")) {
+                if (f.getName().contains("note"))
+                {
                     notes.add(mySound.load(activity, f.getInt(null), 0));
                 }
             } catch (IllegalAccessException e) {
@@ -109,7 +111,8 @@ public class chordHandler extends MainActivity {
         // shows if the built chord matches the set chord
         TextView answerLabel = (TextView) activity.findViewById(R.id.answer);
 
-        if (Arrays.equals(builtChord, setChord)) {
+        if (Arrays.equals(builtChord, setChord))
+        {
             answerLabel.setText("Correct");
             s.setScore(chordIndex, true);
         } else {
