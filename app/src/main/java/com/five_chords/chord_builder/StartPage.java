@@ -33,4 +33,9 @@ public class StartPage extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class );
         startActivity(intent);
     }
+    public void toHelp(View view)
+    {
+        Intent intent = new Intent(this, HelpPage.class );
+        startActivity(intent);
+    }
 }
