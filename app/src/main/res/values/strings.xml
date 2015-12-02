@@ -15,4 +15,5 @@
     <string name="helpPage">Help Page</string>
     <string name="title_activity_score_page">ScorePage</string>
     <string name="title_activity_start_page">StartPage</string>
+    <string name="title_activity_about_page">AboutPage</string>
 </resources>

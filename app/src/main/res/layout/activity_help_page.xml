@@ -38,7 +38,6 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginTop="37dp"
-        android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/button"
         android:layout_alignEnd="@+id/button"
         android:text="The basics, of the application are as follows. To use this application, you must first press the &quot;Random&quot; button. After that you will hear a number of notes, also called a cord. Your job is to match that cord with the sliders then press the Test button and it will tell you how close you are to the correct cord. Note if you want to hear the cord again, press the Chord button.  " />
@@ -52,4 +51,14 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:onClick="goToScores" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="About Us"
+        android:id="@+id/button4"
+        android:layout_marginBottom="39dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="goToAboutPage" />
 </RelativeLayout>

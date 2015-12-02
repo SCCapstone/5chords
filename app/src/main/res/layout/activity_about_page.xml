@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.five_chords.chord_builder.AboutPage"
+    android:background="@android:color/holo_blue_light">
+
+    <TextView android:id="@+id/text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" We are 5Chord!  5Chord comes from our 5 members and chord theory application.  We are Capstone Project students of the University of South Carolina.  Together, We have developed an application that would help music students learn music theory and intonation without the skills required to play perfectly.                   This application&apos;s mission is to guide music learners an easier method to theory."
+        android:layout_below="@+id/textClock"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="57dp" />
+
+    <TextClock
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textClock"
+        android:layout_marginTop="56dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back To Main"
+        android:id="@+id/button8"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/textClock"
+        android:layout_toStartOf="@+id/textClock"
+        android:layout_marginBottom="69dp"
+        android:onClick = "BackToMain"
+        />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back TO HELP"
+        android:id="@+id/button9"
+        android:layout_alignTop="@+id/button8"
+        android:layout_alignRight="@+id/text"
+        android:layout_alignEnd="@+id/text"
+        android:onClick = "BackToHelp"
+        />
+
+</RelativeLayout>

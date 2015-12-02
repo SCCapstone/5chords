@@ -19,10 +19,20 @@ public class HelpPage extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class );
         startActivity(intent);
     }
-
+    public void goToAboutPage(View view)
+    {
+        Intent intent = new Intent(this, AboutPage.class);
+        startActivity(intent);
+    }
     public void goToScores(View view)
     {
         Intent intent = new Intent(this, Score.class);
         startActivity(intent);
     }
+    public void BackToHelp(View view)
+    {
+        Intent intent = new Intent(this, Score.class);
+        startActivity(intent);
+    }
+
 }

@@ -29,6 +29,10 @@
             android:label="@string/title_activity_start_page"
             android:theme="@style/AppTheme.NoActionBar" >
         </activity>
+        <activity
+            android:name=".AboutPage"
+            android:label="@string/title_activity_about_page" >
+        </activity>
     </application>
 
 </manifest>
