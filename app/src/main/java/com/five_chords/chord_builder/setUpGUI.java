@@ -17,7 +17,7 @@ import android.widget.ArrayAdapter;
 
 public class setUpGUI extends MainActivity {
 
-    String[] noteNames = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"};
+    String[] noteNames = {"C", "C#", "D", "E\u266D", "E", "F", "F#", "G", "A\u266D", "A", "B\u266D", "B"};
 
     /**********************************************************************************************
      * seekBarListener function
@@ -53,8 +53,16 @@ public class setUpGUI extends MainActivity {
         dropdown.setAdapter(adapter);
 
         dropdown = (Spinner) activity.findViewById(R.id.spinner2);
-        items = new String[]{"Random","C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B",
-                             "C_minor", "C#_minor","D_minor","Eb_minor","E_minor","F_minor","F#_minor","G_minor","Ab_minor","A_minor","Bb_minor","B_minor"};
+
+        // Populate items from the list of chord names in chordHandler
+        items = new String[chordHandler.chordNames.length + 1];
+        items[0] = "Random";
+        System.arraycopy(chordHandler.chordNames, 0, items, 1, chordHandler.chordNames.length);
+
+        /*items = new String[]{"Random","C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B",
+                             "C_minor", "C#_minor","D_minor","Eb_minor","E_minor","F_minor","F#_minor",
+                "G_minor","Ab_minor","A_minor","Bb_minor","B_minor"};*/
+
         adapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
     }

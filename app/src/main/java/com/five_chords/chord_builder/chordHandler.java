@@ -23,8 +23,9 @@ import java.util.Random;
 
 public class chordHandler extends MainActivity {
 
-    String[] chordNames = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B",
-                           "C_minor", "C#_minor","D_minor","Eb_minor","E_minor","F_minor","F#_minor","G_minor","Ab_minor","A_minor","Bb_minor","B_minor"};
+    public static final String[] chordNames = {"C", "C\u266F", "D", "E\u266D", "E", "F", "F♯", "G", "A\u266D", "A", "B\u266D", "B",
+                                        "C minor", "C♯ minor","D minor","E\u266D minor","E minor","F minor","F♯ minor","G minor",
+                                        "A\u266D minor","A minor","B\u266D minor","B minor"};
     ArrayList<Integer> notes;
     SoundPool mySound;
     SeekBar[] seekBars;
@@ -52,7 +53,6 @@ public class chordHandler extends MainActivity {
 
     public void initialize(Activity activity)
     {
-
         mySound =  new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
         notes = new ArrayList<>();
 
@@ -89,11 +89,10 @@ public class chordHandler extends MainActivity {
 
         setChord = chords[chordIndex];
         playChord(activity, setChord, LOOP);
-
     }
 
     /****************************************************************
-     * checks chord built against random chord
+     * Checks chord built against random chord
      **/
     public void checkChord(Activity activity, Score s)
     {
@@ -113,15 +112,15 @@ public class chordHandler extends MainActivity {
 
         if (Arrays.equals(builtChord, setChord))
         {
-            answerLabel.setText("Correct");
+            answerLabel.setText(R.string.correct);
             s.setScore(chordIndex, true);
         } else {
-            answerLabel.setText("Wrong");
+            answerLabel.setText(R.string.wrong);
             s.setScore(chordIndex, false);
         }
 
         TextView tv = (TextView) activity.findViewById(R.id.chord);
-        tv.setText(s.correctChords[chordIndex] + "/" + s.totalChords[chordIndex]);
+        tv.setText(Score.correctChords[chordIndex] + "/" + Score.totalChords[chordIndex]);
     }
 
     /****************************************************************

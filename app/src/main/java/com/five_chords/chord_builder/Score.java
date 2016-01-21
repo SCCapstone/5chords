@@ -20,14 +20,15 @@ import java.util.ArrayList;
 
 public class Score extends MainActivity {
 
-    static String[] chordNames = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B",
-                                  "C_minor", "C#_minor","D_minor","Eb_minor","E_minor","F_minor","F#_minor","G_minor","Ab_minor","A_minor","Bb_minor","B_minor"};
+    /*static String[] chordNames = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B",
+                                  "C_minor", "C#_minor","D_minor","Eb_minor","E_minor","F_minor",
+                                  "F#_minor","G_minor","Ab_minor","A_minor","Bb_minor","B_minor"};*/
 
     private static SharedPreferences chordScores;
     public static final String CHORD_SCORES = "ScoreFile";
 
-    static int[] correctChords = new int[chordNames.length];
-    static int[] totalChords = new int[chordNames.length];
+    static int[] correctChords = new int[chordHandler.chordNames.length];
+    static int[] totalChords = new int[chordHandler.chordNames.length];
 
     RadioGroup chordClass;
     ArrayList<TextView> textViews = new ArrayList<>();
@@ -70,10 +71,10 @@ public class Score extends MainActivity {
      **********************************************************************************************/
     public void loadScores(Activity activity) {
         chordScores = activity.getApplication().getSharedPreferences(CHORD_SCORES, 0);
-        for (int i = 0; i < chordNames.length; i++)
+        for (int i = 0; i < chordHandler.chordNames.length; i++)
         {
-            correctChords[i] = chordScores.getInt("correct_" + chordNames[i], 0);
-            totalChords[i] = chordScores.getInt("total_" + chordNames[i], 0);
+            correctChords[i] = chordScores.getInt("correct_" + chordHandler.chordNames[i], 0);
+            totalChords[i] = chordScores.getInt("total_" + chordHandler.chordNames[i], 0);
         }
     }
 
@@ -85,8 +86,8 @@ public class Score extends MainActivity {
     public void setScore(int chordIndex, boolean Correct) {
         SharedPreferences.Editor scoreEditor = chordScores.edit();
 
-        if (Correct) scoreEditor.putInt("correct_" + chordNames[chordIndex], (correctChords[chordIndex]++)+1);
-        scoreEditor.putInt("total_" + chordNames[chordIndex], (totalChords[chordIndex]++)+1);
+        if (Correct) scoreEditor.putInt("correct_" + chordHandler.chordNames[chordIndex], (correctChords[chordIndex]++)+1);
+        scoreEditor.putInt("total_" + chordHandler.chordNames[chordIndex], (totalChords[chordIndex]++)+1);
 
         scoreEditor.apply();
     }
@@ -100,7 +101,7 @@ public class Score extends MainActivity {
 
         for (int i = chord; i < 12+chord; i++)
         {
-            textViews.get(i%12).setText(chordNames[i] + " : " + correctChords[i] + "/" + totalChords[i]);
+            textViews.get(i%12).setText(chordHandler.chordNames[i] + " : " + correctChords[i] + "/" + totalChords[i]);
         }
     }
     /***********************************************************************************************
