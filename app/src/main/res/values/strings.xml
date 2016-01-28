@@ -2,12 +2,31 @@
     <string name="app_name">5Chords</string>
 
     <string name="action_settings">Settings</string>
+
+    <!-- Tab Names Array -->
     <string-array name="tabs">
         <item>Home</item>
         <item>Main Tab</item>
         <item>Help</item>
         <item>Stats</item>
     </string-array>
+
+    <!-- Note Names Array -->
+    <string-array name="noteNames">
+        <item>C</item>
+        <item>C#</item>
+        <item>D</item>
+        <item>E\u266D</item>
+        <item>E</item>
+        <item>F</item>
+        <item>F#</item>
+        <item>G</item>
+        <item>A\u266D</item>
+        <item>A</item>
+        <item>B\u266D</item>
+        <item>B</item>
+    </string-array>
+
     <string name="drawer_close">Close navigation drawer</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="title_activity_help_page">HelpPage</string>

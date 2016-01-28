@@ -7,7 +7,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-public class AboutPage extends AppCompatActivity {
+public class AboutPage extends AppCompatActivity
+{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +42,13 @@ public class AboutPage extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
     public void BackToHelp(View view)
     {
         Intent intent = new Intent(this, HelpPage.class);
         startActivity(intent);
     }
+
     public void BackToMain(View view)
     {
         Intent intent = new Intent(this, MainActivity.class );

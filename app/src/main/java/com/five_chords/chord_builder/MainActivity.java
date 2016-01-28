@@ -38,10 +38,10 @@ public class MainActivity extends AppCompatActivity {
         cH.initialize(this);
 
         gui.loadSpinners(this);
-        gui.seekBarListener((SeekBar) findViewById(R.id.root), (TextView) findViewById(R.id.rootText));
-        gui.seekBarListener((SeekBar) findViewById(R.id.third), (TextView) findViewById(R.id.thirdText));
-        gui.seekBarListener((SeekBar) findViewById(R.id.fifth), (TextView) findViewById(R.id.fifthText));
-        gui.seekBarListener((SeekBar) findViewById(R.id.option), (TextView) findViewById(R.id.optionText));
+        gui.seekBarListener(this, (SeekBar) findViewById(R.id.root), (TextView) findViewById(R.id.rootText));
+        gui.seekBarListener(this, (SeekBar) findViewById(R.id.third), (TextView) findViewById(R.id.thirdText));
+        gui.seekBarListener(this, (SeekBar) findViewById(R.id.fifth), (TextView) findViewById(R.id.fifthText));
+        gui.seekBarListener(this, (SeekBar) findViewById(R.id.option), (TextView) findViewById(R.id.optionText));
 
         //gui.buttonListeners(this);
         s.loadScores(this);
