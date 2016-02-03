@@ -91,7 +91,7 @@ public class chordHandler extends MainActivity
         // A non random chord was selected
         if (pos > 0)
             chordIndex = pos - 1;
-        // A random chord was selected
+            // A random chord was selected
         else
             chordIndex =  new Random().nextInt(chordIndices.length() - 1);
 
@@ -106,35 +106,44 @@ public class chordHandler extends MainActivity
     }
 
     /****************************************************************
-     * Checks chord built against random chord
+     * Create the chord made on the sliders, call the check methos
      **/
-    public void checkChord(Activity activity, Score s)
+    public void buildChord(Activity activity, Score s)
     {
-        if (setChord == null) return;
-
         // this will come in handy when we start using the fourth slider
         if (setChord.length == 3) builtChord = new int[] {seekBars[0].getProgress(), seekBars[1].getProgress(),
-                                                          seekBars[2].getProgress()};
+                seekBars[2].getProgress()};
         else builtChord = new int[] {seekBars[0].getProgress(), seekBars[1].getProgress(),
-                                     seekBars[2].getProgress(), seekBars[3].getProgress()};
+                seekBars[2].getProgress(), seekBars[3].getProgress()};
 
         playChord(activity, builtChord, 0);
-
-
         // shows if the built chord matches the set chord
         TextView answerLabel = (TextView) activity.findViewById(R.id.answer);
+        TextView tv = (TextView) activity.findViewById(R.id.chord);
+        tv.setText(Score.correctChords[chordIndex] + " / " + Score.totalChords[chordIndex]);
 
-        if (Arrays.equals(builtChord, setChord))
-        {
+        if (checkChord(builtChord, setChord)) {
             answerLabel.setText(R.string.correct);
             s.setScore(activity, chordIndex, true);
         } else {
             answerLabel.setText(R.string.wrong);
             s.setScore(activity, chordIndex, false);
         }
+    }
 
-        TextView tv = (TextView) activity.findViewById(R.id.chord);
-        tv.setText(Score.correctChords[chordIndex] + " / " + Score.totalChords[chordIndex]);
+    /****************************************************************
+     * Checks chord built against random chord
+     **/
+    public boolean checkChord(int[] builtChord, int[] setChord)
+    {
+        if (setChord == null) return false;
+
+        if (Arrays.equals(builtChord, setChord))
+        {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /****************************************************************

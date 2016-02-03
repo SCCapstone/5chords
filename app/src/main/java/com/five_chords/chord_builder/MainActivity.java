@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
     // temporary solution to call methods in different classes
     public void getChord(View v)   { cH.getChord(this); }
-    public void checkChord(View v) { cH.checkChord(this, s); }
+    public void buildChord(View v) { cH.buildChord(this, s); }
     public void playChord(View v)  { cH.playChord(this, cH.setChord, 0); }
 
 
