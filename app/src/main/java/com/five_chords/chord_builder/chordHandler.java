@@ -13,17 +13,25 @@ import android.app.Activity;
 import java.util.Arrays;
 import java.util.Random;
 
-public class chordHandler extends MainActivity
+public class chordHandler
 {
     String[] chordNames = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B",
             "C_minor", "C#_minor","D_minor","Eb_minor","E_minor","F_minor","F#_minor","G_minor","Ab_minor","A_minor","Bb_minor","B_minor"};
 
     int[][] chords = new int[12*2][];
-    soundHandler sH = new soundHandler();
+    soundHandler sH = null;
 
-    public void initialize(Activity main) {
-        sH.initialize(main);
+    public chordHandler(Activity main) {
+        sH = new soundHandler(main);
 
+        for (int i = 0; i < 12; i++) {
+            chords[i] = new int[] {i, i+4, i+7};
+            chords[12+i] = new int[] {i, i+3, i+7};
+            //chords[24+i] = {i, i+4, i+7, i+10};
+        }
+    }
+
+    public chordHandler() {
         for (int i = 0; i < 12; i++) {
             chords[i] = new int[] {i, i+4, i+7};
             chords[12+i] = new int[] {i, i+3, i+7};

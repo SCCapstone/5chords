@@ -36,24 +36,13 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        cH = new chordHandler();
-        gui = new setUpGUI();
-        s = new Score();
-
-        cH.initialize(this);
-
-        gui.loadSpinners(this, true, false, false);
+        new setUpGUI(this);
+        cH = new chordHandler(this);
+        s = new Score(this);
 
         // Make optional slider disabled to begin with; will probably move this somewhere else
         findViewById(R.id.slider_option).setEnabled(false);
         findViewById(R.id.textview_option).setEnabled(false);
-
-        gui.seekBarListener(this, (SeekBar) findViewById(R.id.slider_root), (TextView) findViewById(R.id.textview_root));
-        gui.seekBarListener(this, (SeekBar) findViewById(R.id.slider_third), (TextView) findViewById(R.id.textview_third));
-        gui.seekBarListener(this, (SeekBar) findViewById(R.id.slider_fifth), (TextView) findViewById(R.id.textview_fifth));
-        gui.seekBarListener(this, (SeekBar) findViewById(R.id.slider_option), (TextView) findViewById(R.id.textview_option));
-
-        s.loadScores(this);
     }
 
     /**

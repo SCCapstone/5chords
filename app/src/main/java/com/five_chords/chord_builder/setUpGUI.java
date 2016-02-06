@@ -18,8 +18,16 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 
-public class setUpGUI extends MainActivity
+public class setUpGUI
 {
+    public setUpGUI(Activity activity) {
+        loadSpinners(activity, true, false, false);
+        seekBarListener(activity, (SeekBar) activity.findViewById(R.id.slider_root), (TextView) activity.findViewById(R.id.textview_root));
+        seekBarListener(activity, (SeekBar) activity.findViewById(R.id.slider_third), (TextView) activity.findViewById(R.id.textview_third));
+        seekBarListener(activity, (SeekBar) activity.findViewById(R.id.slider_fifth), (TextView) activity.findViewById(R.id.textview_fifth));
+        seekBarListener(activity, (SeekBar) activity.findViewById(R.id.slider_option), (TextView) activity.findViewById(R.id.textview_option));
+    }
+
     /**********************************************************************************************
      * seekBarListener function
      * This function will allow user to adjust the chord manually using seekBar

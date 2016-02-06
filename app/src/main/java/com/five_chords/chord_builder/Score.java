@@ -21,6 +21,10 @@ import java.util.ArrayList;
 
 public class Score extends MainActivity
 {
+    public Score(Activity main) {
+        loadScores(main);
+    }
+
 //    private static SharedPreferences chordScores;
 
     /** The name of the saved chord scores in the SharedPreferences */
@@ -68,19 +72,19 @@ public class Score extends MainActivity
 
     /***********************************************************************************************
      * Loads the score data for each chord and initializes the correctChords and totalChords arrays.
-     * @param activity The calling Activity
+     * @param main The calling Activity
      **********************************************************************************************/
-    public void loadScores(Activity activity)
+    public void loadScores(Activity main)
     {
         // Grab the array of chord names from the resources
-        String[] chordNames = activity.getResources().getStringArray(R.array.chordNames);
+        String[] chordNames = main.getResources().getStringArray(R.array.chordNames);
 
         // Initialize correctChords and totalChords arrays
         correctChords = new int[chordNames.length];
         totalChords = new int[chordNames.length];
 
         // Load scores
-        SharedPreferences savedChordScores = activity.getApplication().
+        SharedPreferences savedChordScores = main.getApplication().
                                 getSharedPreferences(CHORD_SCORES_SAVE_FILENAME, Context.MODE_PRIVATE);
         for (int i = 0; i < chordNames.length; ++i)
         {
