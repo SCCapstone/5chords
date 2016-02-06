@@ -10,6 +10,8 @@
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -17,9 +19,6 @@ import android.widget.ArrayAdapter;
 
 public class setUpGUI extends MainActivity
 {
-
-//    String[] noteNames = {"C", "C#", "D", "E\u266D", "E", "F", "F#", "G", "A\u266D", "A", "B\u266D", "B"};
-
     /**********************************************************************************************
      * seekBarListener function
      * This function will allow user to adjust the chord manually using seekBar
@@ -50,22 +49,30 @@ public class setUpGUI extends MainActivity
      * selection.
      * @param activity
      **/
-    public void loadSpinners(Activity activity)
+    public void loadSpinners(final Activity activity)
     {
+        // Populate the chord select spinner
         String[] chordNames = activity.getResources().getStringArray(R.array.chordNames);
-        Spinner dropdown = (Spinner) activity.findViewById(R.id.spinner);
-        String[] items = {"Piano", "Violin", "Trombone", "Frequency Tone"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_dropdown_item, items);
-        dropdown.setAdapter(adapter);
+        final Spinner chordSelector = (Spinner) activity.findViewById(R.id.spinner_chord_select);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_dropdown_item, chordNames);
+        chordSelector.setAdapter(adapter);
 
-        dropdown = (Spinner) activity.findViewById(R.id.spinner2);
+        // Set the OnItemSelectedListener for the spinner
+        chordSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                if (activity instanceof MainActivity)
+                {
+                    // Update the selected chord
+                    ((MainActivity) activity).getChord(chordSelector);
+                }
+            }
 
-        // Populate items from the list of chord names in chordHandle
-        items = new String[chordNames.length + 1];
-        items[0] = "Random";
-        System.arraycopy(chordNames, 0, items, 1, chordNames.length);
-
-        adapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_dropdown_item, items);
-        dropdown.setAdapter(adapter);
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView)
+            { /* Ignore */ }
+        });
     }
 }

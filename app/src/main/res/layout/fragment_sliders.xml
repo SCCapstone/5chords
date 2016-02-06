@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_gravity="center"
+              android:layout_margin="36dp">
+
+    <!-- Note selection sliders -->
+
+    <!-- Root -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textview_root"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="C"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="18sp"/>
+
+        <com.five_chords.chord_builder.VerticalSeekBar
+            android:id="@+id/slider_root"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginEnd="12dp"
+            android:indeterminate="false"
+            android:thumb="@drawable/abc_btn_radio_to_on_mtrl_015"
+            android:max="18"
+            android:progress="0"/>
+
+    </LinearLayout>
+
+    <!-- Third -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textview_third"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="C"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="18sp"/>
+
+        <com.five_chords.chord_builder.VerticalSeekBar
+            android:id="@+id/slider_third"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginEnd="12dp"
+            android:indeterminate="false"
+            android:thumb="@drawable/abc_btn_radio_to_on_mtrl_015"
+            android:max="18"
+            android:progress="0"/>
+
+    </LinearLayout>
+
+    <!-- Fifth -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textview_fifth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="C"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="18sp"/>
+
+        <com.five_chords.chord_builder.VerticalSeekBar
+            android:id="@+id/slider_fifth"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginEnd="12dp"
+            android:indeterminate="false"
+            android:thumb="@drawable/abc_btn_radio_to_on_mtrl_015"
+            android:max="18"
+            android:progress="0"/>
+
+    </LinearLayout>
+
+    <!-- Option -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textview_option"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="C"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="18sp"/>
+
+        <com.five_chords.chord_builder.VerticalSeekBar
+            android:id="@+id/slider_option"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginEnd="12dp"
+            android:indeterminate="false"
+            android:thumb="@drawable/abc_btn_radio_to_on_mtrl_015"
+            android:max="18"
+            android:progress="0"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>

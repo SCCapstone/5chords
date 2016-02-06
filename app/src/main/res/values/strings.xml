@@ -1,8 +1,4 @@
 <resources>
-    <string name="app_name">5Chords</string>
-
-    <string name="action_settings">Settings</string>
-
     <!-- Tab Names Array -->
     <string-array name="tabs">
         <item>Home</item>
@@ -27,6 +23,9 @@
         <item>B</item>
     </string-array>
 
+    <!-- General Strings -->
+    <string name="app_name">5Chords</string>
+    <string name="action_settings">Settings</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="title_activity_help_page">HelpPage</string>
@@ -36,4 +35,13 @@
     <string name="title_activity_about_page">AboutPage</string>
     <string name="correct">Correct</string>
     <string name="wrong">Wrong</string>
+    <string name="play">Play</string>
+    <string name="check">Check</string>
+    <string name="chord">Chord</string>
+    <string name="help">Help</string>
+    <string name="random_chord">Random Chord</string>
+    <string name="instrument">Instrument</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
