@@ -29,4 +29,5 @@ dependencies {
     // Required -- JUnit 4 framework
     testCompile 'junit:junit:4.12'
     compile 'junit:junit:4.12'
+    compile 'com.google.android.gms:play-services-appindexing:8.1.0'
 }

@@ -68,27 +68,4 @@ public class setUpGUI extends MainActivity
         adapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_dropdown_item, items);
         dropdown.setAdapter(adapter);
     }
-
-    /****************************************************************
-     * Buttons can't call from other classes.
-     * Solution 1: find a way to add listener
-     * Solution 2: shove chord stuff in a new activity with fragments
-     **********************
-     public void buttonListeners(Activity activity) {
-     Button getChord = (Button) activity.findViewById(R.id.getChord);
-     Button checkChord = (Button) activity.findViewById(R.id.checkChord);
-     Button playChord = (Button) activity.findViewById(R.id.playChord);
-
-     getChord.setOnClickListener(new View.OnClickListener() {
-     public void onClick(View v) { cH.getChord(); }
-     });
-     checkChord.setOnClickListener(new View.OnClickListener() {
-     public void onClick(View v) { cH.checkChord(); }
-     });
-     playChord.setOnClickListener(new View.OnClickListener() {
-     public void onClick(View v) { cH.playChord(); }
-     });
-
-     }
-     */
 }

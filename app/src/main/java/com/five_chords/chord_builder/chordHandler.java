@@ -10,158 +10,77 @@
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
-import android.content.res.TypedArray;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.widget.SeekBar;
-import android.widget.Spinner;
-import android.widget.TextView;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
 public class chordHandler extends MainActivity
 {
+    String[] chordNames = {"C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B",
+            "C_minor", "C#_minor","D_minor","Eb_minor","E_minor","F_minor","F#_minor","G_minor","Ab_minor","A_minor","Bb_minor","B_minor"};
 
-    ArrayList<Integer> notes;
-    SoundPool mySound;
-    SeekBar[] seekBars;
+    int[][] chords = new int[12*2][];
+    soundHandler sH = new soundHandler();
 
-    int chordIndex;
-    final int LOOP = 3;
-    int[] setChord, builtChord;
+    public void initialize(Activity main) {
+        sH.initialize(main);
 
-    //Since we have a WAV file with less than 1mb all we have to change the loop parameter to -1,
-    // variable LOOP is where i set the parameter to reloop the clip
-//    int[][] chords = {
-//            // this organization makes it easier on the score code
-//            // also easier to debug if the client wants to add more chord types (diminished or when we add the fourth slider)
-//
-//            // major chords
-//            {0,4,7}, {1,5,8}, {2,6,9},          // C, C#, D
-//            {3,7,10}, {4,8,11}, {5,9,12},       // Eb, E, F
-//            {6,10,13}, {7,11,14}, {8,12,15},    // F#, G, Ab
-//            {9,13,16}, {10,14,17}, {11,15,18},  // A, Bb, B
-//
-//            // minor chords
-//            {0,3,7}, {1,4,8}, {2,5,9},           // C, C#, D
-//            {3,6,10}, {4,7,11}, {5,10,12},       // Eb, E, F
-//            {6,9,13}, {7,10,14}, {8,11,15},      // F#, G, Ab
-//            {9,12,16}, {10,13,17}, {11,14,18}};  // A, Bb, B
-
-    public void initialize(Activity activity)
-    {
-        mySound =  new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
-        notes = new ArrayList<>();
-
-        // Loop through raw folder for notes
-        for (Field f : R.raw.class.getFields())
-        {
-            try {
-                if (f.getName().contains("note"))
-                {
-                    notes.add(mySound.load(activity, f.getInt(null), 0));
-                }
-            } catch (IllegalAccessException e) {
-
-            }
+        for (int i = 0; i < 12; i++) {
+            chords[i] = new int[] {i, i+4, i+7};
+            chords[12+i] = new int[] {i, i+3, i+7};
+            //chords[24+i] = {i, i+4, i+7, i+10};
         }
-
-        seekBars = new SeekBar[] {
-                (SeekBar) activity.findViewById(R.id.root),
-                (SeekBar) activity.findViewById(R.id.third),
-                (SeekBar) activity.findViewById(R.id.fifth),
-                (SeekBar) activity.findViewById(R.id.option) };
     }
-
 
     /****************************************************************
      * Picks a Chord. Either random, or the selected chord.
      **/
-    public void getChord(Activity activity)
+    public int newChordIndex(int chordChoice)
     {
-        // Grab chord index array from resources
-        TypedArray chordIndices = activity.getResources().obtainTypedArray(R.array.chordIndices);
-
-        // Determine chordIndex from slider position
-        int pos = ((Spinner) activity.findViewById(R.id.spinner2)).getSelectedItemPosition();
-
-        // A non random chord was selected
-        if (pos > 0)
-            chordIndex = pos - 1;
-            // A random chord was selected
-        else
-            chordIndex =  new Random().nextInt(chordIndices.length() - 1);
-
-//        setChord = chords[chordIndex];
-        // Grab the id of the select chord array from the chord index array
-        int id = chordIndices.getResourceId(chordIndex, 0);
-        setChord = activity.getResources().getIntArray(id);
-        playChord(activity, setChord, LOOP);
-
-        // Recycle chordIndices
-        chordIndices.recycle();
+        if (chordChoice > 0) return chordChoice - 1;
+        else return new Random().nextInt(chordNames.length - 1);
     }
 
     /****************************************************************
-     * Create the chord made on the sliders, call the check methos
+     * Checks whether two chords (as integer arrays) are equivalent.
      **/
-    public void buildChord(Activity activity, Score s)
+    public boolean compareChords(int[] builtChord, int[] setChord)
     {
-        // this will come in handy when we start using the fourth slider
-        if (setChord.length == 3) builtChord = new int[] {seekBars[0].getProgress(), seekBars[1].getProgress(),
-                seekBars[2].getProgress()};
-        else builtChord = new int[] {seekBars[0].getProgress(), seekBars[1].getProgress(),
-                seekBars[2].getProgress(), seekBars[3].getProgress()};
+        if (setChord == null || builtChord == null) return false;
+        if (setChord.length > 4 || builtChord.length > 4) return false;
+        if (setChord.length < 3 || builtChord.length < 3) return false;
 
-        playChord(activity, builtChord, 0);
-        // shows if the built chord matches the set chord
-        TextView answerLabel = (TextView) activity.findViewById(R.id.answer);
-        TextView tv = (TextView) activity.findViewById(R.id.chord);
-        tv.setText(Score.correctChords[chordIndex] + " / " + Score.totalChords[chordIndex]);
-
-        if (checkChord(builtChord, setChord)) {
-            answerLabel.setText(R.string.correct);
-            s.setScore(activity, chordIndex, true);
-        } else {
-            answerLabel.setText(R.string.wrong);
-            s.setScore(activity, chordIndex, false);
+        if (setChord.length == 3) {
+            setChord = new int[] {setChord[0], setChord[1], setChord[2], setChord[2]};
+            builtChord = new int[] {builtChord[0], builtChord[1], builtChord[2], builtChord[2]};
         }
-    }
 
-    /****************************************************************
-     * Checks chord built against random chord
-     **/
-    public boolean checkChord(int[] builtChord, int[] setChord)
-    {
-        if (setChord == null) return false;
-
-        if (Arrays.equals(builtChord, setChord))
-        {
-            return true;
-        } else {
-            return false;
-        }
+        if (Arrays.equals(builtChord, setChord)) return true;
+        else return false;
     }
 
     /****************************************************************
      * Plays a chord
      **/
-    public void playChord(Activity activity, int[] chord, int loop)
+    public void playChord(int[] chord, int chordLength)
     {
-        if (chord == null)
-            return;
+        if (chord == null) return;
+        if (chordLength > 4) return;
+        if (chordLength < 0) return;
 
-        // Show correct chord on a label
-        TextView chordLabel = (TextView) activity.findViewById(R.id.chord);
-//        chordLabel.setText(chordNames[chord[0]]);
-        chordLabel.setText(activity.getResources().getStringArray(R.array.chordNames)[chord[0]]);
-
-        // play the chord again
-        for (int i : chord)
-            mySound.play(notes.get(i), 1, 1, 1, loop, .99f);
+        for (int i = 0; i < chordLength; i++) sH.playNote(chord[i]);
     }
 
+    /****************************************************************
+     * Returns the name of a chord given the index
+     **/
+    public String getChordName(int chordIndex) {
+        return chordNames[chordIndex];
+    }
+
+    /****************************************************************
+     * Returns a chord given the index
+     **/
+    public int[] getChord(int chordIndex) {
+        return chords[chordIndex];
+    }
 }
