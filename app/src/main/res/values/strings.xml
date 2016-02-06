@@ -41,7 +41,7 @@
     <string name="help">Help</string>
     <string name="random_chord">Random Chord</string>
     <string name="instrument">Instrument</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="major_chords">Major Chords</string>
+    <string name="minor_chords">Minor Chords</string>
+    <string name="dominant_chords">Dominant Chords</string>
 </resources>

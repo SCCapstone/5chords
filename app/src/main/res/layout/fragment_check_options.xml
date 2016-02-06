@@ -11,28 +11,22 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="Major Chords"/>
+        android:checked="true"
+        android:text="@string/major_chords"/>
 
     <CheckBox
         android:id="@+id/checkbox_minor_chords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/checkbox_major_chords"
-        android:text="Minor Chords"/>
+        android:text="@string/minor_chords"/>
 
     <CheckBox
         android:id="@+id/checkbox_dominant_chords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/checkbox_minor_chords"
-        android:text="Dominant Chords"/>
-
-    <CheckBox
-        android:id="@+id/checkbox_any_chord"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/checkbox_dominant_chords"
-        android:text="Any"/>
+        android:text="@string/dominant_chords"/>
 
     <!-- Play and Check Buttons-->
     <LinearLayout

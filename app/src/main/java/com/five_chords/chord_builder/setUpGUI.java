@@ -30,6 +30,7 @@ public class setUpGUI extends MainActivity
     {
         // A reference to the noteNames to pass to the Listener
         final String[] noteNames = activity.getResources().getStringArray(R.array.noteNames);
+        text.setText(noteNames[0]);
 
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {

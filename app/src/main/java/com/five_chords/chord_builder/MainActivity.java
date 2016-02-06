@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity
         gui.seekBarListener(this, (SeekBar) findViewById(R.id.slider_option), (TextView) findViewById(R.id.textview_option));
 
         s.loadScores(this);
-
     }
 
     /**
