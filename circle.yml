@@ -1,6 +1,6 @@
 general:
   artifacts:
-    -/home/ubuntu/5chords/app/build/reports/tests/release
+    - /home/ubuntu/5chords/app/build/reports/tests/release
 
 dependencies:
   override:
