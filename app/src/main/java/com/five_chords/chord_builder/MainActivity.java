@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         if (chordChoice == 0)
         {
             Spinner dropdown = (Spinner) findViewById(R.id.spinner_chord_select);
-            dropdown.setSelection(currentChordIndex - 1);
+            dropdown.setSelection((currentChordIndex - 1) % dropdown.getCount());
 
             // Play the selected chord
             playSelectedChord(null);
