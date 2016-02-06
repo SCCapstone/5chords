@@ -1,0 +1,15 @@
+general:
+  artifacts:
+    -/home/ubuntu/5chords/app/build/reports/tests/release
+
+dependencies:
+  override:
+    - export TERM="dumb"
+    - chmod +x ./gradlew
+    - ./gradlew dependencies
+
+test:
+  override:
+    - (echo "Running JUnit tests")
+    - (./gradlew test):
+        timeout: 1800
