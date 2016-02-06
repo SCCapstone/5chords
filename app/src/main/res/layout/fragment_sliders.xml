@@ -10,7 +10,8 @@
 
     <!-- Root -->
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -27,6 +28,7 @@
             android:id="@+id/slider_root"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_marginLeft="12dp"
             android:layout_marginStart="12dp"
             android:layout_marginRight="12dp"
@@ -40,7 +42,8 @@
 
     <!-- Third -->
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -57,6 +60,7 @@
             android:id="@+id/slider_third"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_marginLeft="12dp"
             android:layout_marginStart="12dp"
             android:layout_marginRight="12dp"
@@ -70,7 +74,8 @@
 
     <!-- Fifth -->
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -87,6 +92,7 @@
             android:id="@+id/slider_fifth"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_marginLeft="12dp"
             android:layout_marginStart="12dp"
             android:layout_marginRight="12dp"
@@ -100,7 +106,8 @@
 
     <!-- Option -->
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -117,6 +124,7 @@
             android:id="@+id/slider_option"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_gravity="center"
             android:layout_marginLeft="12dp"
             android:layout_marginStart="12dp"
             android:layout_marginRight="12dp"

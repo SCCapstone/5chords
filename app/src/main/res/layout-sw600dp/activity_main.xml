@@ -60,14 +60,11 @@
 
     </LinearLayout>
 
-    <!-- TODO: make this fragment streamlined on phones/smaller screens
-         possibly slide in from the side -->
-
     <!-- Fragment containing the chord check options -->
     <fragment
         android:id="@+id/fragment_chord_check"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:name="com.five_chords.chord_builder.CheckOptionsFragment"
         tools:layout="@layout/fragment_check_options"
         android:layout_alignParentRight="true"
@@ -79,8 +76,8 @@
     <!-- Fragment containing the sliders -->
     <fragment
         android:id="@+id/fragment_sliders"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:name="com.five_chords.chord_builder.SliderFragment"
         tools:layout="@layout/fragment_sliders"
