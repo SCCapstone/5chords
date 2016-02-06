@@ -10,6 +10,7 @@
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.SeekBar;
@@ -48,14 +49,50 @@ public class setUpGUI extends MainActivity
      * loadSpinners function
      * This functions consist of two dropdown menus, one for instruments selection and one for chord
      * selection.
-     * @param activity
-     **/
-    public void loadSpinners(final Activity activity)
+     * @param activity The calling Activity
+     * @param majorChords Whether or not to load the major chords
+     * @param minorChords Whether or not to load the minor chords
+     * @param dominantChords Whether or not to load the dominant chords
+     */
+    public void loadSpinners(final Activity activity, boolean majorChords, boolean minorChords, boolean dominantChords)
     {
         // Populate the chord select spinner
-        String[] chordNames = activity.getResources().getStringArray(R.array.chordNames);
         final Spinner chordSelector = (Spinner) activity.findViewById(R.id.spinner_chord_select);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_dropdown_item, chordNames);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_dropdown_item);
+
+        // Load items
+        String[] chordNames = activity.getResources().getStringArray(R.array.chordNames);
+
+        // All chords added
+        if (majorChords && minorChords/* && dominantChords*/)
+            adapter.addAll(chordNames);
+        else
+        {
+            String[] items = new String[12];
+
+            // Add major chords
+            if (majorChords)
+            {
+                System.arraycopy(chordNames, 0, items, 0, 12);
+                adapter.addAll(items);
+            }
+
+            // Add minor chords
+            if (minorChords)
+            {
+                System.arraycopy(chordNames, 12, items, 0, 12);
+                adapter.addAll(items);
+            }
+
+//            // Add dominant chords TODO implement dominant chords
+//            if (dominantChords)
+//            {
+//                System.arraycopy(chordNames, 24, items, 0, 12);
+//                adapter.addAll(items);
+//            }
+        }
+
+        // Set the adapter
         chordSelector.setAdapter(adapter);
 
         // Set the OnItemSelectedListener for the spinner

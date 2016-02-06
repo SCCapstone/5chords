@@ -4,174 +4,6 @@
 
 <resources>
 
-    <!-- Individual Chord definitions -->
-    <!-- Major Chords -->
-    <integer-array name="C">
-        <item> 0 </item>
-        <item> 4 </item>
-        <item> 7 </item>
-    </integer-array>
-    <integer-array name="C_sharp">
-        <item> 1 </item>
-        <item> 5 </item>
-        <item> 8 </item>
-    </integer-array>
-    <integer-array name="D">
-        <item> 2 </item>
-        <item> 6 </item>
-        <item> 9 </item>
-    </integer-array>
-
-    <integer-array name="E_flat">
-        <item> 3 </item>
-        <item> 7 </item>
-        <item> 10 </item>
-    </integer-array>
-    <integer-array name="E">
-        <item> 4 </item>
-        <item> 8 </item>
-        <item> 11 </item>
-    </integer-array>
-    <integer-array name="F">
-        <item> 5 </item>
-        <item> 9 </item>
-        <item> 12 </item>
-    </integer-array>
-
-    <integer-array name="F_sharp">
-        <item> 6 </item>
-        <item> 10 </item>
-        <item> 13 </item>
-    </integer-array>
-    <integer-array name="G">
-        <item> 7 </item>
-        <item> 11 </item>
-        <item> 14 </item>
-    </integer-array>
-    <integer-array name="A_flat">
-        <item> 8 </item>
-        <item> 12 </item>
-        <item> 15 </item>
-    </integer-array>
-
-    <integer-array name="A">
-        <item> 9 </item>
-        <item> 13 </item>
-        <item> 16 </item>
-    </integer-array>
-    <integer-array name="B_flat">
-        <item> 10 </item>
-        <item> 14 </item>
-        <item> 17 </item>
-    </integer-array>
-    <integer-array name="B">
-        <item> 11 </item>
-        <item> 15 </item>
-        <item> 18 </item>
-    </integer-array>
-
-    <!-- Minor Chords -->
-    <integer-array name="C_minor">
-        <item> 0 </item>
-        <item> 3 </item>
-        <item> 7 </item>
-    </integer-array>
-    <integer-array name="C_sharp_minor">
-        <item> 1 </item>
-        <item> 4 </item>
-        <item> 8 </item>
-    </integer-array>
-    <integer-array name="D_minor">
-        <item> 2 </item>
-        <item> 5 </item>
-        <item> 9 </item>
-    </integer-array>
-
-    <integer-array name="E_flat_minor">
-        <item> 3 </item>
-        <item> 6 </item>
-        <item> 10 </item>
-    </integer-array>
-    <integer-array name="E_minor">
-        <item> 4 </item>
-        <item> 7 </item>
-        <item> 11 </item>
-    </integer-array>
-    <integer-array name="F_minor">
-        <item> 5 </item>
-        <item> 10 </item>
-        <item> 12 </item>
-    </integer-array>
-
-    <integer-array name="F_sharp_minor">
-        <item> 6 </item>
-        <item> 9 </item>
-        <item> 13 </item>
-    </integer-array>
-    <integer-array name="G_minor">
-        <item> 7 </item>
-        <item> 10 </item>
-        <item> 14 </item>
-    </integer-array>
-    <integer-array name="A_flat_minor">
-        <item> 8 </item>
-        <item> 11 </item>
-        <item> 15 </item>
-    </integer-array>
-
-    <integer-array name="A_minor">
-        <item> 9 </item>
-        <item> 12 </item>
-        <item> 16 </item>
-    </integer-array>
-    <integer-array name="B_flat_minor">
-        <item> 10 </item>
-        <item> 13 </item>
-        <item> 17 </item>
-    </integer-array>
-    <integer-array name="B_minor">
-        <item> 11 </item>
-        <item> 14 </item>
-        <item> 18 </item>
-    </integer-array>
-
-    <!-- The array of all Chord indices -->
-    <array name="chordIndices">
-        <!-- Major Chords -->
-        <item>@array/C</item>
-        <item>@array/C_sharp</item>
-        <item>@array/D</item>
-
-        <item>@array/E_flat</item>
-        <item>@array/E</item>
-        <item>@array/F</item>
-
-        <item>@array/F_sharp</item>
-        <item>@array/G</item>
-        <item>@array/A_flat</item>
-
-        <item>@array/A</item>
-        <item>@array/B_flat</item>
-        <item>@array/B</item>
-
-        <!-- Minor Chords -->
-        <item>@array/C_minor</item>
-        <item>@array/C_sharp_minor</item>
-        <item>@array/D_minor</item>
-
-        <item>@array/E_flat_minor</item>
-        <item>@array/E_minor</item>
-        <item>@array/F_minor</item>
-
-        <item>@array/F_sharp_minor</item>
-        <item>@array/G_minor</item>
-        <item>@array/A_flat_minor</item>
-
-        <item>@array/A_minor</item>
-        <item>@array/B_flat_minor</item>
-        <item>@array/B_minor</item>
-    </array>
-
     <!-- Chord Names Array -->
     <string-array name="chordNames">
         <item>C</item>
@@ -198,6 +30,18 @@
         <item>A minor</item>
         <item>B\u266D minor</item>
         <item>B minor</item>
+        <!--<item>C dominant</item>-->
+        <!--<item>C♯ dominant</item>-->
+        <!--<item>D dominant</item>-->
+        <!--<item>E\u266D dominant</item>-->
+        <!--<item>E dominant</item>-->
+        <!--<item>F dominant</item>-->
+        <!--<item>F♯ dominant</item>-->
+        <!--<item>G dominant</item>-->
+        <!--<item>A\u266D dominant</item>-->
+        <!--<item>A dominant</item>-->
+        <!--<item>B\u266D dominant</item>-->
+        <!--<item>B dominant</item>-->
     </string-array>
 
 </resources>

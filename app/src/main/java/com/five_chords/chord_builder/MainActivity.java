@@ -8,6 +8,7 @@
  */
 package com.five_chords.chord_builder;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +17,7 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements CheckOptionsFragment.OnChordTypeChangeListener
 {
     /****************************
      * This will probably become a fragment holder, with the sidebar/chord classes.
@@ -41,7 +42,12 @@ public class MainActivity extends AppCompatActivity
 
         cH.initialize(this);
 
-        gui.loadSpinners(this);
+        gui.loadSpinners(this, true, false, false);
+
+        // Make optional slider disabled to begin with; will probably move this somewhere else
+        findViewById(R.id.slider_option).setEnabled(false);
+        findViewById(R.id.textview_option).setEnabled(false);
+
         gui.seekBarListener(this, (SeekBar) findViewById(R.id.slider_root), (TextView) findViewById(R.id.textview_root));
         gui.seekBarListener(this, (SeekBar) findViewById(R.id.slider_third), (TextView) findViewById(R.id.textview_third));
         gui.seekBarListener(this, (SeekBar) findViewById(R.id.slider_fifth), (TextView) findViewById(R.id.textview_fifth));
@@ -157,5 +163,21 @@ public class MainActivity extends AppCompatActivity
     public void openStartPage() {
         Intent intent = new Intent(this, StartPage.class);
         startActivity(intent);
+    }
+
+    /**
+     * Called when the chord type changes.
+     * @param useMajors    Whether or not major chords are now being used
+     * @param useMinors    Whether or not minor chords are now being used
+     * @param useDominants Whether or not dominant chords are now being used
+     */
+    @Override
+    public void onChordTypeChanged(boolean useMajors, boolean useMinors, boolean useDominants)
+    {
+        gui.loadSpinners(this, useMajors, useMinors, useDominants);
+
+        // Hide dominant slider if needed
+        findViewById(R.id.slider_option).setEnabled(useDominants);
+        findViewById(R.id.textview_option).setEnabled(useDominants);
     }
 }

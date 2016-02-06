@@ -1,8 +1,9 @@
 package com.five_chords.chord_builder;
 
-import android.content.Context;
+import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +32,41 @@ public class CheckOptionsFragment extends Fragment implements CompoundButton.OnC
     /** The dominant chord checkbox */
     private CheckBox dominantBox;
 
+    /** The OnChordTypeChangeListener of this Fragment */
+    private OnChordTypeChangeListener chordTypeChangeListener;
+
     /**
      * Required empty public constructor.
      */
     public CheckOptionsFragment()
     {   }
+
+    /**
+     * Gets whether or not major chords should be used.
+     * @return Whether or not major chords should be used
+     */
+    public boolean useMajors()
+    {
+        return majorBox.isChecked();
+    }
+
+    /**
+     * Gets whether or not minor chords should be used.
+     * @return Whether or not minor chords should be used
+     */
+    public boolean useMinors()
+    {
+        return minorBox.isChecked();
+    }
+
+    /**
+     * Gets whether or not dominant chords should be used.
+     * @return Whether or not dominant chords should be used
+     */
+    public boolean useDominants()
+    {
+        return dominantBox.isChecked();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -69,15 +100,25 @@ public class CheckOptionsFragment extends Fragment implements CompoundButton.OnC
     }
 
     @Override
-    public void onAttach(Context context)
+    public void onAttach(Activity activity)
     {
-        super.onAttach(context);
+        super.onAttach(activity);
+
+        try
+        {
+            chordTypeChangeListener = (OnChordTypeChangeListener)activity;
+        }
+        catch (ClassCastException e)
+        {
+            throw new ClassCastException(activity.toString() + " must implement OnChordTypeChangeListener");
+        }
     }
 
     @Override
     public void onDetach()
     {
         super.onDetach();
+        chordTypeChangeListener = null;
     }
 
 
@@ -91,6 +132,11 @@ public class CheckOptionsFragment extends Fragment implements CompoundButton.OnC
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
     {
         updateEnables();
+
+        if (chordTypeChangeListener != null)
+            chordTypeChangeListener.onChordTypeChanged(useMajors(), useMinors(), useDominants());
+        else
+            Log.e("CheckOptionsFragment", "No ChordTypeChangeListener assigned");
     }
 
     /**
@@ -116,5 +162,19 @@ public class CheckOptionsFragment extends Fragment implements CompoundButton.OnC
         minorBox.setEnabled(numChecks > 1 || !minorBox.isChecked());
         majorBox.setEnabled(numChecks > 1 || !majorBox.isChecked());
         dominantBox.setEnabled(numChecks > 1 || !dominantBox.isChecked());
+    }
+
+    /**
+     * Interface for listening for chord type changes.
+     */
+    public interface OnChordTypeChangeListener
+    {
+        /**
+         * Called when the chord type changes.
+         * @param useMajors Whether or not major chords are now being used
+         * @param useMinors  Whether or not minor chords are now being used
+         * @param useDominants  Whether or not dominant chords are now being used
+         */
+        void onChordTypeChanged(boolean useMajors, boolean useMinors, boolean useDominants);
     }
 }
