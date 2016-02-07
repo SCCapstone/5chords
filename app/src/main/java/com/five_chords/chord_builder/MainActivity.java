@@ -8,7 +8,8 @@
  */
 package com.five_chords.chord_builder;
 
-import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     chordHandler cH;
     setUpGUI gui;
     Score s;
+    CheckOptionsFragment cof;
 
     int currentChordIndex;
 
@@ -40,9 +42,24 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         cH = new chordHandler(this);
         s = new Score(this);
 
-        // Make optional slider disabled to begin with; will probably move this somewhere else
-        findViewById(R.id.slider_option).setEnabled(false);
-        findViewById(R.id.textview_option).setEnabled(false);
+        if (getResources().getBoolean(R.bool.isTablet) == false) {
+            getFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.fragment_content, new SliderFragment())
+                    .commit();
+
+            cof = new CheckOptionsFragment();
+
+            this.findViewById(R.id.fragment_content).setOnTouchListener(new OnSwipeTouchListener(this) {
+                public void onSwipeLeft() {
+                    openOptions();
+                }
+
+                public void onSwipeRight() {
+                    closeOptions();
+                }
+            });
+        }
     }
 
     /**
@@ -152,6 +169,30 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     public void openStartPage() {
         Intent intent = new Intent(this, StartPage.class);
         startActivity(intent);
+    }
+
+    int optionsAreOpen = 0;
+    public void closeOptions() {
+        if (optionsAreOpen == 1) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+            ft.remove(cof);
+            ft.commit();
+
+            optionsAreOpen = 0;
+        }
+    }
+
+    public void openOptions() {
+        if (optionsAreOpen == 0) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+
+            ft.setCustomAnimations(R.animator.enter_anim, R.animator.exit_anim);
+            ft.add(R.id.fragment_content, cof);
+            ft.commit();
+
+            optionsAreOpen = 1;
+        }
     }
 
     /**

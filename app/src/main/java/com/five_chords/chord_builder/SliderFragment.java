@@ -1,8 +1,9 @@
 package com.five_chords.chord_builder;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,21 +23,26 @@ public class SliderFragment extends Fragment
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
-    {
+                             Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sliders, container, false);
+        View sliders = inflater.inflate(R.layout.fragment_sliders, container, false);
+
+        sliders.findViewById(R.id.slider_option).setEnabled(false);
+        sliders.findViewById(R.id.textview_option).setEnabled(false);
+
+        new setUpGUI(sliders);
+
+        return sliders;
     }
 
     @Override
-    public void onAttach(Context context)
+    public void onAttach(Activity activity)
     {
-        super.onAttach(context);
+        super.onAttach(activity);
     }
 
     @Override

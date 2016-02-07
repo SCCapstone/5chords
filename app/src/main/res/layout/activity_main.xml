@@ -1,5 +1,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/MainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/holo_blue_light"
@@ -56,40 +57,22 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@android:color/white"
             android:textSize="18sp"
-            android:text="@string/instrument"/>
+            android:text="@string/instrument" />
 
     </LinearLayout>
 
     <!-- TODO: make this fragment streamlined on phones/smaller screens
          possibly slide in from the side -->
 
-    <!-- Fragment containing the chord check options -->
-    <fragment
-        android:id="@+id/fragment_chord_check"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:name="com.five_chords.chord_builder.CheckOptionsFragment"
-        tools:layout="@layout/fragment_check_options"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@id/main_activity_top_layer"
-        android:layout_alignParentBottom="true">
-    </fragment>
-
-    <!-- Fragment containing the sliders -->
-    <fragment
-        android:id="@+id/fragment_sliders"
+    <FrameLayout
+        android:id="@+id/fragment_content"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_margin="16dp"
-        android:name="com.five_chords.chord_builder.SliderFragment"
-        tools:layout="@layout/fragment_sliders"
-        android:layout_toLeftOf="@id/fragment_chord_check"
-        android:layout_toStartOf="@id/fragment_chord_check"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@id/main_activity_top_layer"
         android:layout_alignParentBottom="true">
-    </fragment>
+    </FrameLayout>
 
 </RelativeLayout>

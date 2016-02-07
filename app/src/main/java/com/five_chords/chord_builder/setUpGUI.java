@@ -22,23 +22,26 @@ public class setUpGUI
 {
     public setUpGUI(Activity activity) {
         loadSpinners(activity, true, false, false);
-        seekBarListener(activity, (SeekBar) activity.findViewById(R.id.slider_root), (TextView) activity.findViewById(R.id.textview_root));
-        seekBarListener(activity, (SeekBar) activity.findViewById(R.id.slider_third), (TextView) activity.findViewById(R.id.textview_third));
-        seekBarListener(activity, (SeekBar) activity.findViewById(R.id.slider_fifth), (TextView) activity.findViewById(R.id.textview_fifth));
-        seekBarListener(activity, (SeekBar) activity.findViewById(R.id.slider_option), (TextView) activity.findViewById(R.id.textview_option));
+    }
+
+    public setUpGUI(View view) {
+        seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_root), (TextView) view.findViewById(R.id.textview_root));
+        seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_third), (TextView) view.findViewById(R.id.textview_third));
+        seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_fifth), (TextView) view.findViewById(R.id.textview_fifth));
+        seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_option), (TextView) view.findViewById(R.id.textview_option));
     }
 
     /**********************************************************************************************
      * seekBarListener function
      * This function will allow user to adjust the chord manually using seekBar
-     * @param activity The calling Activity
+     * @param view The context of the resources
      * @param bar
      * @param text
      **/
-    public void seekBarListener(Activity activity, SeekBar bar, final TextView text)
+    public void seekBarListener(View view, SeekBar bar, final TextView text)
     {
         // A reference to the noteNames to pass to the Listener
-        final String[] noteNames = activity.getResources().getStringArray(R.array.noteNames);
+        final String[] noteNames = view.getResources().getStringArray(R.array.noteNames);
         text.setText(noteNames[0]);
 
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
