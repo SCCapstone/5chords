@@ -19,7 +19,7 @@
             android:id="@+id/spinner_chord_select"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
+            android:layout_weight="0.63"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dropdown"/>
 
@@ -28,7 +28,7 @@
             android:id="@+id/button_select_chord_play"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="0.39"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@android:color/white"
             android:textSize="18sp"
@@ -36,11 +36,12 @@
             android:onClick="playSelectedChord"/>
 
         <!-- Button to select a random chord-->
+
         <Button
             android:id="@+id/button_select_random_chord"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="0.52"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@android:color/white"
             android:textSize="18sp"
@@ -52,11 +53,22 @@
             android:id="@+id/button_select_instrument"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="0.40"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:text="@string/instrument"/>
+
+        <Button
+            android:id="@+id/button_back_to_help"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.39"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:text="@string/help"
+            android:onClick="BackToHelp" />
 
     </LinearLayout>
 
@@ -67,10 +79,10 @@
         android:layout_height="wrap_content"
         android:name="com.five_chords.chord_builder.CheckOptionsFragment"
         tools:layout="@layout/fragment_check_options"
+        android:layout_alignBaseline="@+id/button2"
+        android:layout_alignBottom="@+id/button2"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_below="@id/main_activity_top_layer"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentEnd="true">
     </fragment>
 
     <!-- Fragment containing the sliders -->
@@ -88,5 +100,19 @@
         android:layout_below="@id/main_activity_top_layer"
         android:layout_alignParentBottom="true">
     </fragment>
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white"
+        android:textSize="18sp"
+        android:text="@string/instrument"
+        android:layout_alignBottom="@+id/fragment_sliders"
+        android:layout_toRightOf="@+id/fragment_sliders"
+        android:layout_toEndOf="@+id/fragment_sliders"
+        android:layout_marginBottom="193dp" />
 
 </RelativeLayout>
