@@ -20,7 +20,7 @@
             android:id="@+id/spinner_chord_select"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="4"
+            android:layout_weight="2.99"
             android:background="@android:drawable/btn_dropdown"
             android:spinnerMode="dropdown"/>
 
@@ -59,6 +59,16 @@
             android:textSize="18sp"
             android:text="@string/instrument" />
 
+        <Button
+            android:id="@+id/button_back_to_help"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:text="@string/help"
+            android:onClick="toHelpPage"/>
     </LinearLayout>
 
     <!-- TODO: make this fragment streamlined on phones/smaller screens
