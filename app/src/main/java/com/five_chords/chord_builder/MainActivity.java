@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -38,11 +39,12 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        new setUpGUI(this);
+        gui = new setUpGUI(this);
         cH = new chordHandler(this);
         s = new Score(this);
 
-        if (getResources().getBoolean(R.bool.isTablet) == false) {
+        // Put the Check Options in a sliding view if the device is not a Tablet
+        if (!getResources().getBoolean(R.bool.isTablet)) {
             getFragmentManager()
                     .beginTransaction()
                     .add(R.id.fragment_content, new SliderFragment())
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         if (chordChoice == 0)
         {
             Spinner dropdown = (Spinner) findViewById(R.id.spinner_chord_select);
-            dropdown.setSelection((currentChordIndex - 1) % dropdown.getCount());
+            dropdown.setSelection((currentChordIndex) % dropdown.getCount());
 
             // Play the selected chord
             playSelectedChord(null);
@@ -99,8 +101,6 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     {
         int[] builtChord = buildChord();
         int[] setChord = cH.getChord(currentChordIndex);
-
-//        cH.playChord(builtChord, setChord.length);
 
         if (cH.compareChords(builtChord, setChord))
         {
@@ -117,8 +117,8 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     public void displayAnswer(View v, int result)
     {
         // shows if the built chord matches the set chord
-        TextView tv = (TextView) this.findViewById(R.id.textview_answer);
-        tv.setText(Score.correctChords[currentChordIndex] + " / " + Score.totalChords[currentChordIndex]);
+        Button view = (Button)findViewById(R.id.button_answer);
+        view.setText(Score.correctChords[currentChordIndex] + " / " + Score.totalChords[currentChordIndex]);
     }
 
     /**

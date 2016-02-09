@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:id="@+id/fragment_check_options"
+              style="?android:attr/buttonBarButtonStyle">
+
+    <!-- Button to play the chord the user currently has selected on the sliders -->
+    <Button
+        android:id="@+id/button_playback_slider_chord"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_margin="4dp"
+        android:text="@string/play"
+        android:onClick="playBuiltChord"
+        />
+
+    <!-- Button to check the chord the user currently has selected on the sliders -->
+    <Button
+        android:id="@+id/button_check_user_chord"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_margin="4dp"
+        android:text="@string/check"
+        android:onClick="compareChords"
+       />
+
+    <!-- Button containing the score and the link to the score page -->
+    <Button
+        android:id="@+id/button_answer"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_margin="4dp"
+        />
+
+</LinearLayout>

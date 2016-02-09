@@ -10,21 +10,14 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
+import java.util.Date;
+
 /**
  * A Fragment containing the chord check options.
  * @author tstone95
  */
 public class CheckOptionsFragment extends Fragment implements CompoundButton.OnCheckedChangeListener
 {
-//    /** The Bundle id of the minor chords checkbox value */
-//    private static final String CHECKBOX_MINOR_VALUE_ID = "CheckOptionsFragment.minor";
-//
-//    /** The Bundle id of the major chords checkbox value */
-//    private static final String CHECKBOX_MAJOR_VALUE_ID = "CheckOptionsFragment.major";
-//
-//    /** The Bundle id of the dominant chords checkbox value */
-//    private static final String CHECKBOX_DOMINANT_VALUE_ID = "CheckOptionsFragment.dominant";
-
     /** The minor chord checkbox */
     private CheckBox minorBox;
     /** The major chord checkbox */

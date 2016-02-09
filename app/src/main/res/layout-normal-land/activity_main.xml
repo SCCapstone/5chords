@@ -1,0 +1,72 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/MainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/holo_blue_light"
+    android:layout_centerInParent="true"
+    android:scaleType="centerCrop"
+    tools:context=".MainActivity">
+
+    <!-- Placeholder to contain the chord sliders -->
+    <FrameLayout
+        android:id="@+id/fragment_content"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
+        >
+    </FrameLayout>
+
+    <!-- Fragment containing the chord select spinner -->
+    <fragment
+        android:id="@+id/fragment_chord_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:name="com.five_chords.chord_builder.ChordSelectFragment"
+        tools:layout="@layout/fragment_chord_select"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@id/fragment_content"
+        android:layout_toStartOf="@id/fragment_content"
+        >
+    </fragment>
+
+    <!-- Fragment containing the chord select options -->
+    <fragment
+        android:id="@+id/fragment_chord_select_options"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:name="com.five_chords.chord_builder.ChordSelectOptionsFragment"
+        tools:layout="@layout/fragment_chord_select_options"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@id/fragment_content"
+        android:layout_toStartOf="@id/fragment_content"
+        android:layout_below="@id/fragment_chord_select"
+        >
+    </fragment>
+
+    <!-- Fragment containing the chord play options -->
+    <fragment
+        android:id="@+id/fragment_chord_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:name="com.five_chords.chord_builder.CheckFragment"
+        tools:layout="@layout/fragment_check"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@id/fragment_content"
+        android:layout_toStartOf="@id/fragment_content"
+        android:layout_alignParentBottom="true"
+        >
+    </fragment>
+
+
+
+</RelativeLayout>

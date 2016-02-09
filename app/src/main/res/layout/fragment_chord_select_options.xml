@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal"
+              android:id="@+id/fragment_chord_select"
+              style="?android:attr/buttonBarStyle">
+
+    <!-- Button to play the selected chord-->
+    <Button
+        android:id="@+id/button_select_chord_play"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:text="@string/play"
+        android:onClick="playSelectedChord"/>
+
+    <!-- Button to select a random chord-->
+    <Button
+        android:id="@+id/button_select_random_chord"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:text="@string/random_chord"
+        android:onClick="getChord"/>
+
+    <!-- Button to select instrument-->
+    <Button
+        android:id="@+id/button_select_instrument"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:text="@string/instrument" />
+
+    <!-- Button to go to help page -->
+    <Button
+        android:id="@+id/button_back_to_help"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:text="@string/help"
+        android:onClick="toHelpPage"/>
+
+</LinearLayout>

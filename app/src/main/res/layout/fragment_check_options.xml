@@ -29,43 +29,4 @@
         android:layout_below="@id/checkbox_minor_chords"
         android:text="@string/dominant_chords"/>
 
-    <!-- Play and Check Buttons-->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        style="?android:attr/buttonBarButtonStyle">
-
-        <!-- Button to play the chord the user currently has selected on the sliders -->
-        <Button
-            android:id="@+id/button_playback_slider_chord"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_margin="8dp"
-            android:text="@string/play"
-            android:onClick="playBuiltChord"
-            />
-
-        <!-- Button to check the chord the user currently has selected on the sliders -->
-        <Button
-            android:id="@+id/button_check_user_chord"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:layout_margin="8dp"
-            android:text="@string/check"
-            android:onClick="compareChords"
-           />
-
-        <!-- TextView containing the answer -->
-        <TextView
-            android:id="@+id/textview_answer"
-            android:layout_width="96dp"
-            android:layout_height="96dp"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textSize="20sp"
-            android:textColor="@android:color/black"/>
-
-    </LinearLayout>
-
 </RelativeLayout>
