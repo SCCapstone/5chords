@@ -8,18 +8,32 @@
     android:scaleType="centerCrop"
     tools:context=".MainActivity">
 
-    <!-- Placeholder to contain the chord sliders -->
+    <!-- Placeholder representing the region to swipe in new fragments -->
     <FrameLayout
         android:id="@+id/fragment_content"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_margin="16dp"
+        android:layout_margin="4dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
         >
     </FrameLayout>
+
+    <!-- Fragment containing the chord sliders -->
+    <fragment
+        android:id="@+id/fragment_sliders"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:name="com.five_chords.chord_builder.SliderFragment"
+        tools:layout="@layout/fragment_sliders"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true">
+    </fragment>
 
     <!-- Fragment containing the chord select spinner -->
     <fragment
@@ -30,8 +44,8 @@
         tools:layout="@layout/fragment_chord_select"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@id/fragment_content"
-        android:layout_toStartOf="@id/fragment_content"
+        android:layout_toLeftOf="@id/fragment_sliders"
+        android:layout_toStartOf="@id/fragment_sliders"
         >
     </fragment>
 
@@ -45,8 +59,8 @@
         tools:layout="@layout/fragment_chord_select_options"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@id/fragment_content"
-        android:layout_toStartOf="@id/fragment_content"
+        android:layout_toLeftOf="@id/fragment_sliders"
+        android:layout_toStartOf="@id/fragment_sliders"
         android:layout_below="@id/fragment_chord_select"
         >
     </fragment>
@@ -61,12 +75,11 @@
         tools:layout="@layout/fragment_check"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@id/fragment_content"
-        android:layout_toStartOf="@id/fragment_content"
+        android:layout_toLeftOf="@id/fragment_sliders"
+        android:layout_toStartOf="@id/fragment_sliders"
         android:layout_alignParentBottom="true"
         >
     </fragment>
-
 
 
 </RelativeLayout>

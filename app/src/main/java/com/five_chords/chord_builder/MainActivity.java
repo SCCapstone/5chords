@@ -43,25 +43,17 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         cH = new chordHandler(this);
         s = new Score(this);
 
-        // Put the Check Options in a sliding view if the device is not a Tablet
-        if (!getResources().getBoolean(R.bool.isTablet)) {
-            getFragmentManager()
-                    .beginTransaction()
-                    .add(R.id.fragment_content, new SliderFragment())
-                    .commit();
+        // Put the heck options in a sliding view
+        cof = new CheckOptionsFragment();
+        this.findViewById(R.id.fragment_content).setOnTouchListener(new OnSwipeTouchListener(this) {
+            public void onSwipeLeft() {
+                openOptions();
+            }
 
-            cof = new CheckOptionsFragment();
-
-            this.findViewById(R.id.fragment_content).setOnTouchListener(new OnSwipeTouchListener(this) {
-                public void onSwipeLeft() {
-                    openOptions();
-                }
-
-                public void onSwipeRight() {
-                    closeOptions();
-                }
-            });
-        }
+            public void onSwipeRight() {
+                closeOptions();
+            }
+        });
     }
 
     /**
