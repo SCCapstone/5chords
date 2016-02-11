@@ -1,4 +1,4 @@
-package com.five_chords.chord_builder;
+package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
 import android.app.Activity;
 import android.content.Context;
@@ -7,6 +7,9 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.five_chords.chord_builder.R;
+import com.five_chords.chord_builder.setUpGUI;
 
 /**
  * A Fragment containing the chord select sliders.

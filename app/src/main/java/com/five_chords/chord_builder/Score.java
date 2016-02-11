@@ -21,22 +21,23 @@ import java.util.ArrayList;
 
 public class Score extends MainActivity
 {
-    public Score(Activity main) {
-        loadScores(main);
-    }
-
 //    private static SharedPreferences chordScores;
 
     /** The name of the saved chord scores in the SharedPreferences */
     public static final String CHORD_SCORES_SAVE_FILENAME = "ScoreFile";
 
     /** The array keeping track of the number of correct guesses for each chord */
-    protected static int[] correctChords;// = new int[Resources.getSystem().getStringArray(R.array.chords).length];
+    protected static int[] correctChords;
     /** The array keeping track of the number of total guesses for each chord */
-    protected static int[] totalChords;// = new int[Resources.getSystem().getStringArray(R.array.chords).length];
+    protected static int[] totalChords;
 
     RadioGroup chordClass;
     ArrayList<TextView> textViews = new ArrayList<>();
+
+    public Score(Activity main)
+    {
+        loadScores(main);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

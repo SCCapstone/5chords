@@ -1,10 +1,12 @@
-package com.five_chords.chord_builder;
+package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.five_chords.chord_builder.R;
 
 /**
  * A Fragment containing the chord select slider.

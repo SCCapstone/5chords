@@ -62,8 +62,7 @@ public class chordHandler
             builtChord = new int[] {builtChord[0], builtChord[1], builtChord[2], builtChord[2]};
         }
 
-        if (Arrays.equals(builtChord, setChord)) return true;
-        else return false;
+        return Arrays.equals(builtChord, setChord);
     }
 
     /****************************************************************
@@ -72,8 +71,8 @@ public class chordHandler
     public void playChord(int[] chord, int chordLength)
     {
         if (chord == null) return;
-        if (chordLength > 4) return;
-        if (chordLength < 0) return;
+        else if (chordLength > 4) return;
+        else if (chordLength < 0) return;
 
         for (int i = 0; i < chordLength; i++) sH.playNote(chord[i]);
     }
