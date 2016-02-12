@@ -24,10 +24,8 @@ public class Score extends MainActivity
     /** The name of the saved chord scores in the SharedPreferences */
     public static final String CHORD_SCORES_SAVE_FILENAME = "ScoreFile";
 
-    /** The array keeping track of the number of correct guesses for each chord */
-    protected static int[] correctChords;
-    /** The array keeping track of the number of total guesses for each chord */
-    protected static int[] totalChords;
+    /** The array of chord Scores */
+    public static ScoreWrapper[] scores;
 
     RadioGroup chordClass;
     ArrayList<TextView> textViews = new ArrayList<>();
@@ -50,23 +48,15 @@ public class Score extends MainActivity
         for( int i = 0; i < scorePage.getChildCount(); i++ )
             if( scorePage.getChildAt(i) instanceof TextView )
                 textViews.add((TextView) scorePage.getChildAt(i));
+    }
 
-        displayScores(0);
-
-        // listen for change of chord class
-        chordClass.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if (checkedId == R.id.major)
-                {
-                    displayScores(0);
-                } else if (checkedId == R.id.minor) {
-                    displayScores(1);
-                }
-
-            }
-        });
-
+    /***********************************************************************************************
+     * Gets the SharedPreferences used to load and save scores
+     * @param activity The calling Activity
+     **********************************************************************************************/
+    public static SharedPreferences getScoreLoader(Activity activity)
+    {
+        return activity.getSharedPreferences(CHORD_SCORES_SAVE_FILENAME, Context.MODE_PRIVATE);
     }
 
     /***********************************************************************************************
@@ -78,18 +68,25 @@ public class Score extends MainActivity
         // Grab the array of chord names from the resources
         String[] chordNames = main.getResources().getStringArray(R.array.chordNames);
 
-        // Initialize correctChords and totalChords arrays
-        correctChords = new int[chordNames.length];
-        totalChords = new int[chordNames.length];
+        // Initialize score array
+        scores = new ScoreWrapper[chordNames.length];
 
         // Load scores
-        SharedPreferences savedChordScores = main.getApplication().
-                                getSharedPreferences(CHORD_SCORES_SAVE_FILENAME, Context.MODE_PRIVATE);
+        SharedPreferences savedChordScores = getScoreLoader(main);
         for (int i = 0; i < chordNames.length; ++i)
-        {
-            correctChords[i] = savedChordScores.getInt("correct_" + chordNames[i], 0);
-            totalChords[i] = savedChordScores.getInt("total_" + chordNames[i], 0);
-        }
+            scores[i] = loadScore(savedChordScores, chordNames[i]);
+    }
+
+    /***********************************************************************************************
+     * Loads in a single score wrapper.
+     * @param savedChordScores The SharedPreferences of saved chord scores
+     * @param chordName The name of the chord whose score to load
+     **********************************************************************************************/
+    public ScoreWrapper loadScore(SharedPreferences savedChordScores, String chordName)
+    {
+        ScoreWrapper scoreWrapper = new ScoreWrapper(chordName);
+        scoreWrapper.load(savedChordScores);
+        return scoreWrapper;
     }
 
     /***********************************************************************************************
@@ -100,34 +97,21 @@ public class Score extends MainActivity
      **********************************************************************************************/
     public void setScore(Activity activity, int chordIndex, boolean correct)
     {
-        String[] chordNames = activity.getResources().getStringArray(R.array.chordNames);
-        SharedPreferences savedChordScores = activity.getApplication().
-                                    getSharedPreferences(CHORD_SCORES_SAVE_FILENAME, Context.MODE_PRIVATE);
-        SharedPreferences.Editor scoreEditor = savedChordScores.edit();
+        ScoreWrapper scoreWrapper = scores[chordIndex];
+        SharedPreferences savedChordScores = getScoreLoader(activity);
 
+        // Edit the score
+        scoreWrapper.numTotalGuesses++;
         if (correct)
-            scoreEditor.putInt("correct_" + chordNames[chordIndex], ++correctChords[chordIndex]);
+            scoreWrapper.numCorrectGuesses++;
 
-        scoreEditor.putInt("total_" + chordNames[chordIndex], ++totalChords[chordIndex]);
-        scoreEditor.apply();
+        // Save the new score
+        scoreWrapper.save(savedChordScores);
     }
-    /***********************************************************************************************
-     * displayScores function
-     * @param chords
-     **********************************************************************************************/
-    public void displayScores(int chords)
-    {
-        int chord = 12 * chords;
-        String[] chordNames = getResources().getStringArray(R.array.chordNames);
 
-        for (int i = chord; i < 12 + chord; i++)
-        {
-            textViews.get(i % 12).setText(chordNames[i] + " : " + correctChords[i] + "/" + totalChords[i]);
-        }
-    }
     /***********************************************************************************************
      * BacktoMain function
-     * @param view
+     * @param view The calling View
      **********************************************************************************************/
     public void BackToMain(View view)
     {
@@ -135,4 +119,47 @@ public class Score extends MainActivity
         startActivity(intent);
     }
 
+    /**
+     * Wrapper class for a single chord score.
+     */
+    public static class ScoreWrapper
+    {
+        /** The chord name of this ScoreItem */
+        public final String CHORD_NAME;
+        /** The number of correct guesses */
+        public int numCorrectGuesses;
+        /** The number of total guesses */
+        public int numTotalGuesses;
+
+        /**
+         * Constructs a new ScoreWrapper with default scores of zero.
+         * @param name The name of the chord
+         */
+        public ScoreWrapper(String name)
+        {
+            CHORD_NAME = name;
+        }
+
+        /**
+         * Loads this ScoreWrapper's score from the given SharedPreferences.
+         * @param savedChordScores The SharedPreferences from which to load
+         */
+        public void load(SharedPreferences savedChordScores)
+        {
+            numCorrectGuesses = savedChordScores.getInt("correct_" + CHORD_NAME, 0);
+            numTotalGuesses = savedChordScores.getInt("total_" + CHORD_NAME, 0);
+        }
+
+        /**
+         * Saves this ScoreWrapper's score to the given SharedPreferences.
+         * @param savedChordScores The SharedPreferences to which to save
+         */
+        public void save(SharedPreferences savedChordScores)
+        {
+            SharedPreferences.Editor scoreEditor = savedChordScores.edit();
+            scoreEditor.putInt("correct_" + CHORD_NAME, numCorrectGuesses);
+            scoreEditor.putInt("total_" + CHORD_NAME, numTotalGuesses);
+            scoreEditor.apply();
+        }
+    }
 }

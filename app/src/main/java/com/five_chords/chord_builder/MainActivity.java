@@ -8,21 +8,14 @@
  */
 package com.five_chords.chord_builder;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
@@ -141,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     {
         // shows if the built chord matches the set chord
         Button view = (Button)findViewById(R.id.button_answer);
-        view.setText(Score.correctChords[currentChordIndex] + " / " + Score.totalChords[currentChordIndex]);
+        view.setText(Score.scores[currentChordIndex].numCorrectGuesses + " / " + Score.scores[currentChordIndex].numTotalGuesses);
     }
 
     /**

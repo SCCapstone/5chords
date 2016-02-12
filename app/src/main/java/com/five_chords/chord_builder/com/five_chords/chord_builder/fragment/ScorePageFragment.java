@@ -57,9 +57,8 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
      * Fills the list of scores for the given chord type.
      * @param major Whether or not to add major chords scores
      * @param minor Whether or not to add minor chords scores
-     * @param dominant Whether or not to add dominant chords scores
      */
-    public void addScores(boolean major, boolean minor, boolean dominant)
+    public void addScores(boolean major, boolean minor)
     {
         if (view == null)
         {
@@ -71,9 +70,6 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
         ListView listView = (ListView)view.findViewById(R.id.score_page_scorelist);
         ScoreItemAdapter adapter = new ScoreItemAdapter(getActivity(), android.R.layout.simple_list_item_1);
 
-        // Grab the array of chord names from the resources
-        String[] chordNames = getActivity().getResources().getStringArray(R.array.chordNames);
-
         // Compute the start index into the score name array
         int startIndex;
 
@@ -84,16 +80,9 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
         else
             startIndex = 24;
 
-        // Load scores
-        SharedPreferences savedChordScores = getActivity().getApplication().
-                getSharedPreferences(Score.CHORD_SCORES_SAVE_FILENAME, Context.MODE_PRIVATE);
-
+        // Get scores
         for (int i = 0; i < 12; ++i)
-        {
-            adapter.add(new ScoreItem(chordNames[startIndex + i],
-                    savedChordScores.getInt("correct_" + chordNames[startIndex + i], 0),
-                    savedChordScores.getInt("total_" + chordNames[startIndex + i], 0)));
-        }
+            adapter.add(Score.scores[startIndex + i]);
 
         // Set the adapter
         listView.setAdapter(adapter);
@@ -134,7 +123,7 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
         tabs.setOnTabSelectedListener(this);
 
         // Populate list view of scores
-        addScores(true, false, false);
+        addScores(true, false);
 
         // Return the created View
         return view;
@@ -151,11 +140,11 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
             return;
 
         if (tab.getText().equals(getString(R.string.major_chords)))
-            addScores(true, false, false);
+            addScores(true, false);
         else if (tab.getText().equals(getString(R.string.minor_chords)))
-            addScores(false, true, false);
+            addScores(false, true);
         else if (tab.getText().equals(getString(R.string.dominant_chords)))
-            addScores(false, false, true);
+            addScores(false, false);
     }
 
     /**
@@ -175,80 +164,10 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
     public void onTabReselected(TabLayout.Tab tab)
     {    }
 
-//    /**
-//     * Fragment containing the Tabs on the Score Page.
-//     */
-//    public static class ScoreTabsFragment extends Fragment
-//    {
-//        /**
-//         * Required empty public constructor.
-//         */
-//        public ScoreTabsFragment()
-//        {   }
-//
-//        /**
-//         * Called when the View containing this Fragment has been created.
-//         * @param inflater The inflater to use to inflate the Fragment
-//         * @param container The ViewGroup container
-//         * @param savedInstanceState The saved instance state
-//         * @return This Fragmet's layout
-//         */
-//        @Override
-//        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                                 Bundle savedInstanceState)
-//        {
-//            // Inflate the layout for this fragment
-//            View view = inflater.inflate(R.layout.fragment_score_tabs, container, false);
-//            TabLayout tabs = (TabLayout)view.findViewById(R.id.tabs_score_page);
-//
-//            // Create tabs
-//            TabLayout.Tab majorTab = tabs.newTab();
-//            majorTab.setText(getResources().getString(R.string.major_chords));
-//            tabs.addTab(majorTab);
-//
-//            TabLayout.Tab minorTab = tabs.newTab();
-//            minorTab.setText(getResources().getString(R.string.minor_chords));
-//            tabs.addTab(minorTab);
-//
-//            TabLayout.Tab dominantTab = tabs.newTab();
-//            dominantTab.setText(getResources().getString(R.string.dominant_chords));
-//            tabs.addTab(dominantTab);
-//
-//            // Return the View
-//            return view;
-//        }
-//    }
-
-    /**
-     * Class representing the score for a single chord.
-     */
-    public static class ScoreItem
-    {
-        /** The chord name of this ScoreItem */
-        public final String CHORD_NAME;
-        /** The number of correct guesses */
-        public final int CORRECT_GUESSES;
-        /** The number of total guesses */
-        public final int TOTAL_GUESSES;
-
-        /**
-         * Constructs a new ScoreItem.
-         * @param name The name of the chord
-         * @param correctGuesses The number of correct guesses
-         * @param totalGuesses The number of total guesses
-         */
-        public ScoreItem(String name, int correctGuesses, int totalGuesses)
-        {
-            CHORD_NAME = name;
-            CORRECT_GUESSES = correctGuesses;
-            TOTAL_GUESSES = totalGuesses;
-        }
-    }
-
     /**
      * Implementation of an ArrayAdapter containing ScoreItems.
      */
-    public static class ScoreItemAdapter extends ArrayAdapter<ScoreItem>
+    public static class ScoreItemAdapter extends ArrayAdapter<Score.ScoreWrapper>
     {
         /**
          * Constructor.
@@ -277,16 +196,16 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
             else
                 view = LayoutInflater.from(getContext()).inflate(R.layout.component_score_item, parent, false);
 
-            ScoreItem item = getItem(position);
+            Score.ScoreWrapper item = getItem(position);
             TextView chordName  = (TextView)view.findViewById(R.id.textview_score_item_chord_name);
             TextView chordScore  = (TextView)view.findViewById(R.id.textview_score_item_score);
 
             chordName.setText(item.CHORD_NAME);
 
-            if (item.TOTAL_GUESSES == 0)
+            if (item.numTotalGuesses == 0)
                 chordScore.setText("Not Attempted");
             else
-                chordScore.setText(String.format("%.3f", (100.0 * item.CORRECT_GUESSES / item.TOTAL_GUESSES)) + " %");
+                chordScore.setText(String.format("%.3f", (100.0 * item.numCorrectGuesses / item.numTotalGuesses)) + " %");
 
             return view;
         }
