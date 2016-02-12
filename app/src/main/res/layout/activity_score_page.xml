@@ -8,127 +8,7 @@
     tools:context="com.five_chords.chord_builder.Score"
     android:background="@android:color/holo_blue_light">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/chord_score_0"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="41dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/chord_score_1"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/chord_score_0"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/chord_score_2"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/chord_score_1"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/chord_score_3"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/chord_score_2"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/chord_score_4"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/chord_score_3"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/chord_score_5"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/chord_score_4"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/chord_score_6"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/chord_score_5"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/chord_score_7"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/chord_score_6"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/chord_score_8"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/chord_score_7"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/chord_score_9"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/chord_score_8"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/chord_score_10"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/chord_score_9"
-        android:layout_alignParentLeft="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/chord_score_11"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/chord_score_10"
-        android:layout_alignParentLeft="true" />
-
+    <!-- Back to Main button -->
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -139,29 +19,19 @@
         android:layout_alignParentEnd="true"
         android:onClick="BackToMain" />
 
-    <RadioGroup
-        android:id="@+id/chordClass"
+    <!-- Score Page Fragment -->
+    <fragment
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_margin="4dp"
+        android:name="com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScorePageFragment"
+        tools:layout="@layout/fragment_score_page"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/button5">
+    </fragment>
 
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="major"
-            android:id="@+id/major"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:checked="true" />
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="minor"
-            android:id="@+id/minor"
-            android:layout_alignParentTop="true"
-            android:layout_alignRight="@+id/button4"
-            android:layout_alignEnd="@+id/button4" />
-   </RadioGroup>
 </RelativeLayout>

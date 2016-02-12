@@ -103,7 +103,8 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
         view = inflater.inflate(R.layout.fragment_score_page, container, false);
 
         // Set title
-        getDialog().setTitle(R.string.scores);
+        if (getDialog() != null)
+            getDialog().setTitle(R.string.scores);
 
         // Create tabs
         TabLayout tabs = (TabLayout)view.findViewById(R.id.tabs_score_page);

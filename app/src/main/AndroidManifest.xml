@@ -21,7 +21,7 @@
             android:label="@string/title_activity_help_page" >
         </activity>
         <activity
-            android:name=".Score"
+            android:name=".Score$ScoreActivity"
             android:label="@string/title_activity_score_page" >
         </activity>
         <activity

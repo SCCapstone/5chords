@@ -26,12 +26,12 @@ public class HelpPage extends AppCompatActivity {
     }
     public void goToScores(View view)
     {
-        Intent intent = new Intent(this, Score.class);
+        Intent intent = new Intent(this, Score.ScoreActivity.class);
         startActivity(intent);
     }
     public void BackToHelp(View view)
     {
-        Intent intent = new Intent(this, Score.class);
+        Intent intent = new Intent(this, Score.ScoreActivity.class);
         startActivity(intent);
     }
 

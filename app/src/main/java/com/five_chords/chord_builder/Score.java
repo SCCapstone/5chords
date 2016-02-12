@@ -13,13 +13,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.RadioGroup;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import java.util.ArrayList;
 
-public class Score extends MainActivity
+public class Score// extends MainActivity
 {
     /** The name of the saved chord scores in the SharedPreferences */
     public static final String CHORD_SCORES_SAVE_FILENAME = "ScoreFile";
@@ -27,27 +25,9 @@ public class Score extends MainActivity
     /** The array of chord Scores */
     public static ScoreWrapper[] scores;
 
-    RadioGroup chordClass;
-    ArrayList<TextView> textViews = new ArrayList<>();
-
     public Score(Activity main)
     {
         loadScores(main);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_score_page);
-
-        chordClass = (RadioGroup) findViewById(R.id.chordClass);
-
-        // get all every TextView for displaying score
-        RelativeLayout scorePage = (RelativeLayout) findViewById( R.id.scorePage );
-        for( int i = 0; i < scorePage.getChildCount(); i++ )
-            if( scorePage.getChildAt(i) instanceof TextView )
-                textViews.add((TextView) scorePage.getChildAt(i));
     }
 
     /***********************************************************************************************
@@ -109,16 +89,6 @@ public class Score extends MainActivity
         scoreWrapper.save(savedChordScores);
     }
 
-    /***********************************************************************************************
-     * BacktoMain function
-     * @param view The calling View
-     **********************************************************************************************/
-    public void BackToMain(View view)
-    {
-        Intent intent = new Intent(this, MainActivity.class );
-        startActivity(intent);
-    }
-
     /**
      * Wrapper class for a single chord score.
      */
@@ -160,6 +130,29 @@ public class Score extends MainActivity
             scoreEditor.putInt("correct_" + CHORD_NAME, numCorrectGuesses);
             scoreEditor.putInt("total_" + CHORD_NAME, numTotalGuesses);
             scoreEditor.apply();
+        }
+    }
+
+    /**
+     * Activity for the Score page.
+     */
+    public static class ScoreActivity extends AppCompatActivity
+    {
+        /***********************************************************************************************
+         * BacktoMain function
+         * @param view The calling View
+         **********************************************************************************************/
+        public void BackToMain(View view)
+        {
+            Intent intent = new Intent(this, MainActivity.class );
+            startActivity(intent);
+        }
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState)
+        {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_score_page);
         }
     }
 }
