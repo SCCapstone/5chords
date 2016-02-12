@@ -21,8 +21,6 @@ import java.util.ArrayList;
 
 public class Score extends MainActivity
 {
-//    private static SharedPreferences chordScores;
-
     /** The name of the saved chord scores in the SharedPreferences */
     public static final String CHORD_SCORES_SAVE_FILENAME = "ScoreFile";
 

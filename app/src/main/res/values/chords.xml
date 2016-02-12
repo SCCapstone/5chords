@@ -30,18 +30,18 @@
         <item>A minor</item>
         <item>B\u266D minor</item>
         <item>B minor</item>
-        <!--<item>C dominant</item>-->
-        <!--<item>C♯ dominant</item>-->
-        <!--<item>D dominant</item>-->
-        <!--<item>E\u266D dominant</item>-->
-        <!--<item>E dominant</item>-->
-        <!--<item>F dominant</item>-->
-        <!--<item>F♯ dominant</item>-->
-        <!--<item>G dominant</item>-->
-        <!--<item>A\u266D dominant</item>-->
-        <!--<item>A dominant</item>-->
-        <!--<item>B\u266D dominant</item>-->
-        <!--<item>B dominant</item>-->
+        <item>C dominant</item>
+        <item>C♯ dominant</item>
+        <item>D dominant</item>
+        <item>E\u266D dominant</item>
+        <item>E dominant</item>
+        <item>F dominant</item>
+        <item>F♯ dominant</item>
+        <item>G dominant</item>
+        <item>A\u266D dominant</item>
+        <item>A dominant</item>
+        <item>B\u266D dominant</item>
+        <item>B dominant</item>
     </string-array>
 
 </resources>

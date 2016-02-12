@@ -36,9 +36,12 @@
     <string name="correct">Correct</string>
     <string name="wrong">Wrong</string>
     <string name="play">Play</string>
+    <string name="preview">Preview</string>
     <string name="check">Check</string>
     <string name="chord">Chord</string>
     <string name="help">Help</string>
+    <string name="score">Score</string>
+    <string name="scores">Scores</string>
     <string name="random_chord">Random Chord</string>
     <string name="instrument">Instrument</string>
     <string name="major_chords">Major Chords</string>

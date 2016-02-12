@@ -8,16 +8,26 @@
  */
 package com.five_chords.chord_builder;
 
+import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.CheckOptionsFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScorePageFragment;
 
 public class MainActivity extends AppCompatActivity implements CheckOptionsFragment.OnChordTypeChangeListener
 {
@@ -91,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
      */
     public void compareChords(View v)
     {
-        int[] builtChord = buildChord();
+        int[] builtChord = buildCurrentChord();
         int[] setChord = cH.getChord(currentChordIndex);
 
         if (cH.compareChords(builtChord, setChord))
@@ -106,6 +116,27 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         }
     }
 
+    /**
+     * Called to launch the score page fragment.
+     * @param v The calling View
+     */
+    public void launchScorePage(View v)
+    {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("score_dialog");
+
+        if (prev != null)
+        {
+            ft.remove(prev);
+        }
+
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = ScorePageFragment.newInstance();
+        newFragment.show(ft, "score_dialog");
+    }
+
     public void displayAnswer(View v, int result)
     {
         // shows if the built chord matches the set chord
@@ -117,7 +148,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
      * Builds the current chord that the user has defined on the sliders.
      * @return An array containing the root, third, fifth, and option values of the built chord
      */
-    public int[] buildChord()
+    public int[] buildCurrentChord()
     {
         int root = ((SeekBar) this.findViewById(R.id.slider_root)).getProgress();
         int third = ((SeekBar) this.findViewById(R.id.slider_third)).getProgress();
@@ -143,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
      */
     public void playBuiltChord(View v)
     {
-        int[] setChord = buildChord();
+        int[] setChord = buildCurrentChord();
         cH.playChord(setChord, setChord.length);
     }
 
