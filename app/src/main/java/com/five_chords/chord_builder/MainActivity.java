@@ -11,11 +11,15 @@ package com.five_chords.chord_builder;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 
@@ -28,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
      * This will probably become a fragment holder, with the sidebar/chord classes.
      * Those two will handle the bulk of the code.
      */
-
+    SharedPreferences sPrefs;
     chordHandler cH;
     setUpGUI gui;
     Score s;
@@ -39,8 +43,36 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+
+
+       super.onCreate(savedInstanceState);
+       setContentView(R.layout.activity_main);
+
+        SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
+        if (isFirstRun)
+        {
+            Intent intent = new Intent(this,demo.class);
+            startActivity(intent);
+
+            SharedPreferences.Editor editor = wmbPreference.edit();
+            editor.putBoolean("FIRSTRUN", false);
+            editor.commit();
+        }
+
+       /*SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
+        if(pref.getBoolean("activity_executed", false)){
+            Intent intent = new Intent(this,demo.class);
+            startActivity(intent);
+            finish();
+
+        } else {
+            SharedPreferences.Editor ed = pref.edit();
+            ed.putBoolean("activity_executed", true);
+            ed.commit();
+
+        }*/
+
 
         gui = new setUpGUI(this);
         cH = new chordHandler(this);
