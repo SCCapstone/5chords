@@ -60,19 +60,6 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
             editor.commit();
         }
 
-       /*SharedPreferences pref = getSharedPreferences("ActivityPREF", Context.MODE_PRIVATE);
-        if(pref.getBoolean("activity_executed", false)){
-            Intent intent = new Intent(this,demo.class);
-            startActivity(intent);
-            finish();
-
-        } else {
-            SharedPreferences.Editor ed = pref.edit();
-            ed.putBoolean("activity_executed", true);
-            ed.commit();
-
-        }*/
-
 
         gui = new setUpGUI(this);
         cH = new chordHandler(this);
