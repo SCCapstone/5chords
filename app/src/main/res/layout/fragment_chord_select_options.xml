@@ -39,7 +39,8 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/white"
         android:textSize="12sp"
-        android:text="@string/instrument" />
+        android:text="@string/instrument"
+        android:onClick="chordMe" />
 
     <!-- Button to go to help page -->
     <Button
