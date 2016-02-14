@@ -9,7 +9,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name">
+            android:label="Chord Builder">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,17 +18,17 @@
         </activity>
         <activity
             android:name=".HelpPage"
-            android:label="@string/title_activity_help_page" />
+            android:label="Help" />
         <activity
             android:name=".Score$ScoreActivity"
-            android:label="@string/title_activity_score_page" />
+            android:label="Score" />
         <activity
             android:name=".StartPage"
             android:label="@string/title_activity_start_page"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".AboutPage"
-            android:label="@string/title_activity_about_page" />
+            android:label="About" />
         <activity android:name=".demo"></activity>
     </application>
 

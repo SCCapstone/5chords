@@ -26,7 +26,7 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.Scor
 
 public class MainActivity extends AppCompatActivity implements CheckOptionsFragment.OnChordTypeChangeListener
 {
-    /****************************
+    /******************************************************************************
      * This will probably become a fragment holder, with the sidebar/chord classes.
      * Those two will handle the bulk of the code.
      */
@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-
-
        super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_main);
 
@@ -79,10 +77,10 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         });
     }
 
-    /**
+    /**************************************
      * Called when a new chord is selected.
      * @param v The calling view
-     */
+     **/
     public void getChord(View v)
     {
         // The chord choice
@@ -108,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         }
     }
 
-    /**
+    /*****************************************************************************
      * Called to compare the user defined chord with the currently selected chord.
      * @param v The calling View
      */
@@ -129,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         }
     }
 
-    /**
+    /*******************************************
      * Called to launch the score page fragment.
      * @param v The calling View
      */
@@ -157,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         view.setText(Score.scores[currentChordIndex].numCorrectGuesses + " / " + Score.scores[currentChordIndex].numTotalGuesses);
     }
 
-    /**
+    /******************************************************************************************
      * Builds the current chord that the user has defined on the sliders.
      * @return An array containing the root, third, fifth, and option values of the built chord
      */
@@ -171,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         return new int[] {root, third, fifth, seventh};
     }
 
-    /**
+    /*************************************
      * Plays the currently selected chord.
      * @param v The calling View
      */
@@ -181,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         cH.playChord(setChord, setChord.length, instrument);
     }
 
-    /**
+    /*************************************************
      * Plays the current chord defined on the sliders.
      * @param v The calling View
      */
@@ -191,23 +189,27 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         cH.playChord(setChord, setChord.length, instrument);
     }
 
-    /****************************************************************
+    /*********************
      * Go to help activity
+     * @param v The calling View
      **/
-    public void toHelpPage(View v) {
+    public void toHelpPage(View v)
+    {
         Intent intent = new Intent(this, HelpPage.class);
         startActivity(intent);
     }
 
-    /****************************************************************
+    /**********************
      * Opens the Start Page
      **/
-    public void openStartPage() {
+    public void openStartPage()
+    {
         Intent intent = new Intent(this, StartPage.class);
         startActivity(intent);
     }
 
-    public void switchInstrument(View v) {
+    public void switchInstrument(View v)
+    {
         if (instrument == 21) {
             instrument = 58;
         } else {
@@ -216,7 +218,8 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     }
 
     int optionsAreOpen = 0;
-    public void closeOptions() {
+    public void closeOptions()
+    {
         if (optionsAreOpen == 1) {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
 
@@ -227,8 +230,10 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         }
     }
 
-    public void openOptions() {
-        if (optionsAreOpen == 0) {
+    public void openOptions()
+    {
+        if (optionsAreOpen == 0)
+        {
             FragmentTransaction ft = getFragmentManager().beginTransaction();
 
             ft.setCustomAnimations(R.animator.enter_anim, R.animator.exit_anim);
@@ -239,11 +244,12 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         }
     }
 
-    public int getInstrument() {
+    public int getInstrument()
+    {
         return instrument;
     }
 
-    /**
+    /************************************************************************
      * Called when the chord type changes.
      * @param useMajors    Whether or not major chords are now being used
      * @param useMinors    Whether or not minor chords are now being used

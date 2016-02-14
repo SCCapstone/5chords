@@ -22,19 +22,21 @@ public class setUpGUI extends MainActivity
 {
     static soundHandler sH;
 
-    public setUpGUI(Activity activity) {
+    public setUpGUI(Activity activity)
+    {
         loadSpinners(activity, true, false, false);
         sH = new soundHandler(activity);
     }
 
-    public setUpGUI(View view) {
+    public setUpGUI(View view)
+    {
         seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_root), (TextView) view.findViewById(R.id.textview_root));
         seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_third), (TextView) view.findViewById(R.id.textview_third));
         seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_fifth), (TextView) view.findViewById(R.id.textview_fifth));
         seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_option), (TextView) view.findViewById(R.id.textview_option));
     }
 
-    /**********************************************************************************************
+    /**************************************************************************
      * seekBarListener function
      * This function will allow user to adjust the chord manually using seekBar
      * @param view The context of the resources

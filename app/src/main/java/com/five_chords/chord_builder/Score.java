@@ -1,11 +1,10 @@
-
-/*************************************************************************************************
+/******************************************************************************************
  * Score.java
  * This class will display how many tries and how many user got it correct by "_/_" format.
  * @version 1.0
  * @date 06 November 2015
  * @author: Drea,Steven,Zach,Kevin,Bo
- */
+ **/
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
@@ -30,10 +29,10 @@ public class Score// extends MainActivity
         loadScores(main);
     }
 
-    /***********************************************************************************************
+    /*********************************************************
      * Gets the SharedPreferences used to load and save scores
      * @param activity The calling Activity
-     **********************************************************************************************/
+     **/
     public static SharedPreferences getScoreLoader(Activity activity)
     {
         return activity.getSharedPreferences(CHORD_SCORES_SAVE_FILENAME, Context.MODE_PRIVATE);
@@ -42,7 +41,7 @@ public class Score// extends MainActivity
     /***********************************************************************************************
      * Loads the score data for each chord and initializes the correctChords and totalChords arrays.
      * @param main The calling Activity
-     **********************************************************************************************/
+     **/
     public void loadScores(Activity main)
     {
         // Grab the array of chord names from the resources
@@ -57,11 +56,11 @@ public class Score// extends MainActivity
             scores[i] = loadScore(savedChordScores, chordNames[i]);
     }
 
-    /***********************************************************************************************
+    /*********************************************************************
      * Loads in a single score wrapper.
      * @param savedChordScores The SharedPreferences of saved chord scores
      * @param chordName The name of the chord whose score to load
-     **********************************************************************************************/
+     **/
     public ScoreWrapper loadScore(SharedPreferences savedChordScores, String chordName)
     {
         ScoreWrapper scoreWrapper = new ScoreWrapper(chordName);
@@ -69,12 +68,12 @@ public class Score// extends MainActivity
         return scoreWrapper;
     }
 
-    /***********************************************************************************************
+    /************************************************************
      * Updates the score for the chord of the given index.
      * @param activity The calling Activity
      * @param chordIndex The index of the chord
      * @param correct Whether or not the chord guess was correct
-     **********************************************************************************************/
+     **/
     public void setScore(Activity activity, int chordIndex, boolean correct)
     {
         ScoreWrapper scoreWrapper = scores[chordIndex];
@@ -89,7 +88,7 @@ public class Score// extends MainActivity
         scoreWrapper.save(savedChordScores);
     }
 
-    /**
+    /*****************************************
      * Wrapper class for a single chord score.
      */
     public static class ScoreWrapper
@@ -101,7 +100,7 @@ public class Score// extends MainActivity
         /** The number of total guesses */
         public int numTotalGuesses;
 
-        /**
+        /************************************************************
          * Constructs a new ScoreWrapper with default scores of zero.
          * @param name The name of the chord
          */
@@ -110,20 +109,20 @@ public class Score// extends MainActivity
             CHORD_NAME = name;
         }
 
-        /**
+        /*******************************************************************
          * Loads this ScoreWrapper's score from the given SharedPreferences.
          * @param savedChordScores The SharedPreferences from which to load
-         */
+         **/
         public void load(SharedPreferences savedChordScores)
         {
             numCorrectGuesses = savedChordScores.getInt("correct_" + CHORD_NAME, 0);
             numTotalGuesses = savedChordScores.getInt("total_" + CHORD_NAME, 0);
         }
 
-        /**
+        /*****************************************************************
          * Saves this ScoreWrapper's score to the given SharedPreferences.
          * @param savedChordScores The SharedPreferences to which to save
-         */
+         **/
         public void save(SharedPreferences savedChordScores)
         {
             SharedPreferences.Editor scoreEditor = savedChordScores.edit();
@@ -133,15 +132,15 @@ public class Score// extends MainActivity
         }
     }
 
-    /**
+    /******************************
      * Activity for the Score page.
-     */
+     **/
     public static class ScoreActivity extends AppCompatActivity
     {
-        /***********************************************************************************************
+        /*******************************
          * BacktoMain function
          * @param view The calling View
-         **********************************************************************************************/
+         **/
         public void BackToMain(View view)
         {
             Intent intent = new Intent(this, MainActivity.class );

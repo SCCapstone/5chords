@@ -1,19 +1,24 @@
+/***************************************************************************************************
+ * soundHandler.java
+ * @version 1.0
+ * @date 06 November 2015
+ * @author: Drea,Steven,Zach,Kevin,Bo
+ **/
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.net.Uri;
 
-/**
- *
- */
-public class soundHandler extends MainActivity {
+public class soundHandler extends MainActivity
+{
 
     static MediaPlayer mediaPlayer;
     static soundHandlerMidi midi;
     static String midiFile;
 
-    public soundHandler(Activity main) {
+    public soundHandler(Activity main)
+    {
         midiFile = main.getFilesDir() + "/midi.mid";
         midi = new soundHandlerMidi();
     }

@@ -7,40 +7,39 @@
     tools:context="com.five_chords.chord_builder.HelpPage"
     android:background="@android:color/holo_blue_light">
 
-
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Back to Main page"
+        android:text="Back to Main"
         android:id="@+id/button_back_to_main"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:onClick = "BackToMain" />
 
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Basics for playing"
+        android:text="Basics for playing:"
         android:id="@+id/textView"
+        android:layout_marginTop="37dp"
+        android:textStyle="bold"
         android:layout_below="@+id/button_back_to_main"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="23dp" />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/Text"
+        android:text=" * To use this application, you must first press the 'Random Chord' button.\n * After that you will hear a number of notes, also called a cord.\n * Your job is to use the sliders to match the chord, and then press the 'CHECK' button to see if you are correct.\n * Note: if you want to hear the cord again, press the 'PREVIEW' button."
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:singleLine="false"
         android:layout_below="@+id/textView"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="37dp"
-        android:layout_alignRight="@+id/button_back_to_main"
-        android:layout_alignEnd="@+id/button_back_to_main"
-        android:text="The basics, of the application are as follows. To use this application, you must first press the &quot;Random&quot; button. After that you will hear a number of notes, also called a cord. Your job is to match that cord with the sliders then press the Test button and it will tell you how close you are to the correct cord. Note if you want to hear the cord again, press the Chord button.  " />
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -57,8 +56,8 @@
         android:layout_height="wrap_content"
         android:text="About Us"
         android:id="@+id/button_back_to_about"
-        android:layout_marginBottom="39dp"
+        android:onClick="goToAboutPage"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:onClick="goToAboutPage" />
+        android:layout_toRightOf="@+id/button_back_to_score"
+        android:layout_toEndOf="@+id/button_back_to_score" />
 </RelativeLayout>
