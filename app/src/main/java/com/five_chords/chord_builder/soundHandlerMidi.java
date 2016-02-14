@@ -1,9 +1,3 @@
-/***************************************************************************************************
- * soundHandlerMidi.java
- * @version 1.0
- * @date 06 November 2015
- * @author: Drea,Steven,Zach,Kevin,Bo
- **/
 package com.five_chords.chord_builder;
 
 import java.io.FileOutputStream;
@@ -29,13 +23,8 @@ public class soundHandlerMidi {
     // A Vector to hold our MIDI events
     Vector<int[]> midiEvents;
 
-    public soundHandlerMidi()
-    {
-        midiEvents = new Vector<int[]>();
-    }
+    public void writeToFile (String filename) throws IOException {
 
-    public void writeToFile (String filename) throws IOException
-    {
         // open midi file
         FileOutputStream fos = new FileOutputStream (filename);
 
@@ -67,8 +56,7 @@ public class soundHandlerMidi {
     }
 
     // Convert an array of integers into an array of bytes
-    public byte[] intArrayToByteArray (int[] ints)
-    {
+    public byte[] intArrayToByteArray (int[] ints) {
         int l = ints.length;
         byte[] out = new byte[ints.length];
         for (int i = 0; i < l; i++) {
@@ -78,8 +66,7 @@ public class soundHandlerMidi {
     }
 
     // create a note-on MIDI event
-    public void noteOn (int delta, int note, int velocity)
-    {
+    public void noteOn (int delta, int note, int velocity) {
         int[] data = new int[4];
         data[0] = delta;
         data[1] = 0x90;
@@ -89,8 +76,7 @@ public class soundHandlerMidi {
     }
 
     // create a note-off MIDI event
-    public void noteOff (int delta, int note)
-    {
+    public void noteOff (int delta, int note) {
         int[] data = new int[4];
         data[0] = delta;
         data[1] = 0x80;
@@ -100,8 +86,7 @@ public class soundHandlerMidi {
     }
 
     // create a bend pitch MIDI event
-    public void bendPitch (int msig, int lsig)
-    {
+    public void bendPitch (int msig, int lsig) {
         int[] data = new int[4];
         data[0] = 0;
         data[1] = 0xE0;
@@ -111,8 +96,7 @@ public class soundHandlerMidi {
     }
 
     // create a program-change MIDI event (instruments)
-    public void progChange (int prog)
-    {
+    public void progChange (int prog) {
         int[] data = new int[3];
         data[0] = 0;
         data[1] = 0xC0;
@@ -120,21 +104,8 @@ public class soundHandlerMidi {
         midiEvents.add(data);
     }
 
-    // create a Midi file from provided input
-    public void createMidi (String s, int inst, int delta, int note, int veloc, int pitch) throws Exception
-    {
-        soundHandlerMidi midi = new soundHandlerMidi();
-        midi.progChange(inst);
-
-        int msb = (pitch >> 7) & 0x7F;
-        int lsb = pitch & 0x7F;
-
-        midi.bendPitch(msb, lsb);
-
-        midi.noteOn(0, note, veloc);
-        midi.noteOff(delta, note);
-
-        midi.writeToFile(s);
+    public void newMidi() {
+        midiEvents = new Vector<int[]>();
     }
 
 }

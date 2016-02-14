@@ -15,8 +15,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/white"
         android:textSize="12sp"
-        android:text="@string/play"
-        android:onClick="playSelectedChord"/>
+        android:text="@string/play" />
 
     <!-- Button to select a random chord-->
     <Button

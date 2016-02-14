@@ -6,7 +6,7 @@
  * @version 1.0
  * @date 06 November 2015
  * @author: Drea,Steven,Zach,Kevin,Bo
- **/
+ */
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
@@ -19,31 +19,16 @@ public class chordHandler
             "C_minor", "C#_minor","D_minor","Eb_minor","E_minor","F_minor","F#_minor","G_minor","Ab_minor","A_minor","Bb_minor","B_minor"};
 
     int[][] chords = new int[12*2][];
-    soundHandler sH = null;
 
-    public chordHandler(Activity main)
-    {
-        sH = new soundHandler(main);
-
-        for (int i = 0; i < 12; i++)
-        {
+    public chordHandler() {
+        for (int i = 0; i < 12; i++) {
             chords[i] = new int[] {i, i+4, i+7};
             chords[12+i] = new int[] {i, i+3, i+7};
             //chords[24+i] = {i, i+4, i+7, i+10};
         }
     }
 
-    public chordHandler()
-    {
-        for (int i = 0; i < 12; i++)
-        {
-            chords[i] = new int[] {i, i+4, i+7};
-            chords[12+i] = new int[] {i, i+3, i+7};
-            //chords[24+i] = {i, i+4, i+7, i+10};
-        }
-    }
-
-    /******************************************************
+    /****************************************************************
      * Picks a Chord. Either random, or the selected chord.
      **/
     public int newChordIndex(int chordChoice)
@@ -61,8 +46,7 @@ public class chordHandler
         if (setChord.length > 4 || builtChord.length > 4) return false;
         if (setChord.length < 3 || builtChord.length < 3) return false;
 
-        if (setChord.length == 3)
-        {
+        if (setChord.length == 3) {
             setChord = new int[] {setChord[0], setChord[1], setChord[2], setChord[2]};
             builtChord = new int[] {builtChord[0], builtChord[1], builtChord[2], builtChord[2]};
         }
@@ -70,7 +54,7 @@ public class chordHandler
         return Arrays.equals(builtChord, setChord);
     }
 
-    /***************
+    /****************************************************************
      * Plays a chord
      **/
     public void playChord(int[] chord, int chordLength, int instrument)
@@ -78,24 +62,19 @@ public class chordHandler
         if (chord == null) return;
         else if (chordLength > 4) return;
         else if (chordLength < 0) return;
-
-        //for (int i = 0; i < chordLength; i++)
-            sH.playNote(chord[0], instrument);
     }
 
-    /*********************************************
+    /****************************************************************
      * Returns the name of a chord given the index
      **/
-    public String getChordName(int chordIndex)
-    {
+    public String getChordName(int chordIndex) {
         return chordNames[chordIndex];
     }
 
-    /*********************************
+    /****************************************************************
      * Returns a chord given the index
      **/
-    public int[] getChord(int chordIndex)
-    {
+    public int[] getChord(int chordIndex) {
         return chords[chordIndex];
     }
 }

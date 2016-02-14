@@ -11,8 +11,10 @@ package com.five_chords.chord_builder;
 
 import android.app.Activity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -22,47 +24,60 @@ public class setUpGUI extends MainActivity
 {
     static soundHandler sH;
 
-    public setUpGUI(Activity activity)
-    {
-        loadSpinners(activity, true, false, false);
+    public setUpGUI(Activity activity) {
         sH = new soundHandler(activity);
+        loadSpinners(activity, true, false, false);
+        assignButtons(activity);
     }
 
-    public setUpGUI(View view)
-    {
+    public setUpGUI(View view) {
         seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_root), (TextView) view.findViewById(R.id.textview_root));
         seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_third), (TextView) view.findViewById(R.id.textview_third));
         seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_fifth), (TextView) view.findViewById(R.id.textview_fifth));
         seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_option), (TextView) view.findViewById(R.id.textview_option));
     }
 
-    /**************************************************************************
+    /**********************************************************************************************
      * seekBarListener function
      * This function will allow user to adjust the chord manually using seekBar
      * @param view The context of the resources
      * @param bar
      * @param text
      **/
-    public void seekBarListener(View view, SeekBar bar, final TextView text)
+    public void seekBarListener(View view, final SeekBar bar, final TextView text)
     {
         // A reference to the noteNames to pass to the Listener
         final String[] noteNames = view.getResources().getStringArray(R.array.noteNames);
         text.setText(noteNames[0]);
 
-        bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
-        {
+        bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
-            {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 text.setText(noteNames[progress % 12]);
-                try {
-                    sH.playNote(progress, getInstrument());
-                } catch (Exception e) {
-                    Log.d("error", e.toString());
-                }
+                sH.playNote(bar.getProgress(), getInstrument());
             }
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-            public void onStopTrackingTouch(SeekBar seekBar) {}
+
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        bar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    sH.playNote(bar.getProgress(), getInstrument());
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    sH.stopSound();
+                }
+                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    return false;
+                }
+                return true;
+            }
         });
     }
 
@@ -117,21 +132,49 @@ public class setUpGUI extends MainActivity
         chordSelector.setAdapter(adapter);
 
         // Set the OnItemSelectedListener for the spinner
-        chordSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        chordSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
-            {
-                if (activity instanceof MainActivity)
-                {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (activity instanceof MainActivity) {
                     // Update the selected chord
                     ((MainActivity) activity).getChord(chordSelector);
                 }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parentView)
-            { /* Ignore */ }
+            public void onNothingSelected(AdapterView<?> parentView) { /* Ignore */ }
         });
+    }
+
+    public void assignButtons(final Activity activity) {
+        final Button playBuiltChord = (Button) activity.findViewById(R.id.button_playback_slider_chord);
+        final Button playSelectedChord = (Button) activity.findViewById(R.id.button_select_chord_play);
+
+        playBuiltChord.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    playBuiltChord(activity);
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    sH.stopSound();
+                }
+                return true;
+            }
+        });
+
+        playSelectedChord.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    playSelectedChord(activity);
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    sH.stopSound();
+                }
+                return true;
+            }
+        });
+
     }
 }

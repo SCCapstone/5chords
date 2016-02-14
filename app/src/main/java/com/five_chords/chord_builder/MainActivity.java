@@ -8,6 +8,7 @@
  */
 package com.five_chords.chord_builder;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -16,6 +17,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
@@ -31,12 +33,13 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
      * Those two will handle the bulk of the code.
      */
     SharedPreferences sPrefs;
-    chordHandler cH;
-    setUpGUI gui;
-    Score s;
-    CheckOptionsFragment cof;
+    static chordHandler cH;
+    static setUpGUI gui;
+    static Score s;
+    static CheckOptionsFragment cof;
+    static soundHandler sH;
 
-    int currentChordIndex;
+    static int currentChordIndex;
     static int instrument = 21;
 
 
@@ -60,9 +63,10 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
 
         instrument = 21;
 
-        cH = new chordHandler(this);
+        cH = new chordHandler();
         gui = new setUpGUI(this);
         s = new Score(this);
+        sH = new soundHandler(this);
 
         // Put the heck options in a sliding view
         cof = new CheckOptionsFragment();
@@ -112,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
      */
     public void compareChords(View v)
     {
-        int[] builtChord = buildCurrentChord();
+        int[] builtChord = buildCurrentChord(this);
         int[] setChord = cH.getChord(currentChordIndex);
 
         if (cH.compareChords(builtChord, setChord))
@@ -159,34 +163,36 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
      * Builds the current chord that the user has defined on the sliders.
      * @return An array containing the root, third, fifth, and option values of the built chord
      */
-    public int[] buildCurrentChord()
+    public int[] buildCurrentChord(Activity activity)
     {
-        int root = ((SeekBar) this.findViewById(R.id.slider_root)).getProgress();
-        int third = ((SeekBar) this.findViewById(R.id.slider_third)).getProgress();
-        int fifth = ((SeekBar) this.findViewById(R.id.slider_fifth)).getProgress();
-        int seventh = ((SeekBar) this.findViewById(R.id.slider_option)).getProgress();
+        int root = ((SeekBar) activity.findViewById(R.id.slider_root)).getProgress();
+        int third = ((SeekBar) activity.findViewById(R.id.slider_third)).getProgress();
+        int fifth = ((SeekBar) activity.findViewById(R.id.slider_fifth)).getProgress();
+        int seventh = ((SeekBar) activity.findViewById(R.id.slider_option)).getProgress();
 
         return new int[] {root, third, fifth, seventh};
     }
 
     /*************************************
      * Plays the currently selected chord.
-     * @param v The calling View
+     * @param activity The calling Activity
      */
-    public void playSelectedChord(View v)
+    public void playSelectedChord(Activity activity)
     {
         int[] setChord = cH.getChord(currentChordIndex);
         cH.playChord(setChord, setChord.length, instrument);
+        sH.playChord(setChord, instrument);
     }
 
     /*************************************************
      * Plays the current chord defined on the sliders.
-     * @param v The calling View
+     * @param activity The calling Activity
      */
-    public void playBuiltChord(View v)
+    public void playBuiltChord(Activity activity)
     {
-        int[] setChord = buildCurrentChord();
+        int[] setChord = buildCurrentChord(activity);
         cH.playChord(setChord, setChord.length, instrument);
+        sH.playChord(setChord, instrument);
     }
 
     /*********************
