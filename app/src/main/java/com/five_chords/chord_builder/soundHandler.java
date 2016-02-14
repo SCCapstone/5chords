@@ -19,6 +19,14 @@ public class soundHandler extends MainActivity {
         midi = new soundHandlerMidi();
     }
 
+    public void stopSound() {
+        try {
+            mediaPlayer.release();
+        } catch (Exception e) {
+
+        }
+    }
+
     /****************************************************************
      * Plays a note
      **/
