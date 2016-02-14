@@ -19,17 +19,6 @@ public class chordHandler
             "C_minor", "C#_minor","D_minor","Eb_minor","E_minor","F_minor","F#_minor","G_minor","Ab_minor","A_minor","Bb_minor","B_minor"};
 
     int[][] chords = new int[12*2][];
-    soundHandler sH = null;
-
-    public chordHandler(Activity main) {
-        sH = new soundHandler(main);
-
-        for (int i = 0; i < 12; i++) {
-            chords[i] = new int[] {i, i+4, i+7};
-            chords[12+i] = new int[] {i, i+3, i+7};
-            //chords[24+i] = {i, i+4, i+7, i+10};
-        }
-    }
 
     public chordHandler() {
         for (int i = 0; i < 12; i++) {
@@ -73,9 +62,6 @@ public class chordHandler
         if (chord == null) return;
         else if (chordLength > 4) return;
         else if (chordLength < 0) return;
-
-        //for (int i = 0; i < chordLength; i++)
-            sH.playNote(chord[0], instrument);
     }
 
     /****************************************************************

@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     setUpGUI gui;
     Score s;
     CheckOptionsFragment cof;
+    soundHandler sH;
 
     int currentChordIndex;
     static int instrument = 21;
@@ -62,9 +63,10 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
 
         instrument = 21;
 
-        cH = new chordHandler(this);
+        cH = new chordHandler();
         gui = new setUpGUI(this);
         s = new Score(this);
+        sH = new soundHandler(this);
 
         // Put the heck options in a sliding view
         cof = new CheckOptionsFragment();
@@ -179,6 +181,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     {
         int[] setChord = cH.getChord(currentChordIndex);
         cH.playChord(setChord, setChord.length, instrument);
+        sH.playChord(setChord, instrument);
     }
 
     /**
@@ -189,6 +192,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     {
         int[] setChord = buildCurrentChord();
         cH.playChord(setChord, setChord.length, instrument);
+        sH.playChord(setChord, instrument);
     }
 
     /****************************************************************

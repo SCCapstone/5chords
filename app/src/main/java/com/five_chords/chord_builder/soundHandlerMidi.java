@@ -23,10 +23,6 @@ public class soundHandlerMidi {
     // A Vector to hold our MIDI events
     Vector<int[]> midiEvents;
 
-    public soundHandlerMidi() {
-        midiEvents = new Vector<int[]>();
-    }
-
     public void writeToFile (String filename) throws IOException {
 
         // open midi file
@@ -108,20 +104,8 @@ public class soundHandlerMidi {
         midiEvents.add(data);
     }
 
-    // create a Midi file from provided input
-    public void createMidi (String s, int inst, int delta, int note, int veloc, int pitch) throws Exception {
-        soundHandlerMidi midi = new soundHandlerMidi();
-        midi.progChange(inst);
-
-        int msb = (pitch >> 7) & 0x7F;
-        int lsb = pitch & 0x7F;
-
-        midi.bendPitch(msb, lsb);
-
-        midi.noteOn(0, note, veloc);
-        midi.noteOff(delta, note);
-
-        midi.writeToFile(s);
+    public void newMidi() {
+        midiEvents = new Vector<int[]>();
     }
 
 }
