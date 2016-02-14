@@ -40,7 +40,7 @@
         android:textColor="@android:color/white"
         android:textSize="12sp"
         android:text="@string/instrument"
-        android:onClick="chordMe" />
+        android:onClick="switchInstrument" />
 
     <!-- Button to go to help page -->
     <Button

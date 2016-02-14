@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     CheckOptionsFragment cof;
 
     int currentChordIndex;
+    static int instrument = 21;
 
 
     @Override
@@ -59,9 +60,10 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
             editor.commit();
         }
 
+        instrument = 21;
 
-        gui = new setUpGUI(this);
         cH = new chordHandler(this);
+        gui = new setUpGUI(this);
         s = new Score(this);
 
         // Put the heck options in a sliding view
@@ -176,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     public void playSelectedChord(View v)
     {
         int[] setChord = cH.getChord(currentChordIndex);
-        cH.playChord(setChord, setChord.length);
+        cH.playChord(setChord, setChord.length, instrument);
     }
 
     /**
@@ -186,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     public void playBuiltChord(View v)
     {
         int[] setChord = buildCurrentChord();
-        cH.playChord(setChord, setChord.length);
+        cH.playChord(setChord, setChord.length, instrument);
     }
 
     /****************************************************************
@@ -203,6 +205,14 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     public void openStartPage() {
         Intent intent = new Intent(this, StartPage.class);
         startActivity(intent);
+    }
+
+    public void switchInstrument(View v) {
+        if (instrument == 21) {
+            instrument = 58;
+        } else {
+            instrument = 21;
+        }
     }
 
     int optionsAreOpen = 0;
@@ -227,6 +237,10 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
 
             optionsAreOpen = 1;
         }
+    }
+
+    public int getInstrument() {
+        return instrument;
     }
 
     /**

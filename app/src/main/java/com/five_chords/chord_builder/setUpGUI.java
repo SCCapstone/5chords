@@ -18,10 +18,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 
-public class setUpGUI
+public class setUpGUI extends MainActivity
 {
+    static soundHandler sH;
+
     public setUpGUI(Activity activity) {
         loadSpinners(activity, true, false, false);
+        sH = new soundHandler(activity);
     }
 
     public setUpGUI(View view) {
@@ -50,6 +53,11 @@ public class setUpGUI
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
                 text.setText(noteNames[progress % 12]);
+                try {
+                    sH.playNote(progress, getInstrument());
+                } catch (Exception e) {
+                    Log.d("error", e.toString());
+                }
             }
             public void onStartTrackingTouch(SeekBar seekBar) {}
             public void onStopTrackingTouch(SeekBar seekBar) {}

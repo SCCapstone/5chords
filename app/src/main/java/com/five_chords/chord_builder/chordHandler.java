@@ -68,13 +68,14 @@ public class chordHandler
     /****************************************************************
      * Plays a chord
      **/
-    public void playChord(int[] chord, int chordLength)
+    public void playChord(int[] chord, int chordLength, int instrument)
     {
         if (chord == null) return;
         else if (chordLength > 4) return;
         else if (chordLength < 0) return;
 
-        for (int i = 0; i < chordLength; i++) sH.playNote(chord[i]);
+        //for (int i = 0; i < chordLength; i++)
+            sH.playNote(chord[0], instrument);
     }
 
     /****************************************************************

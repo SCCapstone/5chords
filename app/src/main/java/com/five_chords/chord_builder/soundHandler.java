@@ -1,47 +1,39 @@
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
-import android.media.AudioManager;
-import android.media.SoundPool;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-
-import java.lang.reflect.Field;
-import java.util.ArrayList;
+import android.media.MediaPlayer;
+import android.net.Uri;
 
 /**
  *
  */
 public class soundHandler extends MainActivity {
 
-    ArrayList<Integer> notes;
-    SoundPool mySound;
+    static MediaPlayer mediaPlayer;
+    static soundHandlerMidi midi;
+    static String midiFile;
 
     public soundHandler(Activity main) {
-        mySound = new SoundPool(4, AudioManager.STREAM_MUSIC, 0);
-        notes = new ArrayList<>();
-
-        // Loop through raw folder for notes
-        for (Field f : R.raw.class.getFields())
-
-        {
-            try {
-                if (f.getName().contains("note")) {
-                    notes.add(mySound.load(main, f.getInt(null), 0));
-                }
-            } catch (IllegalAccessException e) {
-
-            }
-        }
+        midiFile = main.getFilesDir() + "/midi.mid";
+        midi = new soundHandlerMidi();
     }
 
     /****************************************************************
      * Plays a chord
      **/
-    public void playNote(int note)
+    public void playNote(int note, int instrument)
     {
-        // only 0-18 are valid, 19 is our escape note (if necessary)
-        if (note > 18) return;
-        mySound.play(notes.get(note), 1, 1, 1, 0, .99f);
+        try {
+            mediaPlayer.release();
+        } catch (Exception e) {
+
+        }
+
+        try {
+            midi.createMidi(midiFile, instrument, 128, note+60, 127, 8192);
+            mediaPlayer = MediaPlayer.create(this, Uri.parse("file://" + midiFile));
+            mediaPlayer.setLooping(true);
+            mediaPlayer.start();
+        } catch (Exception e) {}
     }
 }

@@ -20,14 +20,12 @@ public class soundHandlerMidi {
         0x01, 0xFF, 0x2F, 0x00
     };
 
-    // A MIDI event to set the tempo
-    int tempoEvent[] = new int[] {
-        0x00, 0xFF, 0x51, 0x03, 0x0F, 0x42, 0x40
-    };
-
     // A Vector to hold our MIDI events
     Vector<int[]> midiEvents;
 
+    public soundHandlerMidi() {
+        midiEvents = new Vector<int[]>();
+    }
 
     public void writeToFile (String filename) throws IOException {
 
@@ -38,7 +36,7 @@ public class soundHandlerMidi {
         fos.write (intArrayToByteArray (header));
 
         // calculate the size of track data (excluding header)
-        int size = tempoEvent.length +  footer.length;
+        int size = footer.length;
         for (int i = 0; i < midiEvents.size(); i++) {
             size += midiEvents.elementAt(i).length;
         }
@@ -111,22 +109,17 @@ public class soundHandlerMidi {
     }
 
     // create a Midi file from provided input
-    public void createMidi (String s, String inst, String delta, String note, String veloc, String pitch) throws Exception {
+    public void createMidi (String s, int inst, int delta, int note, int veloc, int pitch) throws Exception {
         soundHandlerMidi midi = new soundHandlerMidi();
-        midi.progChange(Integer.parseInt(inst));
+        midi.progChange(inst);
 
-        int msb = (Integer.parseInt(pitch) >> 7) & 0x7F;
-        int lsb = Integer.parseInt(pitch) & 0x7F;
+        int msb = (pitch >> 7) & 0x7F;
+        int lsb = pitch & 0x7F;
 
         midi.bendPitch(msb, lsb);
 
-        midi.noteOn(0, Integer.parseInt(note), Integer.parseInt(veloc));
-        midi.noteOn(0, Integer.parseInt(note) + 4, Integer.parseInt(veloc));
-        midi.noteOn(0, Integer.parseInt(note) + 7, Integer.parseInt(veloc));
-
-        midi.noteOff(Integer.parseInt(delta), Integer.parseInt(note));
-        midi.noteOff(0, Integer.parseInt(note) + 4);
-        midi.noteOff(0, Integer.parseInt(note)+7);
+        midi.noteOn(0, note, veloc);
+        midi.noteOff(delta, note);
 
         midi.writeToFile(s);
     }
