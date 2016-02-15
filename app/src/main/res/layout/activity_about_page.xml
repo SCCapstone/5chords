@@ -10,20 +10,12 @@
     <TextView android:id="@+id/text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=" We are 5Chord!  5Chord comes from our 5 members and chord theory application.  We are Capstone Project students of the University of South Carolina.  Together, We have developed an application that would help music students learn music theory and intonation without the skills required to play perfectly.                   This application&apos;s mission is to guide music learners an easier method to theory."
-        android:layout_below="@+id/textClock"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="57dp" />
-
-    <TextClock
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textClock"
-        android:layout_marginTop="56dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        />
+        android:text="We are 5Chords!\nWe are students at the University of South Carolina working on our Capstone Computing Project. Together We have developed an application that will help music students learn music theory and intonation without the skills required to play them perfectly. Our goal is to give music learners an easier method to learn music theory.\n\nCreated by:\nDrea Zeagler\nZachary Askins\nKevin Hyun\nTheodore Stone"
+        android:textStyle="bold"
+        android:layout_below="@+id/textView3"
+        android:layout_alignRight="@+id/button_back_to_main"
+        android:layout_alignEnd="@+id/button_back_to_main"
+        android:textSize="16dp" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -31,12 +23,10 @@
         android:layout_height="wrap_content"
         android:text="Back To Main"
         android:id="@+id/button_back_to_main"
-        android:layout_alignParentBottom="true"
-        android:layout_toLeftOf="@+id/textClock"
-        android:layout_toStartOf="@+id/textClock"
-        android:layout_marginBottom="69dp"
         android:onClick = "BackToMain"
-        />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -44,10 +34,21 @@
         android:layout_height="wrap_content"
         android:text="Back TO HELP"
         android:id="@+id/button_back_to_help"
-        android:layout_alignTop="@+id/button_back_to_main"
-        android:layout_alignRight="@+id/text"
-        android:layout_alignEnd="@+id/text"
         android:onClick = "BackToHelp"
-        />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="About Us:"
+        android:id="@+id/textView3"
+        android:layout_below="@+id/button_back_to_help"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="37dp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

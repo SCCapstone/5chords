@@ -1,3 +1,9 @@
+/*************************************************************************************************
+ * demo.java
+ * @version 1.0
+ * @date 06 November 2015
+ * @author: Drea,Steven,Zach,Kevin,Bo
+ */
 package com.five_chords.chord_builder;
 
 import android.content.Intent;
@@ -10,10 +16,8 @@ import android.widget.ImageView;
 public class demo extends AppCompatActivity {
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-
-
-
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo);
 
