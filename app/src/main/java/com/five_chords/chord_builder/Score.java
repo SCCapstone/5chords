@@ -131,6 +131,10 @@ public class Score// extends MainActivity
             scoreEditor.putInt("total_" + CHORD_NAME, numTotalGuesses);
             scoreEditor.apply();
         }
+
+        public int getNumCorrectGuesses() { return numCorrectGuesses; }
+        public int getNumTotalGuesses() { return numTotalGuesses; }
+
     }
 
     /**
@@ -155,4 +159,7 @@ public class Score// extends MainActivity
             setContentView(R.layout.activity_score_page);
         }
     }
+
+    public int getNumCorrectGuesses(int scoreIndex) { return scores[scoreIndex].getNumCorrectGuesses(); }
+    public int getNumTotalGuesses(int scoreIndex) { return scores[scoreIndex].getNumTotalGuesses(); }
 }

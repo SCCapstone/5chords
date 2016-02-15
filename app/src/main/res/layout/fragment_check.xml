@@ -22,9 +22,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_margin="4dp"
-        android:text="@string/check"
-        android:onClick="compareChords"
-       />
+        android:text="@string/check" />
 
     <!-- Button containing the score and the link to the score page -->
     <Button

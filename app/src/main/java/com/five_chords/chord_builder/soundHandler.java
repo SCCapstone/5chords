@@ -3,7 +3,6 @@ package com.five_chords.chord_builder;
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.util.Log;
 
 /**
  *
@@ -13,6 +12,7 @@ public class soundHandler extends MainActivity {
     static MediaPlayer mediaPlayer;
     static soundHandlerMidi midi;
     static String midiFile;
+    static int instrument = 21;
 
     public soundHandler(Activity main) {
         midiFile = main.getFilesDir() + "/midi.mid";
@@ -30,7 +30,7 @@ public class soundHandler extends MainActivity {
     /****************************************************************
      * Plays a note
      **/
-    public void playNote(int note, int instrument)
+    public void playNote(int note)
     {
         try {
             mediaPlayer.release();
@@ -61,8 +61,12 @@ public class soundHandler extends MainActivity {
     /****************************************************************
      * Plays a chord
      **/
-    public void playChord(int[] chord, int instrument)
+    public void playChord(int[] chord)
     {
+        if (chord == null) return;
+        else if (chord.length > 4) return;
+        else if (chord.length < 0) return;
+
         try {
             mediaPlayer.release();
         } catch (Exception e) {
@@ -90,5 +94,17 @@ public class soundHandler extends MainActivity {
             mediaPlayer.setLooping(true);
             mediaPlayer.start();
         } catch (Exception e) {}
+    }
+
+    public void switchInstrument() {
+        if (instrument == 21) {
+            instrument = 58;
+        } else {
+            instrument = 21;
+        }
+    }
+
+    public int getInstrument() {
+        return instrument;
     }
 }

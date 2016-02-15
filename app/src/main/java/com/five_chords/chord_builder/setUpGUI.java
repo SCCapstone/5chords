@@ -10,11 +10,11 @@
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -23,11 +23,15 @@ import android.widget.ArrayAdapter;
 public class setUpGUI extends MainActivity
 {
     static soundHandler sH;
+    static chordHandler cH;
 
     public setUpGUI(Activity activity) {
         sH = new soundHandler(activity);
+        cH = new chordHandler();
+
         loadSpinners(activity, true, false, false);
         assignButtons(activity);
+        slidingFragments(activity);
     }
 
     public setUpGUI(View view) {
@@ -41,8 +45,8 @@ public class setUpGUI extends MainActivity
      * seekBarListener function
      * This function will allow user to adjust the chord manually using seekBar
      * @param view The context of the resources
-     * @param bar
-     * @param text
+     * @param bar The seekbar to add listeners to
+     * @param text the textview associated with the seekbar
      **/
     public void seekBarListener(View view, final SeekBar bar, final TextView text)
     {
@@ -54,7 +58,7 @@ public class setUpGUI extends MainActivity
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 text.setText(noteNames[progress % 12]);
-                sH.playNote(bar.getProgress(), getInstrument());
+                sH.playNote(bar.getProgress());
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -68,12 +72,10 @@ public class setUpGUI extends MainActivity
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sH.playNote(bar.getProgress(), getInstrument());
-                }
-                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    sH.playNote(bar.getProgress());
+                } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     sH.stopSound();
-                }
-                if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
                     return false;
                 }
                 return true;
@@ -137,7 +139,7 @@ public class setUpGUI extends MainActivity
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
                 if (activity instanceof MainActivity) {
                     // Update the selected chord
-                    ((MainActivity) activity).getChord(chordSelector);
+                    cH.getSelectedChord(chordSelector.getSelectedItemPosition() + 1);
                 }
             }
 
@@ -149,12 +151,15 @@ public class setUpGUI extends MainActivity
     public void assignButtons(final Activity activity) {
         final Button playBuiltChord = (Button) activity.findViewById(R.id.button_playback_slider_chord);
         final Button playSelectedChord = (Button) activity.findViewById(R.id.button_select_chord_play);
+        final Button switchInstrument = (Button) activity.findViewById(R.id.button_select_instrument);
+        final Button selectRandomChord = (Button) activity.findViewById(R.id.button_select_random_chord);
+        final Button checkChord = (Button) activity.findViewById(R.id.button_check_user_chord);
 
         playBuiltChord.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    playBuiltChord(activity);
+                    sH.playChord(cH.buildCurrentChord(activity, cH.getChord(cH.getCurrentChordIndex()).length));
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     sH.stopSound();
@@ -167,7 +172,7 @@ public class setUpGUI extends MainActivity
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    playSelectedChord(activity);
+                    sH.playChord(cH.getChord(cH.getCurrentChordIndex()));
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     sH.stopSound();
@@ -176,5 +181,48 @@ public class setUpGUI extends MainActivity
             }
         });
 
+        switchInstrument.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    sH.switchInstrument();
+                }
+                return true;
+            }
+        });
+
+        selectRandomChord.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    cH.getRandomChord();
+                    updateSpinner(activity);
+                    sH.playChord(cH.getChord(cH.getCurrentChordIndex()));
+                }
+                return true;
+            }
+        });
+
+        checkChord.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    boolean result = cH.compareChords(cH.buildCurrentChord(activity, cH.getChord(cH.getCurrentChordIndex()).length), cH.getChord(cH.getCurrentChordIndex()));
+                    s.setScore(activity, cH.getCurrentChordIndex(), result);
+                    displayAnswer(activity);
+                }
+                return true;
+            }
+        });
+    }
+
+    public void slidingFragments(final Activity activity) {
+        final FrameLayout optionFragment = (FrameLayout) activity.findViewById(R.id.fragment_content);
+        optionFragment.setOnTouchListener(new OnSwipeTouchListener(activity) {
+            public void onSwipeLeft() { openOptions(); }
+            public void onSwipeRight() {
+                closeOptions();
+            }
+        });
     }
 }

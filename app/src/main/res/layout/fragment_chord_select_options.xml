@@ -26,8 +26,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/white"
         android:textSize="12sp"
-        android:text="@string/random_chord"
-        android:onClick="getChord"/>
+        android:text="@string/random_chord" />
 
     <!-- Button to select instrument-->
     <Button
@@ -38,8 +37,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="@android:color/white"
         android:textSize="12sp"
-        android:text="@string/instrument"
-        android:onClick="switchInstrument" />
+        android:text="@string/instrument" />
 
     <!-- Button to go to help page -->
     <Button
