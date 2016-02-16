@@ -30,26 +30,6 @@ public class UnitTest {
     }
 
     @Test
-    public void testGetChordName() {
-        assertSame(cH.getChordName(0), "C");
-        assertSame(cH.getChordName(1), "C#");
-        assertSame(cH.getChordName(2), "D");
-        assertSame(cH.getChordName(3), "Eb");
-        assertSame(cH.getChordName(4), "E");
-        assertSame(cH.getChordName(5), "F");
-        assertSame(cH.getChordName(6), "F#");
-        assertSame(cH.getChordName(7), "G");
-        assertSame(cH.getChordName(8), "Ab");
-        assertSame(cH.getChordName(9), "A");
-        assertSame(cH.getChordName(10), "Bb");
-        assertSame(cH.getChordName(11), "B");
-        assertSame(cH.getChordName(15), "Eb_minor");
-        assertNotSame(cH.getChordName(0), "C#");
-        assertNotSame(cH.getChordName(12), "C#");
-        assertNotSame(cH.getChordName(12), "C");
-    }
-
-    @Test
     public void testNewChord() {
         assertEquals(cH.getSelectedChord(2), 1);
         assertNotEquals(cH.getSelectedChord(2), 2);

@@ -16,20 +16,71 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class chordHandler {
-    static String[] chordNames = {
-            "C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B",
-            "C_minor", "C#_minor","D_minor","Eb_minor","E_minor","F_minor","F#_minor","G_minor","Ab_minor","A_minor","Bb_minor","B_minor"
-    };
 
-    static int[][] chords = new int[12*2][];
+    static final int CHORDS_PER_TYPE = 12;
+    static final int MIN_NOTES_PER_CHORD = 3;
+    static final int MAX_NOTES_PER_CHORD = 4;
+
+    static int[][] availableChords = new int[0][];
     static int currentChordIndex;
 
     public chordHandler() {
-        for (int i = 0; i < 12; i++) {
-            chords[i] = new int[] {i, i+4, i+7};
-            chords[12+i] = new int[] {i, i+3, i+7};
-            //chords[24+i] = {i, i+4, i+7, i+10};
+        clearChords();
+        addMajorChords();
+        addMinorChords();
+        addDominantChords();
+    }
+
+    public void clearChords() {
+        availableChords = new int[0][];
+    }
+
+    public void addMajorChords() {
+        int len = availableChords.length;
+        int[][] returnArray = new int[len + CHORDS_PER_TYPE][];
+
+        for (int i = 0; i < len; i++) {
+            returnArray[i] = availableChords[i];
         }
+
+        for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
+            int note = i%CHORDS_PER_TYPE;
+            returnArray[i] = new int[] {note, note+4, note+7};
+        }
+
+        availableChords = returnArray;
+    }
+
+    public void addMinorChords() {
+        int len = availableChords.length;
+        int[][] returnArray = new int[len + CHORDS_PER_TYPE][];
+
+        for (int i = 0; i < len; i++) {
+            returnArray[i] = availableChords[i];
+        }
+
+        for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
+            int note = i%CHORDS_PER_TYPE;
+            returnArray[i] = new int[] {note, note+3, note+7};
+        }
+
+        availableChords = returnArray;
+    }
+
+    public void addDominantChords() {
+        int len = availableChords.length;
+        int[][] returnArray = new int[len + CHORDS_PER_TYPE][];
+
+        for (int i = 0; i < len; i++) {
+            returnArray[i] = availableChords[i];
+        }
+
+        for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
+            int note = i%CHORDS_PER_TYPE;
+            returnArray[i] = new int[] {note, note+4, note+7, note+10};
+        }
+
+        availableChords = returnArray;
     }
 
     /****************************************************************
@@ -37,15 +88,9 @@ public class chordHandler {
      **/
     public boolean compareChords(int[] builtChord, int[] setChord) {
         if (setChord == null || builtChord == null) return false;
-        if (setChord.length > 4 || builtChord.length > 4) return false;
-        if (setChord.length < 3 || builtChord.length < 3) return false;
-
-        if (setChord.length == 3) {
-            setChord = new int[] {setChord[0], setChord[1], setChord[2], setChord[2]};
-            builtChord = new int[] {builtChord[0], builtChord[1], builtChord[2], builtChord[2]};
-        }
-
-        return Arrays.equals(builtChord, setChord);
+        else if (setChord.length > MAX_NOTES_PER_CHORD || builtChord.length > MAX_NOTES_PER_CHORD) return false;
+        else if (setChord.length < MIN_NOTES_PER_CHORD || builtChord.length < MIN_NOTES_PER_CHORD) return false;
+        else return Arrays.equals(builtChord, setChord);
     }
 
     /**
@@ -61,7 +106,7 @@ public class chordHandler {
      * Change current chord to a random chord
      */
     public int getRandomChord() {
-        currentChordIndex = new Random().nextInt(chordNames.length - 1);
+        currentChordIndex = new Random().nextInt(availableChords.length - 1);
         return currentChordIndex;
     }
 
@@ -69,13 +114,13 @@ public class chordHandler {
      * Builds the current chord that the user has defined on the sliders.
      * @return An array containing the root, third, fifth, and option values of the built chord
      */
-    public int[] buildCurrentChord(Activity activity, int notes) {
+    public int[] buildCurrentChord(Activity activity) {
         int root = ((SeekBar) activity.findViewById(R.id.slider_root)).getProgress();
         int third = ((SeekBar) activity.findViewById(R.id.slider_third)).getProgress();
         int fifth = ((SeekBar) activity.findViewById(R.id.slider_fifth)).getProgress();
         int seventh = ((SeekBar) activity.findViewById(R.id.slider_option)).getProgress();
 
-        if (notes == 3) {
+        if (getCurrentChord().length == MIN_NOTES_PER_CHORD) {
             return new int[]{root, third, fifth};
         } else {
             return new int[]{root, third, fifth, seventh};
@@ -85,11 +130,9 @@ public class chordHandler {
     /****************************************************************
      * Return internal variables
      **/
-    public String getChordName(int chordIndex) {
-        return chordNames[chordIndex];
-    }
     public int getCurrentChordIndex() { return currentChordIndex; }
-    public int[] getChord(int chordIndex) {
-        return chords[chordIndex];
+    public int[] getChord(int chordIndex) { return availableChords[chordIndex]; }
+    public int[] getCurrentChord() {
+        return availableChords[currentChordIndex];
     }
 }

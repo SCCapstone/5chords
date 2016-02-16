@@ -1,8 +1,8 @@
 /***************************************************************************************************
  * soundHandler.java
- * @version 1.0
- * @date 06 November 2015
- * @author: Drea,Steven,Zach,Kevin,Bo
+ * @version 1.1
+ * @date 14 February 2015
+ * @author: Drea,Zach
  **/
 package com.five_chords.chord_builder;
 
@@ -13,10 +13,23 @@ import android.net.Uri;
 public class soundHandler extends MainActivity
 {
 
+    static final int FULL_VOLUME = 127;
+    static final int SILENT = 0;
+    static final int SUSTAIN_NOTE = 128;
+    static final int RELEASE_NOTE = 0;
+    static final int DUMMY_NOTE = 0;
+    static final int NOTE_OFFSET = 60;
+
+    static final int TRUMPET = 58;
+    static final int PIANO = 21;
+    //static final int VIOLIN = 0;
+    //static final int FLUTE = 0;
+
+
     static MediaPlayer mediaPlayer;
     static soundHandlerMidi midi;
     static String midiFile;
-    static int instrument = 21;
+    static int instrument = PIANO;
 
     public soundHandler(Activity main)
     {
@@ -37,11 +50,7 @@ public class soundHandler extends MainActivity
      **/
     public void playNote(int note)
     {
-        try {
-            mediaPlayer.release();
-        } catch (Exception e) {
-
-        }
+        stopSound();
 
         // TODO: use the sliders to change pitch of note
         //       replace 8192 (centered) with the new pitch
@@ -52,8 +61,8 @@ public class soundHandler extends MainActivity
         midi.progChange(instrument);
         midi.bendPitch(mostSignificantbits, leastSignificantbits);
 
-        midi.noteOn(0, note+60, 127);
-        midi.noteOff(128, note+60);
+        midi.noteOn(RELEASE_NOTE, note+NOTE_OFFSET, FULL_VOLUME);
+        midi.noteOff(SUSTAIN_NOTE, note+NOTE_OFFSET);
 
         try {
             midi.writeToFile(midiFile);
@@ -68,15 +77,7 @@ public class soundHandler extends MainActivity
      **/
     public void playChord(int[] chord)
     {
-        if (chord == null) return;
-        else if (chord.length > 4) return;
-        else if (chord.length < 0) return;
-
-        try {
-            mediaPlayer.release();
-        } catch (Exception e) {
-
-        }
+        stopSound();
 
         // TODO: use the sliders to change pitch of note
         //       replace 8192 (centered) with the new pitch
@@ -88,10 +89,10 @@ public class soundHandler extends MainActivity
         midi.bendPitch(mostSignificantbits, leastSignificantbits);
 
         // use a silent dummy note to keep chord sustained
-        midi.noteOn(0, 0, 0);
-        for (int note : chord) midi.noteOn(0, note + 60, 127);
-        midi.noteOff(128, 0);
-        for (int note : chord) midi.noteOff(0, note + 60);
+        midi.noteOn(RELEASE_NOTE, DUMMY_NOTE, SILENT);
+        for (int note : chord) midi.noteOn(RELEASE_NOTE, note + NOTE_OFFSET, FULL_VOLUME);
+        midi.noteOff(SUSTAIN_NOTE, DUMMY_NOTE);
+        for (int note : chord) midi.noteOff(RELEASE_NOTE, note + NOTE_OFFSET);
 
         try {
             midi.writeToFile(midiFile);
@@ -102,10 +103,10 @@ public class soundHandler extends MainActivity
     }
 
     public void switchInstrument() {
-        if (instrument == 21) {
-            instrument = 58;
+        if (instrument == PIANO) {
+            instrument = TRUMPET;
         } else {
-            instrument = 21;
+            instrument = PIANO;
         }
     }
 

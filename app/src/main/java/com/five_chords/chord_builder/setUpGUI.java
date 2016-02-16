@@ -101,11 +101,15 @@ public class setUpGUI extends MainActivity
         // Load items
         String[] chordNames = activity.getResources().getStringArray(R.array.chordNames);
 
+        cH.clearChords();
+
         // All chords added
-        if (majorChords && minorChords/* && dominantChords*/)
+        if (majorChords && minorChords && dominantChords) {
             adapter.addAll(chordNames);
-        else
-        {
+            cH.addMajorChords();
+            cH.addMinorChords();
+            cH.addDominantChords();
+        } else {
             String[] items = new String[12];
 
             // Add major chords
@@ -113,6 +117,7 @@ public class setUpGUI extends MainActivity
             {
                 System.arraycopy(chordNames, 0, items, 0, 12);
                 adapter.addAll(items);
+                cH.addMajorChords();
             }
 
             // Add minor chords
@@ -120,14 +125,16 @@ public class setUpGUI extends MainActivity
             {
                 System.arraycopy(chordNames, 12, items, 0, 12);
                 adapter.addAll(items);
+                cH.addMinorChords();
             }
 
-//            // Add dominant chords TODO implement dominant chords
-//            if (dominantChords)
-//            {
-//                System.arraycopy(chordNames, 24, items, 0, 12);
-//                adapter.addAll(items);
-//            }
+            // Add dominant chords
+            if (dominantChords)
+            {
+                System.arraycopy(chordNames, 24, items, 0, 12);
+                adapter.addAll(items);
+                cH.addDominantChords();
+            }
         }
 
         // Set the adapter
@@ -159,7 +166,7 @@ public class setUpGUI extends MainActivity
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sH.playChord(cH.buildCurrentChord(activity, cH.getChord(cH.getCurrentChordIndex()).length));
+                    sH.playChord(cH.buildCurrentChord(activity));
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     sH.stopSound();
@@ -172,7 +179,7 @@ public class setUpGUI extends MainActivity
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sH.playChord(cH.getChord(cH.getCurrentChordIndex()));
+                    sH.playChord(cH.getCurrentChord());
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     sH.stopSound();
@@ -197,7 +204,7 @@ public class setUpGUI extends MainActivity
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     cH.getRandomChord();
                     updateSpinner(activity);
-                    sH.playChord(cH.getChord(cH.getCurrentChordIndex()));
+                    sH.playChord(cH.getCurrentChord());
                 }
                 return true;
             }
@@ -207,7 +214,7 @@ public class setUpGUI extends MainActivity
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    boolean result = cH.compareChords(cH.buildCurrentChord(activity, cH.getChord(cH.getCurrentChordIndex()).length), cH.getChord(cH.getCurrentChordIndex()));
+                    boolean result = cH.compareChords(cH.buildCurrentChord(activity), cH.getCurrentChord());
                     s.setScore(activity, cH.getCurrentChordIndex(), result);
                     displayAnswer(activity);
                 }
