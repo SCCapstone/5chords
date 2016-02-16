@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.five_chords.chord_builder.R;
@@ -88,6 +89,17 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
         listView.setAdapter(adapter);
     }
 
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        // Set size
+        int width = getResources().getDimensionPixelSize(R.dimen.score_dialog_width);
+        int height = getResources().getDimensionPixelSize(R.dimen.score_dialog_height);
+        getDialog().getWindow().setLayout(width, height);
+    }
+
     /**
      * Called when the View containing this Fragment has been created.
      * @param inflater The inflater to use to inflate the Fragment
@@ -101,6 +113,10 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
     {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_score_page, container, false);
+
+//        view.setLayoutParams(new LinearLayout.LayoutParams(
+//                getActivity().getResources().getDimension(R.dimen.score_dialog_width),
+//                getActivity().getResources().getDimension(R.dimen.score_dialog_height));
 
         // Set title
         if (getDialog() != null)

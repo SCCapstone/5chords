@@ -10,6 +10,7 @@
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
+import android.util.Log;
 import android.widget.SeekBar;
 
 import java.util.Arrays;
@@ -114,15 +115,19 @@ public class chordHandler {
      * Builds the current chord that the user has defined on the sliders.
      * @return An array containing the root, third, fifth, and option values of the built chord
      */
-    public int[] buildCurrentChord(Activity activity) {
+    public int[] buildCurrentChord(Activity activity)
+    {
         int root = ((SeekBar) activity.findViewById(R.id.slider_root)).getProgress();
         int third = ((SeekBar) activity.findViewById(R.id.slider_third)).getProgress();
         int fifth = ((SeekBar) activity.findViewById(R.id.slider_fifth)).getProgress();
         int seventh = ((SeekBar) activity.findViewById(R.id.slider_option)).getProgress();
 
-        if (getCurrentChord().length == MIN_NOTES_PER_CHORD) {
+        if (getCurrentChord().length == MIN_NOTES_PER_CHORD)
+        {
             return new int[]{root, third, fifth};
-        } else {
+        }
+        else
+        {
             return new int[]{root, third, fifth, seventh};
         }
     }

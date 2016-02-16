@@ -21,9 +21,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="C"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="18sp"/>
+            android:textSize="@dimen/text_size_medium"/>
 
         <com.five_chords.chord_builder.VerticalSeekBar
             android:id="@+id/slider_root"
@@ -53,9 +52,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="C"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="18sp"/>
+            android:textSize="@dimen/text_size_medium"/>
 
         <com.five_chords.chord_builder.VerticalSeekBar
             android:id="@+id/slider_third"
@@ -85,9 +83,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="C"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="18sp"/>
+            android:textSize="@dimen/text_size_medium"/>
 
         <com.five_chords.chord_builder.VerticalSeekBar
             android:id="@+id/slider_fifth"
@@ -117,9 +114,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="C"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textSize="18sp"/>
+            android:textSize="@dimen/text_size_medium"/>
 
         <com.five_chords.chord_builder.VerticalSeekBar
             android:id="@+id/slider_option"

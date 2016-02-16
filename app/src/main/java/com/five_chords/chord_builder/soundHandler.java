@@ -9,9 +9,14 @@ package com.five_chords.chord_builder;
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.util.Log;
+
+import java.util.Arrays;
 
 public class soundHandler extends MainActivity
 {
+    /** The tag for this class. */
+    private static final String TAG = "soundHandler";
 
     static final int FULL_VOLUME = 127;
     static final int SILENT = 0;
@@ -38,6 +43,7 @@ public class soundHandler extends MainActivity
     }
 
     public void stopSound() {
+        Log.d(TAG, "Stop Sound");
         try {
             mediaPlayer.release();
         } catch (Exception e) {
@@ -61,15 +67,19 @@ public class soundHandler extends MainActivity
         midi.progChange(instrument);
         midi.bendPitch(mostSignificantbits, leastSignificantbits);
 
-        midi.noteOn(RELEASE_NOTE, note+NOTE_OFFSET, FULL_VOLUME);
-        midi.noteOff(SUSTAIN_NOTE, note+NOTE_OFFSET);
+        midi.noteOn(RELEASE_NOTE, note + NOTE_OFFSET, FULL_VOLUME);
+        midi.noteOff(SUSTAIN_NOTE, note + NOTE_OFFSET);
 
-        try {
+        try
+        {
             midi.writeToFile(midiFile);
             mediaPlayer = MediaPlayer.create(this, Uri.parse("file://" + midiFile));
             mediaPlayer.setLooping(true);
             mediaPlayer.start();
-        } catch (Exception e) {}
+        }
+        catch (Exception e)
+        {
+        }
     }
 
     /****************************************************************
@@ -94,12 +104,18 @@ public class soundHandler extends MainActivity
         midi.noteOff(SUSTAIN_NOTE, DUMMY_NOTE);
         for (int note : chord) midi.noteOff(RELEASE_NOTE, note + NOTE_OFFSET);
 
-        try {
+        try
+        {
             midi.writeToFile(midiFile);
             mediaPlayer = MediaPlayer.create(this, Uri.parse("file://" + midiFile));
             mediaPlayer.setLooping(true);
             mediaPlayer.start();
-        } catch (Exception e) {}
+        }
+        catch (Exception e)
+        {
+        }
+
+        Log.d(TAG, "Done Playing Chord");
     }
 
     public void switchInstrument() {

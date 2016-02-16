@@ -10,6 +10,7 @@
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;

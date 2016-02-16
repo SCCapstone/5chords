@@ -13,8 +13,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/white"
-        android:textSize="12sp"
+        android:textSize="@dimen/text_size_xsmall"
         android:text="@string/play" />
 
     <!-- Button to select a random chord-->
@@ -24,8 +23,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/white"
-        android:textSize="12sp"
+        android:textSize="@dimen/text_size_xsmall"
         android:text="@string/random_chord" />
 
     <!-- Button to select instrument-->
@@ -35,8 +33,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/white"
-        android:textSize="12sp"
+        android:textSize="@dimen/text_size_xsmall"
         android:text="@string/instrument" />
 
     <!-- Button to go to help page -->
@@ -46,8 +43,7 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="@android:color/white"
-        android:textSize="12sp"
+        android:textSize="@dimen/text_size_xsmall"
         android:text="@string/help"
         android:onClick="toHelpPage"/>
 

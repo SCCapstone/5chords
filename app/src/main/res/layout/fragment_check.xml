@@ -13,7 +13,8 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_margin="4dp"
-        android:text="@string/preview" />
+        android:text="@string/preview"
+        android:textSize="@dimen/text_size_small"/>
 
     <!-- Button to check the chord the user currently has selected on the sliders -->
     <Button
@@ -22,7 +23,8 @@
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:layout_margin="4dp"
-        android:text="@string/check" />
+        android:text="@string/check"
+        android:textSize="@dimen/text_size_small"/>
 
     <!-- Button containing the score and the link to the score page -->
     <Button
@@ -33,6 +35,7 @@
         android:layout_margin="4dp"
         android:text="@string/score"
         android:onClick="launchScorePage"
+        android:textSize="@dimen/text_size_small"
         />
 
 </LinearLayout>

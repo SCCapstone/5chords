@@ -7,13 +7,13 @@
     <dimen name="text_margin">16dp</dimen>
 
     <!-- Text Sizes-->
-    <dimen name="text_size_xsmall">10sp</dimen>
-    <dimen name="text_size_small">12sp</dimen>
-    <dimen name="text_size_medium">18sp</dimen>
-    <dimen name="text_size_large">24sp</dimen>
+    <dimen name="text_size_xsmall">16sp</dimen>
+    <dimen name="text_size_small">18sp</dimen>
+    <dimen name="text_size_medium">20sp</dimen>
+    <dimen name="text_size_large">32sp</dimen>
 
     <!-- Size of the score dialog -->
-    <dimen name="score_dialog_width">320dp</dimen>
-    <dimen name="score_dialog_height">380dp</dimen>
+    <dimen name="score_dialog_width">512dp</dimen>
+    <dimen name="score_dialog_height">480dp</dimen>
 
 </resources>
