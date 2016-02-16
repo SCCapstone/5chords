@@ -17,11 +17,14 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
+
+import java.util.Random;
 
 /**
  * A Fragment containing the score page.
@@ -114,10 +117,6 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_score_page, container, false);
 
-//        view.setLayoutParams(new LinearLayout.LayoutParams(
-//                getActivity().getResources().getDimension(R.dimen.score_dialog_width),
-//                getActivity().getResources().getDimension(R.dimen.score_dialog_height));
-
         // Set title
         if (getDialog() != null)
             getDialog().setTitle(R.string.scores);
@@ -208,21 +207,36 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
         {
             View view;
 
+            // Reuse old view if possible
             if (convertView != null && convertView.getId() == R.id.component_score_item)
                 view = convertView;
             else
                 view = LayoutInflater.from(getContext()).inflate(R.layout.component_score_item, parent, false);
 
+            // Get the Score object that this item represents
             Score.ScoreWrapper item = getItem(position);
             TextView chordName  = (TextView)view.findViewById(R.id.textview_score_item_chord_name);
             TextView chordScore  = (TextView)view.findViewById(R.id.textview_score_item_score);
+            ProgressBar chordProgress = (ProgressBar)view.findViewById(R.id.progress_score_item_score);
 
+            // Set the chord name
             chordName.setText(item.CHORD_NAME);
 
+            // Set the score progress
             if (item.numTotalGuesses == 0)
+            {
                 chordScore.setText("Not Attempted");
+                chordProgress.setProgress(0);
+            }
             else
-                chordScore.setText(String.format("%.3f", (100.0 * item.numCorrectGuesses / item.numTotalGuesses)) + " %");
+            {
+                // Set progress text
+                double progress = (100.0 * item.numCorrectGuesses / item.numTotalGuesses);
+                chordScore.setText(String.format("%.3f", progress) + " %");
+
+                // Set progress value
+                chordProgress.setProgress((int)Math.round(progress));
+            }
 
             return view;
         }
