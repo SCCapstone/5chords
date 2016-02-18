@@ -61,7 +61,12 @@ public class setUpGUI extends MainActivity
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
                 text.setText(noteNames[progress % 12]);
-                sH.playNote(activity, bar.getProgress());
+
+                // Only play note if progress change is from user
+                if (seekBar instanceof VerticalSeekBar && ((VerticalSeekBar)seekBar).isTouched())
+                {
+                    sH.playNote(activity, bar.getProgress());
+                }
             }
 
             public void onStartTrackingTouch(SeekBar seekBar)

@@ -15,6 +15,8 @@ import android.widget.SeekBar;
 
 public class VerticalSeekBar extends SeekBar
 {
+    /** Indicates whether or not this SeekBar is currently touched by the user */
+    private boolean isTouched;
 
     public VerticalSeekBar(Context context)
     {
@@ -34,6 +36,15 @@ public class VerticalSeekBar extends SeekBar
     protected void onSizeChanged(int w, int h, int oldw, int oldh)
     {
         super.onSizeChanged(h, w, oldh, oldw);
+    }
+
+    /**
+     * Gets whether or not this VerticalSeekBar is currently being touched by the user.
+     * @return Whether or not this VerticalSeekBar is currently being touched by the user
+     */
+    protected boolean isTouched()
+    {
+        return isTouched;
     }
 
     @Override
@@ -63,12 +74,14 @@ public class VerticalSeekBar extends SeekBar
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
             case MotionEvent.ACTION_UP:
+                isTouched = true;
                 setProgress(getMax() - (int) (getMax() * event.getY() / getHeight()));
                 onSizeChanged(getWidth(), getHeight(), 0, 0);
 
                 break;
 
             case MotionEvent.ACTION_CANCEL:
+                isTouched = false;
                 break;
         }
         return true;

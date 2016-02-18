@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
 
     @Override
     protected void onDestroy() {
+
+        // Make sure sound stops
         if (sH != null)
             sH.stopSound();
 

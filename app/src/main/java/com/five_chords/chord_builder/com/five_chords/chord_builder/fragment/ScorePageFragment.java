@@ -97,10 +97,13 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
     {
         super.onResume();
 
-        // Set size
-        int width = getResources().getDimensionPixelSize(R.dimen.score_dialog_width);
-        int height = getResources().getDimensionPixelSize(R.dimen.score_dialog_height);
-        getDialog().getWindow().setLayout(width, height);
+        // Set size if dialog
+        if (getDialog() != null)
+        {
+            int width = getResources().getDimensionPixelSize(R.dimen.score_dialog_width);
+            int height = getResources().getDimensionPixelSize(R.dimen.score_dialog_height);
+            getDialog().getWindow().setLayout(width, height);
+        }
     }
 
     /**
