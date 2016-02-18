@@ -18,6 +18,10 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -38,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Display demo if needed
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
         if (isFirstRun) {
@@ -69,12 +74,55 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     }
 
     /**
+     * Called to create the options Menu
+     * @param menu The Menu to hold the options menu
+     * @return True
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        if (item.getItemId() == R.id.menu_item_main_options)
+            launchCheckOptionsDialog(findViewById(R.id.fragment_content));
+        else if (item.getItemId() == R.id.menu_item_main_help)
+            toHelpPage(null);
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Called to launch the check options dialog.
+     * @param v The calling View
+     */
+    public void launchCheckOptionsDialog(View v) {
+        FragmentTransaction ft = fm.beginTransaction();
+        Fragment prev = fm.findFragmentByTag("dialog");
+
+        if (prev != null)
+        {
+            ft.remove(prev);
+        }
+
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = CheckOptionsFragment.newInstance();
+        newFragment.show(ft, "dialog");
+    }
+
+    /**
      * Called to launch the score page fragment.
      * @param v The calling View
      */
     public void launchScorePage(View v) {
         FragmentTransaction ft = fm.beginTransaction();
-        Fragment prev = fm.findFragmentByTag("score_dialog");
+        Fragment prev = fm.findFragmentByTag("dialog");
 
         if (prev != null)
         {
@@ -85,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
 
         // Create and show the dialog.
         DialogFragment newFragment = ScorePageFragment.newInstance();
-        newFragment.show(ft, "score_dialog");
+        newFragment.show(ft, "dialog");
     }
 
     public void displayAnswer(Activity activity) {
@@ -113,30 +161,6 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     public void openStartPage() {
         Intent intent = new Intent(this, StartPage.class);
         startActivity(intent);
-    }
-
-    int optionsAreOpen = 0;
-    public void closeOptions() {
-        if (optionsAreOpen == 1) {
-            FragmentTransaction ft = fm.beginTransaction();
-
-            ft.remove(cof);
-            ft.commit();
-
-            optionsAreOpen = 0;
-        }
-    }
-
-    public void openOptions() {
-        if (optionsAreOpen == 0) {
-            FragmentTransaction ft = fm.beginTransaction();
-
-            ft.setCustomAnimations(R.animator.enter_anim, R.animator.exit_anim);
-            ft.add(R.id.fragment_content, cof);
-            ft.commit();
-
-            optionsAreOpen = 1;
-        }
     }
 
     /**

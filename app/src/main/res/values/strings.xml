@@ -42,6 +42,7 @@
     <string name="help">Help</string>
     <string name="score">Score</string>
     <string name="scores">Scores</string>
+    <string name="select_chords">Select Chords</string>
     <string name="random_chord">Random Chord</string>
     <string name="instrument">Instrument</string>
     <string name="major_chords">Major Chords</string>

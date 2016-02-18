@@ -16,4 +16,8 @@
     <dimen name="score_dialog_width">320dp</dimen>
     <dimen name="score_dialog_height">380dp</dimen>
 
+    <!-- Size of the chord select check boxes dialog -->
+    <dimen name="chord_select_dialog_width">220dp</dimen>
+    <dimen name="chord_select_dialog_height">180dp</dimen>
+
 </resources>

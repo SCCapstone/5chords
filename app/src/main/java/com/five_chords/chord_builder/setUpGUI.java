@@ -32,7 +32,6 @@ public class setUpGUI extends MainActivity
 
         loadSpinners(activity, true, false, false);
         assignButtons(activity);
-        slidingFragments(activity);
     }
 
     public setUpGUI(Activity activity, View view) {
@@ -244,16 +243,6 @@ public class setUpGUI extends MainActivity
                     displayAnswer(activity);
                 }
                 return true;
-            }
-        });
-    }
-
-    public void slidingFragments(final Activity activity) {
-        final FrameLayout optionFragment = (FrameLayout) activity.findViewById(R.id.fragment_content);
-        optionFragment.setOnTouchListener(new OnSwipeTouchListener(activity) {
-            public void onSwipeLeft() { openOptions(); }
-            public void onSwipeRight() {
-                closeOptions();
             }
         });
     }

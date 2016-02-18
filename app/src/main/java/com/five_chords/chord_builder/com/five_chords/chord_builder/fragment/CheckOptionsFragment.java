@@ -1,12 +1,14 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
 import android.app.Activity;
+import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
@@ -18,7 +20,7 @@ import java.util.Date;
  * A Fragment containing the chord check options.
  * @author tstone95
  */
-public class CheckOptionsFragment extends Fragment implements CompoundButton.OnCheckedChangeListener
+public class CheckOptionsFragment extends DialogFragment implements CompoundButton.OnCheckedChangeListener
 {
     /** The minor chord checkbox */
     private CheckBox minorBox;
@@ -35,6 +37,22 @@ public class CheckOptionsFragment extends Fragment implements CompoundButton.OnC
      */
     public CheckOptionsFragment()
     {   }
+
+    /**
+     * Create a new instance of ScorePageFragment, providing ...
+     * as an argument.
+     * @return A new instance of ScorePageFragment
+     */
+    public static CheckOptionsFragment newInstance()
+    {
+        CheckOptionsFragment f = new CheckOptionsFragment();
+
+        // Supply arguments to Bundle
+        Bundle args = new Bundle();
+        f.setArguments(args);
+
+        return f;
+    }
 
     /**
      * Gets whether or not major chords should be used.
@@ -64,6 +82,21 @@ public class CheckOptionsFragment extends Fragment implements CompoundButton.OnC
     }
 
     @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        // Dialog specific conditions
+        if (getDialog() != null)
+        {
+            // Set size if dialog
+            int width = getResources().getDimensionPixelSize(R.dimen.chord_select_dialog_width);
+            int height = getResources().getDimensionPixelSize(R.dimen.chord_select_dialog_height);
+            getDialog().getWindow().setLayout(width, height);
+        }
+    }
+
+    @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -89,6 +122,10 @@ public class CheckOptionsFragment extends Fragment implements CompoundButton.OnC
         minorBox.setOnCheckedChangeListener(this);
         majorBox.setOnCheckedChangeListener(this);
         dominantBox.setOnCheckedChangeListener(this);
+
+        // Remove title
+        if (getDialog() != null)
+            getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         // Return the layout for this fragment
         return view;

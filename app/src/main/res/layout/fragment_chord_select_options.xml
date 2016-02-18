@@ -36,15 +36,4 @@
         android:textSize="@dimen/text_size_xsmall"
         android:text="@string/instrument" />
 
-    <!-- Button to go to help page -->
-    <Button
-        android:id="@+id/button_back_to_help"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="@dimen/text_size_xsmall"
-        android:text="@string/help"
-        android:onClick="toHelpPage"/>
-
 </LinearLayout>
