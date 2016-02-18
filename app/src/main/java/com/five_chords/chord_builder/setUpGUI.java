@@ -35,11 +35,11 @@ public class setUpGUI extends MainActivity
         slidingFragments(activity);
     }
 
-    public setUpGUI(View view) {
-        seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_root), (TextView) view.findViewById(R.id.textview_root));
-        seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_third), (TextView) view.findViewById(R.id.textview_third));
-        seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_fifth), (TextView) view.findViewById(R.id.textview_fifth));
-        seekBarListener(view, (SeekBar) view.findViewById(R.id.slider_option), (TextView) view.findViewById(R.id.textview_option));
+    public setUpGUI(Activity activity, View view) {
+        seekBarListener(activity, view, (SeekBar) view.findViewById(R.id.slider_root), (TextView) view.findViewById(R.id.textview_root));
+        seekBarListener(activity, view, (SeekBar) view.findViewById(R.id.slider_third), (TextView) view.findViewById(R.id.textview_third));
+        seekBarListener(activity, view, (SeekBar) view.findViewById(R.id.slider_fifth), (TextView) view.findViewById(R.id.textview_fifth));
+        seekBarListener(activity, view, (SeekBar) view.findViewById(R.id.slider_option), (TextView) view.findViewById(R.id.textview_option));
     }
 
     /**********************************************************************************************
@@ -49,7 +49,7 @@ public class setUpGUI extends MainActivity
      * @param bar The seekbar to add listeners to
      * @param text the textview associated with the seekbar
      **/
-    public void seekBarListener(View view, final SeekBar bar, final TextView text)
+    public void seekBarListener(final Activity activity, View view, final SeekBar bar, final TextView text)
     {
         // A reference to the noteNames to pass to the Listener
         final String[] noteNames = view.getResources().getStringArray(R.array.noteNames);
@@ -59,7 +59,7 @@ public class setUpGUI extends MainActivity
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 text.setText(noteNames[progress % 12]);
-                sH.playNote(bar.getProgress());
+                sH.playNote(activity, bar.getProgress());
             }
 
             public void onStartTrackingTouch(SeekBar seekBar) {
@@ -73,7 +73,7 @@ public class setUpGUI extends MainActivity
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sH.playNote(bar.getProgress());
+                    sH.playNote(activity, bar.getProgress());
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     sH.stopSound();
                 } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
@@ -167,7 +167,7 @@ public class setUpGUI extends MainActivity
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sH.playChord(cH.buildCurrentChord(activity));
+                    sH.playChord(activity, cH.buildCurrentChord(activity));
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     sH.stopSound();
@@ -180,7 +180,7 @@ public class setUpGUI extends MainActivity
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sH.playChord(cH.getCurrentChord());
+                    sH.playChord(activity, cH.getCurrentChord());
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     sH.stopSound();
@@ -205,7 +205,7 @@ public class setUpGUI extends MainActivity
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     cH.getRandomChord();
                     updateSpinner(activity);
-                    sH.playChord(cH.getCurrentChord());
+                    sH.playChord(activity, cH.getCurrentChord());
                 }
                 return true;
             }

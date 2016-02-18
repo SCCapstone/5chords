@@ -37,7 +37,7 @@ public class SliderFragment extends Fragment
         sliders.findViewById(R.id.slider_option).setEnabled(false);
         sliders.findViewById(R.id.textview_option).setEnabled(false);
 
-        new setUpGUI(sliders);
+        new setUpGUI(getActivity(), sliders);
 
         return sliders;
     }

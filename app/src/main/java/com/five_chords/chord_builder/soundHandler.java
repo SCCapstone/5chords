@@ -54,7 +54,7 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Plays a note
      **/
-    public void playNote(int note)
+    public void playNote(Activity activity, int note)
     {
         stopSound();
 
@@ -73,7 +73,7 @@ public class soundHandler extends MainActivity
         try
         {
             midi.writeToFile(midiFile);
-            mediaPlayer = MediaPlayer.create(this, Uri.parse("file://" + midiFile));
+            mediaPlayer = MediaPlayer.create(activity, Uri.parse("file://" + midiFile));
             mediaPlayer.setLooping(true);
             mediaPlayer.start();
         }
@@ -85,8 +85,9 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Plays a chord
      **/
-    public void playChord(int[] chord)
+    public void playChord(Activity activity, int[] chord)
     {
+        Log.w("PLAY_CHORD", "!!!!!!!!!!!!!!!!!!!!!!!!!!");
         stopSound();
 
         // TODO: use the sliders to change pitch of note
@@ -107,7 +108,7 @@ public class soundHandler extends MainActivity
         try
         {
             midi.writeToFile(midiFile);
-            mediaPlayer = MediaPlayer.create(this, Uri.parse("file://" + midiFile));
+            mediaPlayer = MediaPlayer.create(activity, Uri.parse("file://" + midiFile));
             mediaPlayer.setLooping(true);
             mediaPlayer.start();
         }
