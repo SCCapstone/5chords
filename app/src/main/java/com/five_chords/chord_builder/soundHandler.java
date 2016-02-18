@@ -87,7 +87,6 @@ public class soundHandler extends MainActivity
      **/
     public void playChord(Activity activity, int[] chord)
     {
-        Log.w("PLAY_CHORD", "!!!!!!!!!!!!!!!!!!!!!!!!!!");
         stopSound();
 
         // TODO: use the sliders to change pitch of note

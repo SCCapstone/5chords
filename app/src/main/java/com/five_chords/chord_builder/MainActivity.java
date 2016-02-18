@@ -58,6 +58,14 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         cof = new CheckOptionsFragment();
     }
 
+    @Override
+    protected void onDestroy() {
+        if (sH != null)
+            sH.stopSound();
+
+        super.onDestroy();
+    }
+
     /**
      * Called to launch the score page fragment.
      * @param v The calling View

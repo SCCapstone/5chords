@@ -55,28 +55,39 @@ public class setUpGUI extends MainActivity
         final String[] noteNames = view.getResources().getStringArray(R.array.noteNames);
         text.setText(noteNames[0]);
 
-        bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
+        {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
+            {
                 text.setText(noteNames[progress % 12]);
                 sH.playNote(activity, bar.getProgress());
             }
 
-            public void onStartTrackingTouch(SeekBar seekBar) {
+            public void onStartTrackingTouch(SeekBar seekBar)
+            {
             }
 
-            public void onStopTrackingTouch(SeekBar seekBar) {
+            public void onStopTrackingTouch(SeekBar seekBar)
+            {
             }
         });
 
-        bar.setOnTouchListener(new View.OnTouchListener() {
+        bar.setOnTouchListener(new View.OnTouchListener()
+        {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            public boolean onTouch(View v, MotionEvent event)
+            {
+                if (event.getAction() == MotionEvent.ACTION_DOWN)
+                {
                     sH.playNote(activity, bar.getProgress());
-                } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                }
+                else if (event.getAction() == MotionEvent.ACTION_UP)
+                {
                     sH.stopSound();
-                } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                }
+                else if (event.getAction() == MotionEvent.ACTION_MOVE)
+                {
                     return false;
                 }
                 return true;
@@ -142,17 +153,21 @@ public class setUpGUI extends MainActivity
         chordSelector.setAdapter(adapter);
 
         // Set the OnItemSelectedListener for the spinner
-        chordSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        chordSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (activity instanceof MainActivity) {
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                if (activity instanceof MainActivity)
+                {
                     // Update the selected chord
                     cH.getSelectedChord(chordSelector.getSelectedItemPosition() + 1);
                 }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parentView) { /* Ignore */ }
+            public void onNothingSelected(AdapterView<?> parentView)
+            { /* Ignore */ }
         });
     }
 
@@ -202,11 +217,15 @@ public class setUpGUI extends MainActivity
         selectRandomChord.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     cH.getRandomChord();
                     updateSpinner(activity);
                     sH.playChord(activity, cH.getCurrentChord());
                 }
+                else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    sH.stopSound();
+                }
+
                 return true;
             }
         });

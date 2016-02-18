@@ -107,7 +107,16 @@ public class chordHandler {
      * Change current chord to a random chord
      */
     public int getRandomChord() {
-        currentChordIndex = new Random().nextInt(availableChords.length - 1);
+        int previousChordIndex = currentChordIndex;
+        Random random = new Random();
+
+        // Make sure new chord index is different than the previous
+        do
+        {
+            currentChordIndex = random.nextInt(availableChords.length - 1);
+        }
+        while (currentChordIndex == previousChordIndex);
+
         return currentChordIndex;
     }
 

@@ -21,7 +21,7 @@ public class soundHandlerMidi {
     };
 
     // A Vector to hold our MIDI events
-    Vector<int[]> midiEvents;
+    private Vector<int[]> midiEvents;
 
     public void writeToFile (String filename) throws IOException {
 
