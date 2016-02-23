@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         ft.addToBackStack(null);
 
         // Create and show the dialog.
-        DialogFragment newFragment = ScorePageFragment.newInstance();
+        DialogFragment newFragment = ScorePageFragment.newInstance(true, false, true);
         newFragment.show(ft, "dialog");
     }
 
