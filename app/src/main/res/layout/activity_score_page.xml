@@ -1,37 +1,22 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:id="@+id/scorePage"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.five_chords.chord_builder.Score"
-    android:background="@android:color/holo_blue_light">
-
-    <!-- Back to Main button -->
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back to Main"
-        android:id="@+id/button5"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="BackToMain" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                android:id="@+id/scorePage"
+                android:layout_height="match_parent"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+              android:orientation="vertical"
+                tools:context="com.five_chords.chord_builder.Score"
+                android:background="@android:color/holo_blue_light">
 
     <!-- Score Page Fragment -->
     <fragment
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_margin="4dp"
         android:name="com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScorePageFragment"
-        tools:layout="@layout/fragment_score_page"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_above="@id/button5">
+        tools:layout="@layout/fragment_score_page">
     </fragment>
 
-</RelativeLayout>
+</LinearLayout>

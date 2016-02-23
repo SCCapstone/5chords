@@ -1,54 +1,43 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.five_chords.chord_builder.AboutPage"
     android:background="@android:color/holo_blue_light">
 
-    <TextView android:id="@+id/text"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="We are 5Chords!\nWe are students at the University of South Carolina working on our Capstone Computing Project. Together We have developed an application that will help music students learn music theory and intonation without the skills required to play them perfectly. Our goal is to give music learners an easier method to learn music theory.\n\nCreated by:\nDrea Zeagler\nZachary Askins\nKevin Hyun\nTheodore Stone"
-        android:textStyle="bold"
-        android:layout_below="@+id/textView3"
-        android:layout_alignRight="@+id/button_back_to_main"
-        android:layout_alignEnd="@+id/button_back_to_main"
-        android:textSize="16dp" />
+        android:orientation="vertical">
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back To Main"
-        android:id="@+id/button_back_to_main"
-        android:onClick = "BackToMain"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="About Us:"
+            android:id="@+id/textView3"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            android:textStyle="bold" />
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back TO HELP"
-        android:id="@+id/button_back_to_help"
-        android:onClick = "BackToHelp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="We are 5Chords!\nWe are students at the University of South Carolina working on our Capstone Computing Project. Together We have developed an application that will help music students learn music theory and intonation without the skills required to play them perfectly. Our goal is to give music learners an easier method to learn music theory."
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_medium" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="About Us:"
-        android:id="@+id/textView3"
-        android:layout_below="@+id/button_back_to_help"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="37dp"
-        android:textStyle="bold" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Created by:\nDrea Zeagler\nZachary Askins\nKevin Hyun\nTheodore Stone"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"
+            android:textSize="@dimen/text_size_medium" />
 
-</RelativeLayout>
+    </LinearLayout>
+
+</ScrollView>

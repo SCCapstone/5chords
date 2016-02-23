@@ -22,11 +22,6 @@ public class AboutPage extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_page);
-
-      /*  Log.i("OnCreate", "OnCreate method has been executed");
-
-        Button b = (Button) findViewById(R.id.yourButtonIdInXML);
-        b.setOnClickListener(this);*/
     }
 
     @Override
@@ -52,17 +47,5 @@ public class AboutPage extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void BackToHelp(View view)
-    {
-        Intent intent = new Intent(this, HelpPage.class);
-        startActivity(intent);
-    }
-
-    public void BackToMain(View view)
-    {
-        Intent intent = new Intent(this, MainActivity.class );
-        startActivity(intent);
     }
 }

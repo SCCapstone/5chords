@@ -90,6 +90,10 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     {
         if (item.getItemId() == R.id.menu_item_main_options)
             launchCheckOptionsDialog(findViewById(R.id.fragment_content));
+        else if (item.getItemId() == R.id.menu_item_main_scores)
+            toScorePage(null);
+        else if (item.getItemId() == R.id.menu_item_main_about)
+            toAboutPage(null);
         else if (item.getItemId() == R.id.menu_item_main_help)
             toHelpPage(null);
 
@@ -149,9 +153,30 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
 
     /****************************************************************
      * Go to help activity
+     * @param view The calling View
      **/
-    public void toHelpPage(View v) {
+    public void toHelpPage(View view) {
         Intent intent = new Intent(this, HelpPage.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Goes to the Score page.
+     * @param view The calling View
+     */
+    public void toScorePage(View view)
+    {
+        Intent intent = new Intent(this, Score.ScoreActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Goes to the About page.
+     * @param view The calling View
+     */
+    public void toAboutPage(View view)
+    {
+        Intent intent = new Intent(this, AboutPage.class);
         startActivity(intent);
     }
 

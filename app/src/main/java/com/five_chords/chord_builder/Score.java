@@ -291,16 +291,6 @@ public class Score// extends MainActivity
      **/
     public static class ScoreActivity extends AppCompatActivity
     {
-        /*******************************
-         * BacktoMain function
-         * @param view The calling View
-         **/
-        public void BackToMain(View view)
-        {
-            Intent intent = new Intent(this, MainActivity.class );
-            startActivity(intent);
-        }
-
         @Override
         protected void onCreate(Bundle savedInstanceState)
         {

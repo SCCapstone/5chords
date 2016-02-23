@@ -1,63 +1,30 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
     tools:context="com.five_chords.chord_builder.HelpPage"
     android:background="@android:color/holo_blue_light">
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Back to Main"
-        android:id="@+id/button_back_to_main"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick = "BackToMain" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Basics for playing:"
-        android:id="@+id/textView"
-        android:layout_marginTop="37dp"
-        android:textStyle="bold"
-        android:layout_below="@+id/button_back_to_main"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="16dp"
+        android:textStyle="bold"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/Text"
         android:text=" * To use this application, you must first press the 'Random Chord' button.\n * After that you will hear a number of notes, also called a cord.\n * Your job is to use the sliders to match the chord, and then press the 'CHECK' button to see if you are correct.\n * Note: if you want to hear the cord again, press the 'PREVIEW' button."
         android:textSize="16dp"
         android:textStyle="bold"
-        android:singleLine="false"
-        android:layout_below="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="To Score Page"
-        android:id="@+id/button_back_to_score"
-        android:layout_above="@+id/textView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:onClick="goToScores" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="About Us"
-        android:id="@+id/button_back_to_about"
-        android:onClick="goToAboutPage"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/button_back_to_score"
-        android:layout_toEndOf="@+id/button_back_to_score" />
-</RelativeLayout>
+        android:singleLine="false"/>
+</LinearLayout>

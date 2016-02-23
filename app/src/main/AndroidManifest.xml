@@ -16,20 +16,49 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".HelpPage"
-            android:label="Help" />
+            android:label="Help"
+            android:parentActivityName="com.five_chords.chord_builder.MainActivity" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.five_chords.chord_builder.MainActivity" />
+            </activity>
+
         <activity
             android:name=".Score$ScoreActivity"
-            android:label="Score" />
+            android:label="Score"
+            android:parentActivityName="com.five_chords.chord_builder.MainActivity" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.five_chords.chord_builder.MainActivity" />
+        </activity>
+
         <activity
             android:name=".StartPage"
             android:label="@string/title_activity_start_page"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".AboutPage"
-            android:label="About" />
-        <activity android:name=".demo"></activity>
+            android:label="About"
+            android:parentActivityName="com.five_chords.chord_builder.MainActivity" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.five_chords.chord_builder.MainActivity" />
+        </activity>
+
+        <activity
+            android:name=".demo">
+        </activity>
+
     </application>
 
 </manifest>

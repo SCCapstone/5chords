@@ -14,36 +14,10 @@ import android.view.View;
 
 public class HelpPage extends AppCompatActivity
 {
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help_page);
     }
-
-    public void BackToMain(View view)
-    {
-        Intent intent = new Intent(this, MainActivity.class );
-        startActivity(intent);
-    }
-
-    public void goToAboutPage(View view)
-    {
-        Intent intent = new Intent(this, AboutPage.class);
-        startActivity(intent);
-    }
-
-    public void goToScores(View view)
-    {
-        Intent intent = new Intent(this, Score.ScoreActivity.class);
-        startActivity(intent);
-    }
-
-    public void BackToHelp(View view)
-    {
-        Intent intent = new Intent(this, Score.ScoreActivity.class);
-        startActivity(intent);
-    }
-
 }
