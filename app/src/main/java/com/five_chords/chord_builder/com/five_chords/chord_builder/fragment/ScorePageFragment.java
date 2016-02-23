@@ -141,6 +141,20 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
         // Add listener
         tabs.setOnTabSelectedListener(this);
 
+        // Create view mode tabs
+        tabs = (TabLayout)view.findViewById(R.id.tabs_view_mode_score_page);
+
+        TabLayout.Tab currentTab = tabs.newTab();
+        currentTab.setText(getResources().getString(R.string.current));
+        tabs.addTab(currentTab);
+
+        TabLayout.Tab historyTab = tabs.newTab();
+        historyTab.setText(getResources().getString(R.string.history));
+        tabs.addTab(historyTab);
+
+        // Add listener
+        tabs.setOnTabSelectedListener(this);
+
         // Populate list view of scores
         addScores(true, false);
 
