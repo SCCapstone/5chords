@@ -19,6 +19,7 @@ import android.view.View;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Random;
 
@@ -127,16 +128,22 @@ public class Score// extends MainActivity
         }
 
         /**
-         * Gets the history of this CurrentScoreWrapper, loading it if needed.
+         * Loads the history of this CurrentScoreWrapper.
          * @param activity The current Activity
-         * @return The history of this CurrentScoreWrapper
+         * @param overwrite Whether or not to load the history again if it has already been loaded
          */
-        public List<ScoreWrapper> getHistory(Activity activity)
+        public void loadHistory(Activity activity, boolean overwrite)
         {
-            // Need to load history
-            if (scoreHistory == null)
+            if (overwrite || scoreHistory == null)
                 loadHistory(getScoreLoader(activity));
+        }
 
+        /**
+         * Gets the history of this CurrentScoreWrapper.
+         * @return The history of this CurrentScoreWrapper, or null if the history has not been loaded
+         */
+        public LinkedList<ScoreWrapper> getHistory()
+        {
             return scoreHistory;
         }
 
@@ -221,6 +228,26 @@ public class Score// extends MainActivity
                 wrapper.load(savedChordScores, i);
                 scoreHistory.add(wrapper);
             }
+
+            // Trim history TODO temporary
+//            ScoreWrapper p = null;
+//            ListIterator<ScoreWrapper> it = scoreHistory.listIterator();
+//            while (it.hasNext())
+//            {
+//                wrapper = it.next();
+//
+//                if (p != null)
+//                {
+//                    if (wrapper.time == p.time)
+//                        it.remove();
+//                }
+//
+//                p = wrapper;
+//            }
+//
+//            SharedPreferences.Editor e = savedChordScores.edit();
+//            saveHistory(e);
+//            e.apply();
         }
 
         /**
@@ -283,6 +310,17 @@ public class Score// extends MainActivity
             scoreEditor.putInt(CHORD_NAME + "-" + index + "-c", numCorrectGuesses);
             scoreEditor.putInt(CHORD_NAME + "-" + index + "-t", numTotalGuesses);
             scoreEditor.putLong(CHORD_NAME + "-" + index + "-h", time);
+        }
+
+        /**
+         * Gets a String representation of this Score.
+         * @return AString representation of this Score
+         */
+        @Override
+        public String toString()
+        {
+            return CHORD_NAME + ": " + numCorrectGuesses + " / " + numTotalGuesses + " (" +
+                    (100.0 * numCorrectGuesses / + numTotalGuesses) + " %), " + new Date(time).toString();
         }
     }
 

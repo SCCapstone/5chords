@@ -1,9 +1,14 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +20,8 @@ import android.widget.TextView;
 
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
+
+import org.w3c.dom.Text;
 
 import java.util.Random;
 
@@ -407,17 +414,28 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
         @Override
         public void initialize(View view, int position)
         {
-            Score.ScoreWrapper item = getItem(position);
-            TextView textView = (TextView)view.findViewById(R.id.textview_history);
+            Score.CurrentScoreWrapper item = getItem(position);
+            TextView textView = (TextView)view.findViewById(R.id.score_history_chord_name);
+            ScoreProgressView progressView = (ScoreProgressView)view.findViewById(R.id.score_history_progress_view);
 
-            textView.setText(item.CHORD_NAME + " - History will display here");
+            // Set chord name
+            textView.setText(item.CHORD_NAME);
+
+            // Setup progress view
+            item.loadHistory((Activity) getContext(), false); // Make sure the History is loaded
+            progressView.setScore(item);
+
+            // TODO temporary
+            Log.w("HIST", item.CHORD_NAME + ": " + item.getHistory().size() + " points");
+            for (Score.ScoreWrapper wrapper: item.getHistory())
+                Log.w("\tPoint", wrapper.toString());
         }
     }
 
     /**
      * Abstract implementation of an ArrayAdapter containing ScoreItems.
      */
-    public static abstract class AbstractScoreItemAdapter extends ArrayAdapter<Score.ScoreWrapper>
+    public static abstract class AbstractScoreItemAdapter extends ArrayAdapter<Score.CurrentScoreWrapper>
     {
         /**
          * Constructor.

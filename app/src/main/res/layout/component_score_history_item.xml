@@ -3,12 +3,20 @@
                 android:id="@+id/component_score_history_item"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
+                android:orientation="vertical"
                 android:layout_margin="4dp">
 
+    <!-- Chord name -->
     <TextView
-        android:id="@+id/textview_history"
-        android:layout_width="wrap_content"
+        android:id="@+id/score_history_chord_name"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <!-- The score progress view -->
+    <com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScoreProgressView
+        android:id="@+id/score_history_progress_view"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/chord_progress_history_height"
+        android:layout_margin="4dp"/>
 
 </LinearLayout>
