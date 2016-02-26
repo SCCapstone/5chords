@@ -105,8 +105,8 @@ public class ScoreProgressView extends View
         {
             float wBorder = w * 0.0625f;
             float hBorder = h * 0.0625f;
-            float xScale = 2.0f * (w - 2.0f * wBorder) / (float) points.length;
-            float yScale = (h - 2.0f * hBorder);
+            float xScale = w - 2.0f * wBorder ;
+            float yScale = h - 2.0f * hBorder;
             float radius = w / (96.0f);
 
             // Draw points
@@ -138,9 +138,18 @@ public class ScoreProgressView extends View
                 PAINT.setStyle(Paint.Style.FILL);
                 PAINT.setColor(Color.DKGRAY);
                 text = "" + Math.round(points[i].percent * 100.0f) + " %";
-                PAINT.getTextBounds(text, 0, text.length() - 1, BOUNDS);
-                canvas.drawText(text, x, Math.max(Math.min(y - BOUNDS.height() * 0.5f,
-                        h - BOUNDS.height()), BOUNDS.height()), PAINT);
+                drawText(canvas, text, x, y);
+
+                // Draw 'Today' over last point
+                if (i == points.length - 1)
+                {
+                    PAINT.setColor(Color.LTGRAY);
+                    drawText(canvas, "Today", x, points[i].y > 0.0f ? 0.0f : h);
+                }
+
+                // TODO draw other strings over previous points, such as 'Earlier today', 'last week', etc
+                // TODO Possibly make the spacing between points constant and put the whole view in a
+                // TODO horizontal scroll view
             }
         }
 
@@ -148,6 +157,21 @@ public class ScoreProgressView extends View
         PAINT.setColor(Color.DKGRAY);
         PAINT.setStyle(Paint.Style.STROKE);
         canvas.drawRect(0.0f, 0.0f, (float) w, (float) h, PAINT);
+    }
+
+    /**
+     * Draws Text on the given Canvas, constraining it always be on the Canvas. Uses the global Paint in this class.
+     * @param canvas The Canvas on which to draw
+     * @param text The text to draw
+     * @param x The x coordinate of the text position on the Canvas
+     * @param y The y coordinate of the text position on the Canvas
+     */
+    private void drawText(Canvas canvas, String text, float x, float y)
+    {
+        PAINT.getTextBounds(text, 0, text.length() - 1, BOUNDS);
+        canvas.drawText(text,
+                Math.max(Math.min(x, canvas.getWidth() - BOUNDS.width()), BOUNDS.width()),
+                Math.max(Math.min(y, canvas.getHeight() - BOUNDS.height()), BOUNDS.height()), PAINT);
     }
 
     /**

@@ -14,18 +14,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import java.util.Date;
 import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.Random;
 
 public class Score
 {
@@ -36,7 +30,7 @@ public class Score
     public static final int NUM_SCORES_TO_KEEP = 100;
 
     /** The amount of time to wait between updating scores, in milliseconds */
-    public static final long SCORE_UPDATE_INTERVAL = 24L * 3600L * 1000L;
+    public static final long SCORE_UPDATE_INTERVAL = 2000L;//24L * 3600L * 1000L;
 
     /** The array of chord Scores */
     public static CurrentScoreWrapper[] scores;
@@ -181,7 +175,6 @@ public class Score
 
                 // Load the history
                 loadHistory(savedChordScores);
-
 
                 // Add this Score to the history
                 scoreHistory.addFirst(this);
