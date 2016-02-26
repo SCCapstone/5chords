@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -61,9 +62,13 @@ public class Score
     /***********************************************************************************************
      * Loads the score data for each chord and initializes the correctChords and totalChords arrays.
      * @param main The calling Activity
+     * @param overwrite Whether or not to overwrite the score history if it is already loaded
      **/
-    public static void loadScores(Activity main)
+    public static void loadScores(Activity main, boolean overwrite)
     {
+        if (!overwrite && scores != null)
+            return;
+
         // Grab the array of chord names from the resources
         final String[] chordNames = main.getResources().getStringArray(R.array.chordNames);
 
@@ -174,9 +179,9 @@ public class Score
 
                 // Load history, make changes, and save changes
 
-                // Load the history if needed
-                if (scoreHistory == null)
-                    loadHistory(savedChordScores);
+                // Load the history
+                loadHistory(savedChordScores);
+
 
                 // Add this Score to the history
                 scoreHistory.addFirst(this);
@@ -238,12 +243,11 @@ public class Score
             // Save the size of the history
             scoreEditor.putInt(CHORD_NAME + "-n", scoreHistory.size());
 
-            // Save self
-            save(scoreEditor, 0);
-
-            int i = 1;
+            int i = 0;
             for (ScoreWrapper wrapper: scoreHistory)
+            {
                 wrapper.save(scoreEditor, i++);
+            }
         }
     }
 
@@ -343,7 +347,7 @@ public class Score
                             editor.apply();
 
                             // Reload scores
-                            loadScores(activity);
+                            loadScores(activity, true);
 
                             // Refresh Score View
                             View scoreView = findViewById(R.id.score_activity_score_fragment);

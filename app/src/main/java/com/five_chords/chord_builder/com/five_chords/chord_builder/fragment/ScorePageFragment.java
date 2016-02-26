@@ -423,12 +423,13 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
 
             // Setup progress view
             item.loadHistory((Activity) getContext(), false); // Make sure the History is loaded
-            progressView.setScore(item);
 
             // TODO temporary
-            Log.w("HIST", item.CHORD_NAME + ": " + item.getHistory().size() + " points");
-            for (Score.ScoreWrapper wrapper: item.getHistory())
-                Log.w("\tPoint", wrapper.toString());
+//            Log.w("HIST", item.CHORD_NAME + ": " + item.getHistory().size() + " points");
+//            for (Score.ScoreWrapper wrapper: item.getHistory())
+//                Log.w("\tPoint", wrapper.toString());
+
+            progressView.setScore(item);
         }
     }
 

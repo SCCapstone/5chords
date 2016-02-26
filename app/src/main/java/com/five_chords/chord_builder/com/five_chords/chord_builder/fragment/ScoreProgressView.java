@@ -6,10 +6,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.five_chords.chord_builder.Score;
 
+import java.util.Date;
 import java.util.LinkedList;
 
 /**
@@ -102,7 +104,9 @@ public class ScoreProgressView extends View
         if (points != null && points.length > 0)
         {
             float wBorder = w * 0.0625f;
+            float hBorder = h * 0.0625f;
             float xScale = 2.0f * (w - 2.0f * wBorder) / (float) points.length;
+            float yScale = (h - 2.0f * hBorder);
             float radius = w / (96.0f);
 
             // Draw points
@@ -112,7 +116,7 @@ public class ScoreProgressView extends View
             {
                 // Get position of point
                 x = wBorder + points[i].x * xScale;
-                y = points[i].y * h;
+                y = hBorder + points[i].y * yScale;
 
                 // Draw circles on each point
                 PAINT.setStrokeWidth(2.0f);
@@ -125,12 +129,13 @@ public class ScoreProgressView extends View
                 {
                     PAINT.setStyle(Paint.Style.STROKE);
                     PAINT.setColor(Color.LTGRAY);
-                    canvas.drawLine(x, y, wBorder + points[i - 1].x * xScale, points[i - 1].y * h, PAINT);
+                    canvas.drawLine(x, y, wBorder + points[i - 1].x * xScale,
+                            hBorder + points[i - 1].y * yScale, PAINT);
                 }
 
                 // Draw percent above point
                 PAINT.setStrokeWidth(1.0f);
-                PAINT.setStyle(Paint.Style.STROKE);
+                PAINT.setStyle(Paint.Style.FILL);
                 PAINT.setColor(Color.DKGRAY);
                 text = "" + Math.round(points[i].percent * 100.0f) + " %";
                 PAINT.getTextBounds(text, 0, text.length() - 1, BOUNDS);
@@ -152,10 +157,13 @@ public class ScoreProgressView extends View
     private void createScorePointArray(LinkedList<Score.ScoreWrapper> scores)
     {
         // Allocate array
-        points = new ScorePoint[score.getHistory().size()];
+        points = new ScorePoint[scores.size()];
 
         if (points.length == 0)
+        {
+            Log.e("ScoreProgressView", "Zero length history for " + score.CHORD_NAME);
             return;
+        }
 
         // First calculate total time span
         long startTime = scores.getLast().time;
@@ -164,13 +172,16 @@ public class ScoreProgressView extends View
         // Add points
         int i = 0;
         ScorePoint point;
+        Log.w("SPV", "Points for " + score.CHORD_NAME + ":");
         for (Score.ScoreWrapper wrapper: scores)
         {
             point = new ScorePoint();
-            point.percent = (float)wrapper.numCorrectGuesses / wrapper.numTotalGuesses;
-            point.x = timeSpan == 0L ? 0.0f : (float)((wrapper.time - startTime) / timeSpan);
+            point.percent = wrapper.numTotalGuesses == 0 ? 0.0f : (float)wrapper.numCorrectGuesses / wrapper.numTotalGuesses;
+            point.x = timeSpan == 0L ? 0.0f : (float)((wrapper.time - startTime) / (double)timeSpan);
             point.y = 1.0f - point.percent;
             points[points.length - 1 - (i++)] = point;
+
+            Log.w("\tPoint", "Pos = " + point.x + ", " + point.y + " time = " + new Date(wrapper.time).toString());
         }
     }
 

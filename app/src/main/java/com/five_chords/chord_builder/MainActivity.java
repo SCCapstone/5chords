@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         gui = new setUpGUI(this);
         sH = new soundHandler(this);
         cof = new CheckOptionsFragment();
-        Score.loadScores(this);
+        Score.loadScores(this, false);
     }
 
     @Override
