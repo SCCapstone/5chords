@@ -8,13 +8,16 @@
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -235,7 +238,10 @@ public class Score
             // Save the size of the history
             scoreEditor.putInt(CHORD_NAME + "-n", scoreHistory.size());
 
-            int i = 0;
+            // Save self
+            save(scoreEditor, 0);
+
+            int i = 1;
             for (ScoreWrapper wrapper: scoreHistory)
                 wrapper.save(scoreEditor, i++);
         }
@@ -318,21 +324,39 @@ public class Score
          */
         public void resetScores(View view)
         {
-            // TODO launch confirmation dialog
+            final ScoreActivity activity = this;
 
-            // Clear the history
-            SharedPreferences savedChordScores = getScoreLoader(this);
-            SharedPreferences.Editor editor = savedChordScores.edit();
-            editor.clear();
-            editor.apply();
+            // Launch confirmation dialog
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Clear Scores")
+                    .setMessage("Are you sure you want clear all scores?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            // Clear the history
+                            SharedPreferences savedChordScores = getScoreLoader(activity);
+                            SharedPreferences.Editor editor = savedChordScores.edit();
+                            editor.clear();
+                            editor.apply();
 
-            // Reload scores
-            loadScores(this);
+                            // Reload scores
+                            loadScores(activity);
 
-            // Refresh Score View
-            View scoreView = findViewById(R.id.score_activity_score_fragment);
-            if (scoreView != null)
-                scoreView.invalidate();
+                            // Refresh Score View
+                            View scoreView = findViewById(R.id.score_activity_score_fragment);
+                            if (scoreView != null)
+                                scoreView.invalidate();
+
+                            // Show confirmation toast
+                            Toast.makeText(activity, "Scores cleared", Toast.LENGTH_SHORT).show();
+                        }
+
+                    })
+                    .setNegativeButton("No", null)
+                    .show();
         }
     }
 }
