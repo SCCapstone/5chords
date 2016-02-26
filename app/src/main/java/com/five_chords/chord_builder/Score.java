@@ -13,6 +13,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -173,7 +174,7 @@ public class Score
 
                 // Load history, make changes, and save changes
 
-                // Load the history
+                // Load the history TODO put this in a separate thread
                 loadHistory(savedChordScores);
 
                 // Add this Score to the history
@@ -313,6 +314,10 @@ public class Score
         {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_score_page);
+
+            // Lock orientation in portrait mode with small screen devices
+            if (!getResources().getBoolean(R.bool.isTablet))
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
         /**
