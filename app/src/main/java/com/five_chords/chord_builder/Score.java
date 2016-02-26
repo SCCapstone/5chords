@@ -30,7 +30,7 @@ public class Score
     public static final int NUM_SCORES_TO_KEEP = 100;
 
     /** The amount of time to wait between updating scores, in milliseconds */
-    public static final long SCORE_UPDATE_INTERVAL = 2000L;//24L * 3600L * 1000L;
+    public static final long SCORE_UPDATE_INTERVAL = 24L * 3600L * 1000L;
 
     /** The array of chord Scores */
     public static CurrentScoreWrapper[] scores;
