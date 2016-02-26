@@ -2,25 +2,21 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 
 import com.five_chords.chord_builder.R;
 
-import java.util.Date;
-
 /**
- * A Fragment containing the chord check options.
+ * A Fragment containing the options for the Main Activity
  * @author tstone95
  */
-public class CheckOptionsFragment extends DialogFragment implements CompoundButton.OnCheckedChangeListener
+public class OptionsFragment extends DialogFragment implements CompoundButton.OnCheckedChangeListener
 {
     /** The minor chord checkbox */
     private CheckBox minorBox;
@@ -35,7 +31,7 @@ public class CheckOptionsFragment extends DialogFragment implements CompoundButt
     /**
      * Required empty public constructor.
      */
-    public CheckOptionsFragment()
+    public OptionsFragment()
     {   }
 
     /**
@@ -43,9 +39,9 @@ public class CheckOptionsFragment extends DialogFragment implements CompoundButt
      * as an argument.
      * @return A new instance of ScorePageFragment
      */
-    public static CheckOptionsFragment newInstance()
+    public static OptionsFragment newInstance()
     {
-        CheckOptionsFragment f = new CheckOptionsFragment();
+        OptionsFragment f = new OptionsFragment();
 
         // Supply arguments to Bundle
         Bundle args = new Bundle();
@@ -90,8 +86,8 @@ public class CheckOptionsFragment extends DialogFragment implements CompoundButt
         if (getDialog() != null)
         {
             // Set size if dialog
-            int width = getResources().getDimensionPixelSize(R.dimen.chord_select_dialog_width);
-            int height = getResources().getDimensionPixelSize(R.dimen.chord_select_dialog_height);
+            int width = getResources().getDimensionPixelSize(R.dimen.options_dialog_width);
+            int height = getResources().getDimensionPixelSize(R.dimen.options_dialog_height);
             getDialog().getWindow().setLayout(width, height);
         }
     }
@@ -114,7 +110,11 @@ public class CheckOptionsFragment extends DialogFragment implements CompoundButt
                              Bundle savedInstanceState)
     {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_check_options, container, false);
+        View view = inflater.inflate(R.layout.fragment_options, container, false);
+
+        // Set title
+        if (getDialog() != null)
+            getDialog().setTitle(R.string.options);
 
         // Add listener to checkboxes
         assignCheckboxes(view);
@@ -122,10 +122,6 @@ public class CheckOptionsFragment extends DialogFragment implements CompoundButt
         minorBox.setOnCheckedChangeListener(this);
         majorBox.setOnCheckedChangeListener(this);
         dominantBox.setOnCheckedChangeListener(this);
-
-        // Remove title
-        if (getDialog() != null)
-            getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
 
         // Return the layout for this fragment
         return view;

@@ -1,33 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              android:id="@+id/fragment_check_options"
-            android:background="@color/common_action_bar_splitter">
+              android:orientation="vertical"
+              android:id="@+id/fragment_check_options">
 
     <!-- Checkboxes for what types of chords to select -->
     <CheckBox
         android:id="@+id/checkbox_major_chords"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
+        android:layout_marginTop="4dp"
         android:checked="true"
         android:text="@string/major_chords"/>
 
     <CheckBox
         android:id="@+id/checkbox_minor_chords"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/checkbox_major_chords"
         android:text="@string/minor_chords"/>
 
     <CheckBox
         android:id="@+id/checkbox_dominant_chords"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/checkbox_minor_chords"
         android:text="@string/dominant_chords"/>
 
-</RelativeLayout>
+    <!-- Separator -->
+    <View style="@style/VerticalSeparator"/>
+
+    <!-- Enable hints checkbox -->
+    <Switch
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/enable_hints"/>
+
+</LinearLayout>

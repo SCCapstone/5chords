@@ -19,21 +19,19 @@ import android.content.pm.ActivityInfo;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 
-import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.CheckOptionsFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.OptionsFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScorePageFragment;
 
-public class MainActivity extends AppCompatActivity implements CheckOptionsFragment.OnChordTypeChangeListener {
+public class MainActivity extends AppCompatActivity implements OptionsFragment.OnChordTypeChangeListener {
     static chordHandler cH;
     static setUpGUI gui;
-    static CheckOptionsFragment cof;
+    static OptionsFragment cof;
     static soundHandler sH;
     static FragmentManager fm;
 
@@ -63,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         cH = new chordHandler();
         gui = new setUpGUI(this);
         sH = new soundHandler(this);
-        cof = new CheckOptionsFragment();
+        cof = new OptionsFragment();
         Score.loadScores(this, false);
     }
 
@@ -120,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         ft.addToBackStack(null);
 
         // Create and show the dialog.
-        DialogFragment newFragment = CheckOptionsFragment.newInstance();
+        DialogFragment newFragment = OptionsFragment.newInstance();
         newFragment.show(ft, "dialog");
     }
 

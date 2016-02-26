@@ -48,11 +48,13 @@
     <string name="major_chords">Major Chords</string>
     <string name="minor_chords">Minor Chords</string>
     <string name="dominant_chords">Dominant Chords</string>
-    <string name="title_activity_tutorial">tutorial</string>
+    <string name="title_activity_tutorial">Tutorial</string>
     <string name="current">Current</string>
     <string name="history">History</string>
     <string name="about">About</string>
     <string name="clear_scores">Clear Scores</string>
+    <string name="options">Options</string>
+    <string name="enable_hints">Enable Hints</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

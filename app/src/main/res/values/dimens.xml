@@ -16,9 +16,9 @@
     <dimen name="score_dialog_width">320dp</dimen>
     <dimen name="score_dialog_height">400dp</dimen>
 
-    <!-- Size of the chord select check boxes dialog -->
-    <dimen name="chord_select_dialog_width">220dp</dimen>
-    <dimen name="chord_select_dialog_height">180dp</dimen>
+    <!-- Size of the options dialog -->
+    <dimen name="options_dialog_width">320dp</dimen>
+    <dimen name="options_dialog_height">320dp</dimen>
 
     <!-- Height of the score progress history graph -->
     <dimen name="chord_progress_history_height">64dp</dimen>
