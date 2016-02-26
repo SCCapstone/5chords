@@ -32,7 +32,6 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.Scor
 public class MainActivity extends AppCompatActivity implements CheckOptionsFragment.OnChordTypeChangeListener {
     static chordHandler cH;
     static setUpGUI gui;
-    static Score s;
     static CheckOptionsFragment cof;
     static soundHandler sH;
     static FragmentManager fm;
@@ -58,9 +57,9 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
 
         cH = new chordHandler();
         gui = new setUpGUI(this);
-        s = new Score(this);
         sH = new soundHandler(this);
         cof = new CheckOptionsFragment();
+        Score.loadScores(this);
     }
 
     @Override
@@ -143,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
     public void displayAnswer(Activity activity) {
         // shows if the built chord matches the set chord
         Button view = (Button) activity.findViewById(R.id.button_answer);
-        view.setText(s.getNumCorrectGuesses(cH.getCurrentChordIndex()) + " / " + s.getNumTotalGuesses(cH.getCurrentChordIndex()));
+        view.setText(Score.getNumCorrectGuesses(cH.getCurrentChordIndex()) + " / " + Score.getNumTotalGuesses(cH.getCurrentChordIndex()));
     }
 
     public void updateSpinner(Activity activity) {

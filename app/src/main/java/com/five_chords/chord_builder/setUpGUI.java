@@ -239,7 +239,7 @@ public class setUpGUI extends MainActivity
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     boolean result = cH.compareChords(cH.buildCurrentChord(activity), cH.getCurrentChord());
-                    s.setScore(activity, cH.getCurrentChordIndex(), result);
+                    Score.setScore(activity, cH.getCurrentChordIndex(), result);
                     displayAnswer(activity);
                 }
                 return true;

@@ -23,7 +23,7 @@ import java.util.ListIterator;
 import java.util.Map;
 import java.util.Random;
 
-public class Score// extends MainActivity
+public class Score
 {
     /** The name of the saved chord scores in the SharedPreferences */
     public static final String CHORD_SCORES_SAVE_FILENAME = "ScoreFile";
@@ -37,10 +37,11 @@ public class Score// extends MainActivity
     /** The array of chord Scores */
     public static CurrentScoreWrapper[] scores;
 
-    public Score(Activity main)
-    {
-        loadScores(main);
-    }
+    /**
+     * Static class.
+     */
+    private Score()
+    {    }
 
     /*********************************************************
      * Gets the SharedPreferences used to load and save scores
@@ -51,24 +52,25 @@ public class Score// extends MainActivity
         return activity.getSharedPreferences(CHORD_SCORES_SAVE_FILENAME, Context.MODE_PRIVATE);
     }
 
-    public int getNumCorrectGuesses(int scoreIndex) { return scores[scoreIndex].numCorrectGuesses; }
-    public int getNumTotalGuesses(int scoreIndex) { return scores[scoreIndex].numTotalGuesses; }
+    public static int getNumCorrectGuesses(int scoreIndex) { return scores[scoreIndex].numCorrectGuesses; }
+    public static int getNumTotalGuesses(int scoreIndex) { return scores[scoreIndex].numTotalGuesses; }
 
     /***********************************************************************************************
      * Loads the score data for each chord and initializes the correctChords and totalChords arrays.
      * @param main The calling Activity
      **/
-    public void loadScores(Activity main)
+    public static void loadScores(Activity main)
     {
         // Grab the array of chord names from the resources
-        String[] chordNames = main.getResources().getStringArray(R.array.chordNames);
+        final String[] chordNames = main.getResources().getStringArray(R.array.chordNames);
 
         // Initialize score array
         scores = new CurrentScoreWrapper[chordNames.length];
 
         // Load scores
-        SharedPreferences savedChordScores = getScoreLoader(main);
-        for (int i = 0; i < chordNames.length; ++i)
+        final SharedPreferences savedChordScores = getScoreLoader(main);
+
+        for (int i = 0; i < scores.length; ++i)
             scores[i] = loadScore(savedChordScores, chordNames[i]);
     }
 
@@ -77,7 +79,7 @@ public class Score// extends MainActivity
      * @param savedChordScores The SharedPreferences of saved chord scores
      * @param chordName The name of the chord whose score to load
      **/
-    public CurrentScoreWrapper loadScore(SharedPreferences savedChordScores, String chordName)
+    public static CurrentScoreWrapper loadScore(SharedPreferences savedChordScores, String chordName)
     {
         CurrentScoreWrapper scoreWrapper = new CurrentScoreWrapper(chordName);
         scoreWrapper.load(savedChordScores);
@@ -90,7 +92,7 @@ public class Score// extends MainActivity
      * @param chordIndex The index of the chord
      * @param correct Whether or not the chord guess was correct
      **/
-    public void setScore(Activity activity, int chordIndex, boolean correct)
+    public static void setScore(Activity activity, int chordIndex, boolean correct)
     {
         CurrentScoreWrapper scoreWrapper = scores[chordIndex];
         SharedPreferences savedChordScores = getScoreLoader(activity);
@@ -110,9 +112,6 @@ public class Score// extends MainActivity
      */
     public static class CurrentScoreWrapper extends ScoreWrapper
     {
-        /** Flag denoting whether or not thr history of this CurrentScoreWrapper has changed */
-        private boolean historyChanged;
-
         /** The history of this score */
         private LinkedList<ScoreWrapper> scoreHistory;
 
@@ -123,7 +122,6 @@ public class Score// extends MainActivity
         public CurrentScoreWrapper(String name)
         {
             super (name);
-            historyChanged = false;
             scoreHistory = null;
         }
 
@@ -159,35 +157,19 @@ public class Score// extends MainActivity
             // Load from index 0 (default)
             super.load(savedChordScores, 0);
 
-            // TODO temporary random scores
-            Random r = new Random();
-            numCorrectGuesses = r.nextInt(100);
-            numTotalGuesses = 100;
+//            // TODO temporary random scores
+//            Random r = new Random();
+//            numCorrectGuesses = r.nextInt(100);
+//            numTotalGuesses = 100;
 
             // Check whether this CurrentScore Wrapper is old enough so that
             // a new wrapper should be added to the history
             if (currentTime - time > SCORE_UPDATE_INTERVAL)
             {
-                historyChanged = true;
+                // Update time
                 time = currentTime;
-            }
-        }
 
-        /*****************************************************************
-         * Loads this CurrentScoreWrapper from the given SharedPreferences.
-         * @param savedChordScores The SharedPreferences to which to save
-         **/
-        public void save(SharedPreferences savedChordScores)
-        {
-            SharedPreferences.Editor scoreEditor = savedChordScores.edit();
-
-            // Save self
-            super.save(scoreEditor, -1);
-
-            // Save history if needed
-            if (historyChanged)
-            {
-                historyChanged = false;
+                // Load history, make changes, and save changes
 
                 // Load the history if needed
                 if (scoreHistory == null)
@@ -201,8 +183,22 @@ public class Score// extends MainActivity
                     scoreHistory.removeLast();
 
                 // Save history
+                SharedPreferences.Editor scoreEditor = savedChordScores.edit();
                 saveHistory(scoreEditor);
+                scoreEditor.apply();
             }
+        }
+
+        /*****************************************************************
+         * Loads this CurrentScoreWrapper from the given SharedPreferences.
+         * @param savedChordScores The SharedPreferences to which to save
+         **/
+        public void save(SharedPreferences savedChordScores)
+        {
+            SharedPreferences.Editor scoreEditor = savedChordScores.edit();
+
+            // Save self
+            super.save(scoreEditor, 0);
 
             scoreEditor.apply();
         }
@@ -228,26 +224,6 @@ public class Score// extends MainActivity
                 wrapper.load(savedChordScores, i);
                 scoreHistory.add(wrapper);
             }
-
-            // Trim history TODO temporary
-//            ScoreWrapper p = null;
-//            ListIterator<ScoreWrapper> it = scoreHistory.listIterator();
-//            while (it.hasNext())
-//            {
-//                wrapper = it.next();
-//
-//                if (p != null)
-//                {
-//                    if (wrapper.time == p.time)
-//                        it.remove();
-//                }
-//
-//                p = wrapper;
-//            }
-//
-//            SharedPreferences.Editor e = savedChordScores.edit();
-//            saveHistory(e);
-//            e.apply();
         }
 
         /**
@@ -334,6 +310,29 @@ public class Score// extends MainActivity
         {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_score_page);
+        }
+
+        /**
+         * Called to reset the scores.
+         * @param view The calling View
+         */
+        public void resetScores(View view)
+        {
+            // TODO launch confirmation dialog
+
+            // Clear the history
+            SharedPreferences savedChordScores = getScoreLoader(this);
+            SharedPreferences.Editor editor = savedChordScores.edit();
+            editor.clear();
+            editor.apply();
+
+            // Reload scores
+            loadScores(this);
+
+            // Refresh Score View
+            View scoreView = findViewById(R.id.score_activity_score_fragment);
+            if (scoreView != null)
+                scoreView.invalidate();
         }
     }
 }

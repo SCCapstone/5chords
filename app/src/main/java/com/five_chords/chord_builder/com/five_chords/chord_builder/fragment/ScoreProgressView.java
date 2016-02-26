@@ -110,7 +110,7 @@ public class ScoreProgressView extends View
             String text;
             for (int i = 0; i < points.length; ++i)
             {
-                // Gte position of point
+                // Get position of point
                 x = wBorder + points[i].x * xScale;
                 y = points[i].y * h;
 
