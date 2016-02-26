@@ -11,6 +11,7 @@
 
     <!-- Root -->
     <LinearLayout
+        android:id="@+id/slider_root_layout"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
@@ -42,6 +43,7 @@
 
     <!-- Third -->
     <LinearLayout
+        android:id="@+id/slider_third_layout"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
@@ -73,6 +75,7 @@
 
     <!-- Fifth -->
     <LinearLayout
+        android:id="@+id/slider_fifth_layout"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"
@@ -104,6 +107,7 @@
 
     <!-- Option -->
     <LinearLayout
+        android:id="@+id/slider_option_layout"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="match_parent"

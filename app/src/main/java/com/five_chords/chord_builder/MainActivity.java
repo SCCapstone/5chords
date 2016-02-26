@@ -203,7 +203,6 @@ public class MainActivity extends AppCompatActivity implements CheckOptionsFragm
         gui.loadSpinners(this, useMajors, useMinors, useDominants);
 
         // Hide dominant slider if needed
-        findViewById(R.id.slider_option).setEnabled(useDominants);
-        findViewById(R.id.textview_option).setEnabled(useDominants);
+        findViewById(R.id.slider_option_layout).setVisibility(useDominants ? View.VISIBLE : View.GONE);
     }
 }
