@@ -11,7 +11,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
@@ -31,7 +30,7 @@ public class Score
     public static final int NUM_SCORES_TO_KEEP = 100;
 
     /** The amount of time to wait between updating scores, in milliseconds */
-    public static final long SCORE_UPDATE_INTERVAL = 24L * 3600L * 1000L;
+    public static final long SCORE_UPDATE_INTERVAL = 12L * 3600L * 1000L;
 
     /** The array of chord Scores */
     public static CurrentScoreWrapper[] scores;
@@ -136,7 +135,13 @@ public class Score
         public void loadHistory(Activity activity, boolean overwrite)
         {
             if (overwrite || scoreHistory == null)
+            {
                 loadHistory(getScoreLoader(activity));
+
+                // Set this score as the reference of the first element in the history
+                scoreHistory.removeFirst();
+                scoreHistory.addFirst(this);
+            }
         }
 
         /**

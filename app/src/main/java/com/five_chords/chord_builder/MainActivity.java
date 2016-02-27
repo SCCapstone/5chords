@@ -28,6 +28,7 @@ import android.widget.Spinner;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.OptionsFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScorePageFragment;
 
+
 public class MainActivity extends AppCompatActivity implements OptionsFragment.OnChordTypeChangeListener {
     static chordHandler cH;
     static setUpGUI gui;
