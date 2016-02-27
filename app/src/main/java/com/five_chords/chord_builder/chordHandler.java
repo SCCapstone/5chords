@@ -65,15 +65,6 @@ public class chordHandler
     }
 
     /**
-     * Gets the chord array at the given chord index.
-     * @param chordIndex The chord index to use
-     * @return The chord array at the given chord index
-     */
-    public static int[] getChord(int chordIndex) {
-        return availableChords[chordIndex];
-    }
-
-    /**
      * Get the chord array at the current chord index.
      * @return The current chord array
      */

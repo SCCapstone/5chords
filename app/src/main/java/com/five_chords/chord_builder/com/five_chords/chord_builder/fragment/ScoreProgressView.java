@@ -104,7 +104,7 @@ public class ScoreProgressView extends View
         if (points != null && points.length > 0)
         {
             float wBorder = w * 0.0625f;
-            float hBorder = h * 0.0625f;
+            float hBorder = 32.0f;
             float xScale = w - 2.0f * wBorder ;
             float yScale = h - 2.0f * hBorder;
             float radius = w / (96.0f);
@@ -138,13 +138,13 @@ public class ScoreProgressView extends View
                 PAINT.setStyle(Paint.Style.FILL);
                 PAINT.setColor(Color.DKGRAY);
                 text = "" + Math.round(points[i].percent * 100.0f) + " %";
-                drawText(canvas, text, x, y);
+                drawText(canvas, text, x, 0.0f);
 
-                // Draw 'Today' over last point
+                // Draw 'Today' below last point
                 if (i == points.length - 1)
                 {
                     PAINT.setColor(Color.LTGRAY);
-                    drawText(canvas, "Today", x, points[i].y > 0.0f ? 0.0f : h);
+                    drawText(canvas, "Today", x, h);
                 }
 
                 // TODO draw other strings over previous points, such as 'Earlier today', 'last week', etc
@@ -169,9 +169,13 @@ public class ScoreProgressView extends View
     private void drawText(Canvas canvas, String text, float x, float y)
     {
         PAINT.getTextBounds(text, 0, text.length() - 1, BOUNDS);
+
+        int width = (BOUNDS.width() + 4);
+        int height = (BOUNDS.height() + 4);
+
         canvas.drawText(text,
-                Math.max(Math.min(x, canvas.getWidth() - BOUNDS.width()), BOUNDS.width()),
-                Math.max(Math.min(y, canvas.getHeight() - BOUNDS.height()), BOUNDS.height()), PAINT);
+                Math.max(Math.min(x, canvas.getWidth() - width * 0.5f), width * 0.5f),
+                Math.max(Math.min(y, canvas.getHeight() - height * 0.5f), height), PAINT);
     }
 
     /**
