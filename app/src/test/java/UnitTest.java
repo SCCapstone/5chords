@@ -29,7 +29,8 @@ public class UnitTest {
 
     @Test
     public void testNewChord() {
-        assertEquals(chordHandler.getSelectedChord(2), 1);
-        assertNotEquals(chordHandler.getSelectedChord(2), 2);
+        chordHandler.setSelectedChord(2);
+        assertEquals(chordHandler.getSelectedChord(), 2);
+        assertNotEquals(chordHandler.getSelectedChord(), 1);
     }
 }

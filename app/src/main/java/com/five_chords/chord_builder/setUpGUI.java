@@ -18,7 +18,6 @@ import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
-import android.widget.Toast;
 
 public class setUpGUI
 {
@@ -188,7 +187,7 @@ public class setUpGUI
                 if (activity instanceof MainActivity)
                 {
                     // Update the selected chord
-                    chordHandler.getSelectedChord(chordSelector.getSelectedItemPosition() + 1);
+                    chordHandler.setSelectedChord(chordSelector.getSelectedItemPosition());
                 }
             }
 
@@ -250,7 +249,7 @@ public class setUpGUI
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     chordHandler.getRandomChord();
-                    activity.updateSpinner();
+                    activity.updateChordSelectSpinner();
                     soundHandler.playChord(activity, chordHandler.getCurrentChord());
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP) {

@@ -12,9 +12,6 @@ package com.five_chords.chord_builder;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.util.Log;
-import android.view.View;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -23,12 +20,23 @@ import java.util.Random;
 
 public class chordHandler
 {
+    /** The number of chords per type (Major, Minor, Dominant) */
     private static final int CHORDS_PER_TYPE = 12;
+
+    /** The minimum number of notes per chord (for Major and Minor) */
     private static final int MIN_NOTES_PER_CHORD = 3;
+
+    /** The maximum number of notes per chord (for Dominant) */
     private static final int MAX_NOTES_PER_CHORD = 4;
 
-    private static int[][] availableChords = new int[0][];
+    /** Array containing the currently available chords */
+    private static int[][] availableChords = null;
+
+    /** Records the current chord index */
     private static int currentChordIndex;
+
+    /** Records the current wrong streak of the current chord for hinting purposes. */
+    private static int currentWrongStreak;
 
     /**
      * Static class.
@@ -51,21 +59,20 @@ public class chordHandler
      * Clears the available chord array.
      */
     public static void clearChords() {
-        availableChords = new int[0][];
+        availableChords = null;
     }
 
     /**
      * Adds the major chords to the available chord array.
      */
     public static void addMajorChords() {
-        int len = availableChords.length;
-        int[][] returnArray = new int[len + CHORDS_PER_TYPE][];
 
-        System.arraycopy(availableChords, 0, returnArray, 0, len);
+        int len = availableChords == null ? 0 : availableChords.length;
+        int[][] returnArray = createEmptyChordArray();
 
         for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
             int note = i % CHORDS_PER_TYPE;
-            returnArray[i] = new int[] {note, note+4, note+7};
+            returnArray[i] = new int[] {note, note + 4, note + 7};
         }
 
         availableChords = returnArray;
@@ -75,14 +82,13 @@ public class chordHandler
      * Adds the minor chords to the available chord array.
      */
     public static void addMinorChords() {
-        int len = availableChords.length;
-        int[][] returnArray = new int[len + CHORDS_PER_TYPE][];
 
-        System.arraycopy(availableChords, 0, returnArray, 0, len);
+        int len = availableChords == null ? 0 : availableChords.length;
+        int[][] returnArray = createEmptyChordArray();
 
         for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
             int note = i%CHORDS_PER_TYPE;
-            returnArray[i] = new int[] {note, note+3, note+7};
+            returnArray[i] = new int[] {note, note + 3, note + 7};
         }
 
         availableChords = returnArray;
@@ -92,14 +98,12 @@ public class chordHandler
      * Adds the dominant chords to the available chord array.
      */
     public static void addDominantChords() {
-        int len = availableChords.length;
-        int[][] returnArray = new int[len + CHORDS_PER_TYPE][];
-
-        System.arraycopy(availableChords, 0, returnArray, 0, len);
+        int len = availableChords == null ? 0 : availableChords.length;
+        int[][] returnArray = createEmptyChordArray();
 
         for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
-            int note = i%CHORDS_PER_TYPE;
-            returnArray[i] = new int[] {note, note+4, note+7, note+10};
+            int note = i % CHORDS_PER_TYPE;
+            returnArray[i] = new int[] {note, note + 4, note + 7, note + 10};
         }
 
         availableChords = returnArray;
@@ -118,29 +122,42 @@ public class chordHandler
     }
 
     /**
-     * Change current chord to the one selected
-     * @param newChordIndex The index of the new chord
+     * Called to set the index of the currently selected chord.
+     * @param chordIndex The index of the new chord
      */
-    public static int getSelectedChord(int newChordIndex) {
-        currentChordIndex = newChordIndex - 1;
+    public static void setSelectedChord(int chordIndex) {
+
+        // Reset wrong streak if needed
+        if (chordIndex != currentChordIndex)
+            currentWrongStreak = 0;
+
+        currentChordIndex = chordIndex;
+    }
+
+    /**
+     * Gets the index of the currently selected chord.
+     * @return The index of the currently selected chord
+     */
+    public static int getSelectedChord() {
         return currentChordIndex;
     }
 
     /**
-     * Change current chord to a random chord
+     * Changes the current chord to a random chord.
      */
-    public static int getRandomChord() {
+    public static void getRandomChord() {
         int previousChordIndex = currentChordIndex;
+        int newChordIndex;
         Random random = new Random();
 
         // Make sure new chord index is different than the previous
         do
         {
-            currentChordIndex = random.nextInt(availableChords.length - 1);
+            newChordIndex = random.nextInt(availableChords.length - 1);
         }
-        while (currentChordIndex == previousChordIndex);
+        while (newChordIndex == previousChordIndex);
 
-        return currentChordIndex;
+        setSelectedChord(newChordIndex);
     }
 
     /**
@@ -186,7 +203,7 @@ public class chordHandler
                         public void onClick(DialogInterface dialog, int which)
                         {
                             getRandomChord();
-                            activity.updateSpinner();
+                            activity.updateChordSelectSpinner();
                             setUpGUI.resetChordSliders(activity);
                             soundHandler.stopSound();
                         }
@@ -222,5 +239,24 @@ public class chordHandler
     public static int[] getChord(int chordIndex) { return availableChords[chordIndex]; }
     public static int[] getCurrentChord() {
         return availableChords[currentChordIndex];
+    }
+
+    /**
+     * Creates a blank chord array, which will contain the avialable chords if non-null.
+     * @return A blank chord array
+     */
+    private static int[][] createEmptyChordArray()
+    {
+        int[][] returnArray;
+
+        if (availableChords == null)
+            returnArray = new int[CHORDS_PER_TYPE][];
+        else
+        {
+            returnArray = new int[availableChords.length + CHORDS_PER_TYPE][];
+            System.arraycopy(availableChords, 0, returnArray, 0, availableChords.length);
+        }
+
+        return returnArray;
     }
 }

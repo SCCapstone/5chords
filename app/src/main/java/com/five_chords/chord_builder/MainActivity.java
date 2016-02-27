@@ -191,7 +191,10 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
                 " / " + Score.getNumTotalGuesses(chordHandler.getCurrentChordIndex()));
     }
 
-    public void updateSpinner() {
+    /**
+     * Called to update the spinner displaying the currently selected chord.
+     */
+    public void updateChordSelectSpinner() {
         Spinner dropdown = (Spinner) findViewById(R.id.spinner_chord_select);
         dropdown.setSelection((chordHandler.getCurrentChordIndex()) % dropdown.getCount());
     }
