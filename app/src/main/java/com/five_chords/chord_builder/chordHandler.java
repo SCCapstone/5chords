@@ -20,6 +20,15 @@ import java.util.Random;
 
 public class chordHandler
 {
+    /** Denotes a 'small' number of times that the user has guessed the wrong chord */
+    private static final int NUM_TIMES_WRONG_SMALL = 4;
+
+    /** Denotes a 'medium' number of times that the user has guessed the wrong chord */
+    private static final int NUM_TIMES_WRONG_MEDIUM = 6;
+
+    /** Denotes a 'large' number of times that the user has guessed the wrong chord */
+    private static final int NUM_TIMES_WRONG_LARGE = 10;
+
     /** The number of chords per type (Major, Minor, Dominant) */
     private static final int CHORDS_PER_TYPE = 12;
 
@@ -53,6 +62,62 @@ public class chordHandler
         addMajorChords();
         addMinorChords();
         addDominantChords();
+    }
+
+    /**
+     * Gets the chord array at the given chord index.
+     * @param chordIndex The chord index to use
+     * @return The chord array at the given chord index
+     */
+    public static int[] getChord(int chordIndex) {
+        return availableChords[chordIndex];
+    }
+
+    /**
+     * Get the chord array at the current chord index.
+     * @return The current chord array
+     */
+    public static int[] getCurrentChord() {
+        return availableChords[currentChordIndex];
+    }
+
+    /**
+     * Called to set the index of the currently selected chord.
+     * @param chordIndex The index of the new chord
+     */
+    public static void setSelectedChord(int chordIndex) {
+
+        // Reset wrong streak if needed
+        if (chordIndex != currentChordIndex)
+            currentWrongStreak = 0;
+
+        currentChordIndex = chordIndex;
+    }
+
+    /**
+     * Gets the index of the currently selected chord.
+     * @return The index of the currently selected chord
+     */
+    public static int getSelectedChord() {
+        return currentChordIndex;
+    }
+
+    /**
+     * Changes the current chord to a random chord.
+     */
+    public static void getRandomChord() {
+        int previousChordIndex = currentChordIndex;
+        int newChordIndex;
+        Random random = new Random();
+
+        // Make sure new chord index is different than the previous
+        do
+        {
+            newChordIndex = random.nextInt(availableChords.length - 1);
+        }
+        while (newChordIndex == previousChordIndex);
+
+        setSelectedChord(newChordIndex);
     }
 
     /**
@@ -122,45 +187,6 @@ public class chordHandler
     }
 
     /**
-     * Called to set the index of the currently selected chord.
-     * @param chordIndex The index of the new chord
-     */
-    public static void setSelectedChord(int chordIndex) {
-
-        // Reset wrong streak if needed
-        if (chordIndex != currentChordIndex)
-            currentWrongStreak = 0;
-
-        currentChordIndex = chordIndex;
-    }
-
-    /**
-     * Gets the index of the currently selected chord.
-     * @return The index of the currently selected chord
-     */
-    public static int getSelectedChord() {
-        return currentChordIndex;
-    }
-
-    /**
-     * Changes the current chord to a random chord.
-     */
-    public static void getRandomChord() {
-        int previousChordIndex = currentChordIndex;
-        int newChordIndex;
-        Random random = new Random();
-
-        // Make sure new chord index is different than the previous
-        do
-        {
-            newChordIndex = random.nextInt(availableChords.length - 1);
-        }
-        while (newChordIndex == previousChordIndex);
-
-        setSelectedChord(newChordIndex);
-    }
-
-    /**
      * Builds the current chord that the user has defined on the sliders.
      * @return An array containing the root, third, fifth, and option values of the built chord
      */
@@ -214,6 +240,7 @@ public class chordHandler
                         @Override
                         public void onClick(DialogInterface dialog, int which)
                         {
+                            setSelectedChord(getSelectedChord()); // Resets the wrong streak counter
                             setUpGUI.resetChordSliders(activity);
                             soundHandler.stopSound();
                         }
@@ -223,26 +250,37 @@ public class chordHandler
         }
         else
         {
+            // Increment the wrong streak counter
+            currentWrongStreak++;
+
+            // Show hints
+            if (MainActivity.getOptions().useHints)
+            {
+                if (currentWrongStreak >= NUM_TIMES_WRONG_SMALL)
+                {
+                    // TODO show first level hint
+                }
+                else if (currentWrongStreak >= NUM_TIMES_WRONG_MEDIUM)
+                {
+                    // TODO show second level hint
+                }
+                else if (currentWrongStreak >= NUM_TIMES_WRONG_LARGE)
+                {
+                    // TODO show third level hint
+                }
+            }
+
             // Show toast
             Toast.makeText(activity, activity.getString(R.string.thats_incorrect), Toast.LENGTH_SHORT).show();
         }
 
         // Set the score
-        Score.setScore(activity, chordHandler.getCurrentChordIndex(), isCorrect);
+        Score.setScore(activity, chordHandler.getSelectedChord(), isCorrect);
         activity.displayAnswer();
     }
 
-    /****************************************************************
-     * Return internal variables
-     **/
-    public static int getCurrentChordIndex() { return currentChordIndex; }
-    public static int[] getChord(int chordIndex) { return availableChords[chordIndex]; }
-    public static int[] getCurrentChord() {
-        return availableChords[currentChordIndex];
-    }
-
     /**
-     * Creates a blank chord array, which will contain the avialable chords if non-null.
+     * Creates a blank chord array, which will contain the currently available chords if non-null.
      * @return A blank chord array
      */
     private static int[][] createEmptyChordArray()

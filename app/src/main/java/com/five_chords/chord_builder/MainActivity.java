@@ -33,6 +33,18 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     /** The current options selected in this MainActivity */
     private static OptionsFragment.Options options;
 
+    /**
+     * Gets the current global Options wrapper, creating a default Options if the global is null.
+     * @return The current global Options wrapper
+     */
+    public static OptionsFragment.Options getOptions()
+    {
+        if (options == null)
+            options = new OptionsFragment.Options();
+
+        return options;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -187,8 +199,8 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     public void displayAnswer() {
         // shows if the built chord matches the set chord
         Button view = (Button) findViewById(R.id.button_answer);
-        view.setText(Score.getNumCorrectGuesses(chordHandler.getCurrentChordIndex()) +
-                " / " + Score.getNumTotalGuesses(chordHandler.getCurrentChordIndex()));
+        view.setText(Score.getNumCorrectGuesses(chordHandler.getSelectedChord()) +
+                " / " + Score.getNumTotalGuesses(chordHandler.getSelectedChord()));
     }
 
     /**
@@ -196,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
      */
     public void updateChordSelectSpinner() {
         Spinner dropdown = (Spinner) findViewById(R.id.spinner_chord_select);
-        dropdown.setSelection((chordHandler.getCurrentChordIndex()) % dropdown.getCount());
+        dropdown.setSelection((chordHandler.getSelectedChord()) % dropdown.getCount());
     }
 
     /**
