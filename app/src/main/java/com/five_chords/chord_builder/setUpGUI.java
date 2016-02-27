@@ -22,10 +22,7 @@ import android.widget.Toast;
 
 public class setUpGUI
 {
-    static soundHandler sH;
-
     public setUpGUI(MainActivity activity) {
-        sH = new soundHandler(activity);
 
         loadSpinners(activity, true, false, false);
         assignButtons(activity);
@@ -61,7 +58,7 @@ public class setUpGUI
                 // Only play note if progress change is from user
                 if (seekBar instanceof VerticalSeekBar && ((VerticalSeekBar)seekBar).isTouched())
                 {
-                    sH.playNote(activity, bar.getProgress());
+                    soundHandler.playNote(activity, bar.getProgress());
                 }
             }
 
@@ -81,11 +78,11 @@ public class setUpGUI
             {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
-                    sH.playNote(activity, bar.getProgress());
+                    soundHandler.playNote(activity, bar.getProgress());
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP)
                 {
-                    sH.stopSound();
+                    soundHandler.stopSound();
                 }
                 else if (event.getAction() == MotionEvent.ACTION_MOVE)
                 {
@@ -183,10 +180,10 @@ public class setUpGUI
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sH.playChord(activity, chordHandler.buildCurrentChord(activity));
+                    soundHandler.playChord(activity, chordHandler.buildCurrentChord(activity));
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sH.stopSound();
+                    soundHandler.stopSound();
                 }
                 return true;
             }
@@ -196,10 +193,10 @@ public class setUpGUI
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    sH.playChord(activity, chordHandler.getCurrentChord());
+                    soundHandler.playChord(activity, chordHandler.getCurrentChord());
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sH.stopSound();
+                    soundHandler.stopSound();
                 }
                 return true;
             }
@@ -209,7 +206,7 @@ public class setUpGUI
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sH.switchInstrument();
+                    soundHandler.switchInstrument();
                 }
                 return true;
             }
@@ -221,10 +218,10 @@ public class setUpGUI
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     chordHandler.getRandomChord();
                     activity.updateSpinner();
-                    sH.playChord(activity, chordHandler.getCurrentChord());
+                    soundHandler.playChord(activity, chordHandler.getCurrentChord());
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    sH.stopSound();
+                    soundHandler.stopSound();
                 }
 
                 return true;

@@ -31,7 +31,6 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.Scor
 public class MainActivity extends AppCompatActivity implements OptionsFragment.OnChordTypeChangeListener {
     static setUpGUI gui;
     static OptionsFragment cof;
-    static soundHandler sH;
     static FragmentManager fm;
 
     @Override
@@ -58,9 +57,9 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         fm = getFragmentManager();
 
         gui = new setUpGUI(this);
-        sH = new soundHandler(this);
         cof = new OptionsFragment();
         chordHandler.initialize();
+        soundHandler.initialize(this);
         Score.loadScores(this, false);
     }
 
@@ -68,8 +67,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     protected void onDestroy() {
 
         // Make sure sound stops
-        if (sH != null)
-            sH.stopSound();
+        soundHandler.stopSound();
 
         super.onDestroy();
     }

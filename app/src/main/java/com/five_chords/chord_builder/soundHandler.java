@@ -36,13 +36,22 @@ public class soundHandler extends MainActivity
     static String midiFile;
     static int instrument = PIANO;
 
-    public soundHandler(Activity main)
+    /**
+     * Static class.
+     */
+    private soundHandler()
+    {   }
+
+    /**
+     * Called to initialize the SoundHandler.
+     */
+    public static void initialize(Activity main)
     {
         midiFile = main.getFilesDir() + "/midi.mid";
         midi = new soundHandlerMidi();
     }
 
-    public void stopSound() {
+    public static void stopSound() {
         Log.d(TAG, "Stop Sound");
         try {
             mediaPlayer.release();
@@ -54,7 +63,7 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Plays a note
      **/
-    public void playNote(Activity activity, int note)
+    public static void playNote(Activity activity, int note)
     {
         stopSound();
 
@@ -85,7 +94,7 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Plays a chord
      **/
-    public void playChord(Activity activity, int[] chord)
+    public static void playChord(Activity activity, int[] chord)
     {
         stopSound();
 
@@ -118,7 +127,7 @@ public class soundHandler extends MainActivity
         Log.d(TAG, "Done Playing Chord");
     }
 
-    public void switchInstrument() {
+    public static void switchInstrument() {
         if (instrument == PIANO) {
             instrument = TRUMPET;
         } else {
@@ -126,7 +135,7 @@ public class soundHandler extends MainActivity
         }
     }
 
-    public int getInstrument() {
+    public static int getInstrument() {
         return instrument;
     }
 }
