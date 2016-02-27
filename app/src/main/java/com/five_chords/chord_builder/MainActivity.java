@@ -10,7 +10,6 @@ package com.five_chords.chord_builder;
 
 import android.app.DialogFragment;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,7 +17,6 @@ import android.content.pm.ActivityInfo;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,9 +32,6 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
     /** The current options selected in this MainActivity */
     private static OptionsFragment.Options options;
-
-    static OptionsFragment cof;
-    static FragmentManager fm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,9 +58,6 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
             editor.apply();
         }
 
-        fm = getFragmentManager();
-
-        cof = new OptionsFragment();
         setUpGUI.initialize(this);
         chordHandler.initialize();
         soundHandler.initialize(this);
@@ -160,8 +152,8 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
      */
     public void launchOptionsDialog(View v)
     {
-        FragmentTransaction ft = fm.beginTransaction();
-        Fragment prev = fm.findFragmentByTag("dialog");
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
 
         if (prev != null)
             ft.remove(prev);
@@ -179,8 +171,8 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
      */
     public void launchScorePageDialog(View v)
     {
-        FragmentTransaction ft = fm.beginTransaction();
-        Fragment prev = fm.findFragmentByTag("dialog");
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
 
         if (prev != null)
             ft.remove(prev);
