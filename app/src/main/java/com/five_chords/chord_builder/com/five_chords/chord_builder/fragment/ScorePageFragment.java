@@ -3,27 +3,19 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 
-import org.w3c.dom.Text;
-
-import java.util.Random;
 
 /**
  * A Fragment containing the score page.
@@ -31,9 +23,6 @@ import java.util.Random;
  */
 public class ScorePageFragment extends DialogFragment implements TabLayout.OnTabSelectedListener
 {
-    /** The bundle id for the current score view mode flag */
-    private static final String BUNDLE_ID_SCORE_VIEW_MODE = "ScorePageFragment.currentScoreViewMode";
-
     /** The bundle id for the major chords view flag */
     private static final String BUNDLE_ID_MAJOR_CHORDS = "ScorePageFragment.onMajorChords";
 
@@ -42,9 +31,6 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
 
     /** Handle to the View of this ScorePageFragment */
     private View view;
-
-    /** Stores the current score View mode */
-    private boolean currentScoreViewMode;
 
     /** Stores whether or not major chords are currently selected */
     private boolean onMajorChords;
@@ -62,10 +48,9 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
      * Create a new instance of ScorePageFragment.
      * @param onMajorChords Whether or not major chords should be selected
      * @param onMinorChords Whether or not minor chords should be selected
-     * @param currentScoreViewMode The current score view mode (current or history)
      * @return A new new instance of ScorePageFragment
      */
-    public static ScorePageFragment newInstance(boolean onMajorChords, boolean onMinorChords, boolean currentScoreViewMode)
+    public static ScorePageFragment newInstance(boolean onMajorChords, boolean onMinorChords)
     {
         ScorePageFragment f = new ScorePageFragment();
 
@@ -74,7 +59,6 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
 
         args.putBoolean(BUNDLE_ID_MAJOR_CHORDS, onMajorChords);
         args.putBoolean(BUNDLE_ID_MINOR_CHORDS, onMinorChords);
-        args.putBoolean(BUNDLE_ID_SCORE_VIEW_MODE, currentScoreViewMode);
 
         f.setArguments(args);
 
@@ -94,12 +78,7 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
 
         // Populate list view of scores
         ListView listView = (ListView)view.findViewById(R.id.score_page_scorelist);
-        AbstractScoreItemAdapter adapter;
-
-        if (currentScoreViewMode)
-            adapter = new ScoreItemAdapter(getActivity(), android.R.layout.simple_list_item_1);
-        else
-            adapter = new ScoreItemHistoryAdapter(getActivity(), android.R.layout.simple_list_item_1);
+        ScoreItemHistoryAdapter adapter = new ScoreItemHistoryAdapter(getActivity(), android.R.layout.simple_list_item_1);
 
         // Compute the start index into the score name array
         int startIndex;
@@ -149,13 +128,13 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
 
         if (arguments == null) // Use default values in this case
         {
-            currentScoreViewMode = true;
+//            currentScoreViewMode = true;
             onMajorChords = true;
             onMinorChords = false;
         }
         else
         {
-            currentScoreViewMode = arguments.getBoolean(BUNDLE_ID_SCORE_VIEW_MODE);
+//            currentScoreViewMode = arguments.getBoolean(BUNDLE_ID_SCORE_VIEW_MODE);
             onMajorChords = arguments.getBoolean(BUNDLE_ID_MAJOR_CHORDS);
             onMinorChords = arguments.getBoolean(BUNDLE_ID_MINOR_CHORDS);
         }
@@ -169,7 +148,7 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
 
         // Create and add tabs
         addScoreTypeTabs(view);
-        addScoreViewModeTabs(view);
+//        addScoreViewModeTabs(view);
 
         // Populate list view of scores
         refreshListView();
@@ -203,10 +182,10 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
             onMajorChords = false;
             onMinorChords = false;
         }
-        else // Set tab view mode
-        {
-            currentScoreViewMode = tab.getText().equals(getString(R.string.current));
-        }
+//        else // Set tab view mode
+//        {
+//            currentScoreViewMode = tab.getText().equals(getString(R.string.current));
+//        }
 
         // Refresh
         refreshListView();
@@ -215,7 +194,7 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
         Bundle arguments = getArguments();
         if (arguments != null)
         {
-            arguments.putBoolean(BUNDLE_ID_SCORE_VIEW_MODE, currentScoreViewMode);
+//            arguments.putBoolean(BUNDLE_ID_SCORE_VIEW_MODE, currentScoreViewMode);
             arguments.putBoolean(BUNDLE_ID_MAJOR_CHORDS, onMajorChords);
             arguments.putBoolean(BUNDLE_ID_MINOR_CHORDS, onMinorChords);
         }
@@ -270,108 +249,9 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
     }
 
     /**
-     * Used to add the score view mode tabs.
-     * @param view the View to which to add the tabs
+     * Implementation of an ArrayAdapter containing views for displaying the history of a chord's scores.
      */
-    private void addScoreViewModeTabs(View view)
-    {
-        // Create view mode tabs
-        TabLayout tabs = (TabLayout)view.findViewById(R.id.tabs_view_mode_score_page);
-
-        TabLayout.Tab currentTab = tabs.newTab();
-        currentTab.setText(getResources().getString(R.string.current));
-        tabs.addTab(currentTab);
-
-        TabLayout.Tab historyTab = tabs.newTab();
-        historyTab.setText(getResources().getString(R.string.history));
-        tabs.addTab(historyTab);
-
-        if (currentScoreViewMode)
-            currentTab.select();
-        else
-            historyTab.select();
-
-        // Add listener
-        tabs.setOnTabSelectedListener(this);
-    }
-
-    /**
-     * Implementation of an AbstractScoreItemAdapter containing views for displaying the current score of a chord.
-     */
-    public static class ScoreItemAdapter extends AbstractScoreItemAdapter
-    {
-        /**
-         * Constructor.
-         *
-         * @param context  The current context
-         * @param resource The resource ID for a layout file containing a TextView to use
-         */
-        public ScoreItemAdapter(Context context, int resource)
-        {
-            super(context, resource);
-        }
-
-        /**
-         * Override to get the view id of this AbstractScoreItemAdapter.
-         *
-         * @return The view id of this AbstractScoreItemAdapter
-         */
-        @Override
-        public int getViewId()
-        {
-            return R.id.component_score_item;
-        }
-
-        /**
-         * Override to get the view layout id of this AbstractScoreItemAdapter.
-         * @return The view layout id of this AbstractScoreItemAdapter
-         */
-        @Override
-        public int getViewLayout()
-        {
-            return R.layout.component_score_item;
-        }
-
-        /**
-         * Override to initialize the given View in the array.
-         *
-         * @param view     The view at the given position
-         * @param position The position of the view
-         */
-        @Override
-        public void initialize(View view, int position)
-        {
-            // Get the Score object that this item represents
-            Score.ScoreWrapper item = getItem(position);
-            TextView chordName  = (TextView)view.findViewById(R.id.textview_score_item_chord_name);
-            TextView chordScore  = (TextView)view.findViewById(R.id.textview_score_item_score);
-            ProgressBar chordProgress = (ProgressBar)view.findViewById(R.id.progress_score_item_score);
-
-            // Set the chord name
-            chordName.setText(item.CHORD_NAME);
-
-            // Set the score progress
-            if (item.numTotalGuesses == 0)
-            {
-                chordScore.setText("Not Attempted");
-                chordProgress.setProgress(0);
-            }
-            else
-            {
-                // Set progress text
-                double progress = (100.0 * item.numCorrectGuesses / item.numTotalGuesses);
-                chordScore.setText(String.format("%.3f", progress) + " %");
-
-                // Set progress value
-                chordProgress.setProgress((int)Math.round(progress));
-            }
-        }
-    }
-
-    /**
-     * Implementation of an AbstractScoreItemAdapter containing views for displaying the history of a chords scores.
-     */
-    public static class ScoreItemHistoryAdapter extends AbstractScoreItemAdapter
+    public static class ScoreItemHistoryAdapter extends ArrayAdapter<Score.CurrentScoreWrapper>
     {
         /**
          * Constructor.
@@ -385,35 +265,23 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
         }
 
         /**
-         * Override to get the view id of this AbstractScoreItemAdapter.
-         *
-         * @return The view id of this AbstractScoreItemAdapter
+         * Get the view that displays the data at the specified position.
+         * @param position The position of the item
+         * @param convertView The old view
+         * @param parent The parent viewgroup
+         * @return The view that displays the data
          */
         @Override
-        public int getViewId()
+        public View getView(int position, View convertView, ViewGroup parent)
         {
-            return R.id.component_score_history_item;
-        }
+            View view;
 
-        /**
-         * Override to get the view layout id of this AbstractScoreItemAdapter.
-         * @return The view layout id of this AbstractScoreItemAdapter
-         */
-        @Override
-        public int getViewLayout()
-        {
-            return R.layout.component_score_history_item;
-        }
+            // Reuse old view if possible
+            if (convertView != null && convertView.getId() == R.id.component_score_history_item)
+                view = convertView;
+            else
+                view = LayoutInflater.from(getContext()).inflate(R.layout.component_score_history_item, parent, false);
 
-        /**
-         * Override to initialize the given View in the array.
-         *
-         * @param view     The view at the given position
-         * @param position The position of the view
-         */
-        @Override
-        public void initialize(View view, int position)
-        {
             Score.CurrentScoreWrapper item = getItem(position);
             TextView textView = (TextView)view.findViewById(R.id.score_history_chord_name);
             ScoreProgressView progressView = (ScoreProgressView)view.findViewById(R.id.score_history_progress_view);
@@ -430,63 +298,6 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
 //                Log.w("\tPoint", wrapper.toString());
 
             progressView.setScore(item);
-        }
-    }
-
-    /**
-     * Abstract implementation of an ArrayAdapter containing ScoreItems.
-     */
-    public static abstract class AbstractScoreItemAdapter extends ArrayAdapter<Score.CurrentScoreWrapper>
-    {
-        /**
-         * Constructor.
-         * @param context  The current context
-         * @param resource The resource ID for a layout file containing a TextView to use
-         */
-        public AbstractScoreItemAdapter(Context context, int resource)
-        {
-            super(context, resource);
-        }
-
-        /**
-         * Override to get the view id of this AbstractScoreItemAdapter.
-         * @return The view id of this AbstractScoreItemAdapter
-         */
-        public abstract int getViewId();
-
-        /**
-         * Override to get the view layout id of this AbstractScoreItemAdapter.
-         * @return The view layout id of this AbstractScoreItemAdapter
-         */
-        public abstract int getViewLayout();
-
-        /**
-         * Override to initialize the given View in the array.
-         * @param view The view at the given position
-         * @param position The position of the view
-         */
-        public abstract void initialize(View view, int position);
-
-        /**
-         * Get the view that displays the data at the specified position.
-         * @param position The position of the item
-         * @param convertView The old view
-         * @param parent The parent viewgroup
-         * @return The view that displays the data
-         */
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
-            View view;
-
-            // Reuse old view if possible
-            if (convertView != null && convertView.getId() == getViewId())
-                view = convertView;
-            else
-                view = LayoutInflater.from(getContext()).inflate(getViewLayout(), parent, false);
-
-            // Initialize the view
-            initialize(view, position);
 
             return view;
         }
