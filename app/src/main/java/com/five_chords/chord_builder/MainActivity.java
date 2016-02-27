@@ -18,6 +18,7 @@ import android.content.pm.ActivityInfo;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,7 +29,11 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.Opti
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScorePageFragment;
 
 
-public class MainActivity extends AppCompatActivity implements OptionsFragment.OnChordTypeChangeListener {
+public class MainActivity extends AppCompatActivity implements OptionsFragment.OptionsChangedListener
+{
+
+    /** The current options selected in this MainActivity */
+    private static OptionsFragment.Options options;
 
     static OptionsFragment cof;
     static FragmentManager fm;
@@ -37,6 +42,10 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Create Options if needed
+        if (options == null)
+            options = new OptionsFragment.Options();
 
         // Lock orientation in portrait mode with small screen devices
         if (!getResources().getBoolean(R.bool.isTablet))
@@ -70,6 +79,47 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         soundHandler.stopSound();
 
         super.onDestroy();
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        // Initialize views from options
+        onChordTypeOptionsChanged(options.useMajorChords, options.useMinorChords, options.useDominantChords);
+        onHintsOptionsChanged(options.useHints);
+    }
+
+    /**
+     * Called when the state of this Activity should be saved.
+     * @param savedInstanceState The Bundle to which to save
+     */
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+
+        // Save options
+        options.writeToBundle(savedInstanceState);
+
+        // Call superclass method
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    /**
+     * Called when the state of this Activity should be read at start up, provided it was previously saved.
+     * @param savedInstanceState The Bundle from which to read
+     */
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+
+        // Call superclass method
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Read options
+        if (options == null)
+            options = new OptionsFragment.Options();
+
+        options.readFromBundle(savedInstanceState);
     }
 
     /**
@@ -119,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         ft.addToBackStack(null);
 
         // Create and show the dialog.
-        DialogFragment newFragment = OptionsFragment.newInstance();
+        DialogFragment newFragment = OptionsFragment.newInstance(options);
         newFragment.show(ft, "dialog");
     }
 
@@ -198,7 +248,12 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
      * @param useDominants Whether or not dominant chords are now being used
      */
     @Override
-    public void onChordTypeChanged(boolean useMajors, boolean useMinors, boolean useDominants) {
+    public void onChordTypeOptionsChanged(boolean useMajors, boolean useMinors, boolean useDominants) {
+
+        // Update options
+        options.useMajorChords = useMajors;
+        options.useMinorChords = useMinors;
+        options.useDominantChords = useDominants;
 
         // Update the spinners
         setUpGUI.loadSpinners(this, useMajors, useMinors, useDominants);
@@ -206,4 +261,16 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         // Hide dominant slider if needed
         findViewById(R.id.slider_option_layout).setVisibility(useDominants ? View.VISIBLE : View.GONE);
     }
+
+    /**
+     * Called when the hints options changes.
+     * @param useHints Whether or not hints are now enabled.
+     */
+    @Override
+    public void onHintsOptionsChanged(boolean useHints)
+    {
+        // Update options
+        options.useHints = useHints;
+    }
+
 }

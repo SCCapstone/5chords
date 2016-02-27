@@ -31,6 +31,7 @@
 
     <!-- Enable hints checkbox -->
     <Switch
+        android:id="@+id/switch_hints"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
