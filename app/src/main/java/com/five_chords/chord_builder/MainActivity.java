@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         if (item.getItemId() == R.id.menu_item_main_options)
             launchOptionsDialog(findViewById(R.id.fragment_content));
         else if (item.getItemId() == R.id.menu_item_main_scores)
-            toScorePage(null);
+            launchScorePageDialog(null);
         else if (item.getItemId() == R.id.menu_item_main_about)
             toAboutPage(null);
         else if (item.getItemId() == R.id.menu_item_main_help)
@@ -217,16 +217,6 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
      */
     public void toHelpPage(View view) {
         Intent intent = new Intent(this, HelpPage.class);
-        startActivity(intent);
-    }
-
-    /**
-     * Goes to the Score page.
-     * @param view The calling View
-     */
-    public void toScorePage(View view)
-    {
-        Intent intent = new Intent(this, Score.ScoreActivity.class);
         startActivity(intent);
     }
 

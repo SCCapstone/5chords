@@ -55,6 +55,7 @@
     <string name="history">History</string>
     <string name="about">About</string>
     <string name="clear_scores">Clear Scores</string>
+    <string name="clear">Clear</string>
     <string name="options">Options</string>
     <string name="enable_hints">Enable Hints</string>
     <string name="large_text">

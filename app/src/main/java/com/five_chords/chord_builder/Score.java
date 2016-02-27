@@ -27,10 +27,20 @@ public class Score
     public static final String CHORD_SCORES_SAVE_FILENAME = "ScoreFile";
 
     /** The number of scores to keep in the history */
-    public static final int NUM_SCORES_TO_KEEP = 100;
+    public static final int NUM_SCORES_TO_KEEP = 9;
 
     /** The amount of time to wait between updating scores, in milliseconds */
     public static final long SCORE_UPDATE_INTERVAL = 12L * 3600L * 1000L;
+
+//    /** Tags for the score history view */
+//    public static final String[] HISTORY_TAGS = new String[] {"Today", "Earlier Today", "Yesterday",
+//                                            "Earlier this Week", "Last Week", "Earlier this Month",
+//                                            "Last Month", "Earlier this Year", "Last Year"};
+//
+//    /** Update times for each history tag, in milliseconds */
+//    public static final long[] HISTORY_UPDATE_INTERVALS = new long[] {0L, 12L * 360000L, 24L * 360000L,
+//                                                            72L * 360000L, 168L * 360000L, 336L * 360000L,
+//                                                            672L * 360000L, 4032L * 360000L, 8064L * 360000L};
 
     /** The array of chord Scores */
     public static CurrentScoreWrapper[] scores;
@@ -52,6 +62,45 @@ public class Score
 
     public static int getNumCorrectGuesses(int scoreIndex) { return scores[scoreIndex].numCorrectGuesses; }
     public static int getNumTotalGuesses(int scoreIndex) { return scores[scoreIndex].numTotalGuesses; }
+
+    /**
+     * Called to reset the scores.
+     * @param activity The current Activity
+     */
+    public static void resetScores(final Activity activity)
+    {
+        // Launch confirmation dialog
+        new AlertDialog.Builder(activity)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Clear Scores")
+                .setMessage("Are you sure you want clear all scores?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which)
+                    {
+                        // Clear the history
+                        SharedPreferences savedChordScores = getScoreLoader(activity);
+                        SharedPreferences.Editor editor = savedChordScores.edit();
+                        editor.clear();
+                        editor.apply();
+
+                        // Reload scores
+                        loadScores(activity, true);
+
+                        // Refresh Score View TODO this does not work
+                        View scoreView = activity.findViewById(R.id.score_activity_score_fragment);
+                        if (scoreView != null)
+                            scoreView.invalidate();
+
+                        // Show confirmation toast
+                        Toast.makeText(activity, "Scores cleared", Toast.LENGTH_SHORT).show();
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
 
     /***********************************************************************************************
      * Loads the score data for each chord and initializes the correctChords and totalChords arrays.
@@ -306,64 +355,6 @@ public class Score
         {
             return CHORD_NAME + ": " + numCorrectGuesses + " / " + numTotalGuesses + " (" +
                     (100.0 * numCorrectGuesses / + numTotalGuesses) + " %), " + new Date(time).toString();
-        }
-    }
-
-    /******************************
-     * Activity for the Score page.
-     **/
-    public static class ScoreActivity extends AppCompatActivity
-    {
-        @Override
-        protected void onCreate(Bundle savedInstanceState)
-        {
-            super.onCreate(savedInstanceState);
-            setContentView(R.layout.activity_score_page);
-
-            // Lock orientation in portrait mode with small screen devices
-            if (!getResources().getBoolean(R.bool.isTablet))
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        }
-
-        /**
-         * Called to reset the scores.
-         * @param view The calling View
-         */
-        public void resetScores(View view)
-        {
-            final ScoreActivity activity = this;
-
-            // Launch confirmation dialog
-            new AlertDialog.Builder(this)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setTitle("Clear Scores")
-                    .setMessage("Are you sure you want clear all scores?")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            // Clear the history
-                            SharedPreferences savedChordScores = getScoreLoader(activity);
-                            SharedPreferences.Editor editor = savedChordScores.edit();
-                            editor.clear();
-                            editor.apply();
-
-                            // Reload scores
-                            loadScores(activity, true);
-
-                            // Refresh Score View
-                            View scoreView = findViewById(R.id.score_activity_score_fragment);
-                            if (scoreView != null)
-                                scoreView.invalidate();
-
-                            // Show confirmation toast
-                            Toast.makeText(activity, "Scores cleared", Toast.LENGTH_SHORT).show();
-                        }
-
-                    })
-                    .setNegativeButton("No", null)
-                    .show();
         }
     }
 }

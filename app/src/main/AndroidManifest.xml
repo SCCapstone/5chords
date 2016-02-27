@@ -29,17 +29,6 @@
             </activity>
 
         <activity
-            android:name=".Score$ScoreActivity"
-            android:label="Score"
-            android:parentActivityName="com.five_chords.chord_builder.MainActivity" >
-
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.five_chords.chord_builder.MainActivity" />
-        </activity>
-
-        <activity
             android:name=".StartPage"
             android:label="@string/title_activity_start_page"
             android:theme="@style/AppTheme.NoActionBar" />

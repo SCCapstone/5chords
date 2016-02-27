@@ -7,11 +7,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.five_chords.chord_builder.R;
+import com.five_chords.chord_builder.Score;
 
 /**
  * A Fragment containing the options for the Main Activity
@@ -28,6 +30,9 @@ public class OptionsFragment extends DialogFragment implements CompoundButton.On
 
     /** The hints switch */
     private Switch hintsSwitch;
+
+    /** Button to clear the scores */
+    private Button clearScoresButton;
 
     /** The OnChordTypeChangeListener of this Fragment */
     private OptionsChangedListener optionsChangedListener;
@@ -142,6 +147,14 @@ public class OptionsFragment extends DialogFragment implements CompoundButton.On
         majorBox.setOnCheckedChangeListener(this);
         dominantBox.setOnCheckedChangeListener(this);
         hintsSwitch.setOnCheckedChangeListener(this);
+        clearScoresButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Score.resetScores(getActivity());
+            }
+        });
 
         // Return the layout for this fragment
         return view;
@@ -205,10 +218,11 @@ public class OptionsFragment extends DialogFragment implements CompoundButton.On
      */
     private void assignViews(View view)
     {
-        minorBox = ((CheckBox) view.findViewById(R.id.checkbox_minor_chords));
-        majorBox = ((CheckBox) view.findViewById(R.id.checkbox_major_chords));
-        dominantBox = ((CheckBox) view.findViewById(R.id.checkbox_dominant_chords));
-        hintsSwitch = ((Switch) view.findViewById(R.id.switch_hints));
+        minorBox = (CheckBox) view.findViewById(R.id.checkbox_minor_chords);
+        majorBox = (CheckBox) view.findViewById(R.id.checkbox_major_chords);
+        dominantBox = (CheckBox) view.findViewById(R.id.checkbox_dominant_chords);
+        hintsSwitch = (Switch) view.findViewById(R.id.switch_hints);
+        clearScoresButton = (Button) view.findViewById(R.id.button_clear_scores);
     }
 
     /**
