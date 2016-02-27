@@ -10,8 +10,13 @@
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.View;
 import android.widget.SeekBar;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -42,10 +47,16 @@ public class chordHandler
         addDominantChords();
     }
 
+    /**
+     * Clears the available chord array.
+     */
     public static void clearChords() {
         availableChords = new int[0][];
     }
 
+    /**
+     * Adds the major chords to the available chord array.
+     */
     public static void addMajorChords() {
         int len = availableChords.length;
         int[][] returnArray = new int[len + CHORDS_PER_TYPE][];
@@ -60,6 +71,9 @@ public class chordHandler
         availableChords = returnArray;
     }
 
+    /**
+     * Adds the minor chords to the available chord array.
+     */
     public static void addMinorChords() {
         int len = availableChords.length;
         int[][] returnArray = new int[len + CHORDS_PER_TYPE][];
@@ -74,6 +88,9 @@ public class chordHandler
         availableChords = returnArray;
     }
 
+    /**
+     * Adds the dominant chords to the available chord array.
+     */
     public static void addDominantChords() {
         int len = availableChords.length;
         int[][] returnArray = new int[len + CHORDS_PER_TYPE][];
@@ -88,9 +105,11 @@ public class chordHandler
         availableChords = returnArray;
     }
 
-    /****************************************************************
+    /**
      * Checks whether two chords (as integer arrays) are equivalent.
-     **/
+     * @param builtChord The array containing the notes of the built chord
+     * @param setChord The array containing the notes of the set chord
+     */
     public static boolean compareChords(int[] builtChord, int[] setChord) {
         if (setChord == null || builtChord == null) return false;
         else if (setChord.length > MAX_NOTES_PER_CHORD || builtChord.length > MAX_NOTES_PER_CHORD) return false;
@@ -143,6 +162,57 @@ public class chordHandler
         {
             return new int[]{root, third, fifth, seventh};
         }
+    }
+
+    /**
+     * Called when the user checks the current chord.
+     * @param activity Handle to the MainActivity
+     */
+    public static void checkCurrentChord(final MainActivity activity)
+    {
+        boolean isCorrect = chordHandler.compareChords(chordHandler.buildCurrentChord(activity),
+                chordHandler.getCurrentChord());
+
+        // Handle result TODO add sounds for right and wrong
+        if (isCorrect)
+        {
+            // Launch dialog TODO maybe replace with a custom dialog that also shows the current score info for the chord
+            new AlertDialog.Builder(activity)
+                    .setTitle(activity.getString(R.string.thats_correct))
+                    .setMessage("Do you want to try another chord?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            getRandomChord();
+                            activity.updateSpinner();
+                            setUpGUI.resetChordSliders(activity);
+                            soundHandler.stopSound();
+                        }
+
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            setUpGUI.resetChordSliders(activity);
+                            soundHandler.stopSound();
+                        }
+
+                    })
+                    .show();
+        }
+        else
+        {
+            // Show toast
+            Toast.makeText(activity, activity.getString(R.string.thats_incorrect), Toast.LENGTH_SHORT).show();
+        }
+
+        // Set the score
+        Score.setScore(activity, chordHandler.getCurrentChordIndex(), isCorrect);
+        activity.displayAnswer();
     }
 
     /****************************************************************

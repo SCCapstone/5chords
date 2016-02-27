@@ -35,6 +35,7 @@
     <string name="title_activity_about_page">AboutPage</string>
     <string name="correct">Correct</string>
     <string name="wrong">Wrong</string>
+    <string name="thats_correct">That\'s Correct!</string>
     <string name="thats_incorrect">That\'s Incorrect!</string>
     <string name="play">Play</string>
     <string name="preview">Preview</string>

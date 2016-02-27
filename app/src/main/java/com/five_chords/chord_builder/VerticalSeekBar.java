@@ -47,6 +47,15 @@ public class VerticalSeekBar extends SeekBar
         return isTouched;
     }
 
+    /**
+     * Sets the touch flag of this VerticalSeekBar.
+     * @param touched The new value of the touch flag
+     */
+    public void setTouched(boolean touched)
+    {
+        isTouched = false;
+    }
+
     @Override
     protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {

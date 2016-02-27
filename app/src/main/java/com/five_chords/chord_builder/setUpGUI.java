@@ -51,9 +51,31 @@ public class setUpGUI
         addSeekBarListener(activity, view, (SeekBar) view.findViewById(R.id.slider_option), (TextView) view.findViewById(R.id.textview_option));
     }
 
+    /**
+     * Called to reset the positions of the chord sliders.
+     * @param activity The current Activity
+     */
+    public static void resetChordSliders(Activity activity)
+    {
+        VerticalSeekBar slider = ((VerticalSeekBar) activity.findViewById(R.id.slider_root));
+        slider.setProgress(0);
+        slider.setTouched(false);
+
+        slider = ((VerticalSeekBar) activity.findViewById(R.id.slider_third));
+        slider.setProgress(0);
+        slider.setTouched(false);
+
+        slider = ((VerticalSeekBar) activity.findViewById(R.id.slider_fifth));
+        slider.setProgress(0);
+        slider.setTouched(false);
+
+        slider = ((VerticalSeekBar) activity.findViewById(R.id.slider_option));
+        slider.setProgress(0);
+        slider.setTouched(false);
+    }
+
     /**********************************************************************************************
-     * addSeekBarListener function
-     * This function will allow user to adjust the chord manually using seekBar
+     * Called to add the seek bar listener to a single seek bar.
      * @param view The context of the resources
      * @param bar The seekbar to add listeners to
      * @param text the textview associated with the seekbar
@@ -73,18 +95,14 @@ public class setUpGUI
 
                 // Only play note if progress change is from user
                 if (seekBar instanceof VerticalSeekBar && ((VerticalSeekBar)seekBar).isTouched())
-                {
                     soundHandler.playNote(activity, bar.getProgress());
-                }
             }
 
             public void onStartTrackingTouch(SeekBar seekBar)
-            {
-            }
+            {   }
 
             public void onStopTrackingTouch(SeekBar seekBar)
-            {
-            }
+            {   }
         });
 
         bar.setOnTouchListener(new View.OnTouchListener()
@@ -93,17 +111,12 @@ public class setUpGUI
             public boolean onTouch(View v, MotionEvent event)
             {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
-                {
                     soundHandler.playNote(activity, bar.getProgress());
-                }
                 else if (event.getAction() == MotionEvent.ACTION_UP)
-                {
                     soundHandler.stopSound();
-                }
                 else if (event.getAction() == MotionEvent.ACTION_MOVE)
-                {
                     return false;
-                }
+
                 return true;
             }
         });
@@ -111,7 +124,7 @@ public class setUpGUI
 
     /***********************************************************************************************
      * loadSpinners function
-     * This functions consist of two dropdown menus, one for instruments selection and one for chord
+     * This method consists of two dropdown menus, one for instruments selection and one for chord
      * selection.
      * @param activity The calling Activity
      * @param majorChords Whether or not to load the major chords
@@ -185,6 +198,10 @@ public class setUpGUI
         });
     }
 
+    /**
+     * Called to assign functions to buttons on the MainActivity page.
+     * @param activity Handle to the MainAcitvity
+     */
     public static void assignButtons(final MainActivity activity) {
         final Button playBuiltChord = (Button) activity.findViewById(R.id.button_playback_slider_chord);
         final Button playSelectedChord = (Button) activity.findViewById(R.id.button_select_chord_play);
@@ -258,25 +275,10 @@ public class setUpGUI
                         {
                             v.setEnabled(true);
                         }
-                    }, 500L);
+                    }, 1000L);
 
                     // Check the result
-                    boolean isCorrect = chordHandler.compareChords(chordHandler.buildCurrentChord(activity),
-                            chordHandler.getCurrentChord());
-
-                    // Handle result
-                    if (isCorrect)
-                    {
-                        // Launch dialog TODO
-                    }
-                    else
-                    {
-                        // Show toast
-                        Toast.makeText(activity, activity.getString(R.string.thats_incorrect), Toast.LENGTH_SHORT).show();
-                    }
-
-                    Score.setScore(activity, chordHandler.getCurrentChordIndex(), isCorrect);
-                    activity.displayAnswer();
+                    chordHandler.checkCurrentChord(activity);
                 }
                 return true;
             }
