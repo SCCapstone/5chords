@@ -22,27 +22,43 @@ import android.widget.Toast;
 
 public class setUpGUI
 {
-    public setUpGUI(MainActivity activity) {
+    /**
+     * Static class.
+     */
+    private setUpGUI()
+    {   }
 
+    /**
+     * Called to initialize setUpGUI.
+     * @param activity The calling MainActivity
+     */
+    public static void initialize(MainActivity activity)
+    {
         loadSpinners(activity, true, false, false);
         assignButtons(activity);
     }
 
-    public setUpGUI(Activity activity, View view) {
-        seekBarListener(activity, view, (SeekBar) view.findViewById(R.id.slider_root), (TextView) view.findViewById(R.id.textview_root));
-        seekBarListener(activity, view, (SeekBar) view.findViewById(R.id.slider_third), (TextView) view.findViewById(R.id.textview_third));
-        seekBarListener(activity, view, (SeekBar) view.findViewById(R.id.slider_fifth), (TextView) view.findViewById(R.id.textview_fifth));
-        seekBarListener(activity, view, (SeekBar) view.findViewById(R.id.slider_option), (TextView) view.findViewById(R.id.textview_option));
+    /**
+     * Called to add the seek bar listeners to the chord sliders.
+     * @param activity The calling activity
+     * @param view The parent View of the seek bars
+     */
+    public static void addSeekBarListeners(Activity activity, View view)
+    {
+        addSeekBarListener(activity, view, (SeekBar) view.findViewById(R.id.slider_root), (TextView) view.findViewById(R.id.textview_root));
+        addSeekBarListener(activity, view, (SeekBar) view.findViewById(R.id.slider_third), (TextView) view.findViewById(R.id.textview_third));
+        addSeekBarListener(activity, view, (SeekBar) view.findViewById(R.id.slider_fifth), (TextView) view.findViewById(R.id.textview_fifth));
+        addSeekBarListener(activity, view, (SeekBar) view.findViewById(R.id.slider_option), (TextView) view.findViewById(R.id.textview_option));
     }
 
     /**********************************************************************************************
-     * seekBarListener function
+     * addSeekBarListener function
      * This function will allow user to adjust the chord manually using seekBar
      * @param view The context of the resources
      * @param bar The seekbar to add listeners to
      * @param text the textview associated with the seekbar
      **/
-    public void seekBarListener(final Activity activity, View view, final SeekBar bar, final TextView text)
+    private static void addSeekBarListener(final Activity activity, View view, final SeekBar bar, final TextView text)
     {
         // A reference to the noteNames to pass to the Listener
         final String[] noteNames = view.getResources().getStringArray(R.array.noteNames);
@@ -102,7 +118,7 @@ public class setUpGUI
      * @param minorChords Whether or not to load the minor chords
      * @param dominantChords Whether or not to load the dominant chords
      */
-    public void loadSpinners(final Activity activity, boolean majorChords, boolean minorChords, boolean dominantChords)
+    public static void loadSpinners(final Activity activity, boolean majorChords, boolean minorChords, boolean dominantChords)
     {
         // Populate the chord select spinner
         final Spinner chordSelector = (Spinner) activity.findViewById(R.id.spinner_chord_select);
@@ -169,7 +185,7 @@ public class setUpGUI
         });
     }
 
-    public void assignButtons(final MainActivity activity) {
+    public static void assignButtons(final MainActivity activity) {
         final Button playBuiltChord = (Button) activity.findViewById(R.id.button_playback_slider_chord);
         final Button playSelectedChord = (Button) activity.findViewById(R.id.button_select_chord_play);
         final Button switchInstrument = (Button) activity.findViewById(R.id.button_select_instrument);

@@ -30,7 +30,6 @@ public class soundHandler extends MainActivity
     //static final int VIOLIN = 0;
     //static final int FLUTE = 0;
 
-
     static MediaPlayer mediaPlayer;
     static soundHandlerMidi midi;
     static String midiFile;

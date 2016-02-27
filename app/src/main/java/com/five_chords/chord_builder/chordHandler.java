@@ -18,7 +18,6 @@ import java.util.Random;
 
 public class chordHandler
 {
-
     private static final int CHORDS_PER_TYPE = 12;
     private static final int MIN_NOTES_PER_CHORD = 3;
     private static final int MAX_NOTES_PER_CHORD = 4;
@@ -52,9 +51,6 @@ public class chordHandler
         int[][] returnArray = new int[len + CHORDS_PER_TYPE][];
 
         System.arraycopy(availableChords, 0, returnArray, 0, len);
-//        for (int i = 0; i < len; i++) {
-//            returnArray[i] = availableChords[i];
-//        }
 
         for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
             int note = i % CHORDS_PER_TYPE;
@@ -69,9 +65,6 @@ public class chordHandler
         int[][] returnArray = new int[len + CHORDS_PER_TYPE][];
 
         System.arraycopy(availableChords, 0, returnArray, 0, len);
-//        for (int i = 0; i < len; i++) {
-//            returnArray[i] = availableChords[i];
-//        }
 
         for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
             int note = i%CHORDS_PER_TYPE;
@@ -86,9 +79,6 @@ public class chordHandler
         int[][] returnArray = new int[len + CHORDS_PER_TYPE][];
 
         System.arraycopy(availableChords, 0, returnArray, 0, len);
-//        for (int i = 0; i < len; i++) {
-//            returnArray[i] = availableChords[i];
-//        }
 
         for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
             int note = i%CHORDS_PER_TYPE;

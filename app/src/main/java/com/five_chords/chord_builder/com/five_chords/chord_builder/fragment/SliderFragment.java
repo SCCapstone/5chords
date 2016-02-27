@@ -34,10 +34,11 @@ public class SliderFragment extends Fragment
         // Inflate the layout for this fragment
         View sliders = inflater.inflate(R.layout.fragment_sliders, container, false);
 
+        // Hide the fourth slider by default
         sliders.findViewById(R.id.slider_option_layout).setVisibility(View.GONE);
 
-        // TODO make static class
-        new setUpGUI(getActivity(), sliders);
+        // Add the seek bar listeners
+        setUpGUI.addSeekBarListeners(getActivity(), sliders);
 
         return sliders;
     }

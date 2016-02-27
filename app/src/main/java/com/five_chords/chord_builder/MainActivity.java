@@ -29,7 +29,7 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.Scor
 
 
 public class MainActivity extends AppCompatActivity implements OptionsFragment.OnChordTypeChangeListener {
-    static setUpGUI gui;
+
     static OptionsFragment cof;
     static FragmentManager fm;
 
@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
         fm = getFragmentManager();
 
-        gui = new setUpGUI(this);
         cof = new OptionsFragment();
+        setUpGUI.initialize(this);
         chordHandler.initialize();
         soundHandler.initialize(this);
         Score.loadScores(this, false);
@@ -199,7 +199,9 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
      */
     @Override
     public void onChordTypeChanged(boolean useMajors, boolean useMinors, boolean useDominants) {
-        gui.loadSpinners(this, useMajors, useMinors, useDominants);
+
+        // Update the spinners
+        setUpGUI.loadSpinners(this, useMajors, useMinors, useDominants);
 
         // Hide dominant slider if needed
         findViewById(R.id.slider_option_layout).setVisibility(useDominants ? View.VISIBLE : View.GONE);
