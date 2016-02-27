@@ -8,7 +8,6 @@
  */
 package com.five_chords.chord_builder;
 
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentManager;
@@ -30,7 +29,6 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.Scor
 
 
 public class MainActivity extends AppCompatActivity implements OptionsFragment.OnChordTypeChangeListener {
-    static chordHandler cH;
     static setUpGUI gui;
     static OptionsFragment cof;
     static soundHandler sH;
@@ -59,10 +57,10 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
         fm = getFragmentManager();
 
-        cH = new chordHandler();
         gui = new setUpGUI(this);
         sH = new soundHandler(this);
         cof = new OptionsFragment();
+        chordHandler.initialize();
         Score.loadScores(this, false);
     }
 
@@ -88,11 +86,16 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         return true;
     }
 
+    /**
+     * Called when an item in the menu is selected.
+     * @param item The selected item
+     * @return super.onOptionsItemSelected()
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         if (item.getItemId() == R.id.menu_item_main_options)
-            launchCheckOptionsDialog(findViewById(R.id.fragment_content));
+            launchOptionsDialog(findViewById(R.id.fragment_content));
         else if (item.getItemId() == R.id.menu_item_main_scores)
             toScorePage(null);
         else if (item.getItemId() == R.id.menu_item_main_about)
@@ -104,17 +107,16 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     }
 
     /**
-     * Called to launch the check options dialog.
+     * Called to launch the options dialog.
      * @param v The calling View
      */
-    public void launchCheckOptionsDialog(View v) {
+    public void launchOptionsDialog(View v)
+    {
         FragmentTransaction ft = fm.beginTransaction();
         Fragment prev = fm.findFragmentByTag("dialog");
 
         if (prev != null)
-        {
             ft.remove(prev);
-        }
 
         ft.addToBackStack(null);
 
@@ -124,17 +126,16 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     }
 
     /**
-     * Called to launch the score page fragment.
+     * Called to launch the score page dialog.
      * @param v The calling View
      */
-    public void launchScorePage(View v) {
+    public void launchScorePageDialog(View v)
+    {
         FragmentTransaction ft = fm.beginTransaction();
         Fragment prev = fm.findFragmentByTag("dialog");
 
         if (prev != null)
-        {
             ft.remove(prev);
-        }
 
         ft.addToBackStack(null);
 
@@ -143,21 +144,22 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         newFragment.show(ft, "dialog");
     }
 
-    public void displayAnswer(Activity activity) {
+    public void displayAnswer() {
         // shows if the built chord matches the set chord
-        Button view = (Button) activity.findViewById(R.id.button_answer);
-        view.setText(Score.getNumCorrectGuesses(cH.getCurrentChordIndex()) + " / " + Score.getNumTotalGuesses(cH.getCurrentChordIndex()));
+        Button view = (Button) findViewById(R.id.button_answer);
+        view.setText(Score.getNumCorrectGuesses(chordHandler.getCurrentChordIndex()) +
+                " / " + Score.getNumTotalGuesses(chordHandler.getCurrentChordIndex()));
     }
 
-    public void updateSpinner(Activity activity) {
-        Spinner dropdown = (Spinner) activity.findViewById(R.id.spinner_chord_select);
-        dropdown.setSelection((cH.getCurrentChordIndex()) % dropdown.getCount());
+    public void updateSpinner() {
+        Spinner dropdown = (Spinner) findViewById(R.id.spinner_chord_select);
+        dropdown.setSelection((chordHandler.getCurrentChordIndex()) % dropdown.getCount());
     }
 
-    /****************************************************************
-     * Go to help activity
+    /**
+     * Goes to Help page.
      * @param view The calling View
-     **/
+     */
     public void toHelpPage(View view) {
         Intent intent = new Intent(this, HelpPage.class);
         startActivity(intent);

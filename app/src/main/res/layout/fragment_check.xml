@@ -34,7 +34,7 @@
         android:layout_weight="1"
         android:layout_margin="4dp"
         android:text="@string/score"
-        android:onClick="launchScorePage"
+        android:onClick="launchScorePageDialog"
         android:textSize="@dimen/text_size_small"
         />
 

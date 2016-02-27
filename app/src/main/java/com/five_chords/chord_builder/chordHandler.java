@@ -16,49 +16,62 @@ import android.widget.SeekBar;
 import java.util.Arrays;
 import java.util.Random;
 
-public class chordHandler {
+public class chordHandler
+{
 
-    static final int CHORDS_PER_TYPE = 12;
-    static final int MIN_NOTES_PER_CHORD = 3;
-    static final int MAX_NOTES_PER_CHORD = 4;
+    private static final int CHORDS_PER_TYPE = 12;
+    private static final int MIN_NOTES_PER_CHORD = 3;
+    private static final int MAX_NOTES_PER_CHORD = 4;
 
-    static int[][] availableChords = new int[0][];
-    static int currentChordIndex;
+    private static int[][] availableChords = new int[0][];
+    private static int currentChordIndex;
 
-    public chordHandler() {
+    /**
+     * Static class.
+     */
+    private chordHandler()
+    {   }
+
+    /**
+     * Called to initialize this chordHandler.
+     */
+    public static void initialize()
+    {
         clearChords();
         addMajorChords();
         addMinorChords();
         addDominantChords();
     }
 
-    public void clearChords() {
+    public static void clearChords() {
         availableChords = new int[0][];
     }
 
-    public void addMajorChords() {
+    public static void addMajorChords() {
         int len = availableChords.length;
         int[][] returnArray = new int[len + CHORDS_PER_TYPE][];
 
-        for (int i = 0; i < len; i++) {
-            returnArray[i] = availableChords[i];
-        }
+        System.arraycopy(availableChords, 0, returnArray, 0, len);
+//        for (int i = 0; i < len; i++) {
+//            returnArray[i] = availableChords[i];
+//        }
 
         for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
-            int note = i%CHORDS_PER_TYPE;
+            int note = i % CHORDS_PER_TYPE;
             returnArray[i] = new int[] {note, note+4, note+7};
         }
 
         availableChords = returnArray;
     }
 
-    public void addMinorChords() {
+    public static void addMinorChords() {
         int len = availableChords.length;
         int[][] returnArray = new int[len + CHORDS_PER_TYPE][];
 
-        for (int i = 0; i < len; i++) {
-            returnArray[i] = availableChords[i];
-        }
+        System.arraycopy(availableChords, 0, returnArray, 0, len);
+//        for (int i = 0; i < len; i++) {
+//            returnArray[i] = availableChords[i];
+//        }
 
         for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
             int note = i%CHORDS_PER_TYPE;
@@ -68,13 +81,14 @@ public class chordHandler {
         availableChords = returnArray;
     }
 
-    public void addDominantChords() {
+    public static void addDominantChords() {
         int len = availableChords.length;
         int[][] returnArray = new int[len + CHORDS_PER_TYPE][];
 
-        for (int i = 0; i < len; i++) {
-            returnArray[i] = availableChords[i];
-        }
+        System.arraycopy(availableChords, 0, returnArray, 0, len);
+//        for (int i = 0; i < len; i++) {
+//            returnArray[i] = availableChords[i];
+//        }
 
         for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
             int note = i%CHORDS_PER_TYPE;
@@ -87,7 +101,7 @@ public class chordHandler {
     /****************************************************************
      * Checks whether two chords (as integer arrays) are equivalent.
      **/
-    public boolean compareChords(int[] builtChord, int[] setChord) {
+    public static boolean compareChords(int[] builtChord, int[] setChord) {
         if (setChord == null || builtChord == null) return false;
         else if (setChord.length > MAX_NOTES_PER_CHORD || builtChord.length > MAX_NOTES_PER_CHORD) return false;
         else if (setChord.length < MIN_NOTES_PER_CHORD || builtChord.length < MIN_NOTES_PER_CHORD) return false;
@@ -98,7 +112,7 @@ public class chordHandler {
      * Change current chord to the one selected
      * @param newChordIndex The index of the new chord
      */
-    public int getSelectedChord(int newChordIndex) {
+    public static int getSelectedChord(int newChordIndex) {
         currentChordIndex = newChordIndex - 1;
         return currentChordIndex;
     }
@@ -106,7 +120,7 @@ public class chordHandler {
     /**
      * Change current chord to a random chord
      */
-    public int getRandomChord() {
+    public static int getRandomChord() {
         int previousChordIndex = currentChordIndex;
         Random random = new Random();
 
@@ -124,7 +138,7 @@ public class chordHandler {
      * Builds the current chord that the user has defined on the sliders.
      * @return An array containing the root, third, fifth, and option values of the built chord
      */
-    public int[] buildCurrentChord(Activity activity)
+    public static int[] buildCurrentChord(Activity activity)
     {
         int root = ((SeekBar) activity.findViewById(R.id.slider_root)).getProgress();
         int third = ((SeekBar) activity.findViewById(R.id.slider_third)).getProgress();
@@ -144,9 +158,9 @@ public class chordHandler {
     /****************************************************************
      * Return internal variables
      **/
-    public int getCurrentChordIndex() { return currentChordIndex; }
-    public int[] getChord(int chordIndex) { return availableChords[chordIndex]; }
-    public int[] getCurrentChord() {
+    public static int getCurrentChordIndex() { return currentChordIndex; }
+    public static int[] getChord(int chordIndex) { return availableChords[chordIndex]; }
+    public static int[] getCurrentChord() {
         return availableChords[currentChordIndex];
     }
 }
