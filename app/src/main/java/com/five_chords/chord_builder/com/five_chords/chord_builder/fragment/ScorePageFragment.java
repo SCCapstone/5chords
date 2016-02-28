@@ -16,6 +16,8 @@ import android.widget.TextView;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 
+import java.util.Date;
+
 
 /**
  * A Fragment containing the score page.
@@ -56,10 +58,8 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
 
         // Supply arguments to Bundle
         Bundle args = new Bundle();
-
         args.putBoolean(BUNDLE_ID_MAJOR_CHORDS, onMajorChords);
         args.putBoolean(BUNDLE_ID_MINOR_CHORDS, onMinorChords);
-
         f.setArguments(args);
 
         return f;
@@ -128,13 +128,11 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
 
         if (arguments == null) // Use default values in this case
         {
-//            currentScoreViewMode = true;
             onMajorChords = true;
             onMinorChords = false;
         }
         else
         {
-//            currentScoreViewMode = arguments.getBoolean(BUNDLE_ID_SCORE_VIEW_MODE);
             onMajorChords = arguments.getBoolean(BUNDLE_ID_MAJOR_CHORDS);
             onMinorChords = arguments.getBoolean(BUNDLE_ID_MINOR_CHORDS);
         }
@@ -148,7 +146,6 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
 
         // Create and add tabs
         addScoreTypeTabs(view);
-//        addScoreViewModeTabs(view);
 
         // Populate list view of scores
         refreshListView();
@@ -251,7 +248,7 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
     /**
      * Implementation of an ArrayAdapter containing views for displaying the history of a chord's scores.
      */
-    public static class ScoreItemHistoryAdapter extends ArrayAdapter<Score.CurrentScoreWrapper>
+    public static class ScoreItemHistoryAdapter extends ArrayAdapter<Score.ScoreWrapper>
     {
         /**
          * Constructor.
@@ -282,24 +279,47 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
             else
                 view = LayoutInflater.from(getContext()).inflate(R.layout.component_score_history_item, parent, false);
 
-            Score.CurrentScoreWrapper item = getItem(position);
+            // Get components on View
+            Score.ScoreWrapper item = getItem(position);
             TextView textView = (TextView)view.findViewById(R.id.score_history_chord_name);
             ScoreProgressView progressView = (ScoreProgressView)view.findViewById(R.id.score_history_progress_view);
 
             // Set chord name
-            textView.setText(item.CHORD_NAME);
+            textView.setText(getLabel(item));
 
-            // Setup progress view
-            item.loadHistory((Activity) getContext(), false); // Make sure the History is loaded
+            // Setup history view
+            item.loadDiscreteHistory((Activity) getContext()); // Make sure the History is loaded
+
+            progressView.setWidthPixels(ScoreProgressView.calculateWidth(item.getDiscreteHistory()));
+            progressView.setHeightPixels(ScoreProgressView.calculateHeight());
+            progressView.setMinimumWidth(progressView.getWidthPixels());
+            progressView.setMinimumHeight(progressView.getHeightPixels());
+            progressView.setHistory(item.getDiscreteHistory());
 
             // TODO temporary
-//            Log.w("HIST", item.CHORD_NAME + ": " + item.getHistory().size() + " points");
-//            for (Score.ScoreWrapper wrapper: item.getHistory())
-//                Log.w("\tPoint", wrapper.toString());
+            Log.w("PIX_WIDTH", item.CHORD_NAME + ": " + progressView.getWidthPixels());
+            Log.w("DISC_HIST", item.CHORD_NAME + ": " + item.getDiscreteHistory().size + " points");
+            int i = 0;
+            for (Score.ScoreValue value: item.getDiscreteHistory().values)
+                Log.w("\tPoint", "(" + (i++) + ") " + (value == null ? "NULL" : value.numCorrectGuesses + " / " + value.numTotalGuesses));
 
-            progressView.setScore(item);
+            Log.w("HIST", item.CHORD_NAME + ": " + item.getHistory().size() + " points");
+            for (Score.ScoreTimeValue value: item.getHistory())
+                Log.w("\tPoint", value == null ? "NULL" : value.numCorrectGuesses + " / " + value.numTotalGuesses +
+                        ", t = " + new Date(value.time));
 
             return view;
+        }
+
+        /**
+         * Gets a label for a CurrentScoreWrapper.
+         * @param wrapper The CurrentScoreWrapper
+         * @return A label for the CurrentScoreWrapper
+         */
+        private String getLabel(Score.ScoreWrapper wrapper)
+        {
+            return wrapper.CHORD_NAME + (wrapper.getNumTotalGuesses() == 0 ?
+                    " - " + getContext().getString(R.string.not_attempted) : "");
         }
     }
 }

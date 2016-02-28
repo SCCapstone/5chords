@@ -37,6 +37,7 @@
     <string name="wrong">Wrong</string>
     <string name="thats_correct">That\'s Correct!</string>
     <string name="thats_incorrect">That\'s Incorrect!</string>
+    <string name="not_attempted">Not Attempted</string>
     <string name="play">Play</string>
     <string name="preview">Preview</string>
     <string name="check">Check</string>

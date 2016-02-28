@@ -25,16 +25,47 @@ public class ScoreProgressView extends View
     /** A Rect handle for convenience */
     private static final Rect BOUNDS = new Rect();
 
+    /** The size of the border to use for the history tag names */
+    private static int historyTagBorder;
+
+    /** The height of the history tag names */
+    private static int historyTagHeight;
+
+    /** Array of the widths of the History tag strings */
+    private static int[] historyTagWidths = new int[Score.HISTORY_TAGS.length];
+
     // Setup Paint
     static
     {
         PAINT.setAntiAlias(true);
         PAINT.setTextAlign(Paint.Align.CENTER);
         PAINT.setTextSize(18.0f);
+
+        // Compute history tag widths
+        String tag;
+        historyTagHeight = 0;
+        for (int i = 0; i < historyTagWidths.length; ++i)
+        {
+            tag = Score.HISTORY_TAGS[i];
+            PAINT.getTextBounds(tag, 0, tag.length() - 1, BOUNDS);
+            historyTagWidths[i] = BOUNDS.width();
+
+            if (BOUNDS.height() > historyTagHeight)
+                historyTagHeight = BOUNDS.height();
+        }
+
+        // Set the border size (for now use half the size of 'Earlier this Month')
+        historyTagBorder = historyTagWidths[0] / 2;
+
+        // Double the height
+        historyTagHeight *= 2;
     }
 
-    /** The CurrentScoreWrapper attached to this ScoreProgressView. */
-    private Score.CurrentScoreWrapper score;
+    /** The width of this ScoreProgressView */
+    private int width;
+
+    /** The height of this ScoreProgressView */
+    private int height;
 
     /** The array of ScorePoints wrapping the score history. */
     private ScorePoint[] points;
@@ -70,18 +101,99 @@ public class ScoreProgressView extends View
     }
 
     /**
-     * Sets the CurrentScoreWrapper attached to this ScoreProgressView.
-     * @param score The new CurrentScoreWrapper
+     * Calculates the width needed to fit the given history.
+     * @param history The Score.DiscreteScoreHistory
+     * @return The width needed to fit the given history
      */
-    public void setScore(Score.CurrentScoreWrapper score)
+    public static int calculateWidth(Score.DiscreteScoreHistory history)
     {
-        this.score = score;
+        int width = historyTagBorder * 2;
 
-        // Load points (if possible)
-        if (score.getHistory() != null)
-            createScorePointArray(score.getHistory());
-        else
-            points = null;
+        int i = 0;
+        for (Score.ScoreValue value: history.values)
+        {
+            if (value != null)
+                width += historyTagWidths[i];
+            ++i;
+        }
+
+        return width;
+    }
+
+    /**
+     * Calculates the height needed for ScoreProgressView.
+     * @return The height needed for ScoreProgressView
+     */
+    public static int calculateHeight()
+    {
+        return historyTagHeight * 5; // 2 times to fit text, 3 times for content
+    }
+
+    /**
+     * Sets the width in pixels of this ScoreProgressView.
+     * @param width The width in pixels of this ScoreProgressView.
+     */
+    public void setWidthPixels(int width)
+    {
+        this.width = width;
+    }
+
+    /**
+     * Gets the width in pixels of this ScoreProgressView.
+     * @return The width in pixels of this ScoreProgressView.
+     */
+    public int getWidthPixels()
+    {
+        return width;
+    }
+
+    /**
+     * Sets the height in pixels of this ScoreProgressView.
+     * @param height The height in pixels of this ScoreProgressView.
+     */
+    public void setHeightPixels(int height)
+    {
+        this.height = height;
+    }
+
+    /**
+     * Gets the height in pixels of this ScoreProgressView.
+     * @return The height in pixels of this ScoreProgressView.
+     */
+    public int getHeightPixels()
+    {
+        return height;
+    }
+
+    /**
+     * Sets the Score.DiscreteScoreHistory displayed by this ScoreProgressView.
+     * @param history The Score.DiscreteScoreHistory to be displayed
+     */
+    public void setHistory(Score.DiscreteScoreHistory history)
+    {
+        // Allocate array
+        points = new ScorePoint[history.size];
+
+        // Add points
+        int index = 0;
+        int x = historyTagBorder;
+        ScorePoint point;
+        Score.ScoreValue value;
+
+        for (int j = 0; j < history.values.length; ++j)
+        {
+            value = history.values[j];
+
+            if (value != null)
+            {
+                point = new ScorePoint();
+                point.percent = value.numTotalGuesses == 0 ? 0.0f : (float) value.numCorrectGuesses / value.numTotalGuesses;
+                point.x = (float)x / width;
+                point.y = 1.0f - point.percent;
+                points[index++] = point;
+                x += historyTagWidths[j];
+            }
+        }
     }
 
     /**
@@ -96,18 +208,17 @@ public class ScoreProgressView extends View
         int w = canvas.getWidth();
         int h = canvas.getHeight();
 
-        // Draw background
-        PAINT.setColor(Color.WHITE);
-        PAINT.setStyle(Paint.Style.FILL);
-        canvas.drawRect(0.0f, 0.0f, (float) w, (float) h, PAINT);
+//        // Draw background
+//        PAINT.setColor(Color.WHITE);
+//        PAINT.setStyle(Paint.Style.FILL);
+//        canvas.drawRect(0.0f, 0.0f, (float) w, (float) h, PAINT);
 
         if (points != null && points.length > 0)
         {
             float wBorder = w * 0.0625f;
-            float hBorder = 32.0f;
             float xScale = w - 2.0f * wBorder ;
-            float yScale = h - 2.0f * hBorder;
-            float radius = w / (96.0f);
+            float yScale = h - 2.0f * historyTagHeight;
+            float radius = historyTagHeight * 0.125f;
 
             // Draw points
             float x, y;
@@ -116,7 +227,7 @@ public class ScoreProgressView extends View
             {
                 // Get position of point
                 x = wBorder + points[i].x * xScale;
-                y = hBorder + points[i].y * yScale;
+                y = historyTagHeight + points[i].y * yScale;
 
                 // Draw circles on each point
                 PAINT.setStrokeWidth(2.0f);
@@ -130,7 +241,7 @@ public class ScoreProgressView extends View
                     PAINT.setStyle(Paint.Style.STROKE);
                     PAINT.setColor(Color.LTGRAY);
                     canvas.drawLine(x, y, wBorder + points[i - 1].x * xScale,
-                            hBorder + points[i - 1].y * yScale, PAINT);
+                            historyTagHeight + points[i - 1].y * yScale, PAINT);
                 }
 
                 // Draw percent above point
@@ -140,12 +251,9 @@ public class ScoreProgressView extends View
                 text = "" + Math.round(points[i].percent * 100.0f) + " %";
                 drawText(canvas, text, x, 0.0f);
 
-                // Draw 'Today' below last point
-                if (i == points.length - 1)
-                {
-                    PAINT.setColor(Color.LTGRAY);
-                    drawText(canvas, "Today", x, h);
-                }
+                // Draw history tags beneath points
+                PAINT.setColor(Color.LTGRAY);
+                drawText(canvas, Score.HISTORY_TAGS[i], x, h);
 
                 // TODO draw other strings over previous points, such as 'Earlier today', 'last week', etc
                 // TODO Possibly make the spacing between points constant and put the whole view in a
@@ -153,10 +261,10 @@ public class ScoreProgressView extends View
             }
         }
 
-        // Draw Border
-        PAINT.setColor(Color.DKGRAY);
-        PAINT.setStyle(Paint.Style.STROKE);
-        canvas.drawRect(0.0f, 0.0f, (float) w, (float) h, PAINT);
+//        // Draw Border
+//        PAINT.setColor(Color.DKGRAY);
+//        PAINT.setStyle(Paint.Style.STROKE);
+//        canvas.drawRect(0.0f, 0.0f, (float) w, (float) h, PAINT);
     }
 
     /**
@@ -176,41 +284,6 @@ public class ScoreProgressView extends View
         canvas.drawText(text,
                 Math.max(Math.min(x, canvas.getWidth() - width * 0.5f), width * 0.5f),
                 Math.max(Math.min(y, canvas.getHeight() - height * 0.5f), height), PAINT);
-    }
-
-    /**
-     * Creates the ScorePoint array.
-     * @param scores The list of ScoreWrappers to use to create the array
-     */
-    private void createScorePointArray(LinkedList<Score.ScoreWrapper> scores)
-    {
-        // Allocate array
-        points = new ScorePoint[scores.size()];
-
-        if (points.length == 0)
-        {
-            Log.e("ScoreProgressView", "Zero length history for " + score.CHORD_NAME);
-            return;
-        }
-
-        // First calculate total time span
-        long startTime = scores.getLast().time;
-        long timeSpan = scores.getFirst().time - startTime;
-
-        // Add points
-        int i = 0;
-        ScorePoint point;
-        Log.w("SPV", "Points for " + score.CHORD_NAME + ":");
-        for (Score.ScoreWrapper wrapper: scores)
-        {
-            point = new ScorePoint();
-            point.percent = wrapper.numTotalGuesses == 0 ? 0.0f : (float)wrapper.numCorrectGuesses / wrapper.numTotalGuesses;
-            point.x = timeSpan == 0L ? 0.0f : (float)((wrapper.time - startTime) / (double)timeSpan);
-            point.y = 1.0f - point.percent;
-            points[points.length - 1 - (i++)] = point;
-
-            Log.w("\tPoint", "Pos = " + point.x + ", " + point.y + " time = " + new Date(wrapper.time).toString());
-        }
     }
 
     /**
