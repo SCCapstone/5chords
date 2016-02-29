@@ -31,8 +31,11 @@ public class ScoreProgressView extends View
     /** The height of the history tag names */
     private static int historyTagHeight;
 
-    /** Array of the widths of the History tag strings */
-    private static int[] historyTagWidths = new int[Score.HISTORY_TAGS.length];
+    /** The height of the history tag names */
+    private static int historyTagWidth;
+
+//    /** Array of the widths of the History tag strings */
+//    private static int[] historyTagWidths = new int[Score.HISTORY_TAGS.length];
 
     // Setup Paint
     static
@@ -41,21 +44,27 @@ public class ScoreProgressView extends View
         PAINT.setTextAlign(Paint.Align.CENTER);
         PAINT.setTextSize(18.0f);
 
-        // Compute history tag widths
+        // Compute history tag width and height
         String tag;
         historyTagHeight = 0;
-        for (int i = 0; i < historyTagWidths.length; ++i)
+        historyTagWidth = 0;
+        for (int i = 0; i < Score.HISTORY_TAGS.length; ++i)
         {
             tag = Score.HISTORY_TAGS[i];
             PAINT.getTextBounds(tag, 0, tag.length() - 1, BOUNDS);
-            historyTagWidths[i] = BOUNDS.width();
+
+            if (BOUNDS.width() > historyTagWidth)
+                historyTagWidth = BOUNDS.width();
 
             if (BOUNDS.height() > historyTagHeight)
                 historyTagHeight = BOUNDS.height();
         }
 
-        // Set the border size (for now use half the size of 'Earlier this Month')
-        historyTagBorder = historyTagWidths[0] / 2;
+        // Set the border size
+        historyTagBorder = (int)(historyTagWidth * 0.75f);
+
+        // Double the width
+        historyTagWidth *= 2;
 
         // Double the height
         historyTagHeight *= 2;
@@ -107,17 +116,7 @@ public class ScoreProgressView extends View
      */
     public static int calculateWidth(Score.DiscreteScoreHistory history)
     {
-        int width = historyTagBorder * 2;
-
-        int i = 0;
-        for (Score.ScoreValue value: history.values)
-        {
-            if (value != null)
-                width += historyTagWidths[i];
-            ++i;
-        }
-
-        return width;
+        return historyTagBorder + historyTagWidth * history.size;
     }
 
     /**
@@ -171,12 +170,20 @@ public class ScoreProgressView extends View
      */
     public void setHistory(Score.DiscreteScoreHistory history)
     {
+        if (history.size == 0)
+        {
+            points = null;
+            return;
+        }
+
         // Allocate array
         points = new ScorePoint[history.size];
 
         // Add points
         int index = 0;
-        int x = historyTagBorder;
+        int x = historyTagWidth;
+        float yBase = historyTagHeight * 1.5f / height;
+        float yScale = 1.0f - 2 * yBase;
         ScorePoint point;
         Score.ScoreValue value;
 
@@ -188,10 +195,11 @@ public class ScoreProgressView extends View
             {
                 point = new ScorePoint();
                 point.percent = value.numTotalGuesses == 0 ? 0.0f : (float) value.numCorrectGuesses / value.numTotalGuesses;
-                point.x = (float)x / width;
-                point.y = 1.0f - point.percent;
+                point.x = 1.0f - (float)x / width;
+                point.y = yBase + (1.0f - point.percent) * yScale;
+                point.label = Score.HISTORY_TAGS[j];
                 points[index++] = point;
-                x += historyTagWidths[j];
+                x += historyTagWidth;
             }
         }
     }
@@ -208,16 +216,11 @@ public class ScoreProgressView extends View
         int w = canvas.getWidth();
         int h = canvas.getHeight();
 
-//        // Draw background
-//        PAINT.setColor(Color.WHITE);
-//        PAINT.setStyle(Paint.Style.FILL);
-//        canvas.drawRect(0.0f, 0.0f, (float) w, (float) h, PAINT);
+        // Clear the canvas
+        canvas.drawColor(0x00000000);
 
         if (points != null && points.length > 0)
         {
-            float wBorder = w * 0.0625f;
-            float xScale = w - 2.0f * wBorder ;
-            float yScale = h - 2.0f * historyTagHeight;
             float radius = historyTagHeight * 0.125f;
 
             // Draw points
@@ -226,8 +229,8 @@ public class ScoreProgressView extends View
             for (int i = 0; i < points.length; ++i)
             {
                 // Get position of point
-                x = wBorder + points[i].x * xScale;
-                y = historyTagHeight + points[i].y * yScale;
+                x = points[i].x * w;
+                y = points[i].y * h;
 
                 // Draw circles on each point
                 PAINT.setStrokeWidth(2.0f);
@@ -240,8 +243,7 @@ public class ScoreProgressView extends View
                 {
                     PAINT.setStyle(Paint.Style.STROKE);
                     PAINT.setColor(Color.LTGRAY);
-                    canvas.drawLine(x, y, wBorder + points[i - 1].x * xScale,
-                            historyTagHeight + points[i - 1].y * yScale, PAINT);
+                    canvas.drawLine(x, y, points[i - 1].x * w, points[i - 1].y * h, PAINT);
                 }
 
                 // Draw percent above point
@@ -253,18 +255,9 @@ public class ScoreProgressView extends View
 
                 // Draw history tags beneath points
                 PAINT.setColor(Color.LTGRAY);
-                drawText(canvas, Score.HISTORY_TAGS[i], x, h);
-
-                // TODO draw other strings over previous points, such as 'Earlier today', 'last week', etc
-                // TODO Possibly make the spacing between points constant and put the whole view in a
-                // TODO horizontal scroll view
+                drawText(canvas, points[i].label, x, h);
             }
         }
-
-//        // Draw Border
-//        PAINT.setColor(Color.DKGRAY);
-//        PAINT.setStyle(Paint.Style.STROKE);
-//        canvas.drawRect(0.0f, 0.0f, (float) w, (float) h, PAINT);
     }
 
     /**
@@ -299,5 +292,8 @@ public class ScoreProgressView extends View
 
         /** The percent value of the point. */
         private float percent;
+
+        /** The label of this point */
+        private String label;
     }
 }

@@ -18,27 +18,21 @@ import android.widget.Toast;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class Score
 {
     /** The name of the saved chord scores in the SharedPreferences */
     public static final String CHORD_SCORES_SAVE_FILENAME = "ScoreFile";
 
-    /** The maximum number of scores to keep in the history */
-    public static final int NUM_SCORES_TO_KEEP = 100;
-
-    /** The amount of time to wait between adding scores to the continuous history, in milliseconds */
-    public static final long SCORE_UPDATE_INTERVAL = 12L * 3600L * 1000L;
-
     /** Tags for the score history view */
-    public static final String[] HISTORY_TAGS = new String[] {"Today", "Earlier Today", "Yesterday", "A Day Ago",
-                                            "Earlier this Week", "Last Week", "Earlier this Month",
-                                            "Last Month", "Earlier this Year", "Last Year"};
+    public static final String[] HISTORY_TAGS = new String[] {"Current", "1H", "2H", "1D",
+                                                "2D", "4D", "1W", "2W", "1M", "2M", "6M", "1Y"};
 
-    /** Update times for each history tag, in milliseconds */
-    public static final long[] HISTORY_UPDATE_INTERVALS = new long[] {2L * 3600000L, 12L * 3600000L, 24L * 3600000L,
-                                                            72L * 3600000L, 168L * 3600000L, 336L * 3600000L,
-                                                            672L * 3600000L, 4032L * 3600000L, 8064L * 3600000L};
+    /** Update times for each history tag, in seconds */
+    public static final long[] HISTORY_UPDATE_INTERVALS = new long[] {0L, 3600L, 2 * 3600L, 24 * 3600L, 48 * 3600L,
+                                                                        96 * 3600L, 168 * 3600L, 336 * 3600L,
+                                                                        672 * 3600L, 1344 * 3600L, 4032 * 3600L, 8064 * 3600L};
 
     /** The array of chord Scores */
     public static ScoreWrapper[] scores;
@@ -162,10 +156,7 @@ public class Score
         public final String CHORD_NAME;
 
         /** Records the value of this ScoreWrapper */
-        private ScoreTimeValue value;
-
-        /** Records the history of this score */
-        private LinkedList<ScoreTimeValue> scoreHistory;
+        private ScoreValue value;
 
         /** The history of this ScoreWrapper split into discrete bins for scores of different age categories */
         private DiscreteScoreHistory discreteScoreHistory;
@@ -177,7 +168,7 @@ public class Score
         public ScoreWrapper(String name)
         {
             CHORD_NAME = name;
-            value = new ScoreTimeValue();
+            value = new ScoreValue();
         }
 
         /**
@@ -200,9 +191,6 @@ public class Score
         {
             // Read from index zero (default)
             value.load(savedChordScores, CHORD_NAME, 0);
-
-            // Update history
-            updateHistory(savedChordScores);
         }
 
         /*****************************************************************
@@ -211,44 +199,35 @@ public class Score
          **/
         public void save(SharedPreferences savedChordScores)
         {
-            // Update history
+            // Check time
+            if (value.time < 0L) // This is a new value, set the time
+                value.time = new Date().getTime() / 1000L;
+
+            // Save this score
+            SharedPreferences.Editor editor = savedChordScores.edit();
+            value.save(editor, CHORD_NAME, 0);
+            editor.apply();
+
+            // Update history if needed
             updateHistory(savedChordScores);
         }
 
         /**
-         * Loads the discrete history of this ScoreWrapper.
+         * Loads the history of this ScoreWrapper.
          * @param activity The current Activity
+         * @param overwrite Whether or not to overwrite the history if it is already loaded
          */
-        public void loadDiscreteHistory(Activity activity)
+        public void loadHistory(Activity activity, boolean overwrite)
         {
-            // Create the discrete history if needed
-            if (discreteScoreHistory == null)
-                discreteScoreHistory = new DiscreteScoreHistory();
-            else
-                discreteScoreHistory.clear();
-
-            // Load the continuous history
-            if (scoreHistory == null)
+            if (overwrite || discreteScoreHistory == null)
                 loadHistory(getScoreLoader(activity));
-
-            // Add the continuous history to the discrete history
-            discreteScoreHistory.addValuesToHistory(scoreHistory);
         }
 
         /**
-         * Gets the continuous score history of this ScoreWrapper.
-         * @return The continuous score history of this ScoreWrapper
+         * Gets the score history of this ScoreWrapper.
+         * @return The score history of this ScoreWrapper
          */
-        public LinkedList<ScoreTimeValue> getHistory()
-        {
-            return scoreHistory;
-        }
-
-        /**
-         * Gets the discrete score history of this ScoreWrapper.
-         * @return The discrete score history of this ScoreWrapper
-         */
-        public DiscreteScoreHistory getDiscreteHistory()
+        public DiscreteScoreHistory getHistory()
         {
             return discreteScoreHistory;
         }
@@ -261,55 +240,48 @@ public class Score
         public String toString()
         {
             return CHORD_NAME + ": " + value.numCorrectGuesses + " / " + value.numTotalGuesses + " (" +
-                    (100.0 * value.numCorrectGuesses / + value.numTotalGuesses) + " %), " + new Date(value.time).toString();
+                    (100.0 * value.numCorrectGuesses / + value.numTotalGuesses) + " %), " +
+                    new Date(value.time * 1000L).toString();
         }
 
         /**
-         * Updates the history of this CurrentScoreWrapper, adding a new instance of this ScoreWrapper if needed.
+         * Updates the history of this ScoreWrapper.
          * @param savedChordScores The SharedPreferences from which to load
          */
         private void updateHistory(SharedPreferences savedChordScores)
         {
-            // Calculate the current time
-            long time = new Date().getTime();
+            // Calculate the current time in seconds
+            long time = new Date().getTime() / 1000;
 
             // If this score has aged past the update interval, add it
-            if (this.value.time - time > SCORE_UPDATE_INTERVAL)
+            if (value.time - time > HISTORY_UPDATE_INTERVALS[1])
             {
+                // Collect all score points
+                List<ScoreValue> scoreValues = new LinkedList<>();
+                scoreValues.add(value);
+
                 // Load old history if needed
-                if (scoreHistory == null)
+                if (discreteScoreHistory == null)
                     loadHistory(savedChordScores);
 
-                // Add this score to the history
-                scoreHistory.addFirst(this.value);
+                // Add the points in the history to the list
+                for (ScoreValue value: discreteScoreHistory.values)
+                    if (value != null)
+                        scoreValues.add(value);
 
-                // Remove last point if too history too large (Actually average together last and next to last)
-                if (scoreHistory.size() > NUM_SCORES_TO_KEEP)
-                {
-                    ScoreTimeValue last = scoreHistory.removeLast();
-
-                    // Average with next last
-                    ScoreTimeValue newLast = scoreHistory.getLast();
-                    newLast.numCorrectGuesses += last.numCorrectGuesses;
-                    newLast.numTotalGuesses += last.numTotalGuesses;
-                    newLast.time = (newLast.time + last.time) / 2;
-                }
+                // Clear the history and re-add the points
+                discreteScoreHistory.clear();
+                discreteScoreHistory.addValuesToHistory(scoreValues);
 
                 // Re-save the history
                 SharedPreferences.Editor editor = savedChordScores.edit();
                 saveHistory(editor);
                 editor.apply();
             }
-            else if (scoreHistory != null)
+            else if (discreteScoreHistory != null)
             {
                 // Update first element of the history
-                if (scoreHistory.isEmpty())
-                    scoreHistory.add(value);
-                else
-                {
-                    scoreHistory.removeFirst();
-                    scoreHistory.addFirst(value);
-                }
+                discreteScoreHistory.setValueInHistory(value, time);
 
                 // Re-save the history
                 SharedPreferences.Editor editor = savedChordScores.edit();
@@ -324,38 +296,76 @@ public class Score
          */
         private void loadHistory(SharedPreferences savedChordScores)
         {
-            if (scoreHistory == null)
-                scoreHistory = new LinkedList<>();
-            else
-                scoreHistory.clear();
+            discreteScoreHistory = new DiscreteScoreHistory();
 
-            // Load the size of the history
-            int size = savedChordScores.getInt(CHORD_NAME + "-n", 0);
-            ScoreTimeValue value;
+            ScoreValue value;
 
             // Load each element of the history
-            for (int i = 0; i < size; ++i)
+            for (int i = 0; i < discreteScoreHistory.values.length; ++i)
             {
-                value = new ScoreTimeValue();
-                value.load(savedChordScores, CHORD_NAME, i);
-                scoreHistory.add(value);
+                if (savedChordScores.getBoolean(CHORD_NAME + "-b" + i, false))
+                {
+                    value = new ScoreValue();
+                    value.load(savedChordScores, CHORD_NAME, i);
+                    discreteScoreHistory.values[i] = value;
+                    discreteScoreHistory.size++;
+                }
             }
+
+            // Collect all score points
+            List<ScoreValue> scoreValues = new LinkedList<>();
+
+//            // TODO test - Fill history with random points
+//            discreteScoreHistory.clear();
+//            long time = new Date().getTime() / 1000L;
+//            Random random = new Random();
+//            int num = 1 + random.nextInt(HISTORY_UPDATE_INTERVALS.length - 1);
+//            for (int i = 0; i < num; ++i)
+//            {
+//                value = new ScoreValue();
+//                value.numTotalGuesses = 1 + random.nextInt(100);
+//                value.numCorrectGuesses = random.nextInt(value.numTotalGuesses + 1);
+//                value.time = time - HISTORY_UPDATE_INTERVALS[i];
+//                scoreValues.add(value);
+//
+//                if (i == 0)
+//                    this.value = value;
+//            }
+
+            // Add the points in the history to the list
+            for (ScoreValue v: discreteScoreHistory.values)
+                if (v != null)
+                    scoreValues.add(v);
+
+            // Clear the history and re-add the points
+            discreteScoreHistory.clear();
+            discreteScoreHistory.addValuesToHistory(scoreValues);
+
+            // Re-save the history
+            SharedPreferences.Editor editor = savedChordScores.edit();
+            saveHistory(editor);
+            editor.apply();
         }
 
         /**
-         * Writes the history of this CurrentScoreWrapper without apllying changes.
+         * Writes the history of this CurrentScoreWrapper without applying changes.
          * @param scoreEditor The SharedPreferences.Editor to which to write
          */
         private void saveHistory(SharedPreferences.Editor scoreEditor)
         {
-            // Save the size of the history
-            scoreEditor.putInt(CHORD_NAME + "-n", scoreHistory.size());
-
             // Save each element of the history
-            int i = 0;
-            for (ScoreTimeValue value: scoreHistory)
+            ScoreValue value;
+            for (int i = 0; i < discreteScoreHistory.values.length; ++i)
             {
-                value.save(scoreEditor, CHORD_NAME, i++);
+                value = discreteScoreHistory.values[i];
+
+                if (value == null)
+                    scoreEditor.putBoolean(CHORD_NAME + "-b" + i, false);
+                else
+                {
+                    scoreEditor.putBoolean(CHORD_NAME + "-b" + i, true);
+                    value.save(scoreEditor, CHORD_NAME, i++);
+                }
             }
         }
     }
@@ -391,48 +401,89 @@ public class Score
         }
 
         /**
-         * Adds a list of ScoreTimeValue to this DiscreteScoreHistory, putting each value in an appropriate bin.
-         * @param values The list of ScoreTimeValues to add
+         * Adds a single ScoreValue to this DiscreteScoreHistory, putting it in an appropriate bin.
+         * @param value The ScoreValue to add
+         * @param time The current time in seconds
          */
-        public void addValuesToHistory(List<ScoreTimeValue> values)
+        public void addValueToHistory(ScoreValue value, long time)
         {
-            // Get the current time
-            long time = new Date().getTime();
+            // Determine the bin for the current value
+            int bin = getBin(Math.abs(time - value.time));
+
+            // Add the value to the bin
+            if (this.values[bin] == null)
+            {
+                ++size;
+                this.values[bin] = new ScoreValue();
+                this.values[bin].time = value.time; // Set time
+            }
+            else
+                this.values[bin].time = (this.values[bin].time + value.time) / 2L; // Average times together
+
+            this.values[bin].numCorrectGuesses += value.numCorrectGuesses;
+            this.values[bin].numTotalGuesses += value.numTotalGuesses;
+        }
+
+        /**
+         * Adds the given ScoreValue to this DiscreteScoreHistory, putting it in an appropriate bin and
+         * overwriting any previous contents of that bin.
+         * @param value The ScoreValue to add
+         * @param time The current time in seconds
+         */
+        public void setValueInHistory(ScoreValue value, long time)
+        {
+            // Determine the bin for the current value
+            int bin = getBin(Math.abs(time - value.time));
+
+            // Add the value to the bin
+            if (this.values[bin] == null)
+            {
+                ++size;
+                this.values[bin] = new ScoreValue();
+            }
+
+            this.values[bin].time = value.time;
+            this.values[bin].numCorrectGuesses = value.numCorrectGuesses;
+            this.values[bin].numTotalGuesses = value.numTotalGuesses;
+        }
+
+        /**
+         * Adds a list of ScoreValues to this DiscreteScoreHistory, putting each value in an appropriate bin.
+         * @param values The list of ScoreValues to add
+         */
+        public void addValuesToHistory(List<ScoreValue> values)
+        {
+            // Get the current time in seconds
+            long time = new Date().getTime() / 1000;
 
             // Loop over the values
-            int bin;
-            long age;
-            for (ScoreTimeValue value: values)
+            for (ScoreValue value: values)
             {
-                // Calculate the age of the value
-                age = time - value.time;
-
-                // Determine the bin for the current value
-                if (age < HISTORY_UPDATE_INTERVALS[0])
-                    bin = 0;
-                else
-                {
-                    bin = -1;
-                    for (int i = 0; bin == -1 && i < HISTORY_UPDATE_INTERVALS.length; ++i)
-                    {
-                        if (age < HISTORY_UPDATE_INTERVALS[i])
-                            bin = i + 1;
-                    }
-
-                    if (bin == -1)
-                        bin = HISTORY_UPDATE_INTERVALS.length;
-                }
-
-                // Add the value to the bin
-                if (this.values[bin] == null)
-                {
-                    ++size;
-                    this.values[bin] = new ScoreValue();
-                }
-
-                this.values[bin].numCorrectGuesses += value.numCorrectGuesses;
-                this.values[bin].numTotalGuesses += value.numTotalGuesses;
+                addValueToHistory(value, time);
             }
+        }
+
+        /**
+         * Gets the bin index for the given ScoreValue age.
+         * @param age The age of the ScoreValue to use
+         * @return The bin index for the given ScoreValue age
+         */
+        private int getBin(long age)
+        {
+            int bin = -1;
+
+            for (int i = 1; bin == -1 && i < HISTORY_UPDATE_INTERVALS.length; ++i)
+            {
+                if (age < HISTORY_UPDATE_INTERVALS[i])
+                {
+                    bin = i - 1;
+                }
+            }
+
+            if (bin == -1)
+                bin = HISTORY_UPDATE_INTERVALS.length - 1;
+
+            return bin;
         }
     }
 
@@ -445,6 +496,8 @@ public class Score
         public int numCorrectGuesses;
         /** The number of total guesses */
         public int numTotalGuesses;
+        /** The time stamp of this ScoreTimeValue */
+        public long time;
 
         /**
          * Loads this ScoreValue from the given SharedPreferences.
@@ -456,6 +509,7 @@ public class Score
         {
             numCorrectGuesses = sharedPreferences.getInt(name + "-" + index + "-c", 0);
             numTotalGuesses = sharedPreferences.getInt(name + "-" + index + "-t", 0);
+            time = sharedPreferences.getLong(name + "-" + index + "-h", -1L);
         }
 
         /**
@@ -468,40 +522,6 @@ public class Score
         {
             editor.putInt(name + "-" + index + "-c", numCorrectGuesses);
             editor.putInt(name + "-" + index + "-t", numTotalGuesses);
-        }
-    }
-
-    /**
-     * Wrapper class extending the ScoreValue class to also contain a timestamp.
-     */
-    public static class ScoreTimeValue extends ScoreValue
-    {
-        /** The time stamp of this ScoreTimeValue */
-        public long time;
-
-        /**
-         * Loads this ScoreValue from the given SharedPreferences.
-         * @param sharedPreferences The SharedPreferences from which to load
-         * @param name The name to attach to this ScoreValue
-         * @param index The index to attach to this ScoreValue
-         */
-        @Override
-        public void load(SharedPreferences sharedPreferences, String name, int index)
-        {
-            super.load(sharedPreferences, name, index);
-            time = sharedPreferences.getLong(name + "-" + index + "-h", new Date().getTime());
-        }
-
-        /**
-         * Saves this ScoreValue to the given SharedPreferences.Editor.
-         * @param editor The SharedPreferences.Editor to which to write
-         * @param name The name to attach to this ScoreValue
-         * @param index The index to attach to this ScoreValue
-         */
-        @Override
-        public void save(SharedPreferences.Editor editor, String name, int index)
-        {
-            super.save(editor, name, index);
             editor.putLong(name + "-" + index + "-h", time);
         }
     }

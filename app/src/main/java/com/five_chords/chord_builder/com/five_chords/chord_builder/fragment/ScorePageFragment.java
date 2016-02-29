@@ -4,13 +4,16 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.HorizontalScrollView;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.five_chords.chord_builder.R;
@@ -288,25 +291,33 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
             textView.setText(getLabel(item));
 
             // Setup history view
-            item.loadDiscreteHistory((Activity) getContext()); // Make sure the History is loaded
+            item.loadHistory((Activity) getContext(), false); // Make sure the History is loaded
 
-            progressView.setWidthPixels(ScoreProgressView.calculateWidth(item.getDiscreteHistory()));
+            progressView.setWidthPixels(ScoreProgressView.calculateWidth(item.getHistory()));
             progressView.setHeightPixels(ScoreProgressView.calculateHeight());
             progressView.setMinimumWidth(progressView.getWidthPixels());
             progressView.setMinimumHeight(progressView.getHeightPixels());
-            progressView.setHistory(item.getDiscreteHistory());
+            progressView.setHistory(item.getHistory());
 
-            // TODO temporary
-            Log.w("PIX_WIDTH", item.CHORD_NAME + ": " + progressView.getWidthPixels());
-            Log.w("DISC_HIST", item.CHORD_NAME + ": " + item.getDiscreteHistory().size + " points");
-            int i = 0;
-            for (Score.ScoreValue value: item.getDiscreteHistory().values)
-                Log.w("\tPoint", "(" + (i++) + ") " + (value == null ? "NULL" : value.numCorrectGuesses + " / " + value.numTotalGuesses));
+            // Scroll the progress bar all the way over to the right
+            final HorizontalScrollView scrollView = (HorizontalScrollView)view.findViewById(R.id.score_history_progress_scrollview);
+            scrollView.setVisibility(View.INVISIBLE);
+            scrollView.post(new Runnable()
+            {
+                public void run()
+                {
+                    scrollView.scrollTo(10000, 0);
+                    scrollView.setVisibility(View.VISIBLE);
+                }
+            });
 
-            Log.w("HIST", item.CHORD_NAME + ": " + item.getHistory().size() + " points");
-            for (Score.ScoreTimeValue value: item.getHistory())
-                Log.w("\tPoint", value == null ? "NULL" : value.numCorrectGuesses + " / " + value.numTotalGuesses +
-                        ", t = " + new Date(value.time));
+             // TODO temporary
+//            Log.w("PIX_WIDTH", item.CHORD_NAME + ": " + progressView.getWidthPixels());
+//            Log.w("DISC_HIST", item.CHORD_NAME + ": " + item.getHistory().size + " points");
+//            int i = 0;
+//            for (Score.ScoreValue value: item.getHistory().values)
+//                Log.w("\tPoint", "(" + (i++) + ") " + (value == null ? "NULL" : value.numCorrectGuesses + " / " + value.numTotalGuesses)
+//                + " Time = " + (value == null ? "0" : "" + new Date(value.time * 1000).toString()));
 
             return view;
         }
