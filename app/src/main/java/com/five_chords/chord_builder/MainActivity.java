@@ -25,6 +25,8 @@ import android.widget.Spinner;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.OptionsFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScorePageFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView;
 
 
 public class MainActivity extends AppCompatActivity implements OptionsFragment.OptionsChangedListener
@@ -236,6 +238,25 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     public void openStartPage() {
         Intent intent = new Intent(this, StartPage.class);
         startActivity(intent);
+    }
+
+    /**
+     * Generates one instance of the first hint type.
+     */
+    public void makeHintOne()
+    {
+        final SliderHintView view;
+
+        view = (SliderHintView)findViewById(R.id.slider_root_layout);
+
+        view.postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                view.setHint(view.new CircleHint());
+            }
+        }, 500L);
     }
 
     /**

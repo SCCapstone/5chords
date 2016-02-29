@@ -59,6 +59,7 @@
     <string name="clear">Clear</string>
     <string name="options">Options</string>
     <string name="enable_hints">Enable Hints</string>
+    <string name="seek_bar_tag">seekBarTag</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

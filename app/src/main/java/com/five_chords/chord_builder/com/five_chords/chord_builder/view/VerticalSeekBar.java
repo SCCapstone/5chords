@@ -5,7 +5,7 @@
  * @date 06 November 2015
  * @author: Drea,Steven,Zach,Kevin,Bo
  **/
-package com.five_chords.chord_builder;
+package com.five_chords.chord_builder.com.five_chords.chord_builder.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -42,7 +42,7 @@ public class VerticalSeekBar extends SeekBar
      * Gets whether or not this VerticalSeekBar is currently being touched by the user.
      * @return Whether or not this VerticalSeekBar is currently being touched by the user
      */
-    protected boolean isTouched()
+    public boolean isTouched()
     {
         return isTouched;
     }
@@ -53,7 +53,7 @@ public class VerticalSeekBar extends SeekBar
      */
     public void setTouched(boolean touched)
     {
-        isTouched = false;
+        isTouched = touched;
     }
 
     @Override

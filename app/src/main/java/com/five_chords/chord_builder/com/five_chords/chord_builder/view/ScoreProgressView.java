@@ -34,9 +34,6 @@ public class ScoreProgressView extends View
     /** The height of the history tag names */
     private static int historyTagWidth;
 
-//    /** Array of the widths of the History tag strings */
-//    private static int[] historyTagWidths = new int[Score.HISTORY_TAGS.length];
-
     // Setup Paint
     static
     {

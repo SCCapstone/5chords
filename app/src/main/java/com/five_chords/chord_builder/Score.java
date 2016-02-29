@@ -197,9 +197,8 @@ public class Score
          **/
         public void save(SharedPreferences savedChordScores)
         {
-            // Check time
-            if (value.time < 0L) // This is a new value, set the time
-                value.time = new Date().getTime() / 1000L;
+            // Update time
+            value.time = new Date().getTime() / 1000L;
 
             // Save this score
             SharedPreferences.Editor editor = savedChordScores.edit();
@@ -256,6 +255,7 @@ public class Score
             {
                 // Collect all score points
                 List<ScoreValue> scoreValues = new LinkedList<>();
+//                value.time = time;
                 scoreValues.add(value);
 
                 // Load old history if needed

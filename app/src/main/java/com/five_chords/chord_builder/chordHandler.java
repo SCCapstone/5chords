@@ -12,6 +12,7 @@ package com.five_chords.chord_builder;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -21,13 +22,13 @@ import java.util.Random;
 public class chordHandler
 {
     /** Denotes a 'small' number of times that the user has guessed the wrong chord */
-    private static final int NUM_TIMES_WRONG_SMALL = 4;
+    private static final int NUM_TIMES_WRONG_SMALL = 2;
 
     /** Denotes a 'medium' number of times that the user has guessed the wrong chord */
-    private static final int NUM_TIMES_WRONG_MEDIUM = 6;
+    private static final int NUM_TIMES_WRONG_MEDIUM = 4;
 
     /** Denotes a 'large' number of times that the user has guessed the wrong chord */
-    private static final int NUM_TIMES_WRONG_LARGE = 10;
+    private static final int NUM_TIMES_WRONG_LARGE = 8;
 
     /** The number of chords per type (Major, Minor, Dominant) */
     private static final int CHORDS_PER_TYPE = 12;
@@ -245,19 +246,20 @@ public class chordHandler
             currentWrongStreak++;
 
             // Show hints
+            Log.e("HINTS", "UseHints = " + MainActivity.getOptions().useHints + ", Current Streak = " + currentWrongStreak);
             if (MainActivity.getOptions().useHints)
             {
-                if (currentWrongStreak >= NUM_TIMES_WRONG_SMALL)
+                if (currentWrongStreak > NUM_TIMES_WRONG_LARGE)
                 {
-                    // TODO show first level hint
+                    activity.makeHintOne(); // TODO
                 }
-                else if (currentWrongStreak >= NUM_TIMES_WRONG_MEDIUM)
+                else if (currentWrongStreak > NUM_TIMES_WRONG_MEDIUM)
                 {
-                    // TODO show second level hint
+                    activity.makeHintOne(); // TODO
                 }
-                else if (currentWrongStreak >= NUM_TIMES_WRONG_LARGE)
+                else if (currentWrongStreak > NUM_TIMES_WRONG_SMALL)
                 {
-                    // TODO show third level hint
+                    activity.makeHintOne();
                 }
             }
 

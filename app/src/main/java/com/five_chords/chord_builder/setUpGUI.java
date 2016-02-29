@@ -19,6 +19,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 
+import com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar;
+
 public class setUpGUI
 {
     /**
