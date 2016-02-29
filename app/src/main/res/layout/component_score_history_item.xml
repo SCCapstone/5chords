@@ -22,7 +22,7 @@
         android:background="@android:color/white">
 
         <!-- The score progress view -->
-        <com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScoreProgressView
+        <com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView
             android:id="@+id/score_history_progress_view"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/chord_progress_history_height"

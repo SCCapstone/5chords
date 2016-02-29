@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,13 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
-
-import java.util.Date;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
 
 
 /**

@@ -10,7 +10,7 @@
     <!-- Note selection sliders -->
 
     <!-- Root -->
-    <LinearLayout
+    <com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView
         android:id="@+id/slider_root_layout"
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -39,10 +39,10 @@
             android:max="18"
             android:progress="0"/>
 
-    </LinearLayout>
+    </com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView>
 
     <!-- Third -->
-    <LinearLayout
+    <com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView
         android:id="@+id/slider_third_layout"
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -71,10 +71,10 @@
             android:max="18"
             android:progress="0"/>
 
-    </LinearLayout>
+    </com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView>
 
     <!-- Fifth -->
-    <LinearLayout
+    <com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView
         android:id="@+id/slider_fifth_layout"
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -103,10 +103,10 @@
             android:max="18"
             android:progress="0"/>
 
-    </LinearLayout>
+    </com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView>
 
     <!-- Option -->
-    <LinearLayout
+    <com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView
         android:id="@+id/slider_option_layout"
         android:layout_width="0dp"
         android:layout_weight="1"
@@ -135,7 +135,7 @@
             android:max="18"
             android:progress="0"/>
 
-    </LinearLayout>
+    </com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView>
 
 
 </LinearLayout>

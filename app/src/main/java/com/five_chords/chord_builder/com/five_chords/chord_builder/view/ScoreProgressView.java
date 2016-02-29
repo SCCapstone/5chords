@@ -1,4 +1,4 @@
-package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
+package com.five_chords.chord_builder.com.five_chords.chord_builder.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
