@@ -18,6 +18,8 @@ import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
 
+import java.util.Date;
+
 
 /**
  * A Fragment containing the score page.
@@ -179,10 +181,6 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
             onMajorChords = false;
             onMinorChords = false;
         }
-//        else // Set tab view mode
-//        {
-//            currentScoreViewMode = tab.getText().equals(getString(R.string.current));
-//        }
 
         // Refresh
         refreshListView();
@@ -191,7 +189,6 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
         Bundle arguments = getArguments();
         if (arguments != null)
         {
-//            arguments.putBoolean(BUNDLE_ID_SCORE_VIEW_MODE, currentScoreViewMode);
             arguments.putBoolean(BUNDLE_ID_MAJOR_CHORDS, onMajorChords);
             arguments.putBoolean(BUNDLE_ID_MINOR_CHORDS, onMinorChords);
         }
@@ -309,12 +306,12 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
             });
 
              // TODO temporary
-//            Log.w("PIX_WIDTH", item.CHORD_NAME + ": " + progressView.getWidthPixels());
-//            Log.w("DISC_HIST", item.CHORD_NAME + ": " + item.getHistory().size + " points");
-//            int i = 0;
-//            for (Score.ScoreValue value: item.getHistory().values)
-//                Log.w("\tPoint", "(" + (i++) + ") " + (value == null ? "NULL" : value.numCorrectGuesses + " / " + value.numTotalGuesses)
-//                + " Time = " + (value == null ? "0" : "" + new Date(value.time * 1000).toString()));
+            Log.w("PIX_WIDTH", item.CHORD_NAME + ": " + progressView.getWidthPixels());
+            Log.w("DISC_HIST", item.CHORD_NAME + ": " + item.getHistory().size + " points");
+            int i = 0;
+            for (Score.ScoreValue value: item.getHistory().values)
+                Log.w("\tPoint", "(" + (i++) + ") " + (value == null ? "NULL" : value.numCorrectGuesses + " / " + value.numTotalGuesses)
+                + " Time = " + (value == null ? "0" : "" + new Date(value.time * 1000).toString()));
 
             return view;
         }
@@ -327,7 +324,8 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
         private String getLabel(Score.ScoreWrapper wrapper)
         {
             return wrapper.CHORD_NAME + (wrapper.getNumTotalGuesses() == 0 ?
-                    " - " + getContext().getString(R.string.not_attempted) : "");
+                    " - " + getContext().getString(R.string.not_attempted) : " (" + wrapper.getNumCorrectGuesses() +
+                    " / " + wrapper.getNumTotalGuesses() + ")");
         }
     }
 }

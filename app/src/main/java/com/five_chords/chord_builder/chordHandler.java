@@ -12,7 +12,6 @@ package com.five_chords.chord_builder;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -42,6 +41,9 @@ public class chordHandler
     /** Array containing the currently available chords */
     private static int[][] availableChords = null;
 
+    /** Contains the current chord built by the user on the sliders */
+    private static int[] currentBuiltChord;
+
     /** Records the current chord index */
     private static int currentChordIndex;
 
@@ -69,8 +71,28 @@ public class chordHandler
      * Get the chord array at the current chord index.
      * @return The current chord array
      */
-    public static int[] getCurrentChord() {
+    public static int[] getCurrentSelectedChord() {
         return availableChords[currentChordIndex];
+    }
+
+    /**
+     * Gets the current built chord.
+     * @param activity The current Activity
+     * @return The current built chord
+     */
+    public static int[] getCurrentBuiltChord(Activity activity) {
+
+        if (currentBuiltChord == null)
+            buildCurrentChord(activity);
+
+        return currentBuiltChord;
+    }
+
+    /**
+     * Called to notify chordHandler that the built chord has changed.
+     */
+    public static void builtChordChanged() {
+        currentBuiltChord = null;
     }
 
     /**
@@ -83,6 +105,7 @@ public class chordHandler
         if (chordIndex != currentChordIndex)
             currentWrongStreak = 0;
 
+        // Update current chord index
         currentChordIndex = chordIndex;
     }
 
@@ -90,7 +113,7 @@ public class chordHandler
      * Gets the index of the currently selected chord.
      * @return The index of the currently selected chord
      */
-    public static int getSelectedChord() {
+    public static int getSelectedChordIndex() {
         return currentChordIndex;
     }
 
@@ -180,22 +203,21 @@ public class chordHandler
 
     /**
      * Builds the current chord that the user has defined on the sliders.
-     * @return An array containing the root, third, fifth, and option values of the built chord
      */
-    public static int[] buildCurrentChord(Activity activity)
+    private static void buildCurrentChord(Activity activity)
     {
         int root = ((SeekBar) activity.findViewById(R.id.slider_root)).getProgress();
         int third = ((SeekBar) activity.findViewById(R.id.slider_third)).getProgress();
         int fifth = ((SeekBar) activity.findViewById(R.id.slider_fifth)).getProgress();
         int seventh = ((SeekBar) activity.findViewById(R.id.slider_option)).getProgress();
 
-        if (getCurrentChord().length == MIN_NOTES_PER_CHORD)
+        if (getCurrentSelectedChord().length == MIN_NOTES_PER_CHORD)
         {
-            return new int[]{root, third, fifth};
+            currentBuiltChord = new int[]{root, third, fifth};
         }
         else
         {
-            return new int[]{root, third, fifth, seventh};
+            currentBuiltChord = new int[]{root, third, fifth, seventh};
         }
     }
 
@@ -205,8 +227,7 @@ public class chordHandler
      */
     public static void checkCurrentChord(final MainActivity activity)
     {
-        boolean isCorrect = chordHandler.compareChords(chordHandler.buildCurrentChord(activity),
-                chordHandler.getCurrentChord());
+        boolean isCorrect = compareChords(getCurrentBuiltChord(activity), getCurrentSelectedChord());
 
         // Handle result TODO add sounds for right and wrong
         if (isCorrect)
@@ -232,7 +253,7 @@ public class chordHandler
                         @Override
                         public void onClick(DialogInterface dialog, int which)
                         {
-                            setSelectedChord(getSelectedChord()); // Resets the wrong streak counter
+                            setSelectedChord(getSelectedChordIndex()); // Resets the wrong streak counter
                             setUpGUI.resetChordSliders(activity);
                             soundHandler.stopSound();
                         }
@@ -246,7 +267,6 @@ public class chordHandler
             currentWrongStreak++;
 
             // Show hints
-            Log.e("HINTS", "UseHints = " + MainActivity.getOptions().useHints + ", Current Streak = " + currentWrongStreak);
             if (MainActivity.getOptions().useHints)
             {
                 if (currentWrongStreak > NUM_TIMES_WRONG_LARGE)
@@ -268,7 +288,7 @@ public class chordHandler
         }
 
         // Set the score
-        Score.setScore(activity, chordHandler.getSelectedChord(), isCorrect);
+        Score.setScore(activity, chordHandler.getSelectedChordIndex(), isCorrect);
         activity.displayAnswer();
     }
 

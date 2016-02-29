@@ -13,6 +13,8 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.SeekBar;
 
+import com.five_chords.chord_builder.chordHandler;
+
 public class VerticalSeekBar extends SeekBar
 {
     /** Indicates whether or not this SeekBar is currently touched by the user */
@@ -85,6 +87,7 @@ public class VerticalSeekBar extends SeekBar
             case MotionEvent.ACTION_UP:
                 isTouched = true;
                 setProgress(getMax() - (int) (getMax() * event.getY() / getHeight()));
+                chordHandler.builtChordChanged();
                 onSizeChanged(getWidth(), getHeight(), 0, 0);
 
                 break;

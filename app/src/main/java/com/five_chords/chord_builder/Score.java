@@ -24,11 +24,12 @@ public class Score
     public static final String CHORD_SCORES_SAVE_FILENAME = "ScoreFile";
 
     /** Tags for the score history view */
-    public static final String[] HISTORY_TAGS = new String[] {"Current", "1H", "2H", "1D",
+    public static final String[] HISTORY_TAGS = new String[] {"Current", "1H", "2H", "6H", "12H", "1D",
                                                 "2D", "4D", "1W", "2W", "1M", "2M", "6M", "1Y"};
 
     /** Update times for each history tag, in seconds */
-    public static final long[] HISTORY_UPDATE_INTERVALS = new long[] {0L, 3600L, 2 * 3600L, 24 * 3600L, 48 * 3600L,
+    public static final long[] HISTORY_UPDATE_INTERVALS = new long[] {0L, 3600L, 2 * 3600L, 6 * 3600L,
+                                                                        12 * 3600L, 24 * 3600L, 48 * 3600L,
                                                                         96 * 3600L, 168 * 3600L, 336 * 3600L,
                                                                         672 * 3600L, 1344 * 3600L, 4032 * 3600L, 8064 * 3600L};
 
@@ -255,7 +256,6 @@ public class Score
             {
                 // Collect all score points
                 List<ScoreValue> scoreValues = new LinkedList<>();
-//                value.time = time;
                 scoreValues.add(value);
 
                 // Load old history if needed

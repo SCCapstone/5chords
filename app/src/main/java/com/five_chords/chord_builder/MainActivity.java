@@ -25,7 +25,6 @@ import android.widget.Spinner;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.OptionsFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScorePageFragment;
-import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView;
 
 
@@ -201,8 +200,8 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     public void displayAnswer() {
         // shows if the built chord matches the set chord
         Button view = (Button) findViewById(R.id.button_answer);
-        view.setText(Score.getNumCorrectGuesses(chordHandler.getSelectedChord()) +
-                " / " + Score.getNumTotalGuesses(chordHandler.getSelectedChord()));
+        view.setText(Score.getNumCorrectGuesses(chordHandler.getSelectedChordIndex()) +
+                " / " + Score.getNumTotalGuesses(chordHandler.getSelectedChordIndex()));
     }
 
     /**
@@ -210,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
      */
     public void updateChordSelectSpinner() {
         Spinner dropdown = (Spinner) findViewById(R.id.spinner_chord_select);
-        dropdown.setSelection((chordHandler.getSelectedChord()) % dropdown.getCount());
+        dropdown.setSelection((chordHandler.getSelectedChordIndex()) % dropdown.getCount());
     }
 
     /**

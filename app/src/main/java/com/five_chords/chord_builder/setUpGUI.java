@@ -214,7 +214,7 @@ public class setUpGUI
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    soundHandler.playChord(activity, chordHandler.buildCurrentChord(activity));
+                    soundHandler.playChord(activity, chordHandler.getCurrentBuiltChord(activity));
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
@@ -227,7 +227,7 @@ public class setUpGUI
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    soundHandler.playChord(activity, chordHandler.getCurrentChord());
+                    soundHandler.playChord(activity, chordHandler.getCurrentSelectedChord());
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
@@ -252,7 +252,7 @@ public class setUpGUI
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     chordHandler.getRandomChord();
                     activity.updateChordSelectSpinner();
-                    soundHandler.playChord(activity, chordHandler.getCurrentChord());
+                    soundHandler.playChord(activity, chordHandler.getCurrentSelectedChord());
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
