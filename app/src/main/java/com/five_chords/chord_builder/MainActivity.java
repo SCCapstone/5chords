@@ -240,22 +240,36 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     }
 
     /**
-     * Generates one instance of the first hint type.
+     * Generates one instance of the given type of hint.
+     * @param type The Hint type
      */
-    public void makeHintOne()
+    public void makeHint(final byte type)
     {
-        final SliderHintView view;
+        // Calculate the chord differences
+        final int[] builtChord = chordHandler.getCurrentBuiltChord(this);
+        final int[] selectedChord = chordHandler.getCurrentSelectedChord();
 
+        // Add hints
+        SliderHintView view;
+
+        // Root slider
         view = (SliderHintView)findViewById(R.id.slider_root_layout);
+        view.setHint(type, builtChord[0], selectedChord[0], 500L);
 
-        view.postDelayed(new Runnable()
+        // Third slider
+        view = (SliderHintView)findViewById(R.id.slider_third_layout);
+        view.setHint(type, builtChord[1], selectedChord[1], 500L);
+
+        // Fifth slider
+        view = (SliderHintView)findViewById(R.id.slider_fifth_layout);
+        view.setHint(type, builtChord[2], selectedChord[2], 500L);
+
+        // Option slider
+        if (builtChord.length == 4)
         {
-            @Override
-            public void run()
-            {
-                view.setHint(view.new CircleHint());
-            }
-        }, 500L);
+            view = (SliderHintView) findViewById(R.id.slider_option_layout);
+            view.setHint(type, builtChord[3], selectedChord[3], 500L);
+        }
     }
 
     /**

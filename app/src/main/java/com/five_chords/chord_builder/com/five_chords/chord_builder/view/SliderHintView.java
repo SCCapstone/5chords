@@ -4,14 +4,12 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
+import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.five_chords.chord_builder.R;
-
-import java.util.List;
+import com.five_chords.chord_builder.chordHandler;
 
 /**
  * An overridden LinearLayout to contain the chord sliders and a mechanism for drawing hints on top of the sliders.
@@ -33,9 +31,6 @@ public class SliderHintView extends LinearLayout
 
     /** The current on this SliderHintView */
     private Hint hint;
-
-    /** The HintUpdater to use */
-    private HintUpdater updater;
 
     /** The lock to use for synchronization */
     private final Object HINT_LOCK = new Object();
@@ -75,16 +70,47 @@ public class SliderHintView extends LinearLayout
 
     /**
      * Sets the Hint on this SliderHintView.
-     * @param hint The Hint
+     * @param type The type of hint
+     * @param builtChordPosition The position of the built chord
+     * @param selectedChordPosition The position of the selected chord
+     * @param delay The delay to display the hint, in milliseconds
      */
-    public void setHint(Hint hint)
+    public void setHint(final byte type, final int builtChordPosition, final int selectedChordPosition, long delay)
     {
-        // TODO
-        Log.e("SHV", "Set Hint");
+        postDelayed(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                setHint(type, builtChordPosition, selectedChordPosition);
+            }
+        }, delay);
+    }
 
+    /**
+     * Sets the Hint on this SliderHintView.
+     * @param type The type of hint
+     * @param builtChordPosition The position of the built chord
+     * @param selectedChordPosition The position of the selected chord
+     */
+    private void setHint(byte type, int builtChordPosition, int selectedChordPosition)
+    {
         synchronized (HINT_LOCK)
         {
-            this.hint = hint;
+            int diff = builtChordPosition - selectedChordPosition;
+
+            if (type == chordHandler.HINT_ONE)
+                hint = new CircleHint(builtChordPosition, diff == 0 ? Color.GREEN : Color.RED);
+            else if (type == chordHandler.HINT_TWO)
+            {
+                if (diff == 0)
+                    hint = new CircleHint(builtChordPosition, Color.GREEN);
+                else
+                    hint = new TriangleHint(builtChordPosition, diff < 0);
+            }
+            else if (type == chordHandler.HINT_THREE)
+                hint = new CircleHint(selectedChordPosition, diff == 0 ? Color.GREEN : Color.BLUE);
+
             HINT_LOCK.notify();
         }
     }
@@ -114,7 +140,7 @@ public class SliderHintView extends LinearLayout
     private void initialize()
     {
         setWillNotDraw(false);
-        updater = new HintUpdater();
+        HintUpdater updater = new HintUpdater();
         updater.isRunning = true;
 
         new Thread(updater).start();
@@ -123,8 +149,9 @@ public class SliderHintView extends LinearLayout
     /**
      * Gets the thumb position and size of the slider in this SliderHintView.
      * @param pos Will be filled with the new position, must be size three (size is stored at index two)
+     * @param desiredProgress The progress value of the thumb to use
      */
-    private void getThumbPosition(int[] pos)
+    private void getThumbPosition(int[] pos, int desiredProgress)
     {
         // Calculate own position
         int mx, my;
@@ -139,25 +166,15 @@ public class SliderHintView extends LinearLayout
         pos[0] -= mx;
         pos[1] -= my;
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN)
-        {
-            Rect bounds = bar.getThumb().getBounds();
-            pos[0] += bounds.centerY();
-            pos[1] += bar.getHeight() - bounds.centerX();
-            pos[2] = bounds.width();
-        }
-        else
-        {
-            // TODO there is some slight error in this calculation
-            // Calculate thumb position
-            mx = bar.getWidth(); // Reuse mx
-            my = bar.getHeight() - bar.getPaddingTop() - bar.getPaddingBottom(); // Reuse my
+        // Calculate thumb position
+        mx = bar.getWidth(); // Reuse mx
+        my = bar.getHeight() - bar.getPaddingTop() - bar.getPaddingBottom() - mx; // Reuse my
 
-            // Set position
-            pos[0] += mx / 2;
-            pos[1] += bar.getPaddingBottom() + Math.round(my * (1.0f - (float) bar.getProgress() / bar.getMax()));
-            pos[2] = mx / 2;
-        }
+        // Set position
+        mx /= 2;
+        pos[0] += mx;
+        pos[1] += mx + Math.round(my * (1.0f - (float) desiredProgress / bar.getMax()));
+        pos[2] = mx;
     }
 
     /**
@@ -222,38 +239,34 @@ public class SliderHintView extends LinearLayout
     /**
      * A circular Hint.
      */
-    public class CircleHint extends Hint
+    private class CircleHint extends Hint
     {
+        /** The color of this CircleHint */
+        protected int color;
+
         /** The radius of this CircleHint. */
-        private float radius;
+        protected float radius;
 
         /**
-         * Default constructor.
+         * Constructs a new CircleHint
+         * @param offset The offset
+         * @param color The color of this CircleHint
          */
-        public CircleHint()
+        public CircleHint(int offset, int color)
         {
-            getThumbPosition(position);
+            super (offset);
+            this.color = color;
             radius = position[2] * 0.5f;
         }
 
         /**
-         * Override to update this Hint.
+         * Updates this Hint.
          */
         @Override
         public void update()
         {
-            if (timer < 10)
-                alpha = timer / 10.0f;
-            else
-            {
-                alpha -= 0.0625f;
-
-                if (alpha <= 0.0f)
-                    timer = Integer.MIN_VALUE;
-            }
-
+            super.update();
             radius += position[2] * 0.025f;
-            timer++;
         }
 
         /**
@@ -262,10 +275,53 @@ public class SliderHintView extends LinearLayout
          */
         public void draw(Canvas canvas)
         {
-            PAINT.setColor(Color.WHITE);
+            PAINT.setColor(color);
             PAINT.setAlpha(Math.round(alpha * 255.0f));
             PAINT.setStyle(Paint.Style.FILL);
             canvas.drawCircle(position[0], position[1], radius, PAINT);
+        }
+    }
+
+    /**
+     * A triangular Hint.
+     */
+    private class TriangleHint extends Hint
+    {
+        /** The Triangle Path */
+        private final Path TRIANGLE;
+
+        /**
+         * Constructs a new TriangleHint
+         * @param offset The offset
+         * @param up Whether or not this TriangleHint faces up
+         */
+        public TriangleHint(int offset, boolean up)
+        {
+            super(offset, 20, 40);
+
+            final float sign = up ? 1.0f : -1.0f;
+            final float x = position[0];
+            final float radius = position[2];
+            final float y = position[1] - radius * sign;
+
+            TRIANGLE = new Path();
+            TRIANGLE.setFillType(Path.FillType.EVEN_ODD);
+            TRIANGLE.moveTo(x - radius, y);
+            TRIANGLE.lineTo(x, y - radius * sign);
+            TRIANGLE.lineTo(x + radius, y);
+            TRIANGLE.close();
+        }
+
+        /**
+         * Override to draw this Hint.
+         * @param canvas The drawing Canvas
+         */
+        public void draw(Canvas canvas)
+        {
+            PAINT.setColor(Color.RED);
+            PAINT.setAlpha(Math.round(alpha * 255.0f));
+            PAINT.setStyle(Paint.Style.FILL);
+            canvas.drawPath(TRIANGLE, PAINT);
         }
     }
 
@@ -275,7 +331,13 @@ public class SliderHintView extends LinearLayout
     public abstract class Hint
     {
         /** A timer for drawing */
-        protected int timer;
+        private int timer;
+
+        /** The time to grow */
+        private final int GROW_TIME;
+
+        /** The time to fade */
+        private final int FADE_TIME;
 
         /** The current transparency value of this Hint */
         protected float alpha;
@@ -284,13 +346,30 @@ public class SliderHintView extends LinearLayout
         protected int[] position;
 
         /**
-         * Default constructor.
+         * Constructs a new Hint.
+         * @param offset The offset value
          */
-        public Hint()
+        public Hint(int offset)
         {
+            this (offset, 20, 20);
+        }
+
+
+        /**
+         * Constructs a new Hint.
+         * @param offset The offset value
+         * @param growTime The grow time
+         * @param fadeTime The fade time
+         */
+        public Hint(int offset, int growTime, int fadeTime)
+        {
+            GROW_TIME = growTime;
+            FADE_TIME = fadeTime;
             timer = 0;
             alpha = 1.0f;
             position = new int[3];
+
+            getThumbPosition(position, offset);
         }
 
         /**
@@ -312,9 +391,21 @@ public class SliderHintView extends LinearLayout
         }
 
         /**
-         * Override to update this Hint.
+         * Updates this Hint.
          */
-        public abstract void update();
+        public void update()
+        {
+            if (timer < GROW_TIME)
+                alpha = timer / (float) GROW_TIME;
+            else
+            {
+                alpha = 1.0f - (timer - GROW_TIME) / (float)FADE_TIME;
+
+                if (alpha <= 0.0f)
+                    timer = Integer.MIN_VALUE;
+            }
+            timer++;
+        }
 
         /**
          * Override to draw this Hint.

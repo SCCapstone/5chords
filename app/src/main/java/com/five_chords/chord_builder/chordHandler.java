@@ -20,14 +20,23 @@ import java.util.Random;
 
 public class chordHandler
 {
+    /** Denotes the first level of hints */
+    public static final byte HINT_ONE = 1;
+
+    /** Denotes the second level of hints */
+    public static final byte HINT_TWO = 2;
+
+    /** Denotes the third level of hints */
+    public static final byte HINT_THREE = 3;
+
     /** Denotes a 'small' number of times that the user has guessed the wrong chord */
     private static final int NUM_TIMES_WRONG_SMALL = 2;
 
     /** Denotes a 'medium' number of times that the user has guessed the wrong chord */
-    private static final int NUM_TIMES_WRONG_MEDIUM = 4;
+    private static final int NUM_TIMES_WRONG_MEDIUM = 6;
 
     /** Denotes a 'large' number of times that the user has guessed the wrong chord */
-    private static final int NUM_TIMES_WRONG_LARGE = 8;
+    private static final int NUM_TIMES_WRONG_LARGE = 12;
 
     /** The number of chords per type (Major, Minor, Dominant) */
     private static final int CHORDS_PER_TYPE = 12;
@@ -35,8 +44,8 @@ public class chordHandler
     /** The minimum number of notes per chord (for Major and Minor) */
     private static final int MIN_NOTES_PER_CHORD = 3;
 
-    /** The maximum number of notes per chord (for Dominant) */
-    private static final int MAX_NOTES_PER_CHORD = 4;
+//    /** The maximum number of notes per chord (for Dominant) */
+//    private static final int MAX_NOTES_PER_CHORD = 4;
 
     /** Array containing the currently available chords */
     private static int[][] availableChords = null;
@@ -194,11 +203,10 @@ public class chordHandler
      * @param builtChord The array containing the notes of the built chord
      * @param setChord The array containing the notes of the set chord
      */
-    public static boolean compareChords(int[] builtChord, int[] setChord) {
-        if (setChord == null || builtChord == null) return false;
-        else if (setChord.length > MAX_NOTES_PER_CHORD || builtChord.length > MAX_NOTES_PER_CHORD) return false;
-        else if (setChord.length < MIN_NOTES_PER_CHORD || builtChord.length < MIN_NOTES_PER_CHORD) return false;
-        else return Arrays.equals(builtChord, setChord);
+    public static boolean compareChords(int[] builtChord, int[] setChord)
+    {
+        return !(setChord == null || builtChord == null || setChord.length != builtChord.length) &&
+                Arrays.equals(builtChord, setChord);
     }
 
     /**
@@ -270,17 +278,11 @@ public class chordHandler
             if (MainActivity.getOptions().useHints)
             {
                 if (currentWrongStreak > NUM_TIMES_WRONG_LARGE)
-                {
-                    activity.makeHintOne(); // TODO
-                }
+                    activity.makeHint(HINT_THREE);
                 else if (currentWrongStreak > NUM_TIMES_WRONG_MEDIUM)
-                {
-                    activity.makeHintOne(); // TODO
-                }
+                    activity.makeHint(HINT_TWO);
                 else if (currentWrongStreak > NUM_TIMES_WRONG_SMALL)
-                {
-                    activity.makeHintOne();
-                }
+                    activity.makeHint(HINT_ONE);
             }
 
             // Show toast

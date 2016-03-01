@@ -306,12 +306,12 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
             });
 
              // TODO temporary
-            Log.w("PIX_WIDTH", item.CHORD_NAME + ": " + progressView.getWidthPixels());
-            Log.w("DISC_HIST", item.CHORD_NAME + ": " + item.getHistory().size + " points");
-            int i = 0;
-            for (Score.ScoreValue value: item.getHistory().values)
-                Log.w("\tPoint", "(" + (i++) + ") " + (value == null ? "NULL" : value.numCorrectGuesses + " / " + value.numTotalGuesses)
-                + " Time = " + (value == null ? "0" : "" + new Date(value.time * 1000).toString()));
+//            Log.w("PIX_WIDTH", item.CHORD_NAME + ": " + progressView.getWidthPixels());
+//            Log.w("DISC_HIST", item.CHORD_NAME + ": " + item.getHistory().size + " points");
+//            int i = 0;
+//            for (Score.ScoreValue value: item.getHistory().values)
+//                Log.w("\tPoint", "(" + (i++) + ") " + (value == null ? "NULL" : value.numCorrectGuesses + " / " + value.numTotalGuesses)
+//                + " Time = " + (value == null ? "0" : "" + new Date(value.time * 1000).toString()));
 
             return view;
         }
