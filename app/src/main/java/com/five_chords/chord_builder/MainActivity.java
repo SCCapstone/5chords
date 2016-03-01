@@ -14,6 +14,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -23,23 +24,33 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.five_chords.chord_builder.com.five_chords.chord_builder.Contact_Us;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.OptionsFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScorePageFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView;
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 
-public class MainActivity extends AppCompatActivity implements OptionsFragment.OptionsChangedListener
-{
+public class MainActivity extends AppCompatActivity implements OptionsFragment.OptionsChangedListener {
 
-    /** The current options selected in this MainActivity */
+    /**
+     * The current options selected in this MainActivity
+     */
     private static OptionsFragment.Options options;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     /**
      * Gets the current global Options wrapper, creating a default Options if the global is null.
+     *
      * @return The current global Options wrapper
      */
-    public static OptionsFragment.Options getOptions()
-    {
+    public static OptionsFragment.Options getOptions() {
         if (options == null)
             options = new OptionsFragment.Options();
 
@@ -63,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
         if (isFirstRun) {
-            Intent intent = new Intent(this,demo.class);
+            Intent intent = new Intent(this, demo.class);
             startActivity(intent);
 
             SharedPreferences.Editor editor = wmbPreference.edit();
@@ -76,6 +87,9 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         chordHandler.initialize();
         soundHandler.initialize(this);
         Score.loadScores(this, false);
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     @Override
@@ -88,8 +102,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     }
 
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
         super.onResume();
 
         // Initialize views from options
@@ -99,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
     /**
      * Called when the state of this Activity should be saved.
+     *
      * @param savedInstanceState The Bundle to which to save
      */
     @Override
@@ -113,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
     /**
      * Called when the state of this Activity should be read at start up, provided it was previously saved.
+     *
      * @param savedInstanceState The Bundle from which to read
      */
     @Override
@@ -130,24 +145,24 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
     /**
      * Called to create the options Menu
+     *
      * @param menu The Menu to hold the options menu
      * @return True
      */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     /**
      * Called when an item in the menu is selected.
+     *
      * @param item The selected item
      * @return super.onOptionsItemSelected()
      */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_item_main_options)
             launchOptionsDialog(findViewById(R.id.fragment_content));
         else if (item.getItemId() == R.id.menu_item_main_scores)
@@ -156,16 +171,20 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
             toAboutPage(null);
         else if (item.getItemId() == R.id.menu_item_main_help)
             toHelpPage(null);
+        else if (item.getItemId() == R.id.menu_item_main_contact_us)
+            toContact_UsPage(null);
+
+
 
         return super.onOptionsItemSelected(item);
     }
 
     /**
      * Called to launch the options dialog.
+     *
      * @param v The calling View
      */
-    public void launchOptionsDialog(View v)
-    {
+    public void launchOptionsDialog(View v) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("dialog");
 
@@ -181,10 +200,10 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
     /**
      * Called to launch the score page dialog.
+     *
      * @param v The calling View
      */
-    public void launchScorePageDialog(View v)
-    {
+    public void launchScorePageDialog(View v) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("dialog");
 
@@ -215,6 +234,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
     /**
      * Goes to Help page.
+     *
      * @param view The calling View
      */
     public void toHelpPage(View view) {
@@ -222,12 +242,17 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         startActivity(intent);
     }
 
+    public void toContact_UsPage(View view) {
+        Intent intent = new Intent(this, Contact_Us.class);
+        startActivity(intent);
+    }
+
     /**
      * Goes to the About page.
+     *
      * @param view The calling View
      */
-    public void toAboutPage(View view)
-    {
+    public void toAboutPage(View view) {
         Intent intent = new Intent(this, AboutPage.class);
         startActivity(intent);
     }
@@ -242,10 +267,10 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
     /**
      * Generates one instance of the given type of hint.
+     *
      * @param type The Hint type
      */
-    public void makeHint(final byte type)
-    {
+    public void makeHint(final byte type) {
         // Calculate the chord differences
         final int[] builtChord = chordHandler.getCurrentBuiltChord(this);
         final int[] selectedChord = chordHandler.getCurrentSelectedChord();
@@ -254,20 +279,19 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         SliderHintView view;
 
         // Root slider
-        view = (SliderHintView)findViewById(R.id.slider_root_layout);
+        view = (SliderHintView) findViewById(R.id.slider_root_layout);
         view.setHint(type, builtChord[0], selectedChord[0], 500L);
 
         // Third slider
-        view = (SliderHintView)findViewById(R.id.slider_third_layout);
+        view = (SliderHintView) findViewById(R.id.slider_third_layout);
         view.setHint(type, builtChord[1], selectedChord[1], 500L);
 
         // Fifth slider
-        view = (SliderHintView)findViewById(R.id.slider_fifth_layout);
+        view = (SliderHintView) findViewById(R.id.slider_fifth_layout);
         view.setHint(type, builtChord[2], selectedChord[2], 500L);
 
         // Option slider
-        if (builtChord.length == 4)
-        {
+        if (builtChord.length == 4) {
             view = (SliderHintView) findViewById(R.id.slider_option_layout);
             view.setHint(type, builtChord[3], selectedChord[3], 500L);
         }
@@ -275,6 +299,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
     /**
      * Called when the chord type changes.
+     *
      * @param useMajors    Whether or not major chords are now being used
      * @param useMinors    Whether or not minor chords are now being used
      * @param useDominants Whether or not dominant chords are now being used
@@ -296,13 +321,52 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
     /**
      * Called when the hints options changes.
+     *
      * @param useHints Whether or not hints are now enabled.
      */
     @Override
-    public void onHintsOptionsChanged(boolean useHints)
-    {
+    public void onHintsOptionsChanged(boolean useHints) {
         // Update options
         options.useHints = useHints;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.five_chords.chord_builder/http/host/path")
+        );
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        Action viewAction = Action.newAction(
+                Action.TYPE_VIEW, // TODO: choose an action type.
+                "Main Page", // TODO: Define a title for the content shown.
+                // TODO: If you have web page content that matches this app activity's content,
+                // make sure this auto-generated web page URL is correct.
+                // Otherwise, set the URL to null.
+                Uri.parse("http://host/path"),
+                // TODO: Make sure this auto-generated app deep link URI is correct.
+                Uri.parse("android-app://com.five_chords.chord_builder/http/host/path")
+        );
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
 }
