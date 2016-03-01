@@ -241,7 +241,11 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         Intent intent = new Intent(this, HelpPage.class);
         startActivity(intent);
     }
-
+    /**
+     * Goes to Contact Us page.
+     *
+     * @param view The calling View
+     */
     public void toContact_UsPage(View view) {
         Intent intent = new Intent(this, Contact_Us.class);
         startActivity(intent);
