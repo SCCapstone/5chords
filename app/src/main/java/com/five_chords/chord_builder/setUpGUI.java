@@ -10,6 +10,7 @@
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
+import android.app.FragmentManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +20,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.ArrayAdapter;
 
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordSelectFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar;
 
 public class setUpGUI
@@ -134,69 +136,59 @@ public class setUpGUI
      */
     public static void loadSpinners(final Activity activity, boolean majorChords, boolean minorChords, boolean dominantChords)
     {
-        // Populate the chord select spinner
-        final Spinner chordSelector = (Spinner) activity.findViewById(R.id.spinner_chord_select);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_dropdown_item);
-
-        // Load items
-        String[] chordNames = activity.getResources().getStringArray(R.array.chordNames);
-
+        // Clear the list of currently loaded chords
         chordHandler.clearChords();
 
+        // An array of the indices of the available chords
+        int[] chordIndices;
+
         // All chords added
-        if (majorChords && minorChords && dominantChords) {
-            adapter.addAll(chordNames);
+        if (majorChords && minorChords && dominantChords)
+        {
             chordHandler.addMajorChords();
             chordHandler.addMinorChords();
             chordHandler.addDominantChords();
-        } else {
-            String[] items = new String[12];
+            chordIndices = null;
+        }
+        else
+        {
+            int i = 0;
+            chordIndices = new int[12 * ((majorChords ? 1:0) + (minorChords ? 1:0) + (dominantChords ? 1:0))]; // TODO get constant for 12
 
             // Add major chords
             if (majorChords)
             {
-                System.arraycopy(chordNames, 0, items, 0, 12);
-                adapter.addAll(items);
+                for (int j = 0; j < 12; ++j)
+                    chordIndices[i + j] = j;
+                i += 12;
+
                 chordHandler.addMajorChords();
             }
 
             // Add minor chords
             if (minorChords)
             {
-                System.arraycopy(chordNames, 12, items, 0, 12);
-                adapter.addAll(items);
+                for (int j = 0; j < 12; ++j)
+                    chordIndices[i + j] = 12 + j;
+                i += 12;
+
                 chordHandler.addMinorChords();
             }
 
             // Add dominant chords
             if (dominantChords)
             {
-                System.arraycopy(chordNames, 24, items, 0, 12);
-                adapter.addAll(items);
+                for (int j = 0; j < 12; ++j)
+                    chordIndices[i + j] = 24 + j;
+
                 chordHandler.addDominantChords();
             }
         }
 
-        // Set the adapter
-        chordSelector.setAdapter(adapter);
-
-        // Set the OnItemSelectedListener for the spinner
-        chordSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
-            {
-                if (activity instanceof MainActivity)
-                {
-                    // Update the selected chord
-                    chordHandler.setSelectedChord(chordSelector.getSelectedItemPosition());
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView)
-            { /* Ignore */ }
-        });
+        // Update the Chord select spinner
+        FragmentManager manager = activity.getFragmentManager();
+        ChordSelectFragment fragment = (ChordSelectFragment)manager.findFragmentById(R.id.fragment_chord_select);
+        fragment.updateChordSpinner(activity, chordIndices);
     }
 
     /**

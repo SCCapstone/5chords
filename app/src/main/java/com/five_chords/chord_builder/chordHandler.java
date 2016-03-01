@@ -211,6 +211,7 @@ public class chordHandler
 
     /**
      * Builds the current chord that the user has defined on the sliders.
+     * @param activity The current Activity
      */
     private static void buildCurrentChord(Activity activity)
     {

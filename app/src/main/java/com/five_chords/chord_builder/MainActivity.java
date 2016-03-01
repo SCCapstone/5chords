@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
             editor.apply();
         }
 
+        // Initialize Static Classes
         setUpGUI.initialize(this);
         chordHandler.initialize();
         soundHandler.initialize(this);

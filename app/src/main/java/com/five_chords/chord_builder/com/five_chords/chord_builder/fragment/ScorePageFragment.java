@@ -324,8 +324,7 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
         private String getLabel(Score.ScoreWrapper wrapper)
         {
             return wrapper.CHORD_NAME + (wrapper.getNumTotalGuesses() == 0 ?
-                    " - " + getContext().getString(R.string.not_attempted) : " (" + wrapper.getNumCorrectGuesses() +
-                    " / " + wrapper.getNumTotalGuesses() + ")");
+                    " - " + getContext().getString(R.string.not_attempted) : "");
         }
     }
 }
