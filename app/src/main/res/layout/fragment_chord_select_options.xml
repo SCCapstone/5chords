@@ -27,13 +27,5 @@
         android:text="@string/random_chord" />
 
     <!-- Button to select instrument-->
-    <Button
-        android:id="@+id/button_select_instrument"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="@dimen/text_size_xsmall"
-        android:text="@string/instrument" />
 
 </LinearLayout>

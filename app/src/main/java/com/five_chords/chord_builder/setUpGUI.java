@@ -232,7 +232,6 @@ public class setUpGUI
     public static void assignButtons(final MainActivity activity) {
         final Button playBuiltChord = (Button) activity.findViewById(R.id.button_playback_slider_chord);
         final Button playSelectedChord = (Button) activity.findViewById(R.id.button_select_chord_play);
-        final Button switchInstrument = (Button) activity.findViewById(R.id.button_select_instrument);
         final Button selectRandomChord = (Button) activity.findViewById(R.id.button_select_random_chord);
         final Button checkChord = (Button) activity.findViewById(R.id.button_check_user_chord);
 
@@ -257,16 +256,6 @@ public class setUpGUI
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
-                }
-                return true;
-            }
-        });
-
-        switchInstrument.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                   // soundHandler.switchInstrument();
                 }
                 return true;
             }
