@@ -197,6 +197,32 @@ public class setUpGUI
             public void onNothingSelected(AdapterView<?> parentView)
             { /* Ignore */ }
         });
+
+
+        // Populate the instrument select spinner
+        final Spinner instrumentSelector = (Spinner) activity.findViewById(R.id.spinner_instrument);
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(activity, android.R.layout.simple_spinner_dropdown_item);
+
+        // sets all the items for the spinner
+        String[] instrumentNames = {"Trumpet","Piano","Organ","Guitar","Violin","Flute"};
+        adapter2.addAll(instrumentNames);
+        instrumentSelector.setAdapter(adapter2);
+
+        // Set the OnItemSelectedListener for the spinner
+        instrumentSelector.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (activity instanceof MainActivity) {
+                    // Update the selected chord
+                    soundHandler.switchInstrument(instrumentSelector.getSelectedItemPosition());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) { /* Ignore */ }
+        });
+
+
     }
 
     /**
@@ -240,7 +266,7 @@ public class setUpGUI
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    soundHandler.switchInstrument();
+                   // soundHandler.switchInstrument();
                 }
                 return true;
             }
