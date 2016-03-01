@@ -42,10 +42,10 @@ public class Score
     private Score()
     {    }
 
-    /*********************************************************
+    /**
      * Gets the SharedPreferences used to load and save scores
      * @param activity The calling Activity
-     **/
+     */
     public static SharedPreferences getScoreLoader(Activity activity)
     {
         return activity.getSharedPreferences(CHORD_SCORES_SAVE_FILENAME, Context.MODE_PRIVATE);
@@ -99,11 +99,11 @@ public class Score
                 .show();
     }
 
-    /***********************************************************************************************
+    /**
      * Loads the score data for each chord and initializes the correctChords and totalChords arrays.
      * @param main The calling Activity
      * @param overwrite Whether or not to overwrite the score history if it is already loaded
-     **/
+     */
     public static void loadScores(Activity main, boolean overwrite)
     {
         if (!overwrite && scores != null)
@@ -125,12 +125,12 @@ public class Score
         }
     }
 
-    /************************************************************
+    /**
      * Updates the score for the chord of the given index.
      * @param activity The calling Activity
      * @param chordIndex The index of the chord
      * @param correct Whether or not the chord guess was correct
-     **/
+     */
     public static void setScore(Activity activity, int chordIndex, boolean correct)
     {
         ScoreWrapper scoreWrapper = scores[chordIndex];
@@ -145,7 +145,7 @@ public class Score
         scoreWrapper.save(savedChordScores);
     }
 
-    /************************************************************************************************
+    /**
      * Wrapper class for a single chord score that represents a most up to date version of that score,
      * and contains a history of that score.
      */
