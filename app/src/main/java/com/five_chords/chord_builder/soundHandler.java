@@ -25,10 +25,12 @@ public class soundHandler extends MainActivity
     static final int DUMMY_NOTE = 0;
     static final int NOTE_OFFSET = 60;
 
-    static final int TRUMPET = 58;
+    static final int TRUMPET = 57;
     static final int PIANO = 21;
-    //static final int VIOLIN = 0;
-    //static final int FLUTE = 0;
+    static final int ORGAN = 20;
+    static final int GUITAR = 25;
+    static final int VIOLIN = 41;
+    static final int FLUTE = 74;
 
     static MediaPlayer mediaPlayer;
     static soundHandlerMidi midi;
@@ -126,12 +128,14 @@ public class soundHandler extends MainActivity
         Log.d(TAG, "Done Playing Chord");
     }
 
-    public static void switchInstrument() {
-        if (instrument == PIANO) {
-            instrument = TRUMPET;
-        } else {
-            instrument = PIANO;
-        }
+    public static void switchInstrument(int i)
+    {
+        if(i == 0) instrument = TRUMPET;
+        if(i == 1) instrument = PIANO;
+        if(i == 2) instrument = ORGAN;
+        if(i == 3) instrument = GUITAR;
+        if(i == 4) instrument = VIOLIN;
+        if(i == 5) instrument = FLUTE;
     }
 
     public static int getInstrument() {

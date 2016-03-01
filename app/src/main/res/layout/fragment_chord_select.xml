@@ -4,14 +4,26 @@
               android:layout_height="wrap_content"
               android:orientation="horizontal"
               android:id="@+id/fragment_chord_select"
-              style="?android:attr/buttonBarButtonStyle">
+              style="?android:attr/buttonBarButtonStyle"
+    android:weightSum="1">
 
     <!-- Chord Select Spinner -->
     <Spinner
         android:id="@+id/spinner_chord_select"
+        android:layout_width="167dp"
+        android:layout_height="match_parent"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown"
+        android:layout_gravity="left" />
+
+    <!-- instrument Select Spinner -->
+    <Spinner
+        android:id="@+id/spinner_instrument"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:drawable/btn_dropdown"
-        android:spinnerMode="dropdown"/>
+        android:spinnerMode="dropdown"
+        android:layout_gravity="right" />
+
 
 </LinearLayout>
