@@ -7,15 +7,26 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+
+        <!-- Start Page Activity -->
         <activity
-            android:name=".MainActivity"
-            android:label="Chord Builder">
+            android:name=".StartPage"
+            android:label="@string/title_activity_start_page"
+            android:theme="@style/AppTheme.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!-- Main Activity -->
+        <activity
+            android:name=".MainActivity"
+            android:label="Chord Builder">
+        </activity>
+
+        <!-- Help Page Activity -->
         <activity
             android:name=".HelpPage"
             android:label="Help"
@@ -26,10 +37,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.five_chords.chord_builder.MainActivity" />
         </activity>
-        <activity
-            android:name=".StartPage"
-            android:label="@string/title_activity_start_page"
-            android:theme="@style/AppTheme.NoActionBar" />
+
+        <!-- About Page Activity -->
         <activity
             android:name=".AboutPage"
             android:label="About"

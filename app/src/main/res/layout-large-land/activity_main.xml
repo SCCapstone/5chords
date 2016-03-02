@@ -1,12 +1,12 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/MainLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/holo_blue_light"
-    android:layout_centerInParent="true"
-    android:scaleType="centerCrop"
-    tools:context=".MainActivity">
+                xmlns:tools="http://schemas.android.com/tools"
+                android:id="@+id/MainLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/application_background"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop"
+                tools:context=".MainActivity">
 
     <!-- Fragment containing the chord select spinner -->
     <fragment
