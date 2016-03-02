@@ -1,5 +1,6 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 
+import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 
 import java.util.Date;
@@ -25,6 +27,9 @@ public class ScoreProgressView extends View
     /** A Rect handle for convenience */
     private static final Rect BOUNDS = new Rect();
 
+    /** Keeps track of whether or not the Paint in this class has been initialized */
+    private static boolean isInitialized = false;
+
     /** The size of the border to use for the history tag names */
     private static int historyTagBorder;
 
@@ -33,39 +38,6 @@ public class ScoreProgressView extends View
 
     /** The height of the history tag names */
     private static int historyTagWidth;
-
-    // Setup Paint
-    static
-    {
-        PAINT.setAntiAlias(true);
-        PAINT.setTextAlign(Paint.Align.CENTER);
-        PAINT.setTextSize(18.0f);
-
-        // Compute history tag width and height
-        String tag;
-        historyTagHeight = 0;
-        historyTagWidth = 0;
-        for (int i = 0; i < Score.HISTORY_TAGS.length; ++i)
-        {
-            tag = Score.HISTORY_TAGS[i];
-            PAINT.getTextBounds(tag, 0, tag.length() - 1, BOUNDS);
-
-            if (BOUNDS.width() > historyTagWidth)
-                historyTagWidth = BOUNDS.width();
-
-            if (BOUNDS.height() > historyTagHeight)
-                historyTagHeight = BOUNDS.height();
-        }
-
-        // Set the border size
-        historyTagBorder = (int)(historyTagWidth * 0.75f);
-
-        // Double the width
-        historyTagWidth *= 2;
-
-        // Double the height
-        historyTagHeight *= 2;
-    }
 
     /** The width of this ScoreProgressView */
     private int width;
@@ -104,6 +76,47 @@ public class ScoreProgressView extends View
     public ScoreProgressView(Context context, AttributeSet attrs, int defStyleAttr)
     {
         super (context, attrs, defStyleAttr);
+    }
+
+    /**
+     * Called to initialize the Paint used in instances of ScoreProgressView.
+     * @param activity The current Activity
+     */
+    public static void initializePaint(Activity activity)
+    {
+        if (isInitialized)
+            return;
+
+        isInitialized = true;
+
+        PAINT.setAntiAlias(true);
+        PAINT.setTextAlign(Paint.Align.CENTER);
+        PAINT.setTextSize(activity.getResources().getDimensionPixelSize(R.dimen.text_size_small));
+
+        // Compute history tag width and height
+        String tag;
+        historyTagHeight = 0;
+        historyTagWidth = 0;
+        for (int i = 0; i < Score.HISTORY_TAGS.length; ++i)
+        {
+            tag = Score.HISTORY_TAGS[i];
+            PAINT.getTextBounds(tag, 0, tag.length() - 1, BOUNDS);
+
+            if (BOUNDS.width() > historyTagWidth)
+                historyTagWidth = BOUNDS.width();
+
+            if (BOUNDS.height() > historyTagHeight)
+                historyTagHeight = BOUNDS.height();
+        }
+
+        // Set the border size
+        historyTagBorder = (int)(historyTagWidth * 0.75f);
+
+        // Double the width
+        historyTagWidth *= 2;
+
+        // Double the height
+        historyTagHeight *= 2;
     }
 
     /**

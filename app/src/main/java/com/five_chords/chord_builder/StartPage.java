@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
+
 public class StartPage extends AppCompatActivity
 {
 
