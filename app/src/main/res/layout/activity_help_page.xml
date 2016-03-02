@@ -1,4 +1,4 @@
-<LinearLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,9 +7,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
     tools:context="com.five_chords.chord_builder.HelpPage"
     android:background="@android:color/holo_blue_light">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,11 +24,52 @@
         android:layout_marginBottom="16dp"
         android:textStyle="bold"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=" * To use this application, you must first press the 'Random Chord' button.\n * After that you will hear a number of notes, also called a cord.\n * Your job is to use the sliders to match the chord, and then press the 'CHECK' button to see if you are correct.\n * Note: if you want to hear the cord again, press the 'PREVIEW' button."
-        android:textSize="16dp"
-        android:textStyle="bold"
-        android:singleLine="false"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" \u2022 To use this application, you must first select a chord to replicate using either the drop down menu or the 'Random Chord' button.\n \u2022 After that you will hear a number of notes, also called a cord.\n \u2022 Your job is to use the sliders to match the chord, and then press the 'CHECK' button to see if you are correct.\n \u2022 Note: if you want to hear the cord again, press the 'PREVIEW' button."
+            android:textSize="16dp"
+            android:textStyle="bold"
+            android:singleLine="false"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Contact Us"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="16dp"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Please feel free to contact both a professional musician&apos;s help or the developer team below with your email."
+            android:textSize="16dp"
+            android:singleLine="false" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Contact Developers"
+                android:id="@+id/contact_dev"
+                android:layout_weight="1"/>
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Contact Professional Muscian"
+                android:id="@+id/contact_pro"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
 </LinearLayout>
+
+</ScrollView>

@@ -24,7 +24,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Spinner;
 
-import com.five_chords.chord_builder.com.five_chords.chord_builder.Contact_Us;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.OptionsFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScorePageFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView;
@@ -171,10 +170,6 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
             toAboutPage(null);
         else if (item.getItemId() == R.id.menu_item_main_help)
             toHelpPage(null);
-        else if (item.getItemId() == R.id.menu_item_main_contact_us)
-            toContact_UsPage(null);
-
-
 
         return super.onOptionsItemSelected(item);
     }
@@ -239,15 +234,6 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
      */
     public void toHelpPage(View view) {
         Intent intent = new Intent(this, HelpPage.class);
-        startActivity(intent);
-    }
-    /**
-     * Goes to Contact Us page.
-     *
-     * @param view The calling View
-     */
-    public void toContact_UsPage(View view) {
-        Intent intent = new Intent(this, Contact_Us.class);
         startActivity(intent);
     }
 

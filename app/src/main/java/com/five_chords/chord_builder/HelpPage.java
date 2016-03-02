@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 public class HelpPage extends AppCompatActivity
 {
@@ -19,5 +20,44 @@ public class HelpPage extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_help_page);
+
+        // Set up Buttons
+        Button button = (Button) findViewById(R.id.contact_dev);
+        button.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"5chordscontact@gmail.com"});
+                emailIntent.putExtra(Intent.EXTRA_CC, new String[]{""});
+
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject Of Matter");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+
+                emailIntent.setType("message/rfc822");
+                //standard ARPA startin
+                startActivity(Intent.createChooser(emailIntent, "Choose your email client:"));
+                //startActivityForResult(emailIntent,"Send" );
+            }
+        });
+
+        button = (Button) findViewById(R.id.contact_pro);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent emailIntent = new Intent(Intent.ACTION_SEND);
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"Prohelpcontact123@gmail.com"});
+                emailIntent.putExtra(Intent.EXTRA_CC, new String[]{""});
+
+                emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject Of Matter");
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
+
+                emailIntent.setType("message/rfc822");
+                //standard ARPA starting
+                startActivity(Intent.createChooser(emailIntent, "Email us with your preferential source"));
+
+            }
+        });
     }
 }
