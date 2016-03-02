@@ -38,15 +38,6 @@ public class ChordInstrumentSelectFragment extends Fragment
     public ChordInstrumentSelectFragment()
     {   }
 
-//    /**
-//     * Updates the types of chords available in the Chord spinner on this Fragment.
-//     * @param activity The current Activity
-//     */
-//    public void updateInstrumentSpinner(final Activity activity)
-//    {
-//
-//    }
-
     /**
      * Updates the types of chords available in the Chord spinner on this Fragment.
      * @param activity The current Activity
@@ -98,6 +89,7 @@ public class ChordInstrumentSelectFragment extends Fragment
         instrumentSelectSpinner = (Spinner)view.findViewById(R.id.spinner_instrument);
 
         // Set the OnItemSelectedListener for the spinners
+        chordSelectSpinner.setMinimumWidth((int) getResources().getDimension(R.dimen.min_chord_select_slider_size));
         chordSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
@@ -251,7 +243,9 @@ public class ChordInstrumentSelectFragment extends Fragment
         @Override
         public View getDropDownView(int position, View convertView, ViewGroup parent)
         {
-            return getView(position, convertView, parent);
+            View view = getView(position, convertView, parent);
+            view.setMinimumWidth((int) getContext().getResources().getDimension(R.dimen.min_chord_dropdown_menu_size));
+            return view;
         }
     }
 }

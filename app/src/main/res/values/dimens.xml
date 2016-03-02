@@ -23,4 +23,10 @@
     <!-- Height of the score progress history graph -->
     <dimen name="chord_progress_history_height">64dp</dimen>
 
+    <!-- Minimum size of the chord dropdown menu -->
+    <dimen name="min_chord_dropdown_menu_size">240dp</dimen>
+
+    <!-- Minimum size of the chord select slider -->
+    <dimen name="min_chord_select_slider_size">180dp</dimen>
+
 </resources>
