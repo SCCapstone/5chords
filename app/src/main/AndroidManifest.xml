@@ -41,12 +41,22 @@
                 android:value="com.five_chords.chord_builder.MainActivity" />
         </activity>
         <activity android:name=".demo" />
-        <activity android:name=".com.five_chords.chord_builder.Contact_Us"></activity>
+        <activity
+            android:name=".com.five_chords.chord_builder.Contact_Us"
+            android:label="Contact Us"
+            android:parentActivityName=".MainActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.five_chords.chord_builder.MainActivity" />
+        </activity>
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
     </application>
 
 </manifest>
