@@ -40,7 +40,7 @@
         android:id="@+id/fragment_chord_select"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:name="com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordSelectFragment"
+        android:name="com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordInstrumentSelectFragment"
         tools:layout="@layout/fragment_chord_select"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"

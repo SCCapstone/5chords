@@ -9,30 +9,43 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.HorizontalScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.five_chords.chord_builder.MainActivity;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 import com.five_chords.chord_builder.chordHandler;
-import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
+import com.five_chords.chord_builder.soundHandler;
 
 /**
- * A Fragment containing the chord select slider.
+ * A Fragment containing the chord select slider and the instrument select slider.
  * @author tstone95
  */
-public class ChordSelectFragment extends Fragment
+public class ChordInstrumentSelectFragment extends Fragment
 {
+    /** The available instruments names */
+    public static final String[] INSTRUMENT_NAMES = {"Trumpet", "Piano", "Organ", "Guitar", "Violin", "Flute"};
+
     /** Reference to the Spinner for selecting chords contained in this Fragment. */
     private Spinner chordSelectSpinner;
+
+    /** Reference to the Spinner for selecting instruments contained in this Fragment. */
+    private Spinner instrumentSelectSpinner;
 
     /**
      * Required empty public constructor.
      */
-    public ChordSelectFragment()
+    public ChordInstrumentSelectFragment()
     {   }
+
+//    /**
+//     * Updates the types of chords available in the Chord spinner on this Fragment.
+//     * @param activity The current Activity
+//     */
+//    public void updateInstrumentSpinner(final Activity activity)
+//    {
+//
+//    }
 
     /**
      * Updates the types of chords available in the Chord spinner on this Fragment.
@@ -80,10 +93,11 @@ public class ChordSelectFragment extends Fragment
         // Inflate the View
         View view = inflater.inflate(R.layout.fragment_chord_select, container, false);
 
-        // Get the Spinner
+        // Get the Spinners
         chordSelectSpinner = (Spinner)view.findViewById(R.id.spinner_chord_select);
+        instrumentSelectSpinner = (Spinner)view.findViewById(R.id.spinner_instrument);
 
-        // Set the OnItemSelectedListener for the spinner
+        // Set the OnItemSelectedListener for the spinners
         chordSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override
@@ -97,6 +111,26 @@ public class ChordSelectFragment extends Fragment
             public void onNothingSelected(AdapterView<?> parentView)
             { /* Ignore */ }
         });
+
+        // Set the OnItemSelectedListener for the spinner
+        instrumentSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                // Update the selected chord
+                soundHandler.switchInstrument(instrumentSelectSpinner.getSelectedItemPosition());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView)
+            { /* Ignore */ }
+        });
+
+        // Populate the instrument select spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item,
+                ChordInstrumentSelectFragment.INSTRUMENT_NAMES);
+        instrumentSelectSpinner.setAdapter(adapter);
 
         // Inflate the layout for this fragment
         return view;
