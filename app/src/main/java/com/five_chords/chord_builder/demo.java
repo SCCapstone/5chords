@@ -13,8 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
-public class demo extends AppCompatActivity {
-
+public class demo extends AppCompatActivity
+{
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -27,14 +27,17 @@ public class demo extends AppCompatActivity {
 
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 imageView.setImageResource(R.drawable.test2);
+                v.setEnabled(false);
             }
         });
     }
+
     public void skip_button(View view)
     {
-        Intent intent = new Intent(this, MainActivity.class );
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 }

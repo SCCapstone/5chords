@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-
+    android:background="@color/demo_background"
     tools:context="com.five_chords.chord_builder.demo">
 
     <ImageView
@@ -35,8 +35,8 @@
         android:text="Skip Demo"
         android:id="@+id/skip_button"
         android:onClick = "skip_button"
-        android:layout_marginRight="68dp"
-        android:layout_marginEnd="68dp"
+        android:layout_marginRight="38dp"
+        android:layout_marginEnd="38dp"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/imageView"
         android:layout_alignEnd="@+id/imageView" />

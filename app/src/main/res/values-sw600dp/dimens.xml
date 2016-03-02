@@ -20,7 +20,7 @@
 
     <!-- Size of the options dialog -->
     <dimen name="options_dialog_width">512dp</dimen>
-    <dimen name="options_dialog_height">420dp</dimen>
+    <dimen name="options_dialog_height">320dp</dimen>
 
     <!-- Height of the score progress history graph -->
     <dimen name="chord_progress_history_height">96dp</dimen>

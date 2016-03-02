@@ -76,7 +76,8 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         // Display demo if needed
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
-        if (isFirstRun) {
+        if (isFirstRun)
+        {
             Intent intent = new Intent(this, demo.class);
             startActivity(intent);
 
