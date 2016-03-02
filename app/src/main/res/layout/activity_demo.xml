@@ -7,6 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+
     tools:context="com.five_chords.chord_builder.demo">
 
     <ImageView
@@ -14,7 +15,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/imageView"
         android:src="@drawable/test1"
-        android:layout_centerVertical="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
     <Button
@@ -22,9 +23,11 @@
         android:layout_height="wrap_content"
         android:text="Next"
         android:id="@+id/next_button"
-        android:layout_alignTop="@+id/skip_button"
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView" />
+        android:layout_marginLeft="38dp"
+        android:layout_marginStart="38dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/imageView"
+        android:layout_alignStart="@+id/imageView" />
 
     <Button
         android:layout_width="wrap_content"
@@ -32,6 +35,10 @@
         android:text="Skip Demo"
         android:id="@+id/skip_button"
         android:onClick = "skip_button"
-        android:layout_alignParentBottom="true" />
+        android:layout_marginRight="68dp"
+        android:layout_marginEnd="68dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignRight="@+id/imageView"
+        android:layout_alignEnd="@+id/imageView" />
 
 </RelativeLayout>

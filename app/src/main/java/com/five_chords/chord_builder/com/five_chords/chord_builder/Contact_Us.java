@@ -36,9 +36,9 @@ public class Contact_Us extends AppCompatActivity {
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
 
                 emailIntent.setType("message/rfc822");
-                //standard ARPA starting
-                startActivity(Intent.createChooser(emailIntent, "Email us with your preferential source"));
-
+                //standard ARPA startin
+                startActivity(Intent.createChooser(emailIntent, "Choose your email client:"));
+                //startActivityForResult(emailIntent,"Send" );
             }
         });
 
