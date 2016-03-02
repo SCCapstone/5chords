@@ -11,6 +11,8 @@
     <dimen name="text_size_small">12sp</dimen>
     <dimen name="text_size_medium">18sp</dimen>
     <dimen name="text_size_large">24sp</dimen>
+    <dimen name="text_size_title">40sp</dimen>
+    <dimen name="text_size_subtitle">18sp</dimen>
 
     <!-- Size of the score dialog -->
     <dimen name="score_dialog_width">320dp</dimen>

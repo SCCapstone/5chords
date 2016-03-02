@@ -11,6 +11,8 @@
     <dimen name="text_size_small">18sp</dimen>
     <dimen name="text_size_medium">20sp</dimen>
     <dimen name="text_size_large">32sp</dimen>
+    <dimen name="text_size_title">80sp</dimen>
+    <dimen name="text_size_subtitle">36sp</dimen>
 
     <!-- Size of the score dialog -->
     <dimen name="score_dialog_width">512dp</dimen>
@@ -18,9 +20,9 @@
 
     <!-- Size of the options dialog -->
     <dimen name="options_dialog_width">512dp</dimen>
-    <dimen name="options_dialog_height">480dp</dimen>
+    <dimen name="options_dialog_height">420dp</dimen>
 
     <!-- Height of the score progress history graph -->
-    <dimen name="chord_progress_history_height">128dp</dimen>
+    <dimen name="chord_progress_history_height">96dp</dimen>
 
 </resources>

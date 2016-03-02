@@ -12,7 +12,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-public class StartPage extends AppCompatActivity {
+public class StartPage extends AppCompatActivity
+{
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -26,9 +27,9 @@ public class StartPage extends AppCompatActivity {
         Intent intent = new Intent(this, MainActivity.class );
         startActivity(intent);
     }
-    public void toHelp(View view)
-    {
-        Intent intent = new Intent(this, HelpPage.class );
-        startActivity(intent);
-    }
+//    public void toHelp(View view)
+//    {
+//        Intent intent = new Intent(this, HelpPage.class );
+//        startActivity(intent);
+//    }
 }
