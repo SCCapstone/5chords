@@ -29,6 +29,6 @@
     <dimen name="min_chord_dropdown_menu_size">240dp</dimen>
 
     <!-- Minimum size of the chord select slider -->
-    <dimen name="min_chord_select_slider_size">180dp</dimen>
+    <dimen name="min_chord_select_slider_size">200dp</dimen>
 
 </resources>

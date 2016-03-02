@@ -24,7 +24,7 @@
     </string-array>
 
     <!-- General Strings -->
-    <string name="app_name">5Chords</string>
+    <string name="app_name">Chord Builder</string>
     <string name="action_settings">Settings</string>
     <string name="drawer_close">Close navigation drawer</string>
     <string name="drawer_open">Open navigation drawer</string>
@@ -149,5 +149,5 @@
         "For example, position the FAB to one side of stream of a cards so the FAB won’t interfere "
         "when a user tries to pick up one of cards.\n\n"
     </string>
-    <string name="title_activity_contact__us">contact_Us</string>
+    <string name="title_activity_contact__us">Contact Us</string>
 </resources>
