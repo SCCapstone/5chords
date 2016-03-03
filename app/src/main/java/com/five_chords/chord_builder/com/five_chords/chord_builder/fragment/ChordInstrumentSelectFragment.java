@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -25,6 +26,10 @@ public class ChordInstrumentSelectFragment extends Fragment
 {
     /** The available instruments names */
     public static final String[] INSTRUMENT_NAMES = {"Trumpet", "Piano", "Organ", "Guitar", "Violin", "Flute"};
+
+    /** The available instrument icons */
+    public static final int[] INSTRUMENT_ICONS = {R.drawable.trumpet, R.drawable.piano, R.drawable.organ,
+            R.drawable.guitar, R.drawable.violin, R.drawable.flute};
 
     /** Reference to the Spinner for selecting chords contained in this Fragment. */
     private Spinner chordSelectSpinner;
@@ -120,8 +125,13 @@ public class ChordInstrumentSelectFragment extends Fragment
         });
 
         // Populate the instrument select spinner
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_dropdown_item,
-                ChordInstrumentSelectFragment.INSTRUMENT_NAMES);
+        InstrumentDisplayItemAdapter adapter = new InstrumentDisplayItemAdapter(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item);
+
+        // Add instruments indices
+        for (int i = 0; i < INSTRUMENT_NAMES.length; ++i)
+            adapter.add(i);
+
         instrumentSelectSpinner.setAdapter(adapter);
 
         // Inflate the layout for this fragment
@@ -245,6 +255,87 @@ public class ChordInstrumentSelectFragment extends Fragment
         {
             View view = getView(position, convertView, parent);
             view.setMinimumWidth((int) getContext().getResources().getDimension(R.dimen.min_chord_dropdown_menu_size));
+            return view;
+        }
+    }
+
+//    /**
+//     * Wrapper class containing information to be displayed for instruments.
+//     */
+//    private static class InstrumentDisplayItem
+//    {
+//        /** The name of the instrument */
+//        private String instrumentName;
+//
+//        /** The id of the instrument icon image */
+//        private int instrumentIconId;
+//
+//        /**
+//         * Constructs a new InstrumentDisplayItem.
+//         * @param name The name of the instrument
+//         * @param icon The id of the instrument icon image
+//         */
+//        public InstrumentDisplayItem(String name, int icon)
+//        {
+//            instrumentName = name;
+//            instrumentIconId = icon;
+//        }
+//    }
+
+    /**
+     * Implementation of an ArrayAdapter containing views for displaying the instrument choices.
+     */
+    public static class InstrumentDisplayItemAdapter extends ArrayAdapter<Integer>
+    {
+        /**
+         * Constructor.
+         *
+         * @param context  The current context
+         * @param resource The resource ID for a layout file containing a TextView to use
+         */
+        public InstrumentDisplayItemAdapter(Context context, int resource)
+        {
+            super(context, resource);
+        }
+
+        /**
+         * Get the view that displays the data at the specified position.
+         * @param position The position of the item
+         * @param convertView The old view
+         * @param parent The parent viewgroup
+         * @return The view that displays the data
+         */
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent)
+        {
+            View view;
+
+            // Reuse old view if possible
+            if (convertView != null && convertView.getId() == R.id.component_instrument_choice_item)
+                view = convertView;
+            else
+                view = LayoutInflater.from(getContext()).inflate(R.layout.component_instrument_choice_item, parent, false);
+
+            view.setMinimumWidth(getContext().getResources().getDimensionPixelSize(R.dimen.min_instrument_dropdown_menu_width));
+
+            // Get components on View
+            Integer item = getItem(position);
+            TextView nameView = (TextView)view.findViewById(R.id.instrument_choice_name);
+            ImageView iconView = (ImageView)view.findViewById(R.id.instrument_choice_icon);
+
+            nameView.setText(INSTRUMENT_NAMES[item]);
+            nameView.setVisibility(View.VISIBLE);
+
+            iconView.setImageResource(INSTRUMENT_ICONS[item]);
+
+            return view;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent)
+        {
+            View view = getDropDownView(position, convertView, parent);
+            view.findViewById(R.id.instrument_choice_name).setVisibility(View.GONE);
             return view;
         }
     }

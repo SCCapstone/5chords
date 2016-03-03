@@ -28,7 +28,13 @@
     <!-- Minimum size of the chord dropdown menu -->
     <dimen name="min_chord_dropdown_menu_size">240dp</dimen>
 
-    <!-- Minimum size of the chord select slider -->
+    <!-- Minimum size of the chord select spinner -->
     <dimen name="min_chord_select_slider_size">200dp</dimen>
+
+    <!-- Minimum width of the instrument dropdown menu-->
+    <dimen name="min_instrument_dropdown_menu_width">240dp</dimen>
+
+    <!-- Height of the instrument icon images in the instrument select spinner -->
+    <dimen name="instrument_icon_height">48dp</dimen>
 
 </resources>

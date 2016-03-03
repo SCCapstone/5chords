@@ -4,7 +4,4 @@
     <!-- The Background Color -->
     <color name="application_background">#33b5e5</color>
 
-    <!-- The Demo Background Color -->
-    <color name="demo_background">#808080</color>
-
 </resources>
