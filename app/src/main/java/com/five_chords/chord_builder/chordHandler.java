@@ -176,7 +176,7 @@ public class chordHandler
         int[][] returnArray = createEmptyChordArray();
 
         for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
-            int note = i%CHORDS_PER_TYPE;
+            int note = i % CHORDS_PER_TYPE;
             returnArray[i] = new int[] {note, note + 3, note + 7};
         }
 

@@ -1,3 +1,5 @@
+package com.five_chords.chord_builder;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.test.rule.ActivityTestRule;
