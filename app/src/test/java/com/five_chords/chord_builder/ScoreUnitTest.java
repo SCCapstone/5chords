@@ -1,3 +1,5 @@
+package com.five_chords.chord_builder;
+
 import android.content.SharedPreferences;
 
 import com.five_chords.chord_builder.Score;
@@ -5,6 +7,7 @@ import com.five_chords.chord_builder.chordHandler;
 
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,12 +34,14 @@ public class ScoreUnitTest
         for (int i = 0; i < scores.length; ++i)
             scores[i] = i;
 
+        long time = new Date().getTime() / 1000L;
+
         for (int i = 0; i < scores.length; ++i)
         {
             value = new Score.ScoreValue();
             value.numCorrectGuesses = scores[i];
             value.numTotalGuesses = 100;
-            value.time = Score.HISTORY_UPDATE_INTERVALS[i];
+            value.time = time - Score.HISTORY_UPDATE_INTERVALS[i];
             values.add(value);
         }
 
@@ -54,11 +59,15 @@ public class ScoreUnitTest
 
         value = new Score.ScoreValue();
         history.setValueInHistory(value, 0L);
-        assertEquals(history.values[0], value);
+        assertEquals(history.values[0].numCorrectGuesses, value.numCorrectGuesses);
+        assertEquals(history.values[0].numTotalGuesses, value.numTotalGuesses);
+        assertEquals(history.values[0].time, value.time);
 
         value = new Score.ScoreValue();
         history.setValueInHistory(value, 1000000000L);
-        assertEquals(history.values[history.size - 1], value);
+        assertEquals(history.values[history.size - 1].numCorrectGuesses, value.numCorrectGuesses);
+        assertEquals(history.values[history.size - 1].numTotalGuesses, value.numTotalGuesses);
+        assertEquals(history.values[history.size - 1].time, value.time);
 
         history.clear();
         assertEquals(history.values.length, Score.HISTORY_TAGS.length);
