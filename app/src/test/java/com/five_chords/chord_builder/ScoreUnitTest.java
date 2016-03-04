@@ -1,10 +1,5 @@
 package com.five_chords.chord_builder;
 
-import android.content.SharedPreferences;
-
-import com.five_chords.chord_builder.Score;
-import com.five_chords.chord_builder.chordHandler;
-
 import org.junit.Test;
 
 import java.util.Date;

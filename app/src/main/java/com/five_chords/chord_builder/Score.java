@@ -183,6 +183,15 @@ public class Score
         public int getNumTotalGuesses() { return value.numTotalGuesses; }
 
         /**
+         * Gets the ScoreValue of this ScoreWrapper.
+         * @return The ScoreValue of this ScoreWrapper
+         */
+        public ScoreValue getValue()
+        {
+            return value;
+        }
+
+        /**
          * Loads this ScoreWrapper from the given SharedPreferences.
          * @param savedChordScores The SharedPreferences from which to load
          */
