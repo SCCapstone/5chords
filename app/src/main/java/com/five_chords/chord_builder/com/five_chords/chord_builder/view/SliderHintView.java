@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.chordHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
 
 /**
  * An overridden LinearLayout to contain the chord sliders and a mechanism for drawing hints on top of the sliders.
@@ -97,7 +98,7 @@ public class SliderHintView extends LinearLayout
     {
         synchronized (HINT_LOCK)
         {
-            int diff = builtChordPosition - selectedChordPosition;
+            int diff = (builtChordPosition - selectedChordPosition) / VerticalSeekBar.CHECK_THRESHOLD;
 
             if (type == chordHandler.HINT_ONE)
                 hint = new CircleHint(builtChordPosition, diff == 0 ? Color.GREEN : Color.RED);
@@ -351,7 +352,7 @@ public class SliderHintView extends LinearLayout
          */
         public Hint(int offset)
         {
-            this (offset, 20, 20);
+            this (offset, 20, 40);
         }
 
 

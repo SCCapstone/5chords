@@ -28,6 +28,7 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.Opti
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScorePageFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -267,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
      */
     public void makeHint(final byte type) {
         // Calculate the chord differences
-        final int[] builtChord = chordHandler.getCurrentBuiltChord(this);
+        final int[] builtChord = chordHandler.getCurrentPreciseBuiltChord(this);
         final int[] selectedChord = chordHandler.getCurrentSelectedChord();
 
         // Add hints
@@ -275,20 +276,21 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
         // Root slider
         view = (SliderHintView) findViewById(R.id.slider_root_layout);
-        view.setHint(type, builtChord[0], selectedChord[0], 500L);
+        view.setHint(type, builtChord[0], selectedChord[0] * VerticalSeekBar.NUM_INCREMENTS_PER_NOTE, 500L);
 
         // Third slider
         view = (SliderHintView) findViewById(R.id.slider_third_layout);
-        view.setHint(type, builtChord[1], selectedChord[1], 500L);
+        view.setHint(type, builtChord[1], selectedChord[1] * VerticalSeekBar.NUM_INCREMENTS_PER_NOTE, 500L);
 
         // Fifth slider
         view = (SliderHintView) findViewById(R.id.slider_fifth_layout);
-        view.setHint(type, builtChord[2], selectedChord[2], 500L);
+        view.setHint(type, builtChord[2], selectedChord[2] * VerticalSeekBar.NUM_INCREMENTS_PER_NOTE, 500L);
 
         // Option slider
-        if (builtChord.length == 4) {
+        if (builtChord.length == 4)
+        {
             view = (SliderHintView) findViewById(R.id.slider_option_layout);
-            view.setHint(type, builtChord[3], selectedChord[3], 500L);
+            view.setHint(type, builtChord[3], selectedChord[3] * VerticalSeekBar.NUM_INCREMENTS_PER_NOTE, 500L);
         }
     }
 

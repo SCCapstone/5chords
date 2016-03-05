@@ -16,8 +16,6 @@ import org.junit.runners.MethodSorters;
 
 import java.util.Arrays;
 
-import static junit.framework.Assert.assertEquals;
-
 /**
  * Instrumentation test for the chordBuilder class.
  * Created by Theodore on 3/3/2016.

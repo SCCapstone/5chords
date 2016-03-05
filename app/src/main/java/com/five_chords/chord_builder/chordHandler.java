@@ -15,6 +15,9 @@ import android.content.DialogInterface;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar;
+
 import java.util.Arrays;
 import java.util.Random;
 
@@ -52,6 +55,9 @@ public class chordHandler
 
     /** Contains the current chord built by the user on the sliders */
     private static int[] currentBuiltChord;
+
+    /** Contains the current chord built by the user on the sliders at the VerticalSeekBar precision */
+    private static int[] currentPreciseBuiltChord;
 
     /** Records the current chord index */
     private static int currentChordIndex;
@@ -98,10 +104,24 @@ public class chordHandler
     }
 
     /**
+     * Gets the current precise built chord.
+     * @param activity The current Activity
+     * @return The current precise built chord
+     */
+    public static int[] getCurrentPreciseBuiltChord(Activity activity) {
+
+        if (currentPreciseBuiltChord == null)
+            buildCurrentPreciseChord(activity);
+
+        return currentPreciseBuiltChord;
+    }
+
+    /**
      * Called to notify chordHandler that the built chord has changed.
      */
     public static void builtChordChanged() {
         currentBuiltChord = null;
+        currentPreciseBuiltChord = null;
     }
 
     /**
@@ -215,10 +235,14 @@ public class chordHandler
      */
     private static void buildCurrentChord(Activity activity)
     {
-        int root = ((SeekBar) activity.findViewById(R.id.slider_root)).getProgress();
-        int third = ((SeekBar) activity.findViewById(R.id.slider_third)).getProgress();
-        int fifth = ((SeekBar) activity.findViewById(R.id.slider_fifth)).getProgress();
-        int seventh = ((SeekBar) activity.findViewById(R.id.slider_option)).getProgress();
+        int root = ((VerticalSeekBar) activity.findViewById(R.id.slider_root)).getNearestNote(VerticalSeekBar.CHECK_THRESHOLD);
+        int third = ((VerticalSeekBar) activity.findViewById(R.id.slider_third)).getNearestNote(VerticalSeekBar.CHECK_THRESHOLD);
+        int fifth = ((VerticalSeekBar) activity.findViewById(R.id.slider_fifth)).getNearestNote(VerticalSeekBar.CHECK_THRESHOLD);
+        int seventh = ((VerticalSeekBar) activity.findViewById(R.id.slider_option)).getNearestNote(VerticalSeekBar.CHECK_THRESHOLD);
+//        int root = ((SeekBar) activity.findViewById(R.id.slider_root)).getProgress();
+//        int third = ((SeekBar) activity.findViewById(R.id.slider_third)).getProgress();
+//        int fifth = ((SeekBar) activity.findViewById(R.id.slider_fifth)).getProgress();
+//        int seventh = ((SeekBar) activity.findViewById(R.id.slider_option)).getProgress();
 
         if (getCurrentSelectedChord().length == MIN_NOTES_PER_CHORD)
         {
@@ -227,6 +251,27 @@ public class chordHandler
         else
         {
             currentBuiltChord = new int[]{root, third, fifth, seventh};
+        }
+    }
+
+    /**
+     * Builds the current precise chord that the user has defined on the sliders.
+     * @param activity The current Activity
+     */
+    private static void buildCurrentPreciseChord(Activity activity)
+    {
+        int root = ((SeekBar) activity.findViewById(R.id.slider_root)).getProgress();
+        int third = ((SeekBar) activity.findViewById(R.id.slider_third)).getProgress();
+        int fifth = ((SeekBar) activity.findViewById(R.id.slider_fifth)).getProgress();
+        int seventh = ((SeekBar) activity.findViewById(R.id.slider_option)).getProgress();
+
+        if (getCurrentSelectedChord().length == MIN_NOTES_PER_CHORD)
+        {
+            currentPreciseBuiltChord = new int[]{root, third, fifth};
+        }
+        else
+        {
+            currentPreciseBuiltChord = new int[]{root, third, fifth, seventh};
         }
     }
 
@@ -252,7 +297,8 @@ public class chordHandler
                         {
                             getRandomChord();
                             activity.updateChordSelectSpinner();
-                            setUpGUI.resetChordSliders(activity);
+//                            setUpGUI.resetChordSliders(activity);
+                            SliderFragment.resetChordSliders();
                             soundHandler.stopSound();
                         }
 
@@ -263,7 +309,8 @@ public class chordHandler
                         public void onClick(DialogInterface dialog, int which)
                         {
                             setSelectedChord(getSelectedChordIndex()); // Resets the wrong streak counter
-                            setUpGUI.resetChordSliders(activity);
+//                            setUpGUI.resetChordSliders(activity);
+                            SliderFragment.resetChordSliders();
                             soundHandler.stopSound();
                         }
 
@@ -293,6 +340,8 @@ public class chordHandler
         // Set the score
         Score.setScore(activity, chordHandler.getSelectedChordIndex(), isCorrect);
         activity.displayAnswer();
+
+        builtChordChanged();
     }
 
     /**

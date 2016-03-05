@@ -17,6 +17,7 @@ import android.widget.Toast;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 public class Score
 {
@@ -322,22 +323,22 @@ public class Score
             // Collect all score points
             List<ScoreValue> scoreValues = new LinkedList<>();
 
-//            // TODO test - Fill history with random points
-//            discreteScoreHistory.clear();
-//            long time = new Date().getTime() / 1000L;
-//            Random random = new Random();
-//            int num = 1 + random.nextInt(HISTORY_UPDATE_INTERVALS.length - 1);
-//            for (int i = 0; i < num; ++i)
-//            {
-//                value = new ScoreValue();
-//                value.numTotalGuesses = 1 + random.nextInt(100);
-//                value.numCorrectGuesses = random.nextInt(value.numTotalGuesses + 1);
-//                value.time = time - HISTORY_UPDATE_INTERVALS[i];
-//                scoreValues.add(value);
-//
-//                if (i == 0)
-//                    this.value = value;
-//            }
+            // TODO test - Fill history with random points
+            discreteScoreHistory.clear();
+            long time = new Date().getTime() / 1000L;
+            Random random = new Random();
+            int num = 1 + random.nextInt(HISTORY_UPDATE_INTERVALS.length - 1);
+            for (int i = 0; i < num; ++i)
+            {
+                value = new ScoreValue();
+                value.numTotalGuesses = 1 + random.nextInt(100);
+                value.numCorrectGuesses = random.nextInt(value.numTotalGuesses + 1);
+                value.time = time - HISTORY_UPDATE_INTERVALS[i];
+                scoreValues.add(value);
+
+                if (i == 0)
+                    this.value = value;
+            }
 
             // Add the points in the history to the list
             for (ScoreValue v: discreteScoreHistory.values)
