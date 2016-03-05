@@ -19,7 +19,7 @@ import com.five_chords.chord_builder.chordHandler;
 public class VerticalSeekBar extends SeekBar
 {
     /** The number of notes per slider */
-    public static final int NUM_NOTES_PER_SLIDER = 16;
+    public static final int NUM_NOTES_PER_SLIDER = 20;
 
     /** The number of intermediate slider increments per note */
     public static final int NUM_INCREMENTS_PER_NOTE = 32*2;
@@ -28,7 +28,7 @@ public class VerticalSeekBar extends SeekBar
     private static final int MAX_SLIDER_PROGRESS = NUM_NOTES_PER_SLIDER * NUM_INCREMENTS_PER_NOTE;
 
     /** The check threshold */
-    public static final int CHECK_THRESHOLD = NUM_INCREMENTS_PER_NOTE / 8;
+    public static final int CHECK_THRESHOLD = NUM_INCREMENTS_PER_NOTE / 4;
 
     /** Indicates whether or not this SeekBar is currently touched by the user */
     private boolean isTouched;
