@@ -4,7 +4,8 @@
               android:layout_height="match_parent"
               android:orientation="horizontal"
               android:id="@+id/fragment_chord_select"
-              style="?android:attr/buttonBarStyle">
+              style="?android:attr/buttonBarStyle"
+    android:padding="0dp">
 
     <!-- Button to play the selected chord-->
     <Button
@@ -14,7 +15,9 @@
         android:layout_weight="1"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="@dimen/text_size_xsmall"
-        android:text="@string/play" />
+        android:text="@string/play"
+        android:background="@drawable/buttons"
+        android:textColor="#ffffff" />
 
     <!-- Button to select a random chord-->
     <Button
@@ -24,7 +27,9 @@
         android:layout_weight="1"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="@dimen/text_size_xsmall"
-        android:text="@string/random_chord" />
+        android:text="@string/random_chord"
+        android:background="@drawable/buttons"
+        android:textColor="#ffffff" />
 
     <!-- Button to select instrument-->
 

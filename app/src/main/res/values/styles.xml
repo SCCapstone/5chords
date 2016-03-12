@@ -1,5 +1,7 @@
 <resources>
 
+    <drawable name="application_background">@drawable/wood</drawable>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->

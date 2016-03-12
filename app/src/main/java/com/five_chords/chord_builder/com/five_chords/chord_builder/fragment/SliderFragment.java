@@ -111,22 +111,17 @@ public class SliderFragment extends Fragment
     /**
      * Called to add the seek bar listener to a single seek bar.
      * @param bar The seekbar to add listeners to
-     * @param text the textview associated with the seekbar
      */
-    private static void addSeekBarListener(final Activity activity, final VerticalSeekBar bar, final TextView text)
+    private static void addSeekBarListener(final Activity activity, final VerticalSeekBar bar)
     {
         // A reference to the noteNames to pass to the Listener
         final String[] noteNames = activity.getResources().getStringArray(R.array.noteNames);
-        text.setText(noteNames[0]);
 
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
-                int note = bar.getNearestNote();
-                text.setText(noteNames[note % 12]);
-
                 // Only play note if progress change is from user
                 if (seekBar instanceof VerticalSeekBar && ((VerticalSeekBar)seekBar).isTouched())
                     soundHandler.playNote(activity, bar.getValue().lowerChord, bar.getValue().fraction);
@@ -184,10 +179,10 @@ public class SliderFragment extends Fragment
 
         // Add the seek bar listeners
         Activity activity = getActivity();
-        addSeekBarListener(activity, rootSlider, (TextView) sliders.findViewById(R.id.textview_root));
-        addSeekBarListener(activity, thirdSlider, (TextView) sliders.findViewById(R.id.textview_third));
-        addSeekBarListener(activity, fifthSlider, (TextView) sliders.findViewById(R.id.textview_fifth));
-        addSeekBarListener(activity, optionSlider, (TextView) sliders.findViewById(R.id.textview_option));
+        addSeekBarListener(activity, rootSlider);
+        addSeekBarListener(activity, thirdSlider);
+        addSeekBarListener(activity, fifthSlider);
+        addSeekBarListener(activity, optionSlider);
 //        setUpGUI.addSeekBarListeners(getActivity(), sliders);
 
         return sliders;

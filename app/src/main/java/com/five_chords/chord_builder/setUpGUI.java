@@ -80,19 +80,16 @@ public class setUpGUI
 //     * @param bar The seekbar to add listeners to
 //     * @param text the textview associated with the seekbar
 //     **/
-//    private static void addSeekBarListener(final Activity activity, View view, final SeekBar bar, final TextView text)
+//    private static void addSeekBarListener(final Activity activity, View view, final SeekBar bar)
 //    {
 //        // A reference to the noteNames to pass to the Listener
 //        final String[] noteNames = view.getResources().getStringArray(R.array.noteNames);
-//        text.setText(noteNames[0]);
-//
+
 //        bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
 //        {
 //            @Override
 //            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
 //            {
-//                text.setText(noteNames[progress % 12]);
-//
 //                // Only play note if progress change is from user
 //                if (seekBar instanceof VerticalSeekBar && ((VerticalSeekBar)seekBar).isTouched())
 //                    soundHandler.playNote(activity, bar.getProgress());

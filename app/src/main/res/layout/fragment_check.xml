@@ -4,7 +4,8 @@
               android:layout_height="wrap_content"
               android:orientation="horizontal"
               android:id="@+id/fragment_check_options"
-              style="?android:attr/buttonBarButtonStyle">
+              style="?android:attr/buttonBarButtonStyle"
+    android:padding="0dp">
 
     <!-- Button to play the chord the user currently has selected on the sliders -->
     <Button
@@ -14,7 +15,10 @@
         android:layout_weight="1"
         android:layout_margin="4dp"
         android:text="@string/preview"
-        android:textSize="@dimen/text_size_small"/>
+        android:textSize="@dimen/text_size_small"
+        android:background="@drawable/buttons"
+        android:textColor="#ffffff"
+        android:padding="0dp" />
 
     <!-- Button to check the chord the user currently has selected on the sliders -->
     <Button
@@ -24,7 +28,10 @@
         android:layout_weight="1"
         android:layout_margin="4dp"
         android:text="@string/check"
-        android:textSize="@dimen/text_size_small"/>
+        android:textSize="@dimen/text_size_small"
+        android:background="@drawable/buttons"
+        android:textColor="#ffffff"
+        android:padding="0dp" />
 
     <!-- Button containing the score and the link to the score page -->
     <Button
@@ -36,6 +43,8 @@
         android:text="@string/score"
         android:onClick="launchScorePageDialog"
         android:textSize="@dimen/text_size_small"
-        />
+        android:background="@drawable/buttons"
+        android:textColor="#ffffff"
+        android:padding="0dp" />
 
 </LinearLayout>
