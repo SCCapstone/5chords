@@ -124,7 +124,7 @@ public class SliderFragment extends Fragment
             {
                 // Only play note if progress change is from user
                 if (seekBar instanceof VerticalSeekBar && ((VerticalSeekBar)seekBar).isTouched())
-                    soundHandler.playNote(activity, bar.getValue().lowerChord, bar.getValue().fraction);
+                    soundHandler.playNote(activity, bar.getProgress());
             }
 
             public void onStartTrackingTouch(SeekBar seekBar)
@@ -140,7 +140,7 @@ public class SliderFragment extends Fragment
             public boolean onTouch(View v, MotionEvent event)
             {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
-                    soundHandler.playNote(activity, bar.getValue().lowerChord, bar.getValue().fraction);
+                    soundHandler.playNote(activity, bar.getProgress());
                 else if (event.getAction() == MotionEvent.ACTION_UP)
                     soundHandler.stopSound();
                 else if (event.getAction() == MotionEvent.ACTION_MOVE)

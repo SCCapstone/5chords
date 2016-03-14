@@ -16,12 +16,16 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.OptionsFragment;
@@ -33,6 +37,9 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.util.ArrayList;
+
+import android.util.Log;
 
 public class MainActivity extends AppCompatActivity implements OptionsFragment.OptionsChangedListener {
 
@@ -40,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
      * The current options selected in this MainActivity
      */
     private static OptionsFragment.Options options;
+    private static DrawerLayout mDrawerLayout;
+    private static ListView mDrawerList;
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -74,6 +84,18 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         if (!getResources().getBoolean(R.bool.isTablet))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        // Load Navigation Drawer
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        ArrayList<String> drawerOptions = new ArrayList<>();
+        drawerOptions.add("Chord Builder");
+        drawerOptions.add("Chord History");
+        drawerOptions.add("Settings");
+        drawerOptions.add("Help");
+        drawerOptions.add("About");
+        mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, R.id.textLabel, drawerOptions));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+
         // Display demo if needed
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
@@ -95,6 +117,26 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    public class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            switch (position) {
+                case 0:
+                        break;
+                case 1: launchScorePageDialog(null);
+                        break;
+                case 2: launchOptionsDialog(findViewById(R.id.fragment_content));
+                        break;
+                case 3: toAboutPage(null);
+                        break;
+                case 4: toHelpPage(null);
+                        break;
+            }
+
+            mDrawerLayout.closeDrawer(mDrawerList);
+        }
     }
 
     @Override
@@ -146,38 +188,6 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
             options = new OptionsFragment.Options();
 
         options.readFromBundle(savedInstanceState);
-    }
-
-    /**
-     * Called to create the options Menu
-     *
-     * @param menu The Menu to hold the options menu
-     * @return True
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    /**
-     * Called when an item in the menu is selected.
-     *
-     * @param item The selected item
-     * @return super.onOptionsItemSelected()
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.menu_item_main_options)
-            launchOptionsDialog(findViewById(R.id.fragment_content));
-        else if (item.getItemId() == R.id.menu_item_main_scores)
-            launchScorePageDialog(null);
-        else if (item.getItemId() == R.id.menu_item_main_about)
-            toAboutPage(null);
-        else if (item.getItemId() == R.id.menu_item_main_help)
-            toHelpPage(null);
-
-        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -276,21 +286,21 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
         // Root slider
         view = (SliderHintView) findViewById(R.id.slider_root_layout);
-        view.setHint(type, builtChord[0], selectedChord[0] * VerticalSeekBar.NUM_INCREMENTS_PER_NOTE, 500L);
+        view.setHint(type, builtChord[0], selectedChord[0], 500L);
 
         // Third slider
         view = (SliderHintView) findViewById(R.id.slider_third_layout);
-        view.setHint(type, builtChord[1], selectedChord[1] * VerticalSeekBar.NUM_INCREMENTS_PER_NOTE, 500L);
+        view.setHint(type, builtChord[1], selectedChord[1], 500L);
 
         // Fifth slider
         view = (SliderHintView) findViewById(R.id.slider_fifth_layout);
-        view.setHint(type, builtChord[2], selectedChord[2] * VerticalSeekBar.NUM_INCREMENTS_PER_NOTE, 500L);
+        view.setHint(type, builtChord[2], selectedChord[2], 500L);
 
         // Option slider
         if (builtChord.length == 4)
         {
             view = (SliderHintView) findViewById(R.id.slider_option_layout);
-            view.setHint(type, builtChord[3], selectedChord[3] * VerticalSeekBar.NUM_INCREMENTS_PER_NOTE, 500L);
+            view.setHint(type, builtChord[3], selectedChord[3], 500L);
         }
     }
 

@@ -64,15 +64,14 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Plays a note
      **/
-    public static void playNote(Activity activity, int note, double fraction)
+    public static void playNote(Activity activity, int note)
     {
         stopSound();
 
         // TODO: use the sliders to change pitch of note
         //       replace 8192 (centered) with the new pitch
-        int frac = (int)Math.round(fraction * 8192);
-        int mostSignificantbits = (frac >> 7) & 0x7F;
-        int leastSignificantbits = frac & 0x7F;
+        int mostSignificantbits = (8192 >> 7) & 0x7F;
+        int leastSignificantbits = 8192 & 0x7F;
 
         midi.newMidi();
         midi.progChange(instrument);

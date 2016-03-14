@@ -98,7 +98,7 @@ public class SliderHintView extends LinearLayout
     {
         synchronized (HINT_LOCK)
         {
-            int diff = (builtChordPosition - selectedChordPosition) / VerticalSeekBar.CHECK_THRESHOLD;
+            int diff = (builtChordPosition - selectedChordPosition);
 
             if (type == chordHandler.HINT_ONE)
                 hint = new CircleHint(builtChordPosition, diff == 0 ? Color.GREEN : Color.RED);

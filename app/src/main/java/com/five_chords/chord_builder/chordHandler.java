@@ -235,10 +235,10 @@ public class chordHandler
      */
     private static void buildCurrentChord(Activity activity)
     {
-        int root = ((VerticalSeekBar) activity.findViewById(R.id.slider_root)).getNearestNote(VerticalSeekBar.CHECK_THRESHOLD);
-        int third = ((VerticalSeekBar) activity.findViewById(R.id.slider_third)).getNearestNote(VerticalSeekBar.CHECK_THRESHOLD);
-        int fifth = ((VerticalSeekBar) activity.findViewById(R.id.slider_fifth)).getNearestNote(VerticalSeekBar.CHECK_THRESHOLD);
-        int seventh = ((VerticalSeekBar) activity.findViewById(R.id.slider_option)).getNearestNote(VerticalSeekBar.CHECK_THRESHOLD);
+        int root = ((VerticalSeekBar) activity.findViewById(R.id.slider_root)).getProgress();
+        int third = ((VerticalSeekBar) activity.findViewById(R.id.slider_third)).getProgress();
+        int fifth = ((VerticalSeekBar) activity.findViewById(R.id.slider_fifth)).getProgress();
+        int seventh = ((VerticalSeekBar) activity.findViewById(R.id.slider_option)).getProgress();
 //        int root = ((SeekBar) activity.findViewById(R.id.slider_root)).getProgress();
 //        int third = ((SeekBar) activity.findViewById(R.id.slider_third)).getProgress();
 //        int fifth = ((SeekBar) activity.findViewById(R.id.slider_fifth)).getProgress();
