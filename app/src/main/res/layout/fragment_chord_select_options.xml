@@ -10,25 +10,21 @@
     <!-- Button to play the selected chord-->
     <Button
         android:id="@+id/button_select_chord_play"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="@dimen/text_size_xsmall"
-        android:text="@string/play"
-        android:background="@drawable/buttons"
+
+        android:background="@drawable/play_btn_image1"
         android:textColor="#ffffff" />
 
     <!-- Button to select a random chord-->
     <Button
         android:id="@+id/button_select_random_chord"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="@dimen/text_size_xsmall"
-        android:text="@string/random_chord"
-        android:background="@drawable/buttons"
+
+        android:background="@drawable/random_btn_chord"
         android:textColor="#ffffff" />
 
     <!-- Button to select instrument-->
