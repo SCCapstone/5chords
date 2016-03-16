@@ -23,15 +23,15 @@ public class StartPage extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_page);
     }
-
+    /**
+     * Goes back to mainActivity on Call
+     * @ param  Button Call
+     * MainActivity Call
+     */
     public void backToMain(View view)
     {
         Intent intent = new Intent(this, MainActivity.class );
         startActivity(intent);
     }
-//    public void toHelp(View view)
-//    {
-//        Intent intent = new Intent(this, HelpPage.class );
-//        startActivity(intent);
-//    }
+
 }

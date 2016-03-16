@@ -10,6 +10,18 @@
                 tools:context="com.five_chords.chord_builder.Score"
                 android:background="@drawable/application_background">
 
+    <!-- Done Button -->
+    <Button
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Done"
+        android:id="@+id/button_done"
+        android:onClick="backToMain"
+        android:layout_alignTop="@+id/button_score_page_score_reset"
+        android:layout_alignLeft="@+id/score_activity_score_fragment"
+        android:layout_alignStart="@+id/score_activity_score_fragment" />
+
     <!-- Reset score button -->
     <Button
         android:id="@+id/button_score_page_score_reset"
@@ -36,5 +48,7 @@
         android:layout_alignParentEnd="true"
         android:layout_above="@id/button_score_page_score_reset">
     </fragment>
+
+
 
 </RelativeLayout>

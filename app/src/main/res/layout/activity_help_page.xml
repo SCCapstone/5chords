@@ -72,8 +72,23 @@
                 android:background="@drawable/buttons"
                 android:textColor="#ffffff" />
 
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="Done"
+                android:onClick="backToMain"
+                android:id="@+id/button_done"
+                android:layout_weight="1"
+                android:background="@drawable/buttons"
+                android:textColor="#ffffff" />
+
+
         </LinearLayout>
 
 </LinearLayout>
+
+
+
+
 
 </ScrollView>

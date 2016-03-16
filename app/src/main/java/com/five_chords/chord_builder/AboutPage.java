@@ -16,10 +16,23 @@ import android.view.View;
 
 public class AboutPage extends AppCompatActivity
 {
+    /**
+     * Activity Creator
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about_page);
+    }
+    /**
+     * Goes back to mainActivity on Call
+     * @ param  Button Call
+     * The MainActivity call
+     */
+    public void backToMain(View view)
+    {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

@@ -16,6 +16,10 @@ import android.widget.Button;
 public class HelpPage extends AppCompatActivity
 {
     @Override
+    /*************************************************************
+     * Create Activity to have help page for users
+     *
+     */
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -59,5 +63,15 @@ public class HelpPage extends AppCompatActivity
 
             }
         });
+    }
+    /**
+     * Goes back to mainActivity on Call
+     * @ param Button Call
+     * MainActivity Call
+     */
+    public void backToMain(View view)
+    {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
     }
 }

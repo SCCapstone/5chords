@@ -88,11 +88,11 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         ArrayList<String> drawerOptions = new ArrayList<>();
-        drawerOptions.add("Chord Builder");
-        drawerOptions.add("Chord History");
+        drawerOptions.add("Play");
+        drawerOptions.add("History");
         drawerOptions.add("Settings");
-        drawerOptions.add("Help");
         drawerOptions.add("About");
+        drawerOptions.add("Help");
         mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, R.id.textLabel, drawerOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
@@ -268,6 +268,16 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
      **/
     public void openStartPage() {
         Intent intent = new Intent(this, StartPage.class);
+        startActivity(intent);
+    }
+    /**
+     * Goes back to mainActivity on Call
+     * @ param  Button Call
+     * MainActivity Call
+     */
+    public void backToMain(View view)
+    {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 

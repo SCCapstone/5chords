@@ -11,7 +11,10 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.Date;
@@ -19,7 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class Score
+public class Score extends AppCompatActivity
 {
     /** The name of the saved chord scores in the SharedPreferences */
     public static final String CHORD_SCORES_SAVE_FILENAME = "ScoreFile";
@@ -42,6 +45,7 @@ public class Score
      */
     private Score()
     {    }
+
 
     /**
      * Gets the SharedPreferences used to load and save scores
@@ -67,9 +71,24 @@ public class Score
     public static int getNumTotalGuesses(int chordIndex) { return scores[chordIndex].value.numTotalGuesses; }
 
     /**
+     * Called to go back to the Main Activity.
+     * @ param  The current Activity
+     *  MainActivity Call
+     */
+
+    public void backToMain(View view) {
+
+        Intent intent = new Intent(this, MainActivity.class);
+
+        startActivity(intent);
+
+    }
+
+    /**
      * Called to reset the scores.
      * @param activity The current Activity
      */
+
     public static void resetScores(final Activity activity)
     {
         // Launch confirmation dialog
@@ -145,6 +164,8 @@ public class Score
         // Save the new score
         scoreWrapper.save(savedChordScores);
     }
+
+
 
     /**
      * Wrapper class for a single chord score that represents a most up to date version of that score,

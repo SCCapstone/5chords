@@ -16,6 +16,11 @@ import android.widget.ImageView;
 public class demo extends AppCompatActivity
 {
     @Override
+    /**
+     * Activity Create and checks first launch
+     * If first launch, go to Tutorial, otherwise
+     * Goes straight to the MainActivity
+     */
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -34,7 +39,11 @@ public class demo extends AppCompatActivity
             }
         });
     }
-
+    /**
+     * Goes to mainActivity on Call
+     * @ param  Button Call
+     *  Initiates MainActivity
+     */
     public void skip_button(View view)
     {
         Intent intent = new Intent(this, MainActivity.class);
