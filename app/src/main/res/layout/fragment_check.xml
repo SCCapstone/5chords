@@ -41,7 +41,6 @@
         android:layout_weight="1"
         android:layout_margin="4dp"
         android:text="@string/score"
-        android:onClick="launchScorePageDialog"
         android:textSize="@dimen/text_size_small"
         android:background="@drawable/buttons"
         android:textColor="#ffffff"
