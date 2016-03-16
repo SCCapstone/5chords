@@ -38,7 +38,7 @@ public class setUpGUI
         assignButtons(activity);
     }
 
-    /***********************************************************************************************
+    /**
      * loadSpinners function
      * This method consists of two dropdown menus, one for instruments selection and one for chord
      * selection.

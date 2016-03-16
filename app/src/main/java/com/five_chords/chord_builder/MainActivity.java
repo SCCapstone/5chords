@@ -41,7 +41,9 @@ import java.util.ArrayList;
 
 import android.util.Log;
 
-public class MainActivity extends AppCompatActivity implements OptionsFragment.OptionsChangedListener {
+public class MainActivity extends AppCompatActivity implements OptionsFragment.OptionsChangedListener,
+        chordHandler.OnDominantChordSelectedListener
+{
 
     /**
      * The current options selected in this MainActivity
@@ -112,11 +114,23 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         // Initialize Static Classes
         setUpGUI.initialize(this);
         chordHandler.initialize();
+        chordHandler.setOnDominantChordSelectedListener(this);
         soundHandler.initialize(this);
         Score.loadScores(this, false);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+
+    /**
+     * Called when a chord is selected.
+     * @param dominantSelected Whether or not a dominant chord was selected
+     */
+    @Override
+    public void onChordSelected(boolean dominantSelected)
+    {
+        // Hide dominant slider if needed
+        findViewById(R.id.slider_option_layout).setVisibility(dominantSelected ? View.VISIBLE : View.GONE);
     }
 
     public class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -241,6 +255,11 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     public void updateChordSelectSpinner() {
         Spinner dropdown = (Spinner) findViewById(R.id.spinner_chord_select);
         dropdown.setSelection((chordHandler.getSelectedChordIndex()) % dropdown.getCount());
+
+        // Hide dominant slider if needed
+        Log.w("Main", "Dominant chord selected");
+        boolean useDominants = chordHandler.getCurrentSelectedChord().length == 4;
+        findViewById(R.id.slider_option_layout).setVisibility(useDominants ? View.VISIBLE : View.GONE);
     }
 
     /**
@@ -307,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         view.setHint(type, builtChord[2], selectedChord[2], 500L);
 
         // Option slider
-        if (builtChord.length == 4)
+        if (builtChord.length == 4 && selectedChord.length == 4)
         {
             view = (SliderHintView) findViewById(R.id.slider_option_layout);
             view.setHint(type, builtChord[3], selectedChord[3], 500L);
@@ -332,8 +351,8 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         // Update the spinners
         setUpGUI.loadSpinners(this, useMajors, useMinors, useDominants);
 
-        // Hide dominant slider if needed
-        findViewById(R.id.slider_option_layout).setVisibility(useDominants ? View.VISIBLE : View.GONE);
+//        // Hide dominant slider if needed
+//        findViewById(R.id.slider_option_layout).setVisibility(useDominants ? View.VISIBLE : View.GONE);
     }
 
     /**

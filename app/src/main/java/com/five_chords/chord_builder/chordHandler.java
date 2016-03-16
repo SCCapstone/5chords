@@ -65,6 +65,9 @@ public class chordHandler
     /** Records the current wrong streak of the current chord for hinting purposes. */
     private static int currentWrongStreak;
 
+    /** The OnDominantChordSelectedListener attached to the chordHandler. */
+    private static OnDominantChordSelectedListener dominantChordSelectedListener;
+
     /**
      * Static class.
      */
@@ -80,6 +83,15 @@ public class chordHandler
         addMajorChords();
         addMinorChords();
         addDominantChords();
+    }
+
+    /**
+     * Sets the OnDominantChordSelectedListener attached to the chordHandler.
+     * @param listener The new listener
+     */
+    public static void setOnDominantChordSelectedListener(OnDominantChordSelectedListener listener)
+    {
+        dominantChordSelectedListener = listener;
     }
 
     /**
@@ -136,6 +148,10 @@ public class chordHandler
 
         // Update current chord index
         currentChordIndex = chordIndex;
+
+        // Call the listener
+        if (dominantChordSelectedListener != null)
+            dominantChordSelectedListener.onChordSelected(availableChords[currentChordIndex].length == 4);
     }
 
     /**
@@ -361,5 +377,17 @@ public class chordHandler
         }
 
         return returnArray;
+    }
+
+    /**
+     * Interface for classes listening for dominant chord selection.
+     */
+    public interface OnDominantChordSelectedListener
+    {
+        /**
+         * Called when a chord is selected.
+         * @param dominantSelected Whether or not a dominant chord was selected
+         */
+        void onChordSelected(boolean dominantSelected);
     }
 }
