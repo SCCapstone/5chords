@@ -49,6 +49,19 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.five_chords.chord_builder.MainActivity" />
         </activity>
+
+        <!-- Score Page Activity -->
+        <activity
+            android:name=".ScorePage"
+            android:label="Scores"
+            android:parentActivityName=".MainActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.five_chords.chord_builder.MainActivity" />
+        </activity>
+
         <activity android:name=".demo" />
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for
              App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->

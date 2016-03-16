@@ -139,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
             switch (position) {
                 case 0:
                         break;
-                case 1: launchScorePageDialog(null);
+                case 1: toScorePage(null);
                         break;
                 case 2: launchOptionsDialog(findViewById(R.id.fragment_content));
                         break;
@@ -223,24 +223,24 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         newFragment.show(ft, "dialog");
     }
 
-    /**
-     * Called to launch the score page dialog.
-     *
-     * @param v The calling View
-     */
-    public void launchScorePageDialog(View v) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-
-        if (prev != null)
-            ft.remove(prev);
-
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        DialogFragment newFragment = ScorePageFragment.newInstance(true, false);
-        newFragment.show(ft, "dialog");
-    }
+//    /**
+//     * Called to launch the score page dialog.
+//     *
+//     * @param v The calling View
+//     */
+//    public void launchScorePageDialog(View v) {
+//        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+//
+//        if (prev != null)
+//            ft.remove(prev);
+//
+//        ft.addToBackStack(null);
+//
+//        // Create and show the dialog.
+//        DialogFragment newFragment = ScorePageFragment.newInstance(true, false);
+//        newFragment.show(ft, "dialog");
+//    }
 
     public void displayAnswer() {
         // shows if the built chord matches the set chord
@@ -279,6 +279,16 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
      */
     public void toAboutPage(View view) {
         Intent intent = new Intent(this, AboutPage.class);
+        startActivity(intent);
+    }
+
+    /**
+     * Goes to the Score page.
+     *
+     * @param view The calling View
+     */
+    public void toScorePage(View view) {
+        Intent intent = new Intent(this, ScorePage.class);
         startActivity(intent);
     }
 
@@ -350,9 +360,6 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
         // Update the spinners
         setUpGUI.loadSpinners(this, useMajors, useMinors, useDominants);
-
-//        // Hide dominant slider if needed
-//        findViewById(R.id.slider_option_layout).setVisibility(useDominants ? View.VISIBLE : View.GONE);
     }
 
     /**

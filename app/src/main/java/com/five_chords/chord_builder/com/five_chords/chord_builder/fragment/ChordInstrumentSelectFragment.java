@@ -93,8 +93,10 @@ public class ChordInstrumentSelectFragment extends Fragment
         chordSelectSpinner = (Spinner)view.findViewById(R.id.spinner_chord_select);
         instrumentSelectSpinner = (Spinner)view.findViewById(R.id.spinner_instrument);
 
-        // Set the OnItemSelectedListener for the spinners
+        // Set minimum sizes
         chordSelectSpinner.setMinimumWidth((int) getResources().getDimension(R.dimen.min_chord_select_slider_size));
+
+        // Set the OnItemSelectedListener for the spinners
         chordSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override

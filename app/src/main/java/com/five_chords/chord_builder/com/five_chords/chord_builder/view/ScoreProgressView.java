@@ -259,7 +259,7 @@ public class ScoreProgressView extends View
                 // Draw percent above point
                 PAINT.setStrokeWidth(1.0f);
                 PAINT.setStyle(Paint.Style.FILL);
-                PAINT.setColor(Color.DKGRAY);
+                PAINT.setColor(Color.LTGRAY);
                 text = "" + Math.round(points[i].percent * 100.0f) + " %";
                 drawText(canvas, text, x, 0.0f);
 

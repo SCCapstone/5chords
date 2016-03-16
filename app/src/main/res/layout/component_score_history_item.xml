@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:background="@android:color/white">
+        android:background="@color/trans_black">
 
         <!-- The score progress view -->
         <com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView
