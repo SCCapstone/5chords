@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:orientation="horizontal"
-              android:id="@+id/fragment_check_options"
-              style="?android:attr/buttonBarButtonStyle"
-    android:padding="0dp">
+                xmlns:tools="http://schemas.android.com/tools"
+                style="?android:attr/buttonBarButtonStyle"
+                android:id="@+id/fragment_check_options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="0dp">
 
     <!-- Button to play the chord the user currently has selected on the sliders -->
     <Button
@@ -33,17 +34,19 @@
         android:textColor="#ffffff"
         android:padding="0dp" />
 
-    <!-- Button containing the score and the link to the score page -->
-    <Button
-        android:id="@+id/button_answer"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:layout_margin="4dp"
-        android:text="@string/score"
-        android:textSize="@dimen/text_size_small"
-        android:background="@drawable/buttons"
-        android:textColor="#ffffff"
-        android:padding="0dp" />
+
+
+    <!--&lt;!&ndash; Button containing the score and the link to the score page &ndash;&gt;-->
+    <!--<Button-->
+        <!--android:id="@+id/button_answer"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_weight="1"-->
+        <!--android:layout_margin="4dp"-->
+        <!--android:text="@string/score"-->
+        <!--android:textSize="@dimen/text_size_small"-->
+        <!--android:background="@drawable/buttons"-->
+        <!--android:textColor="#ffffff"-->
+        <!--android:padding="0dp" />-->
 
 </LinearLayout>

@@ -66,7 +66,7 @@ public class chordHandler
     private static int currentWrongStreak;
 
     /** The OnDominantChordSelectedListener attached to the chordHandler. */
-    private static OnDominantChordSelectedListener dominantChordSelectedListener;
+    private static OnChordSelectedListener dominantChordSelectedListener;
 
     /**
      * Static class.
@@ -89,7 +89,7 @@ public class chordHandler
      * Sets the OnDominantChordSelectedListener attached to the chordHandler.
      * @param listener The new listener
      */
-    public static void setOnDominantChordSelectedListener(OnDominantChordSelectedListener listener)
+    public static void setOnDominantChordSelectedListener(OnChordSelectedListener listener)
     {
         dominantChordSelectedListener = listener;
     }
@@ -151,7 +151,7 @@ public class chordHandler
 
         // Call the listener
         if (dominantChordSelectedListener != null)
-            dominantChordSelectedListener.onChordSelected(availableChords[currentChordIndex].length == 4);
+            dominantChordSelectedListener.onChordSelected();
     }
 
     /**
@@ -355,7 +355,7 @@ public class chordHandler
 
         // Set the score
         Score.setScore(activity, chordHandler.getSelectedChordIndex(), isCorrect);
-        activity.displayAnswer();
+        activity.updateDisplayedScore();
 
         builtChordChanged();
     }
@@ -380,14 +380,13 @@ public class chordHandler
     }
 
     /**
-     * Interface for classes listening for dominant chord selection.
+     * Interface for classes listening for chord selection.
      */
-    public interface OnDominantChordSelectedListener
+    public interface OnChordSelectedListener
     {
         /**
-         * Called when a chord is selected.
-         * @param dominantSelected Whether or not a dominant chord was selected
+         * Called when a new chord is selected.
          */
-        void onChordSelected(boolean dominantSelected);
+        void onChordSelected();
     }
 }

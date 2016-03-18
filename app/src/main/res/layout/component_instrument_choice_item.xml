@@ -13,6 +13,8 @@
         android:layout_height="@dimen/instrument_icon_height"
         android:contentDescription="@string/instrument"
         android:layout_centerVertical="true"
+        android:paddingLeft="4dp"
+        android:paddingRight="32dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"/>
 
@@ -22,6 +24,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/instrument_choice_icon"

@@ -43,5 +43,7 @@ public class ScorePage extends AppCompatActivity
     public void clearScores(View view)
     {
         Score.resetScores(this);
+
+        // TODO Invalidate Score History Fragment
     }
 }

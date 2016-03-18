@@ -54,6 +54,7 @@
     <string name="title_activity_tutorial">Tutorial</string>
     <string name="current">Current</string>
     <string name="history">History</string>
+    <string name="overall">Overall</string>
     <string name="about">About</string>
     <string name="clear_scores">Clear Scores</string>
     <string name="clear">Clear</string>

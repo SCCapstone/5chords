@@ -19,20 +19,15 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.OptionsFragment;
-import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScorePageFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView;
-import com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -40,9 +35,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.ArrayList;
 
 import android.util.Log;
+import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements OptionsFragment.OptionsChangedListener,
-        chordHandler.OnDominantChordSelectedListener
+        chordHandler.OnChordSelectedListener
 {
 
     /**
@@ -123,14 +119,17 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     }
 
     /**
-     * Called when a chord is selected.
-     * @param dominantSelected Whether or not a dominant chord was selected
+     * Called when a new chord is selected.
      */
     @Override
-    public void onChordSelected(boolean dominantSelected)
+    public void onChordSelected()
     {
+        // Update current chord score
+        updateDisplayedScore();
+
         // Hide dominant slider if needed
-        findViewById(R.id.slider_option_layout).setVisibility(dominantSelected ? View.VISIBLE : View.GONE);
+        findViewById(R.id.slider_option_layout).setVisibility(
+                chordHandler.getCurrentSelectedChord().length == 4 ? View.VISIBLE : View.GONE);
     }
 
     public class DrawerItemClickListener implements ListView.OnItemClickListener {
@@ -242,11 +241,20 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 //        newFragment.show(ft, "dialog");
 //    }
 
-    public void displayAnswer() {
-        // shows if the built chord matches the set chord
-        Button view = (Button) findViewById(R.id.button_answer);
-        view.setText(Score.getNumCorrectGuesses(chordHandler.getSelectedChordIndex()) +
-                " / " + Score.getNumTotalGuesses(chordHandler.getSelectedChordIndex()));
+    /**
+     * Called to update the displayed score.
+     */
+    public void updateDisplayedScore() {
+
+        // Get the TextViews
+        TextView currentProgress = (TextView) findViewById(R.id.textview_current_score);
+//        TextView overallProgress = (TextView) findViewById(R.id.textview_overall_score);
+
+        // Get the current Score
+        Score.ScoreWrapper current = Score.scores[chordHandler.getSelectedChordIndex()];
+
+        // Set the Views
+        currentProgress.setText(current.getNumCorrectGuesses() + " / " + current.getNumTotalGuesses());
     }
 
     /**

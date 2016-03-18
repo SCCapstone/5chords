@@ -88,7 +88,6 @@ public class Score extends AppCompatActivity
      * Called to reset the scores.
      * @param activity The current Activity
      */
-
     public static void resetScores(final Activity activity)
     {
         // Launch confirmation dialog
@@ -164,8 +163,6 @@ public class Score extends AppCompatActivity
         // Save the new score
         scoreWrapper.save(savedChordScores);
     }
-
-
 
     /**
      * Wrapper class for a single chord score that represents a most up to date version of that score,
@@ -344,22 +341,22 @@ public class Score extends AppCompatActivity
             // Collect all score points
             List<ScoreValue> scoreValues = new LinkedList<>();
 
-            // TODO test - Fill history with random points
-            discreteScoreHistory.clear();
-            long time = new Date().getTime() / 1000L;
-            Random random = new Random();
-            int num = 1 + random.nextInt(HISTORY_UPDATE_INTERVALS.length - 1);
-            for (int i = 0; i < num; ++i)
-            {
-                value = new ScoreValue();
-                value.numTotalGuesses = 1 + random.nextInt(100);
-                value.numCorrectGuesses = random.nextInt(value.numTotalGuesses + 1);
-                value.time = time - HISTORY_UPDATE_INTERVALS[i];
-                scoreValues.add(value);
-
-                if (i == 0)
-                    this.value = value;
-            }
+//            // TODO test - Fill history with random points
+//            discreteScoreHistory.clear();
+//            long time = new Date().getTime() / 1000L;
+//            Random random = new Random();
+//            int num = 1 + random.nextInt(HISTORY_UPDATE_INTERVALS.length - 1);
+//            for (int i = 0; i < num; ++i)
+//            {
+//                value = new ScoreValue();
+//                value.numTotalGuesses = 1 + random.nextInt(100);
+//                value.numCorrectGuesses = random.nextInt(value.numTotalGuesses + 1);
+//                value.time = time - HISTORY_UPDATE_INTERVALS[i];
+//                scoreValues.add(value);
+//
+//                if (i == 0)
+//                    this.value = value;
+//            }
 
             // Add the points in the history to the list
             for (ScoreValue v: discreteScoreHistory.values)
