@@ -60,7 +60,7 @@ public class soundHandler extends MainActivity
     }
 
     /****************************************************************
-     * Plays a note
+     * Add a note to the MIDI file
      **/
     public static void addNote(int note, int pitch, int channel)
     {
@@ -101,7 +101,7 @@ public class soundHandler extends MainActivity
     }
 
     /****************************************************************
-     * Plays a chord
+     * Plays a note
      **/
     public static void playNote(Activity activity, int note)
     {
