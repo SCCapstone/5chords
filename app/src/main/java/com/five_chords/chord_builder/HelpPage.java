@@ -64,6 +64,8 @@ public class HelpPage extends AppCompatActivity
             }
         });
     }
+
+
     /**
      * Goes back to mainActivity on Call
      * @ param Button Call
