@@ -310,16 +310,6 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         Intent intent = new Intent(this, StartPage.class);
         startActivity(intent);
     }
-    /**
-     * Goes back to mainActivity on Call
-     * @ param  Button Call
-     * MainActivity Call
-     */
-    public void backToMain(View view)
-    {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
 
     /**
      * Generates one instance of the given type of hint.
