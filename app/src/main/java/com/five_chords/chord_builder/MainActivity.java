@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         // Create Options if needed
         if (options == null)
             options = new OptionsFragment.Options();
+        options.load(this);
 
         // Lock orientation in portrait mode with small screen devices
         if (!getResources().getBoolean(R.bool.isTablet))
@@ -179,7 +180,8 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     public void onSaveInstanceState(Bundle savedInstanceState) {
 
         // Save options
-        options.writeToBundle(savedInstanceState);
+        options.save(this);
+//        options.writeToBundle(savedInstanceState);
 
         // Call superclass method
         super.onSaveInstanceState(savedInstanceState);
@@ -199,8 +201,8 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         // Read options
         if (options == null)
             options = new OptionsFragment.Options();
-
-        options.readFromBundle(savedInstanceState);
+        options.load(this);
+//        options.readFromBundle(savedInstanceState);
     }
 
     /**
