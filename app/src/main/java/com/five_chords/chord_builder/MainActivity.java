@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         // Create Options if needed
         if (options == null)
             options = new OptionsFragment.Options();
+        options.load(this);
 
         // Lock orientation in portrait mode with small screen devices
         if (!getResources().getBoolean(R.bool.isTablet))
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         // Initialize Static Classes
         setUpGUI.initialize(this);
         chordHandler.initialize();
-        chordHandler.setOnDominantChordSelectedListener(this);
+        chordHandler.setOnChordSelectedListener(this);
         soundHandler.initialize(this);
         Score.loadScores(this, false);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -179,7 +180,8 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     public void onSaveInstanceState(Bundle savedInstanceState) {
 
         // Save options
-        options.writeToBundle(savedInstanceState);
+        options.save(this);
+//        options.writeToBundle(savedInstanceState);
 
         // Call superclass method
         super.onSaveInstanceState(savedInstanceState);
@@ -199,8 +201,8 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         // Read options
         if (options == null)
             options = new OptionsFragment.Options();
-
-        options.readFromBundle(savedInstanceState);
+        options.load(this);
+//        options.readFromBundle(savedInstanceState);
     }
 
     /**
@@ -248,13 +250,14 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
         // Get the TextViews
         TextView currentProgress = (TextView) findViewById(R.id.textview_current_score);
-//        TextView overallProgress = (TextView) findViewById(R.id.textview_overall_score);
+        TextView overallProgress = (TextView) findViewById(R.id.textview_overall_score);
 
         // Get the current Score
-        Score.ScoreWrapper current = Score.scores[chordHandler.getSelectedChordIndex()];
+        Score current = Score.getCurrentScore();
 
         // Set the Views
-        currentProgress.setText(current.getNumCorrectGuesses() + " / " + current.getNumTotalGuesses());
+        currentProgress.setText(current.getCurrentValue().getDisplayString());
+        overallProgress.setText(current.getOverallValue().getDisplayString());
     }
 
     /**

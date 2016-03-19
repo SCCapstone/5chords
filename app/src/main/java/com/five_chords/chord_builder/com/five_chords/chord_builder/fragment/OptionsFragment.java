@@ -2,6 +2,8 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,7 +56,7 @@ public class OptionsFragment extends DialogFragment implements CompoundButton.On
 
         // Supply arguments to Bundle
         Bundle args = new Bundle();
-        options.writeToBundle(args);
+//        options.writeToBundle(args);
         f.setArguments(args);
 
         return f;
@@ -131,9 +133,10 @@ public class OptionsFragment extends DialogFragment implements CompoundButton.On
 
         // Read options
         Options options = new Options();
+        options.load(getActivity());
 
-        if (getArguments() != null)
-            options.readFromBundle(getArguments());
+//        if (getArguments() != null)
+//            options.readFromBundle(getArguments());
 
         // Set options
         majorBox.setChecked(options.useMajorChords);
@@ -264,6 +267,9 @@ public class OptionsFragment extends DialogFragment implements CompoundButton.On
      */
     public static class Options
     {
+        /** The name of the options in the SharedPreferences */
+        public static final String OPTIONS_SAVE_FILENAME = "OptionsFile";
+
         /** Bundle id for the useMajorChords flag */
         private static final String MAJOR_CHORDS_BUNDLE_ID = "OptionsFragment.Options.MAJOR";
 
@@ -300,27 +306,65 @@ public class OptionsFragment extends DialogFragment implements CompoundButton.On
         }
 
         /**
-         * Reads the values of this OptionsFragment from the given Bundle.
-         * @param bundle The Bundle from which to read
+         * Gets the SharedPreferences used to load and save the options.
+         * @param activity The calling Activity
          */
-        public void readFromBundle(Bundle bundle)
+        private static SharedPreferences getOptionsLoader(Activity activity)
         {
-            useMajorChords = bundle.getBoolean(MAJOR_CHORDS_BUNDLE_ID);
-            useMinorChords = bundle.getBoolean(MINOR_CHORDS_BUNDLE_ID);
-            useDominantChords = bundle.getBoolean(DOMINANT_CHORDS_BUNDLE_ID);
-            useHints = bundle.getBoolean(HINTS_BUNDLE_ID);
+            return activity.getSharedPreferences(OPTIONS_SAVE_FILENAME, Context.MODE_PRIVATE);
+        }
+
+//        /**
+//         * Reads the values of this OptionsFragment from the given Bundle.
+//         * @param bundle The Bundle from which to read
+//         */
+//        public void readFromBundle(Bundle bundle)
+//        {
+//            useMajorChords = bundle.getBoolean(MAJOR_CHORDS_BUNDLE_ID);
+//            useMinorChords = bundle.getBoolean(MINOR_CHORDS_BUNDLE_ID);
+//            useDominantChords = bundle.getBoolean(DOMINANT_CHORDS_BUNDLE_ID);
+//            useHints = bundle.getBoolean(HINTS_BUNDLE_ID);
+//        }
+//
+//        /**
+//         * Writes the values of this OptionsFragment to the given Bundle.
+//         * @param bundle The Bundle to which to write
+//         */
+//        public void writeToBundle(Bundle bundle)
+//        {
+//            bundle.putBoolean(MAJOR_CHORDS_BUNDLE_ID, useMajorChords);
+//            bundle.putBoolean(MINOR_CHORDS_BUNDLE_ID, useMinorChords);
+//            bundle.putBoolean(DOMINANT_CHORDS_BUNDLE_ID, useDominantChords);
+//            bundle.putBoolean(HINTS_BUNDLE_ID, useHints);
+//        }
+
+        /**
+         * Saves this Options.
+         * @param activity The current Activity
+         */
+        public void save(Activity activity)
+        {
+            SharedPreferences.Editor editor = getOptionsLoader(activity).edit();
+
+            editor.putBoolean(MAJOR_CHORDS_BUNDLE_ID, useMajorChords);
+            editor.putBoolean(MINOR_CHORDS_BUNDLE_ID, useMinorChords);
+            editor.putBoolean(DOMINANT_CHORDS_BUNDLE_ID, useDominantChords);
+            editor.putBoolean(HINTS_BUNDLE_ID, useHints);
+
+            editor.apply();
         }
 
         /**
-         * Writes the values of this OptionsFragment to the given Bundle.
-         * @param bundle The Bundle to which to write
+         * Loads this Options.
+         * @param activity The current Activity
          */
-        public void writeToBundle(Bundle bundle)
+        public void load(Activity activity)
         {
-            bundle.putBoolean(MAJOR_CHORDS_BUNDLE_ID, useMajorChords);
-            bundle.putBoolean(MINOR_CHORDS_BUNDLE_ID, useMinorChords);
-            bundle.putBoolean(DOMINANT_CHORDS_BUNDLE_ID, useDominantChords);
-            bundle.putBoolean(HINTS_BUNDLE_ID, useHints);
+            SharedPreferences preferences = getOptionsLoader(activity);
+            useMajorChords = preferences.getBoolean(MAJOR_CHORDS_BUNDLE_ID, true);
+            useMinorChords = preferences.getBoolean(MINOR_CHORDS_BUNDLE_ID, false);
+            useDominantChords = preferences.getBoolean(DOMINANT_CHORDS_BUNDLE_ID, false);
+            useHints = preferences.getBoolean(HINTS_BUNDLE_ID, true);
         }
     }
 }
