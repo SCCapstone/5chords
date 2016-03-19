@@ -66,7 +66,7 @@ public class chordHandler
     private static int currentWrongStreak;
 
     /** The OnDominantChordSelectedListener attached to the chordHandler. */
-    private static OnChordSelectedListener dominantChordSelectedListener;
+    private static OnChordSelectedListener onChordSelectedListener;
 
     /**
      * Static class.
@@ -86,12 +86,12 @@ public class chordHandler
     }
 
     /**
-     * Sets the OnDominantChordSelectedListener attached to the chordHandler.
+     * Sets the OnChordSelectedListener attached to the chordHandler.
      * @param listener The new listener
      */
-    public static void setOnDominantChordSelectedListener(OnChordSelectedListener listener)
+    public static void setOnChordSelectedListener(OnChordSelectedListener listener)
     {
-        dominantChordSelectedListener = listener;
+        onChordSelectedListener = listener;
     }
 
     /**
@@ -150,8 +150,8 @@ public class chordHandler
         currentChordIndex = chordIndex;
 
         // Call the listener
-        if (dominantChordSelectedListener != null)
-            dominantChordSelectedListener.onChordSelected();
+        if (onChordSelectedListener != null)
+            onChordSelectedListener.onChordSelected();
     }
 
     /**
@@ -302,7 +302,7 @@ public class chordHandler
         // Handle result TODO add sounds for right and wrong
         if (isCorrect)
         {
-            // Launch dialog TODO maybe replace with a custom dialog that also shows the current score info for the chord
+            // Launch dialog
             new AlertDialog.Builder(activity)
                     .setTitle(activity.getString(R.string.thats_correct))
                     .setMessage("Do you want to try another chord?")
@@ -354,7 +354,7 @@ public class chordHandler
         }
 
         // Set the score
-        Score.setScore(activity, chordHandler.getSelectedChordIndex(), isCorrect);
+        Score.getCurrentScore().update(activity, isCorrect);
         activity.updateDisplayedScore();
 
         builtChordChanged();

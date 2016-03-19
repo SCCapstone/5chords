@@ -22,7 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
-public class Score extends AppCompatActivity
+public class Score
 {
     /** The name of the saved chord scores in the SharedPreferences */
     public static final String CHORD_SCORES_SAVE_FILENAME = "ScoreFile";
@@ -38,50 +38,56 @@ public class Score extends AppCompatActivity
                                                                         672 * 3600L, 1344 * 3600L, 4032 * 3600L, 8064 * 3600L};
 
     /** The array of chord Scores */
-    public static ScoreWrapper[] scores;
+    public static Score[] scores;
+
+    /** The chord name of this Score. */
+    public final String CHORD_NAME;
+
+    /** Records the overall value of this Score. */
+    private ScoreValue overallValue;
+
+    /** Records the current value of this Score. */
+    private ScoreValue currentValue;
+
+    /** The history of this Score split into discrete bins for scores of different age categories */
+    private DiscreteScoreHistory discreteScoreHistory;
 
     /**
-     * Static class.
+     * Constructs a new Score for the given chord.
      */
-    private Score()
-    {    }
+    public Score(String chordName)
+    {
+        CHORD_NAME = chordName;
+        overallValue = new ScoreValue();
+        currentValue = new ScoreValue();
+        discreteScoreHistory = new DiscreteScoreHistory();
+    }
 
+    /**
+     * Gets the current time to use for Score timestamps.
+     * @return The current time to use for Score timestamps
+     */
+    private static long getScoreTime()
+    {
+        return System.currentTimeMillis() / 1000L;
+    }
 
     /**
      * Gets the SharedPreferences used to load and save scores
      * @param activity The calling Activity
      */
-    public static SharedPreferences getScoreLoader(Activity activity)
+    private static SharedPreferences getScoreLoader(Activity activity)
     {
         return activity.getSharedPreferences(CHORD_SCORES_SAVE_FILENAME, Context.MODE_PRIVATE);
     }
 
     /**
-     * Gets the number of correct guesses for the chord of the given index.
-     * @param chordIndex The index of the chord
-     * @return The number of correct guesses for the chord of the given index
+     * Gets the Score object for the currently selected chord.
+     * @return The Score object for the currently selected chord
      */
-    public static int getNumCorrectGuesses(int chordIndex) { return scores[chordIndex].value.numCorrectGuesses; }
-
-    /**
-     * Gets the number of total guesses for the chord of the given index.
-     * @param chordIndex The index of the chord
-     * @return The number of total guesses for the chord of the given index
-     */
-    public static int getNumTotalGuesses(int chordIndex) { return scores[chordIndex].value.numTotalGuesses; }
-
-    /**
-     * Called to go back to the Main Activity.
-     * @ param  The current Activity
-     *  MainActivity Call
-     */
-
-    public void backToMain(View view) {
-
-        Intent intent = new Intent(this, MainActivity.class);
-
-        startActivity(intent);
-
+    public static Score getCurrentScore()
+    {
+        return scores[chordHandler.getSelectedChordIndex()];
     }
 
     /**
@@ -119,7 +125,7 @@ public class Score extends AppCompatActivity
     }
 
     /**
-     * Loads the score data for each chord and initializes the correctChords and totalChords arrays.
+     * Loads the score data for each chord.
      * @param main The calling Activity
      * @param overwrite Whether or not to overwrite the score history if it is already loaded
      */
@@ -132,268 +138,99 @@ public class Score extends AppCompatActivity
         final String[] chordNames = main.getResources().getStringArray(R.array.chordNames);
 
         // Initialize score array
-        scores = new ScoreWrapper[chordNames.length];
+        scores = new Score[chordNames.length];
 
         // Load scores
         final SharedPreferences savedChordScores = getScoreLoader(main);
 
         for (int i = 0; i < scores.length; ++i)
         {
-            scores[i] = new ScoreWrapper(chordNames[i]);
+            scores[i] = new Score(chordNames[i]);
             scores[i].load(savedChordScores);
         }
     }
 
     /**
-     * Updates the score for the chord of the given index.
-     * @param activity The calling Activity
-     * @param chordIndex The index of the chord
-     * @param correct Whether or not the chord guess was correct
+     * Gets the current ScoreValue of this Score.
+     * @return The current ScoreValue of this Score
      */
-    public static void setScore(Activity activity, int chordIndex, boolean correct)
+    public ScoreValue getCurrentValue()
     {
-        ScoreWrapper scoreWrapper = scores[chordIndex];
-        SharedPreferences savedChordScores = getScoreLoader(activity);
-
-        // Edit the score
-        scoreWrapper.value.numTotalGuesses++;
-        if (correct)
-            scoreWrapper.value.numCorrectGuesses++;
-
-        // Save the new score
-        scoreWrapper.save(savedChordScores);
+        return currentValue;
     }
 
     /**
-     * Wrapper class for a single chord score that represents a most up to date version of that score,
-     * and contains a history of that score.
+     * Gets the overall ScoreValue of this Score.
+     * @return The overall ScoreValue of this Score
      */
-    public static class ScoreWrapper
+    public ScoreValue getOverallValue()
     {
-        /** The chord name of this ScoreWrapper */
-        public final String CHORD_NAME;
+        return overallValue;
+    }
 
-        /** Records the value of this ScoreWrapper */
-        private ScoreValue value;
+    /**
+     * Gets the DiscreteScoreHistory of this Score.
+     * @return The DiscreteScoreHistory of this Score
+     */
+    public DiscreteScoreHistory getHistory()
+    {
+        return discreteScoreHistory;
+    }
 
-        /** The history of this ScoreWrapper split into discrete bins for scores of different age categories */
-        private DiscreteScoreHistory discreteScoreHistory;
+    /**
+     * Updates this Score with a new attempt.
+     * @param activity The current Activity
+     * @param correct Whether or not the attempt was successful
+     */
+    public void update(Activity activity, boolean correct)
+    {
+        // Set the current value time
+        currentValue.time = getScoreTime();
 
-        /**
-         * Constructs a new ScoreWrapper with default scores of zero.
-         * @param name The name of the chord
-         */
-        public ScoreWrapper(String name)
+        // Update the value
+        ++currentValue.numTotalGuesses;
+        ++overallValue.numTotalGuesses;
+        if (correct)
         {
-            CHORD_NAME = name;
-            value = new ScoreValue();
+            ++currentValue.numCorrectGuesses;
+            ++overallValue.numCorrectGuesses;
         }
 
-        /**
-         * Gets the number of correct guesses of this ScoreWrapper.
-         * @return The number of correct guesses of this ScoreWrapper
-         */
-        public int getNumCorrectGuesses() { return value.numCorrectGuesses; }
+        // Update the history
+        discreteScoreHistory.setValueInHistory(currentValue, currentValue.time);
 
-        /**
-         * Gets the number of total guesses of this ScoreWrapper.
-         * @return The number of total guesses of this ScoreWrapper
-         */
-        public int getNumTotalGuesses() { return value.numTotalGuesses; }
+        // Save the changes
+        save(getScoreLoader(activity));
+    }
 
-        /**
-         * Gets the ScoreValue of this ScoreWrapper.
-         * @return The ScoreValue of this ScoreWrapper
-         */
-        public ScoreValue getValue()
-        {
-            return value;
-        }
+    /**
+     * Loads this Score from the given SharedPreferences.
+     * @param savedChordScores The SharedPreferences from which to load
+     */
+    private void load(SharedPreferences savedChordScores)
+    {
+        // Load the history
+        discreteScoreHistory.load(savedChordScores, CHORD_NAME);
 
-        /**
-         * Loads this ScoreWrapper from the given SharedPreferences.
-         * @param savedChordScores The SharedPreferences from which to load
-         */
-        public void load(SharedPreferences savedChordScores)
-        {
-            // Read from index zero (default)
-            value.load(savedChordScores, CHORD_NAME, 0);
-        }
+        // Load the overall value
+        overallValue.load(savedChordScores, CHORD_NAME, -1);
+    }
 
-        /*****************************************************************
-         * Loads this CurrentScoreWrapper from the given SharedPreferences.
-         * @param savedChordScores The SharedPreferences to which to save
-         **/
-        public void save(SharedPreferences savedChordScores)
-        {
-            // Update time
-            value.time = new Date().getTime() / 1000L;
+    /**
+     * Saves this Score to the given SharedPreferences.
+     * @param savedChordScores The SharedPreferences to which to save
+     */
+    public void save(SharedPreferences savedChordScores)
+    {
+        SharedPreferences.Editor editor = savedChordScores.edit();
 
-            // Save this score
-            SharedPreferences.Editor editor = savedChordScores.edit();
-            value.save(editor, CHORD_NAME, 0);
-            editor.apply();
+        // Save the history
+        discreteScoreHistory.save(editor, CHORD_NAME);
 
-            // Update history if needed
-            updateHistory(savedChordScores);
-        }
+        // Save the overall value
+        overallValue.save(editor, CHORD_NAME, -1);
 
-        /**
-         * Loads the history of this ScoreWrapper.
-         * @param activity The current Activity
-         * @param overwrite Whether or not to overwrite the history if it is already loaded
-         */
-        public void loadHistory(Activity activity, boolean overwrite)
-        {
-            if (overwrite || discreteScoreHistory == null)
-                loadHistory(getScoreLoader(activity));
-        }
-
-        /**
-         * Gets the score history of this ScoreWrapper.
-         * @return The score history of this ScoreWrapper
-         */
-        public DiscreteScoreHistory getHistory()
-        {
-            return discreteScoreHistory;
-        }
-
-        /**
-         * Gets a String representation of this ScoreWrapper.
-         * @return A String representation of this ScoreWrapper
-         */
-        @Override
-        public String toString()
-        {
-            return CHORD_NAME + ": " + value.numCorrectGuesses + " / " + value.numTotalGuesses + " (" +
-                    (100.0 * value.numCorrectGuesses / + value.numTotalGuesses) + " %), " +
-                    new Date(value.time * 1000L).toString();
-        }
-
-        /**
-         * Updates the history of this ScoreWrapper.
-         * @param savedChordScores The SharedPreferences from which to load
-         */
-        private void updateHistory(SharedPreferences savedChordScores)
-        {
-            // Calculate the current time in seconds
-            long time = new Date().getTime() / 1000;
-
-            // If this score has aged past the update interval, add it
-            if (value.time - time > HISTORY_UPDATE_INTERVALS[1])
-            {
-                // Collect all score points
-                List<ScoreValue> scoreValues = new LinkedList<>();
-                scoreValues.add(value);
-
-                // Load old history if needed
-                if (discreteScoreHistory == null)
-                    loadHistory(savedChordScores);
-
-                // Add the points in the history to the list
-                for (ScoreValue value: discreteScoreHistory.values)
-                    if (value != null)
-                        scoreValues.add(value);
-
-                // Clear the history and re-add the points
-                discreteScoreHistory.clear();
-                discreteScoreHistory.addValuesToHistory(scoreValues);
-
-                // Re-save the history
-                SharedPreferences.Editor editor = savedChordScores.edit();
-                saveHistory(editor);
-                editor.apply();
-            }
-            else if (discreteScoreHistory != null)
-            {
-                // Update first element of the history
-                discreteScoreHistory.setValueInHistory(value, time);
-
-                // Re-save the history
-                SharedPreferences.Editor editor = savedChordScores.edit();
-                saveHistory(editor);
-                editor.apply();
-            }
-        }
-
-        /**
-         * Loads the history of this ScoreWrapper.
-         * @param savedChordScores The SharedPreferences from which to load
-         */
-        private void loadHistory(SharedPreferences savedChordScores)
-        {
-            discreteScoreHistory = new DiscreteScoreHistory();
-
-            ScoreValue value;
-
-            // Load each element of the history
-            for (int i = 0; i < discreteScoreHistory.values.length; ++i)
-            {
-                if (savedChordScores.getBoolean(CHORD_NAME + "-b" + i, false))
-                {
-                    value = new ScoreValue();
-                    value.load(savedChordScores, CHORD_NAME, i);
-                    discreteScoreHistory.values[i] = value;
-                    discreteScoreHistory.size++;
-                }
-            }
-
-            // Collect all score points
-            List<ScoreValue> scoreValues = new LinkedList<>();
-
-//            // TODO test - Fill history with random points
-//            discreteScoreHistory.clear();
-//            long time = new Date().getTime() / 1000L;
-//            Random random = new Random();
-//            int num = 1 + random.nextInt(HISTORY_UPDATE_INTERVALS.length - 1);
-//            for (int i = 0; i < num; ++i)
-//            {
-//                value = new ScoreValue();
-//                value.numTotalGuesses = 1 + random.nextInt(100);
-//                value.numCorrectGuesses = random.nextInt(value.numTotalGuesses + 1);
-//                value.time = time - HISTORY_UPDATE_INTERVALS[i];
-//                scoreValues.add(value);
-//
-//                if (i == 0)
-//                    this.value = value;
-//            }
-
-            // Add the points in the history to the list
-            for (ScoreValue v: discreteScoreHistory.values)
-                if (v != null)
-                    scoreValues.add(v);
-
-            // Clear the history and re-add the points
-            discreteScoreHistory.clear();
-            discreteScoreHistory.addValuesToHistory(scoreValues);
-
-            // Re-save the history
-            SharedPreferences.Editor editor = savedChordScores.edit();
-            saveHistory(editor);
-            editor.apply();
-        }
-
-        /**
-         * Writes the history of this CurrentScoreWrapper without applying changes.
-         * @param scoreEditor The SharedPreferences.Editor to which to write
-         */
-        private void saveHistory(SharedPreferences.Editor scoreEditor)
-        {
-            // Save each element of the history
-            ScoreValue value;
-            for (int i = 0; i < discreteScoreHistory.values.length; ++i)
-            {
-                value = discreteScoreHistory.values[i];
-
-                if (value == null)
-                    scoreEditor.putBoolean(CHORD_NAME + "-b" + i, false);
-                else
-                {
-                    scoreEditor.putBoolean(CHORD_NAME + "-b" + i, true);
-                    value.save(scoreEditor, CHORD_NAME, i++);
-                }
-            }
-        }
+        editor.apply();
     }
 
     /**
@@ -424,6 +261,68 @@ public class Score extends AppCompatActivity
             size = 0;
             for (int i = 0; i < values.length; ++i)
                 values[i] = null;
+        }
+
+        /**
+         * Saves this DiscreteScoreHistory.
+         * @param scoreEditor The SharedPreferences.Editor to which to write
+         * @param name The name of the history
+         */
+        private void save(SharedPreferences.Editor scoreEditor, String name)
+        {
+            // Save each element of the history
+            ScoreValue value;
+            for (int i = 0; i < values.length; ++i)
+            {
+                value = values[i];
+
+                if (value == null)
+                    scoreEditor.putBoolean(name + "-b" + i, false);
+                else
+                {
+                    scoreEditor.putBoolean(name + "-b" + i, true);
+                    value.save(scoreEditor, name, i++);
+                }
+            }
+        }
+
+        /**
+         * Loads this DiscreteScoreHistory.
+         * @param savedChordScores The SharedPreferences from which to load
+         * @param name The name of the history to load
+         */
+        private void load(SharedPreferences savedChordScores, String name)
+        {
+             ScoreValue value;
+
+            // Load each element of the history
+            for (int i = 0; i < values.length; ++i)
+            {
+                if (savedChordScores.getBoolean(name + "-b" + i, false))
+                {
+                    value = new ScoreValue();
+                    value.load(savedChordScores, name, i);
+                    values[i] = value;
+                    size++;
+                }
+            }
+
+            // Collect all score points
+            List<ScoreValue> scoreValues = new LinkedList<>();
+
+            // Add the points in the history to the list
+            for (ScoreValue v: values)
+                if (v != null)
+                    scoreValues.add(v);
+
+            // Clear the history and re-add the points
+            clear();
+            addValuesToHistory(scoreValues);
+
+            // Re-save the history
+            SharedPreferences.Editor editor = savedChordScores.edit();
+            save(editor, name);
+            editor.apply();
         }
 
         /**
@@ -480,7 +379,7 @@ public class Score extends AppCompatActivity
         public void addValuesToHistory(List<ScoreValue> values)
         {
             // Get the current time in seconds
-            long time = new Date().getTime() / 1000;
+            long time = getScoreTime();
 
             // Loop over the values
             for (ScoreValue value: values)
@@ -522,7 +421,7 @@ public class Score extends AppCompatActivity
         public int numCorrectGuesses;
         /** The number of total guesses */
         public int numTotalGuesses;
-        /** The time stamp of this ScoreTimeValue */
+        /** The time stamp of this ScoreValue */
         public long time;
 
         /**
@@ -549,6 +448,15 @@ public class Score extends AppCompatActivity
             editor.putInt(name + "-" + index + "-c", numCorrectGuesses);
             editor.putInt(name + "-" + index + "-t", numTotalGuesses);
             editor.putLong(name + "-" + index + "-h", time);
+        }
+
+        /**
+         * Gets a String for displaying the value of this ScoreValue.
+         * @return A String for displaying the value of this ScoreValue
+         */
+        public String getDisplayString()
+        {
+            return numCorrectGuesses + " / " + numTotalGuesses;
         }
     }
 }

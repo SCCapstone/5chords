@@ -157,22 +157,22 @@ public class ChordInstrumentSelectFragment extends Fragment
 
         /**
          * Creates a new ChordDisplayItem from a ScoreWrapper.
-         * @param wrapper The ScoreWrapper
+         * @param score The Score of the chord to display
          */
-        public ChordDisplayItem(Score.ScoreWrapper wrapper)
+        public ChordDisplayItem(Score score)
         {
-            chordName = wrapper.CHORD_NAME;
-            chordDescription = getChordDescription(wrapper);
+            chordName = score.CHORD_NAME;
+            chordDescription = getChordDescription(score.getOverallValue());
         }
 
         /**
          * Gets the appropriate chord description for the Chord with the given ScoreWrapper.
-         * @param wrapper The ScoreWrapper
+         * @param value The value of the Score
          * @return The appropriate chord description for the Chord with the given ScoreWrapper
          */
-        private static String getChordDescription(Score.ScoreWrapper wrapper)
+        private static String getChordDescription(Score.ScoreValue value)
         {
-            if (wrapper.getNumTotalGuesses() == 0)
+            if (value.numTotalGuesses == 0)
                 return CHORD_DESCRIPTION_MATRIX[0];
             else
             {
@@ -180,7 +180,7 @@ public class ChordInstrumentSelectFragment extends Fragment
                 int i, j;
 
                 // Row
-                int guesses = wrapper.getNumTotalGuesses();
+                int guesses = value.numTotalGuesses;
 
                 if (guesses < 10)
                     i = 0;
@@ -190,7 +190,7 @@ public class ChordInstrumentSelectFragment extends Fragment
                     i = 2;
 
                 // Column
-                float percent = wrapper.getNumCorrectGuesses()  / (float) wrapper.getNumTotalGuesses();
+                float percent = value.numCorrectGuesses  / (float) value.numTotalGuesses;
 
                 if (percent < 0.25f)
                     j = 0;

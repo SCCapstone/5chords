@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         // Initialize Static Classes
         setUpGUI.initialize(this);
         chordHandler.initialize();
-        chordHandler.setOnDominantChordSelectedListener(this);
+        chordHandler.setOnChordSelectedListener(this);
         soundHandler.initialize(this);
         Score.loadScores(this, false);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -248,13 +248,14 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
         // Get the TextViews
         TextView currentProgress = (TextView) findViewById(R.id.textview_current_score);
-//        TextView overallProgress = (TextView) findViewById(R.id.textview_overall_score);
+        TextView overallProgress = (TextView) findViewById(R.id.textview_overall_score);
 
         // Get the current Score
-        Score.ScoreWrapper current = Score.scores[chordHandler.getSelectedChordIndex()];
+        Score current = Score.getCurrentScore();
 
         // Set the Views
-        currentProgress.setText(current.getNumCorrectGuesses() + " / " + current.getNumTotalGuesses());
+        currentProgress.setText(current.getCurrentValue().getDisplayString());
+        overallProgress.setText(current.getOverallValue().getDisplayString());
     }
 
     /**

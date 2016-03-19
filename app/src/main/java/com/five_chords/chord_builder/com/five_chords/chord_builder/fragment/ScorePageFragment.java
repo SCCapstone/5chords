@@ -48,24 +48,24 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
     public ScorePageFragment()
     {   }
 
-    /**
-     * Create a new instance of ScorePageFragment.
-     * @param onMajorChords Whether or not major chords should be selected
-     * @param onMinorChords Whether or not minor chords should be selected
-     * @return A new new instance of ScorePageFragment
-     */
-    public static ScorePageFragment newInstance(boolean onMajorChords, boolean onMinorChords)
-    {
-        ScorePageFragment f = new ScorePageFragment();
-
-        // Supply arguments to Bundle
-        Bundle args = new Bundle();
-        args.putBoolean(BUNDLE_ID_MAJOR_CHORDS, onMajorChords);
-        args.putBoolean(BUNDLE_ID_MINOR_CHORDS, onMinorChords);
-        f.setArguments(args);
-
-        return f;
-    }
+//    /**
+//     * Create a new instance of ScorePageFragment.
+//     * @param onMajorChords Whether or not major chords should be selected
+//     * @param onMinorChords Whether or not minor chords should be selected
+//     * @return A new new instance of ScorePageFragment
+//     */
+//    public static ScorePageFragment newInstance(boolean onMajorChords, boolean onMinorChords)
+//    {
+//        ScorePageFragment f = new ScorePageFragment();
+//
+//        // Supply arguments to Bundle
+//        Bundle args = new Bundle();
+//        args.putBoolean(BUNDLE_ID_MAJOR_CHORDS, onMajorChords);
+//        args.putBoolean(BUNDLE_ID_MINOR_CHORDS, onMinorChords);
+//        f.setArguments(args);
+//
+//        return f;
+//    }
 
     /**
      * Refreshes the list view containing scores.
@@ -245,7 +245,7 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
     /**
      * Implementation of an ArrayAdapter containing views for displaying the history of a chord's scores.
      */
-    public static class ScoreItemHistoryAdapter extends ArrayAdapter<Score.ScoreWrapper>
+    public static class ScoreItemHistoryAdapter extends ArrayAdapter<Score>
     {
         /**
          * Constructor.
@@ -277,7 +277,7 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
                 view = LayoutInflater.from(getContext()).inflate(R.layout.component_score_history_item, parent, false);
 
             // Get components on View
-            Score.ScoreWrapper item = getItem(position);
+            Score item = getItem(position);
             TextView textView = (TextView)view.findViewById(R.id.score_history_chord_name);
             ScoreProgressView progressView = (ScoreProgressView)view.findViewById(R.id.score_history_progress_view);
 
@@ -285,7 +285,7 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
             textView.setText(getLabel(item));
 
             // Setup history view
-            item.loadHistory((Activity) getContext(), false); // Make sure the History is loaded
+//            item.loadHistory((Activity) getContext(), false); // Make sure the History is loaded
 
             progressView.setWidthPixels(ScoreProgressView.calculateWidth(item.getHistory()));
             progressView.setHeightPixels(ScoreProgressView.calculateHeight());
@@ -318,12 +318,12 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
 
         /**
          * Gets a label for a CurrentScoreWrapper.
-         * @param wrapper The CurrentScoreWrapper
+         * @param score The Score
          * @return A label for the CurrentScoreWrapper
          */
-        private String getLabel(Score.ScoreWrapper wrapper)
+        private String getLabel(Score score)
         {
-            return wrapper.CHORD_NAME + (wrapper.getNumTotalGuesses() == 0 ?
+            return score.CHORD_NAME + (score.getOverallValue().numTotalGuesses == 0 ?
                     " - " + getContext().getString(R.string.not_attempted) : "");
         }
     }
