@@ -19,10 +19,8 @@ public class soundHandler extends MainActivity
     private static final String TAG = "soundHandler";
 
     static final int FULL_VOLUME = 127;
-    static final int SILENT = 0;
     static final int SUSTAIN_NOTE = 128;
     static final int RELEASE_NOTE = 0;
-    static final int DUMMY_NOTE = 0;
     static final int NOTE_OFFSET = 60;
 
     static final int TRUMPET = 57;
@@ -64,32 +62,19 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Plays a note
      **/
-    public static void playNote(Activity activity, int note)
+    public static void addNote(int note, int pitch, int channel)
     {
-        stopSound();
-
         // TODO: use the sliders to change pitch of note
         //       replace 8192 (centered) with the new pitch
-        int mostSignificantbits = (8192 >> 7) & 0x7F;
-        int leastSignificantbits = 8192 & 0x7F;
+        int mostSignificantbits = (pitch >> 7) & 0x7F;
+        int leastSignificantbits = pitch & 0x7F;
 
-        midi.newMidi();
+        midi.setChannel(channel);
         midi.progChange(instrument);
         midi.bendPitch(mostSignificantbits, leastSignificantbits);
-
         midi.noteOn(RELEASE_NOTE, note + NOTE_OFFSET, FULL_VOLUME);
         midi.noteOff(SUSTAIN_NOTE, note + NOTE_OFFSET);
-
-        try
-        {
-            midi.writeToFile(midiFile);
-            mediaPlayer = MediaPlayer.create(activity, Uri.parse("file://" + midiFile));
-            mediaPlayer.setLooping(true);
-            mediaPlayer.start();
-        }
-        catch (Exception e)
-        {
-        }
+        midi.commitTrack();
     }
 
     /****************************************************************
@@ -99,20 +84,8 @@ public class soundHandler extends MainActivity
     {
         stopSound();
 
-        // TODO: use the sliders to change pitch of note
-        //       replace 8192 (centered) with the new pitch
-        int mostSignificantbits = (8192 >> 7) & 0x7F;
-        int leastSignificantbits = 8192 & 0x7F;
-
-        midi.newMidi();
-        midi.progChange(instrument);
-        midi.bendPitch(mostSignificantbits, leastSignificantbits);
-
-        // use a silent dummy note to keep chord sustained
-        midi.noteOn(RELEASE_NOTE, DUMMY_NOTE, SILENT);
-        for (int note : chord) midi.noteOn(RELEASE_NOTE, note + NOTE_OFFSET, FULL_VOLUME);
-        midi.noteOff(SUSTAIN_NOTE, DUMMY_NOTE);
-        for (int note : chord) midi.noteOff(RELEASE_NOTE, note + NOTE_OFFSET);
+        midi.newMidi(chord.length, 1);
+        for (int i=0; i<chord.length; i++) addNote(chord[i], 8192, i);
 
         try
         {
@@ -126,6 +99,30 @@ public class soundHandler extends MainActivity
 
         Log.d(TAG, "Done Playing Chord");
     }
+
+    /****************************************************************
+     * Plays a chord
+     **/
+    public static void playNote(Activity activity, int note)
+    {
+        stopSound();
+
+        midi.newMidi(1, 0);
+        addNote(note, 8192, 1);
+
+        try
+        {
+            midi.writeToFile(midiFile);
+            mediaPlayer = MediaPlayer.create(activity, Uri.parse("file://" + midiFile));
+            mediaPlayer.setLooping(true);
+            mediaPlayer.start();
+        }
+        catch (Exception e)
+        { /* Ignored */ }
+
+        Log.d(TAG, "Done Playing Note");
+    }
+
 
     public static void switchInstrument(int i)
     {
