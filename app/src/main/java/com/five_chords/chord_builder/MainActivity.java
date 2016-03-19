@@ -224,6 +224,19 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         newFragment.show(ft, "dialog");
     }
 
+    /**
+     * Called to launch the options dialog.
+     *
+     * @param v The calling View
+     */
+    public void closeOptionsDialog(View v) {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+
+        if (prev != null) ft.remove(prev);
+        ft.commit();
+    }
+
 //    /**
 //     * Called to launch the score page dialog.
 //     *
@@ -260,6 +273,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         overallProgress.setText(current.getOverallValue().getDisplayString());
     }
 
+
     /**
      * Called to update the spinner displaying the currently selected chord.
      */
@@ -272,6 +286,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         boolean useDominants = chordHandler.getCurrentSelectedChord().length == 4;
         findViewById(R.id.slider_option_layout).setVisibility(useDominants ? View.VISIBLE : View.GONE);
     }
+
 
     /**
      * Goes to Help page.

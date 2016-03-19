@@ -81,8 +81,8 @@
             android:layout_margin="8dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:onClick="backToMain"
-            android:text="done"/>
+            android:text="done"
+            android:onClick="closeOptionsDialog" />
 
         <TextView
             android:layout_width="wrap_content"
