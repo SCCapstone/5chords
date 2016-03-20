@@ -11,8 +11,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 
-import java.util.Arrays;
-
 public class soundHandler extends MainActivity
 {
     /** The tag for this class. */
@@ -21,12 +19,12 @@ public class soundHandler extends MainActivity
     static final int FULL_VOLUME = 127;
     static final int SUSTAIN_NOTE = 128;
     static final int RELEASE_NOTE = 0;
-    static final int NOTE_OFFSET = 60;
+    static final int NOTE_OFFSET_OCTAVE3 = 60;
+    static final int NOTE_OFFSET_OCTAVE4 = 72;
 
     static final int TRUMPET = 57;
-    static final int PIANO = 21;
-    static final int ORGAN = 20;
-    static final int GUITAR = 25;
+    static final int PIANO = 2;
+    static final int ORGAN = 16;
     static final int VIOLIN = 41;
     static final int FLUTE = 74;
 
@@ -69,11 +67,26 @@ public class soundHandler extends MainActivity
         int mostSignificantbits = (pitch >> 7) & 0x7F;
         int leastSignificantbits = pitch & 0x7F;
 
+        int midiOffSet = NOTE_OFFSET_OCTAVE3;
+
+        switch (instrument) {
+            case TRUMPET: midiOffSet = NOTE_OFFSET_OCTAVE3;
+                          break;
+            case PIANO:   midiOffSet = NOTE_OFFSET_OCTAVE3;
+                          break;
+            case ORGAN:   midiOffSet = NOTE_OFFSET_OCTAVE3;
+                          break;
+            case VIOLIN:  midiOffSet = NOTE_OFFSET_OCTAVE4;
+                          break;
+            case FLUTE:   midiOffSet = NOTE_OFFSET_OCTAVE4;
+                          break;
+        }
+
         midi.setChannel(channel);
         midi.progChange(instrument);
         midi.bendPitch(mostSignificantbits, leastSignificantbits);
-        midi.noteOn(RELEASE_NOTE, note + NOTE_OFFSET, FULL_VOLUME);
-        midi.noteOff(SUSTAIN_NOTE, note + NOTE_OFFSET);
+        midi.noteOn(RELEASE_NOTE, note + midiOffSet, FULL_VOLUME);
+        midi.noteOff(SUSTAIN_NOTE, note + midiOffSet);
         midi.commitTrack();
     }
 
@@ -159,9 +172,8 @@ public class soundHandler extends MainActivity
         if(i == 0) instrument = TRUMPET;
         if(i == 1) instrument = PIANO;
         if(i == 2) instrument = ORGAN;
-        if(i == 3) instrument = GUITAR;
-        if(i == 4) instrument = VIOLIN;
-        if(i == 5) instrument = FLUTE;
+        if(i == 3) instrument = VIOLIN;
+        if(i == 4) instrument = FLUTE;
     }
 
     public static int getInstrument() {
