@@ -104,6 +104,7 @@ public class ChordInstrumentSelectFragment extends Fragment
             {
                 // Update the selected chord
                 chordHandler.setSelectedChord(chordSelectSpinner.getSelectedItemPosition());
+                chordHandler.newChord();
             }
 
             @Override
