@@ -22,10 +22,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
-
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.OptionsFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
@@ -115,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         chordHandler.initialize();
         chordHandler.setOnChordSelectedListener(this);
         chordHandler.setSelectedChord(0);
-        chordHandler.newChord();
         soundHandler.initialize(this);
         Score.loadScores(this, false);
         // ATTENTION: This was auto-generated to implement the App Indexing API.

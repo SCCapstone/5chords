@@ -163,6 +163,8 @@ public class chordHandler
         // Call the listener
         if (onChordSelectedListener != null)
             onChordSelectedListener.onChordSelected();
+
+        newChord();
     }
 
     /**
@@ -202,6 +204,39 @@ public class chordHandler
 
         setSelectedChord(newChordIndex);
         newChord();
+    }
+
+    public static void newChord() {
+        Random random = new Random();
+        int notes = random.nextInt(2) + 3;
+        int intervalMax = 40/notes;
+        currentNumInterval = random.nextInt(intervalMax/2) + intervalMax/2;
+        int maxProgress = notes*currentNumInterval;
+
+        int[] thisChord = availableChords[currentChordIndex];
+
+        // Set random note position on sliders
+        int rootNote = random.nextInt(maxProgress);
+        int thirdNote = random.nextInt(maxProgress);
+        int fifthNote = random.nextInt(maxProgress);
+        int optionNote = random.nextInt(maxProgress);
+
+        // This is the new correct seekbar positions
+        currentCorrectChord = (thisChord.length == 3) ?
+                new int[] {rootNote, thirdNote, fifthNote} :
+                new int[] {rootNote, thirdNote, fifthNote, optionNote};
+
+
+        // This is where the first note on the sliders start
+        int rootSliderOffset = thisChord[0] - rootNote/currentNumInterval;
+        int thirdSliderOffset = thisChord[1] - thirdNote/currentNumInterval;
+        int fifthSliderOffset = thisChord[2] - fifthNote/currentNumInterval;
+        int optionSliderOffset = (thisChord.length == 3) ? 0 : thisChord[3] - optionNote/currentNumInterval;
+
+        currentSliderOffset = new int[] {rootSliderOffset, thirdSliderOffset,
+                                         fifthSliderOffset, optionSliderOffset};
+
+        sF.setMaxProgress(maxProgress);
     }
 
     public static void newChord() {
