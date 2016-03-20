@@ -163,8 +163,6 @@ public class chordHandler
         // Call the listener
         if (onChordSelectedListener != null)
             onChordSelectedListener.onChordSelected();
-
-        newChord();
     }
 
     /**
@@ -203,6 +201,7 @@ public class chordHandler
         while (newChordIndex == previousChordIndex);
 
         setSelectedChord(newChordIndex);
+        newChord();
     }
 
     public static void newChord() {
