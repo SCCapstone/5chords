@@ -10,7 +10,7 @@
     <!-- Button to play the selected chord-->
     <Button
         android:id="@+id/button_select_chord_play"
-        android:layout_width="20dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:background="@drawable/play_button_selector"
@@ -19,7 +19,7 @@
     <!-- Button to select a random chord-->
     <Button
         android:id="@+id/button_select_random_chord"
-        android:layout_width="20dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
 
