@@ -85,7 +85,37 @@ public class soundHandler extends MainActivity
         stopSound();
 
         midi.newMidi(chord.length, 1);
-        for (int i=0; i<chord.length; i++) addNote(chord[i], 8192, i);
+        for (int i = 0; i < chord.length; i++) addNote(chord[i], 8192, i);
+
+        try
+        {
+            midi.writeToFile(midiFile);
+            mediaPlayer = MediaPlayer.create(activity, Uri.parse("file://" + midiFile));
+            mediaPlayer.setLooping(true);
+            mediaPlayer.start();
+        }
+        catch (Exception e)
+        { /* Ignored */ }
+
+        Log.d(TAG, "Done Playing Chord");
+    }
+
+    /****************************************************************
+     * Plays a chord
+     **/
+    public static void playBuiltChord(Activity activity, int[] chord, int intervals, int[] offsets, int[] correctChord)
+    {
+        stopSound();
+
+        midi.newMidi(chord.length, 1);
+
+        for (int i = 0; i < chord.length; i++)
+        {
+            int note = chord[i]/intervals + offsets[i];
+            int pitch = 8192 + (4096/intervals * (chord[i]%intervals - correctChord[i]%intervals));
+
+            addNote(note, pitch, i);
+        }
 
         try
         {
@@ -103,12 +133,12 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Plays a note
      **/
-    public static void playNote(Activity activity, int note)
+    public static void playNote(Activity activity, int note, int pitch)
     {
         stopSound();
 
         midi.newMidi(1, 0);
-        addNote(note, 8192, 1);
+        addNote(note, pitch, 1);
 
         try
         {

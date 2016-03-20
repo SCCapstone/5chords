@@ -76,13 +76,12 @@ public class SliderHintView extends LinearLayout
      * @param selectedChordPosition The position of the selected chord
      * @param delay The delay to display the hint, in milliseconds
      */
-    public void setHint(final byte type, final int builtChordPosition, final int selectedChordPosition, long delay)
+    public void setHint(final byte type, final int builtChordPosition,
+                        final int selectedChordPosition, long delay)
     {
-        postDelayed(new Runnable()
-        {
+        postDelayed(new Runnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 setHint(type, builtChordPosition, selectedChordPosition);
             }
         }, delay);

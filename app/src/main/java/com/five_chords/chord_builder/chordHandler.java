@@ -12,6 +12,7 @@ package com.five_chords.chord_builder;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.widget.SeekBar;
 import android.widget.Toast;
 
@@ -65,14 +66,22 @@ public class chordHandler
     /** Records the current wrong streak of the current chord for hinting purposes. */
     private static int currentWrongStreak;
 
+    private static int[] currentCorrectChord;
+    private static int[] currentSliderOffset;
+    private static int currentNumInterval;
+
     /** The OnDominantChordSelectedListener attached to the chordHandler. */
     private static OnChordSelectedListener onChordSelectedListener;
+
+    private static SliderFragment sF;
 
     /**
      * Static class.
      */
     private chordHandler()
-    {   }
+    {
+        sF = new SliderFragment();
+    }
 
     /**
      * Called to initialize this chordHandler.
@@ -83,6 +92,8 @@ public class chordHandler
         addMajorChords();
         addMinorChords();
         addDominantChords();
+
+        sF = new SliderFragment();
     }
 
     /**
@@ -152,6 +163,8 @@ public class chordHandler
         // Call the listener
         if (onChordSelectedListener != null)
             onChordSelectedListener.onChordSelected();
+
+        newChord();
     }
 
     /**
@@ -160,6 +173,18 @@ public class chordHandler
      */
     public static int getSelectedChordIndex() {
         return currentChordIndex;
+    }
+
+    public static int[] getCurrentCorrectChord() {
+        return currentCorrectChord;
+    }
+
+    public static int getCurrentNumInterval() {
+        return currentNumInterval;
+    }
+
+    public static int[] getCurrentSliderOffset() {
+        return currentSliderOffset;
     }
 
     /**
@@ -178,6 +203,40 @@ public class chordHandler
         while (newChordIndex == previousChordIndex);
 
         setSelectedChord(newChordIndex);
+        newChord();
+    }
+
+    public static void newChord() {
+        Random random = new Random();
+        int notes = random.nextInt(2) + 3;
+        int intervalMax = 40/notes;
+        currentNumInterval = random.nextInt(intervalMax/2) + intervalMax/2;
+        int maxProgress = notes*currentNumInterval;
+
+        int[] thisChord = availableChords[currentChordIndex];
+
+        // Set random note position on sliders
+        int rootNote = random.nextInt(maxProgress);
+        int thirdNote = random.nextInt(maxProgress);
+        int fifthNote = random.nextInt(maxProgress);
+        int optionNote = random.nextInt(maxProgress);
+
+        // This is the new correct seekbar positions
+        currentCorrectChord = (thisChord.length == 3) ?
+                new int[] {rootNote, thirdNote, fifthNote} :
+                new int[] {rootNote, thirdNote, fifthNote, optionNote};
+
+
+        // This is where the first note on the sliders start
+        int rootSliderOffset = thisChord[0] - rootNote/currentNumInterval;
+        int thirdSliderOffset = thisChord[1] - thirdNote/currentNumInterval;
+        int fifthSliderOffset = thisChord[2] - fifthNote/currentNumInterval;
+        int optionSliderOffset = (thisChord.length == 3) ? 0 : thisChord[3] - optionNote/currentNumInterval;
+
+        currentSliderOffset = new int[] {rootSliderOffset, thirdSliderOffset,
+                                         fifthSliderOffset, optionSliderOffset};
+
+        sF.setMaxProgress(maxProgress);
     }
 
     /**
@@ -241,6 +300,11 @@ public class chordHandler
      */
     public static boolean compareChords(int[] builtChord, int[] setChord)
     {
+        Log.d("set chord", setChord[0] + ", " + setChord[1] + ", " + setChord[2]);
+        Log.d("built chord", builtChord[0] + ", " + builtChord[1] + ", " + builtChord[2]);
+        Log.d("intervals", "" + currentNumInterval);
+        Log.d("offsets", currentSliderOffset[0] + ", " + currentSliderOffset[1] + ", " + currentSliderOffset[2]);
+
         return !(setChord == null || builtChord == null || setChord.length != builtChord.length) &&
                 Arrays.equals(builtChord, setChord);
     }
@@ -255,18 +319,19 @@ public class chordHandler
         int third = ((VerticalSeekBar) activity.findViewById(R.id.slider_third)).getProgress();
         int fifth = ((VerticalSeekBar) activity.findViewById(R.id.slider_fifth)).getProgress();
         int seventh = ((VerticalSeekBar) activity.findViewById(R.id.slider_option)).getProgress();
-//        int root = ((SeekBar) activity.findViewById(R.id.slider_root)).getProgress();
-//        int third = ((SeekBar) activity.findViewById(R.id.slider_third)).getProgress();
-//        int fifth = ((SeekBar) activity.findViewById(R.id.slider_fifth)).getProgress();
-//        int seventh = ((SeekBar) activity.findViewById(R.id.slider_option)).getProgress();
 
         if (getCurrentSelectedChord().length == MIN_NOTES_PER_CHORD)
         {
-            currentBuiltChord = new int[]{root, third, fifth};
+            currentBuiltChord = new int[]{root/currentNumInterval + currentSliderOffset[0],
+                                          third/currentNumInterval + currentSliderOffset[1],
+                                          fifth/currentNumInterval + currentSliderOffset[2]};
         }
         else
         {
-            currentBuiltChord = new int[]{root, third, fifth, seventh};
+            currentBuiltChord = new int[]{root/currentNumInterval + currentSliderOffset[0],
+                                          third/currentNumInterval + currentSliderOffset[1],
+                                          fifth/currentNumInterval + currentSliderOffset[2],
+                                          seventh/currentNumInterval + currentSliderOffset[3]};
         }
     }
 
@@ -297,7 +362,7 @@ public class chordHandler
      */
     public static void checkCurrentChord(final MainActivity activity)
     {
-        boolean isCorrect = compareChords(getCurrentBuiltChord(activity), getCurrentSelectedChord());
+        boolean isCorrect = compareChords(getCurrentPreciseBuiltChord(activity), getCurrentCorrectChord());
 
         // Handle result TODO add sounds for right and wrong
         if (isCorrect)
