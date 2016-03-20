@@ -32,9 +32,6 @@ public class SliderFragment extends Fragment
     /** The slider for the option note */
     private static VerticalSeekBar optionSlider;
 
-    /** Don't use onTouch methods when blocking **/
-    private static boolean blockSliders = false;
-
     /**
      * Required empty public constructor.
      */
@@ -124,7 +121,7 @@ public class SliderFragment extends Fragment
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
                 // Only play note if progress change is from user
-                if (seekBar instanceof VerticalSeekBar && ((VerticalSeekBar)seekBar).isTouched() && !blockSliders) {
+                if (seekBar instanceof VerticalSeekBar && ((VerticalSeekBar)seekBar).isTouched()) {
                     int intervals = chordHandler.getCurrentNumInterval();
                     int[] offsets = chordHandler.getCurrentSliderOffset();
                     int[] correctChord = chordHandler.getCurrentCorrectChord();
@@ -216,11 +213,9 @@ public class SliderFragment extends Fragment
     }
 
     public void setMaxProgress(int max) {
-        blockSliders = true;
         rootSlider.setMax(max);
         thirdSlider.setMax(max);
         fifthSlider.setMax(max);
         optionSlider.setMax(max);
-        blockSliders = false;
     }
 }

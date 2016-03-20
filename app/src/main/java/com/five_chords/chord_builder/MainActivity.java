@@ -113,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         chordHandler.initialize();
         chordHandler.setOnChordSelectedListener(this);
         chordHandler.setSelectedChord(0);
-        chordHandler.newChord();
         soundHandler.initialize(this);
         Score.loadScores(this, false);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
