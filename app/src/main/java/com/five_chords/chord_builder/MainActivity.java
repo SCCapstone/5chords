@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
         setUpGUI.initialize(this);
         chordHandler.initialize();
         chordHandler.setOnChordSelectedListener(this);
+        chordHandler.setSelectedChord(0);
         soundHandler.initialize(this);
         Score.loadScores(this, false);
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -139,13 +140,13 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
             switch (position) {
                 case 0:
                         break;
-                case 1: toScorePage(null);
+                case 1: toScorePage();
                         break;
-                case 2: launchOptionsDialog(findViewById(R.id.fragment_content));
+                case 2: launchOptionsDialog();
                         break;
-                case 3: toAboutPage(null);
+                case 3: toAboutPage();
                         break;
-                case 4: toHelpPage(null);
+                case 4: toHelpPage();
                         break;
             }
 
@@ -207,10 +208,8 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
     /**
      * Called to launch the options dialog.
-     *
-     * @param v The calling View
      */
-    public void launchOptionsDialog(View v) {
+    public void launchOptionsDialog() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("dialog");
 
@@ -225,9 +224,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     }
 
     /**
-     * Called to launch the options dialog.
-     *
-     * @param v The calling View
+     * Called to close the options dialog.
      */
     public void closeOptionsDialog(View v) {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -290,30 +287,24 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
     /**
      * Goes to Help page.
-     *
-     * @param view The calling View
      */
-    public void toHelpPage(View view) {
+    public void toHelpPage() {
         Intent intent = new Intent(this, HelpPage.class);
         startActivity(intent);
     }
 
     /**
      * Goes to the About page.
-     *
-     * @param view The calling View
      */
-    public void toAboutPage(View view) {
+    public void toAboutPage() {
         Intent intent = new Intent(this, AboutPage.class);
         startActivity(intent);
     }
 
     /**
      * Goes to the Score page.
-     *
-     * @param view The calling View
      */
-    public void toScorePage(View view) {
+    public void toScorePage() {
         Intent intent = new Intent(this, ScorePage.class);
         startActivity(intent);
     }
@@ -334,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     public void makeHint(final byte type) {
         // Calculate the chord differences
         final int[] builtChord = chordHandler.getCurrentPreciseBuiltChord(this);
-        final int[] selectedChord = chordHandler.getCurrentSelectedChord();
+        final int[] selectedChord = chordHandler.getCurrentCorrectChord();
 
         // Add hints
         SliderHintView view;

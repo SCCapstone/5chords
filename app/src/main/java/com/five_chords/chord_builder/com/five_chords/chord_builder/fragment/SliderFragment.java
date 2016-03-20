@@ -11,6 +11,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.five_chords.chord_builder.R;
+import com.five_chords.chord_builder.chordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar;
 import com.five_chords.chord_builder.soundHandler;
 
@@ -112,19 +113,24 @@ public class SliderFragment extends Fragment
      * Called to add the seek bar listener to a single seek bar.
      * @param bar The seekbar to add listeners to
      */
-    private static void addSeekBarListener(final Activity activity, final VerticalSeekBar bar)
+    private static void addSeekBarListener(final Activity activity, final VerticalSeekBar bar, final int slider)
     {
-        // A reference to the noteNames to pass to the Listener
-        final String[] noteNames = activity.getResources().getStringArray(R.array.noteNames);
-
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
                 // Only play note if progress change is from user
-                if (seekBar instanceof VerticalSeekBar && ((VerticalSeekBar)seekBar).isTouched())
-                    soundHandler.playNote(activity, bar.getProgress());
+                if (seekBar instanceof VerticalSeekBar && ((VerticalSeekBar)seekBar).isTouched()) {
+                    int intervals = chordHandler.getCurrentNumInterval();
+                    int[] offsets = chordHandler.getCurrentSliderOffset();
+                    int[] correctChord = chordHandler.getCurrentCorrectChord();
+
+                    int note = bar.getProgress()/intervals + offsets[slider];
+                    int pitch = 8192 + (4096/intervals * (bar.getProgress()%intervals - correctChord[slider]%intervals));
+
+                    soundHandler.playNote(activity, note, pitch);
+                }
             }
 
             public void onStartTrackingTouch(SeekBar seekBar)
@@ -139,9 +145,16 @@ public class SliderFragment extends Fragment
             @Override
             public boolean onTouch(View v, MotionEvent event)
             {
-                if (event.getAction() == MotionEvent.ACTION_DOWN)
-                    soundHandler.playNote(activity, bar.getProgress());
-                else if (event.getAction() == MotionEvent.ACTION_UP)
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    int intervals = chordHandler.getCurrentNumInterval();
+                    int[] offsets = chordHandler.getCurrentSliderOffset();
+                    int[] correctChord = chordHandler.getCurrentCorrectChord();
+
+                    int note = bar.getProgress()/intervals + offsets[slider];
+                    int pitch = 8192 + (4096/intervals * (bar.getProgress()%intervals - correctChord[slider]%intervals));
+
+                    soundHandler.playNote(activity, note, pitch);
+                } else if (event.getAction() == MotionEvent.ACTION_UP)
                     soundHandler.stopSound();
                 else if (event.getAction() == MotionEvent.ACTION_MOVE)
                     return false;
@@ -179,10 +192,10 @@ public class SliderFragment extends Fragment
 
         // Add the seek bar listeners
         Activity activity = getActivity();
-        addSeekBarListener(activity, rootSlider);
-        addSeekBarListener(activity, thirdSlider);
-        addSeekBarListener(activity, fifthSlider);
-        addSeekBarListener(activity, optionSlider);
+        addSeekBarListener(activity, rootSlider, 0);
+        addSeekBarListener(activity, thirdSlider, 1);
+        addSeekBarListener(activity, fifthSlider, 2);
+        addSeekBarListener(activity, optionSlider, 3);
 //        setUpGUI.addSeekBarListeners(getActivity(), sliders);
 
         return sliders;
@@ -197,5 +210,12 @@ public class SliderFragment extends Fragment
         thirdSlider = null;
         fifthSlider = null;
         optionSlider = null;
+    }
+
+    public void setMaxProgress(int max) {
+        rootSlider.setMax(max);
+        thirdSlider.setMax(max);
+        fifthSlider.setMax(max);
+        optionSlider.setMax(max);
     }
 }

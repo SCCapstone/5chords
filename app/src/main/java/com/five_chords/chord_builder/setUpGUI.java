@@ -118,7 +118,11 @@ public class setUpGUI
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    soundHandler.playChord(activity, chordHandler.getCurrentBuiltChord(activity));
+                    soundHandler.playBuiltChord(activity,
+                                                chordHandler.getCurrentPreciseBuiltChord(activity),
+                                                chordHandler.getCurrentNumInterval(),
+                                                chordHandler.getCurrentSliderOffset(),
+                                                chordHandler.getCurrentCorrectChord());
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
@@ -163,11 +167,9 @@ public class setUpGUI
                 {
                     // Momentarily disable the button
                     v.setEnabled(false);
-                    v.postDelayed(new Runnable()
-                    {
+                    v.postDelayed(new Runnable() {
                         @Override
-                        public void run()
-                        {
+                        public void run() {
                             v.setEnabled(true);
                         }
                     }, 1000L);
