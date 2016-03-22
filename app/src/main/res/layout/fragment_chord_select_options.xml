@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="@drawable/play_button_selector"
+        android:background="@drawable/play_btn_image1"
         android:textColor="#ffffff" />
 
     <!-- Button to select a random chord-->

@@ -16,6 +16,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -422,4 +423,5 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
     }
+
 }
