@@ -46,7 +46,6 @@ public class demo extends AppCompatActivity
      */
     public void skip_button(View view)
     {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        finish();
     }
 }

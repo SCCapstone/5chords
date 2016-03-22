@@ -25,11 +25,11 @@ import com.five_chords.chord_builder.soundHandler;
 public class ChordInstrumentSelectFragment extends Fragment
 {
     /** The available instruments names */
-    public static final String[] INSTRUMENT_NAMES = {"Trumpet", "Piano", "Organ", "Guitar", "Violin", "Flute"};
+    public static final String[] INSTRUMENT_NAMES = {"Trumpet", "Piano", "Organ", "Violin", "Flute"};
 
     /** The available instrument icons */
     public static final int[] INSTRUMENT_ICONS = {R.drawable.trumpet, R.drawable.piano, R.drawable.organ,
-            R.drawable.guitar, R.drawable.violin, R.drawable.flute};
+                                                  R.drawable.violin, R.drawable.flute};
 
     /** Reference to the Spinner for selecting chords contained in this Fragment. */
     private Spinner chordSelectSpinner;

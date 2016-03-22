@@ -11,8 +11,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 
-import java.util.Arrays;
-
 public class soundHandler extends MainActivity
 {
     /** The tag for this class. */
@@ -21,12 +19,12 @@ public class soundHandler extends MainActivity
     static final int FULL_VOLUME = 127;
     static final int SUSTAIN_NOTE = 128;
     static final int RELEASE_NOTE = 0;
-    static final int NOTE_OFFSET = 60;
+    static final int NOTE_OFFSET_OCTAVE3 = 60;
+    static final int NOTE_OFFSET_OCTAVE4 = 72;
 
     static final int TRUMPET = 57;
-    static final int PIANO = 21;
-    static final int ORGAN = 20;
-    static final int GUITAR = 25;
+    static final int PIANO = 2;
+    static final int ORGAN = 16;
     static final int VIOLIN = 41;
     static final int FLUTE = 74;
 
@@ -69,11 +67,26 @@ public class soundHandler extends MainActivity
         int mostSignificantbits = (pitch >> 7) & 0x7F;
         int leastSignificantbits = pitch & 0x7F;
 
+        int midiOffSet = NOTE_OFFSET_OCTAVE3;
+
+        switch (instrument) {
+            case TRUMPET: midiOffSet = NOTE_OFFSET_OCTAVE3;
+                          break;
+            case PIANO:   midiOffSet = NOTE_OFFSET_OCTAVE3;
+                          break;
+            case ORGAN:   midiOffSet = NOTE_OFFSET_OCTAVE3;
+                          break;
+            case VIOLIN:  midiOffSet = NOTE_OFFSET_OCTAVE4;
+                          break;
+            case FLUTE:   midiOffSet = NOTE_OFFSET_OCTAVE4;
+                          break;
+        }
+
         midi.setChannel(channel);
         midi.progChange(instrument);
         midi.bendPitch(mostSignificantbits, leastSignificantbits);
-        midi.noteOn(RELEASE_NOTE, note + NOTE_OFFSET, FULL_VOLUME);
-        midi.noteOff(SUSTAIN_NOTE, note + NOTE_OFFSET);
+        midi.noteOn(RELEASE_NOTE, note + midiOffSet, FULL_VOLUME);
+        midi.noteOff(SUSTAIN_NOTE, note + midiOffSet);
         midi.commitTrack();
     }
 
@@ -85,7 +98,37 @@ public class soundHandler extends MainActivity
         stopSound();
 
         midi.newMidi(chord.length, 1);
-        for (int i=0; i<chord.length; i++) addNote(chord[i], 8192, i);
+        for (int i = 0; i < chord.length; i++) addNote(chord[i], 8192, i);
+
+        try
+        {
+            midi.writeToFile(midiFile);
+            mediaPlayer = MediaPlayer.create(activity, Uri.parse("file://" + midiFile));
+            mediaPlayer.setLooping(true);
+            mediaPlayer.start();
+        }
+        catch (Exception e)
+        { /* Ignored */ }
+
+        Log.d(TAG, "Done Playing Chord");
+    }
+
+    /****************************************************************
+     * Plays a chord
+     **/
+    public static void playBuiltChord(Activity activity, int[] chord, int intervals, int[] offsets, int[] correctChord)
+    {
+        stopSound();
+
+        midi.newMidi(chord.length, 1);
+
+        for (int i = 0; i < chord.length; i++)
+        {
+            int note = chord[i]/intervals + offsets[i];
+            int pitch = 8192 + (4096/intervals * (chord[i]%intervals - correctChord[i]%intervals));
+
+            addNote(note, pitch, i);
+        }
 
         try
         {
@@ -103,12 +146,12 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Plays a note
      **/
-    public static void playNote(Activity activity, int note)
+    public static void playNote(Activity activity, int note, int pitch)
     {
         stopSound();
 
         midi.newMidi(1, 0);
-        addNote(note, 8192, 1);
+        addNote(note, pitch, 1);
 
         try
         {
@@ -129,9 +172,8 @@ public class soundHandler extends MainActivity
         if(i == 0) instrument = TRUMPET;
         if(i == 1) instrument = PIANO;
         if(i == 2) instrument = ORGAN;
-        if(i == 3) instrument = GUITAR;
-        if(i == 4) instrument = VIOLIN;
-        if(i == 5) instrument = FLUTE;
+        if(i == 3) instrument = VIOLIN;
+        if(i == 4) instrument = FLUTE;
     }
 
     public static int getInstrument() {
