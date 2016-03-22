@@ -102,6 +102,19 @@ public class VerticalSeekBar extends SeekBar
     }
 
     /**
+     * Called when the size of this VerticalSeekBar changes.
+     * @param w The new width
+     * @param h The new height
+     * @param oldw The old width
+     * @param oldh The old height
+     */
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh)
+    {
+        super.onSizeChanged(h, w, oldh, oldw);
+    }
+
+    /**
      * Called on a touch event.
      * @param event The MotionEvent
      * @return Whether the state of this VerticalSeekBar changed as a result of the event
