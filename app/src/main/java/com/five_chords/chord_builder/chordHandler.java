@@ -377,9 +377,9 @@ public class chordHandler
                         {
                             getRandomChord();
                             activity.updateChordSelectSpinner();
-//                            setUpGUI.resetChordSliders(activity);
                             SliderFragment.resetChordSliders();
                             soundHandler.stopSound();
+
                         }
 
                     })
@@ -389,12 +389,29 @@ public class chordHandler
                         public void onClick(DialogInterface dialog, int which)
                         {
                             setSelectedChord(getSelectedChordIndex()); // Resets the wrong streak counter
-//                            setUpGUI.resetChordSliders(activity);
                             SliderFragment.resetChordSliders();
                             soundHandler.stopSound();
                         }
 
                     })
+                    .setOnCancelListener(new DialogInterface.OnCancelListener()
+                    {
+                        @Override
+                        public void onCancel(DialogInterface dialog)
+                        {
+                            SliderFragment.resetChordSliders();
+                            soundHandler.stopSound();
+                        }
+                    })
+//                    .setOnDismissListener(new DialogInterface.OnDismissListener()
+//                    {
+//                        @Override
+//                        public void onDismiss(DialogInterface dialog)
+//                        {
+//                            SliderFragment.resetChordSliders();
+//                            soundHandler.stopSound();
+//                        }
+//                    })
                     .show();
         }
         else
