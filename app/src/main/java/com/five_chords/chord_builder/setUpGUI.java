@@ -131,14 +131,18 @@ public class setUpGUI
             }
         });
 
+        //This will listen for touch on whether to play the sound, and to now change the image of the button
+        //decided this was a better option as, it listens for onclick already
         playSelectedChord.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     soundHandler.playChord(activity, chordHandler.getCurrentSelectedChord());
+                   playSelectedChord.setBackgroundResource(R.drawable.testbtn1);
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
+                    playSelectedChord.setBackgroundResource(R.drawable.play_btn_image1);
                 }
                 return true;
             }

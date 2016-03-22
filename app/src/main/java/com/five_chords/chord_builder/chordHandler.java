@@ -203,6 +203,7 @@ public class chordHandler
         while (newChordIndex == previousChordIndex);
 
         setSelectedChord(newChordIndex);
+        newChord();
     }
 
     public static void newChord() {
@@ -237,6 +238,8 @@ public class chordHandler
 
         sF.setMaxProgress(maxProgress);
     }
+
+
 
     /**
      * Clears the available chord array.
