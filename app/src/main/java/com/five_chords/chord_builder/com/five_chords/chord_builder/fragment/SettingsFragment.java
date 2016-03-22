@@ -36,7 +36,7 @@ public class SettingsFragment extends Fragment
     /**
      * The SettingsOption for editing hints.
      */
-    private final SettingsOption EDIT_HINTS_OPTIONS = new SettingsOption("Edit Hints")
+    private final SettingsOption EDIT_HINTS_OPTIONS = new SettingsOption("Edit Hint Settings")
     {
         @Override
         public void performAction()

@@ -66,6 +66,8 @@
     <string name="choose_chords">Choose Chords</string>
     <string name="choose">Choose</string>
     <string name="seek_bar_tag">seekBarTag</string>
+    <string name="hint_delay_set_submessage">Select the number of incorrect guesses for each hint type below:</string>
+    <string name="hint_delay_set_message">Three types of hints will appear after some number of incorrect guesses.</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
