@@ -403,15 +403,6 @@ public class chordHandler
                             soundHandler.stopSound();
                         }
                     })
-//                    .setOnDismissListener(new DialogInterface.OnDismissListener()
-//                    {
-//                        @Override
-//                        public void onDismiss(DialogInterface dialog)
-//                        {
-//                            SliderFragment.resetChordSliders();
-//                            soundHandler.stopSound();
-//                        }
-//                    })
                     .show();
         }
         else

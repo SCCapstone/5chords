@@ -21,25 +21,34 @@ public class VerticalSeekBar extends SeekBar
     /** Indicates whether or not this SeekBar is currently touched by the user */
     private boolean isTouched;
 
+    /**
+     * Constructs a new VerticalSeekBar.
+     * @param context The Context to set
+     */
     public VerticalSeekBar(Context context)
     {
         super(context);
     }
 
+    /**
+     * Constructs a new VerticalSeekBar.
+     * @param context The Context to set
+     * @param attrs The attributes to set
+     * @param defStyle The default style
+     */
     public VerticalSeekBar(Context context, AttributeSet attrs, int defStyle)
     {
         super(context, attrs, defStyle);
     }
 
+    /**
+     * Constructs a new VerticalSeekBar.
+     * @param context The Context to set
+     * @param attrs The attributes to set
+     */
     public VerticalSeekBar(Context context, AttributeSet attrs)
     {
         super(context, attrs);
-    }
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh)
-    {
-        super.onSizeChanged(h, w, oldh, oldw);
     }
 
     /**
@@ -68,6 +77,11 @@ public class VerticalSeekBar extends SeekBar
         isTouched = touched;
     }
 
+    /**
+     * Called when this VerticalSeekBar is measured.
+     * @param widthMeasureSpec The measured width
+     * @param heightMeasureSpec The measrued height
+     */
     @Override
     protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
@@ -75,6 +89,10 @@ public class VerticalSeekBar extends SeekBar
         setMeasuredDimension(getMeasuredHeight(), getMeasuredWidth());
     }
 
+    /**
+     * Called when this VerticalSeekBar is drawn.
+     * @param c The draw Canvas
+     */
     protected void onDraw(Canvas c)
     {
         c.rotate(-90);
@@ -83,6 +101,11 @@ public class VerticalSeekBar extends SeekBar
         super.onDraw(c);
     }
 
+    /**
+     * Called on a touch event.
+     * @param event The MotionEvent
+     * @return Whether the state of this VerticalSeekBar changed as a result of the event
+     */
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
