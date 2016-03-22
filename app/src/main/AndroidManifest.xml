@@ -25,6 +25,18 @@
             android:label="Chord Builder">
         </activity>
 
+        <!-- Settings Page Activity -->
+        <activity
+            android:name=".SettingsPage"
+            android:label="Settings"
+            android:parentActivityName=".MainActivity">
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.five_chords.chord_builder.MainActivity" />
+        </activity>
+
         <!-- Help Page Activity -->
         <activity
             android:name=".HelpPage"

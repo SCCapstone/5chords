@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <!-- Enable hints checkbox -->
+    <Switch
+        android:id="@+id/switch_hints"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/enable_hints"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="@string/hint_delay_set_message"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="italic"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="@string/hint_delay_set_submessage"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="italic"/>
+
+    <!-- Layout containing selectors for hint intervals -->
+    <LinearLayout
+        android:id="@+id/hint_interval_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- Level 1 picker -->
+        <NumberPicker
+            android:id="@+id/hint_level1_picker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+        </NumberPicker>
+
+        <!-- Level 2 picker -->
+        <NumberPicker
+            android:id="@+id/hint_level2_picker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+        </NumberPicker>
+
+        <!-- Level 3 picker -->
+        <NumberPicker
+            android:id="@+id/hint_level3_picker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+        </NumberPicker>
+
+    </LinearLayout>
+
+</LinearLayout>

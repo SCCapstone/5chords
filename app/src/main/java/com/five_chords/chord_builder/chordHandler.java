@@ -33,14 +33,14 @@ public class chordHandler
     /** Denotes the third level of hints */
     public static final byte HINT_THREE = 3;
 
-    /** Denotes a 'small' number of times that the user has guessed the wrong chord */
-    private static final int NUM_TIMES_WRONG_SMALL = 2;
-
-    /** Denotes a 'medium' number of times that the user has guessed the wrong chord */
-    private static final int NUM_TIMES_WRONG_MEDIUM = 6;
-
-    /** Denotes a 'large' number of times that the user has guessed the wrong chord */
-    private static final int NUM_TIMES_WRONG_LARGE = 12;
+//    /** Denotes a 'small' number of times that the user has guessed the wrong chord */
+//    private static int NUM_TIMES_WRONG_SMALL = 2;
+//
+//    /** Denotes a 'medium' number of times that the user has guessed the wrong chord */
+//    private static int NUM_TIMES_WRONG_MEDIUM = 6;
+//
+//    /** Denotes a 'large' number of times that the user has guessed the wrong chord */
+//    private static int NUM_TIMES_WRONG_LARGE = 12;
 
     /** The number of chords per type (Major, Minor, Dominant) */
     private static final int CHORDS_PER_TYPE = 12;
@@ -380,9 +380,9 @@ public class chordHandler
                         {
                             getRandomChord();
                             activity.updateChordSelectSpinner();
-//                            setUpGUI.resetChordSliders(activity);
                             SliderFragment.resetChordSliders();
                             soundHandler.stopSound();
+
                         }
 
                     })
@@ -392,11 +392,19 @@ public class chordHandler
                         public void onClick(DialogInterface dialog, int which)
                         {
                             setSelectedChord(getSelectedChordIndex()); // Resets the wrong streak counter
-//                            setUpGUI.resetChordSliders(activity);
                             SliderFragment.resetChordSliders();
                             soundHandler.stopSound();
                         }
 
+                    })
+                    .setOnCancelListener(new DialogInterface.OnCancelListener()
+                    {
+                        @Override
+                        public void onCancel(DialogInterface dialog)
+                        {
+                            SliderFragment.resetChordSliders();
+                            soundHandler.stopSound();
+                        }
                     })
                     .show();
         }
@@ -408,11 +416,13 @@ public class chordHandler
             // Show hints
             if (MainActivity.getOptions().useHints)
             {
-                if (currentWrongStreak > NUM_TIMES_WRONG_LARGE)
+                int[] hintDelays = MainActivity.getOptions().hintTypeDelays;
+
+                if (currentWrongStreak > hintDelays[2])
                     activity.makeHint(HINT_THREE);
-                else if (currentWrongStreak > NUM_TIMES_WRONG_MEDIUM)
+                else if (currentWrongStreak > hintDelays[1])
                     activity.makeHint(HINT_TWO);
-                else if (currentWrongStreak > NUM_TIMES_WRONG_SMALL)
+                else if (currentWrongStreak > hintDelays[0])
                     activity.makeHint(HINT_ONE);
             }
 
