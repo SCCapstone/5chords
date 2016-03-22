@@ -164,10 +164,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     @Override
     protected void onResume() {
         super.onResume();
-
-        // Initialize views from options
-        onChordTypeOptionsChanged(options.useMajorChords, options.useMinorChords, options.useDominantChords);
-        onHintsOptionsChanged(options.useHints);
     }
 
     /**
