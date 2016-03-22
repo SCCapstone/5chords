@@ -59,7 +59,12 @@
     <string name="clear_scores">Clear Scores</string>
     <string name="clear">Clear</string>
     <string name="options">Options</string>
+    <string name="settings">Settings</string>
     <string name="enable_hints">Enable Hints</string>
+    <string name="edit_hint_settings">Edit Hint Settings</string>
+    <string name="edit">Edit</string>
+    <string name="choose_chords">Choose Chords</string>
+    <string name="choose">Choose</string>
     <string name="seek_bar_tag">seekBarTag</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"

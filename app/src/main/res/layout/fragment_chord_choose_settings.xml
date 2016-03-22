@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <!-- Checkboxes for what types of chords to select -->
+    <CheckBox
+        android:id="@+id/checkbox_major_chords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:checked="true"
+        android:text="@string/major_chords"/>
+
+    <CheckBox
+        android:id="@+id/checkbox_minor_chords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/minor_chords"/>
+
+    <CheckBox
+        android:id="@+id/checkbox_dominant_chords"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/dominant_chords"/>
+
+</LinearLayout>

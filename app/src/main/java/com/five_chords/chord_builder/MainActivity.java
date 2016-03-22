@@ -8,9 +8,6 @@
  */
 package com.five_chords.chord_builder;
 
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -25,7 +22,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.OptionsFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView;
 import com.google.android.gms.appindexing.Action;
@@ -37,14 +33,14 @@ import java.util.ArrayList;
 import android.util.Log;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements OptionsFragment.OptionsChangedListener,
+public class MainActivity extends AppCompatActivity implements Options.OptionsChangedListener,
         chordHandler.OnChordSelectedListener
 {
 
     /**
      * The current options selected in this MainActivity
      */
-    private static OptionsFragment.Options options;
+    private static Options options;
     private static DrawerLayout mDrawerLayout;
     private static ListView mDrawerList;
 
@@ -59,9 +55,9 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
      *
      * @return The current global Options wrapper
      */
-    public static OptionsFragment.Options getOptions() {
+    public static Options getOptions() {
         if (options == null)
-            options = new OptionsFragment.Options();
+            options = new Options();
 
         return options;
     }
@@ -76,8 +72,9 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
         // Create Options if needed
         if (options == null)
-            options = new OptionsFragment.Options();
+            options = new Options();
         options.load(this);
+        options.setOptionsChangedListener(this);
 
         // Lock orientation in portrait mode with small screen devices
         if (!getResources().getBoolean(R.bool.isTablet))
@@ -142,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
                         break;
                 case 1: toScorePage();
                         break;
-                case 2: launchOptionsDialog();
+                case 2: toSettingsPage();
                         break;
                 case 3: toAboutPage();
                         break;
@@ -201,38 +198,38 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
 
         // Read options
         if (options == null)
-            options = new OptionsFragment.Options();
+            options = new Options();
         options.load(this);
-//        options.readFromBundle(savedInstanceState);
+        options.setOptionsChangedListener(this);
     }
 
-    /**
-     * Called to launch the options dialog.
-     */
-    public void launchOptionsDialog() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-
-        if (prev != null)
-            ft.remove(prev);
-
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        DialogFragment newFragment = OptionsFragment.newInstance(options);
-        newFragment.show(ft, "dialog");
-    }
-
-    /**
-     * Called to close the options dialog.
-     */
-    public void closeOptionsDialog(View v) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-
-        if (prev != null) ft.remove(prev);
-        ft.commit();
-    }
+//    /**
+//     * Called to launch the options dialog.
+//     */
+//    public void launchOptionsDialog() {
+//        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+//
+//        if (prev != null)
+//            ft.remove(prev);
+//
+//        ft.addToBackStack(null);
+//
+//        // Create and show the dialog.
+//        DialogFragment newFragment = OptionsFragment.newInstance(options);
+//        newFragment.show(ft, "dialog");
+//    }
+//
+//    /**
+//     * Called to close the options dialog.
+//     */
+//    public void closeOptionsDialog(View v) {
+//        FragmentTransaction ft = getFragmentManager().beginTransaction();
+//        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+//
+//        if (prev != null) ft.remove(prev);
+//        ft.commit();
+//    }
 
 //    /**
 //     * Called to launch the score page dialog.
@@ -302,6 +299,14 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     }
 
     /**
+     * Goes to the Settings page.
+     */
+    public void toSettingsPage() {
+        Intent intent = new Intent(this, SettingsPage.class);
+        startActivity(intent);
+    }
+
+    /**
      * Goes to the Score page.
      */
     public void toScorePage() {
@@ -360,10 +365,8 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
     @Override
     public void onChordTypeOptionsChanged(boolean useMajors, boolean useMinors, boolean useDominants) {
 
-        // Update options
-        options.useMajorChords = useMajors;
-        options.useMinorChords = useMinors;
-        options.useDominantChords = useDominants;
+        // Save options
+        options.save(this);
 
         // Update the spinners
         setUpGUI.loadSpinners(this, useMajors, useMinors, useDominants);
@@ -376,8 +379,8 @@ public class MainActivity extends AppCompatActivity implements OptionsFragment.O
      */
     @Override
     public void onHintsOptionsChanged(boolean useHints) {
-        // Update options
-        options.useHints = useHints;
+        // Save options
+        options.save(this);
     }
 
     @Override
