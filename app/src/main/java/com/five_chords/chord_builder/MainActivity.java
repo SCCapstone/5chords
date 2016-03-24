@@ -41,11 +41,13 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         chordHandler.OnChordSelectedListener
 {
 
-    /**
-     * The current options selected in this MainActivity
-     */
+    /** The current options selected in this MainActivity. */
     private static Options options;
+
+    /** The DrawerLayout containing the navigation pane. */
     private static DrawerLayout mDrawerLayout;
+
+    /** The List of items in the navigation pane. */
     private static ListView mDrawerList;
 
     /**
@@ -95,6 +97,15 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         drawerOptions.add("Help");
         mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, R.id.textLabel, drawerOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        mDrawerLayout.setOnFocusChangeListener(new View.OnFocusChangeListener()
+        {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus)
+            {
+                // Make sure sounds are stopped
+                soundHandler.stopSound();
+            }
+        });
 
         // Display demo if needed
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(this);
@@ -133,26 +144,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         // Hide dominant slider if needed
         findViewById(R.id.slider_option_layout).setVisibility(
                 chordHandler.getCurrentSelectedChord().length == 4 ? View.VISIBLE : View.GONE);
-    }
-
-    public class DrawerItemClickListener implements ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            switch (position) {
-                case 0:
-                        break;
-                case 1: toScorePage();
-                        break;
-                case 2: toSettingsPage();
-                        break;
-                case 3: toAboutPage();
-                        break;
-                case 4: toHelpPage();
-                        break;
-            }
-
-            mDrawerLayout.closeDrawer(mDrawerList);
-        }
     }
 
     @Override
@@ -423,7 +414,10 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         client.disconnect();
     }
 
-
+    /**
+     * Called when the user attempts to back out of the MainActivity to launch a dialog
+     * confirming this action.
+     */
     @Override
     public void onBackPressed() {
         new AlertDialog.Builder(this)
@@ -442,5 +436,25 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
                 .show();
     }
 
-
+    /**
+     * Class for listening for clicks on the Options drawer.
+     */
+    public class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView parent, View view, int position, long id) {
+            switch (position) {
+                case 0:
+                    break;
+                case 1: toScorePage();
+                    break;
+                case 2: toSettingsPage();
+                    break;
+                case 3: toAboutPage();
+                    break;
+                case 4: toHelpPage();
+                    break;
+            }
+            mDrawerLayout.closeDrawer(mDrawerList);
+        }
+    }
 }
