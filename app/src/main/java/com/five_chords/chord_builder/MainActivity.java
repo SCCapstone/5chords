@@ -18,10 +18,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.content.DialogInterface;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.app.AlertDialog;
+
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView;
@@ -419,5 +422,25 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         AppIndex.AppIndexApi.end(client, viewAction);
         client.disconnect();
     }
+
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Exit")
+                .setMessage("Are you sure you want to exit?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
+
 
 }
