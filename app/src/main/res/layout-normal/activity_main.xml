@@ -19,7 +19,7 @@
             android:id="@+id/fragment_chord_select"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:name="com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordInstrumentSelectFragment"
+            android:name="com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordSelectFragment"
             tools:layout="@layout/fragment_chord_select"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -103,12 +103,12 @@
     </RelativeLayout>
 
     <ListView android:id="@+id/left_drawer"
-        android:layout_width="240dp"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="8dp"
+        android:divider="@android:color/black"
+        android:dividerHeight="1dp"
         android:background="@drawable/leather" />
 
 </android.support.v4.widget.DrawerLayout>

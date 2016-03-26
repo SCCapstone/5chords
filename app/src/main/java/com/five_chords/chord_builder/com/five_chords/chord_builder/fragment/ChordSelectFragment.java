@@ -25,14 +25,14 @@ import com.five_chords.chord_builder.soundHandler;
  * A Fragment containing the chord select slider and the instrument select slider.
  * @author tstone95
  */
-public class ChordInstrumentSelectFragment extends Fragment
+public class ChordSelectFragment extends Fragment
 {
     /** The available instruments names */
     public static final String[] INSTRUMENT_NAMES = {"Trumpet", "Piano", "Organ", "Violin", "Flute"};
 
     /** The available instrument icons */
     public static final int[] INSTRUMENT_ICONS = {R.drawable.trumpet, R.drawable.piano, R.drawable.organ,
-                                                  R.drawable.violin, R.drawable.flute};
+            R.drawable.violin, R.drawable.flute};
 
     /** Reference to the Spinner for selecting chords contained in this Fragment. */
     private Spinner chordSelectSpinner;
@@ -43,7 +43,7 @@ public class ChordInstrumentSelectFragment extends Fragment
     /**
      * Required empty public constructor.
      */
-    public ChordInstrumentSelectFragment()
+    public ChordSelectFragment()
     {   }
 
     /**
@@ -179,7 +179,7 @@ public class ChordInstrumentSelectFragment extends Fragment
     {
         /** The chord description matrix */
         public static String[] CHORD_DESCRIPTION_MATRIX = new String[] {"Not Attempted", "Beginner", "Shows Promise",
-                            "Difficult", "Good", "Very Good", "Challenging", "Very Good", "Expert", "Mastered"};
+                "Difficult", "Good", "Very Good", "Challenging", "Very Good", "Expert", "Mastered"};
 
 //        /** The name of the Chord */
 //        private String chordName;
