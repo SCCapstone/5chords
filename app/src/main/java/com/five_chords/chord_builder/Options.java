@@ -36,6 +36,9 @@ public class Options
     /** Bundle id for the maximum allowable error for checking notes on the Chord sliders as a fraction. */
     private static final String CHECK_ERROR_BUNDLE_ID = "OptionsFragment.Options.CHECK_ERROR";
 
+    /** Bundle id for the instrument settings */
+    private static final String INSTRUMENT_BUNDLE_ID = "OptionsFragment.Options.INSTRUMENT";
+
     /** The default number of slider positions per note. */
     private static final int DEFAULT_SLIDER_DIVISIONS_PER_NOTE = 1;
 
@@ -50,6 +53,9 @@ public class Options
 
     /** The number of wrong attempts to wait between hint types. */
     public int[] hintTypeDelays;
+
+    /** Which instrument does the user want? **/
+    public int instrument;
 
     /** The number of intermediate slider positions per note on the Chord sliders. */
     public int sliderDivisionsPerNote;
@@ -97,16 +103,6 @@ public class Options
     }
 
     /**
-     * Gets whether or not this given ChordType is currently in use.
-     * @param type The ChordType to check
-     * @return Whether or not this given ChordType is currently in use
-     */
-    public boolean isUsingChordType(Chord.ChordType type)
-    {
-        return chordTypesInUseArray[type.ordinal()];
-    }
-
-    /**
      * Gets the number of ChordTypes that are currently in use.
      * @return The number of ChordTypes that are currently in use
      */
@@ -131,6 +127,21 @@ public class Options
     public void setOptionsChangedListener(OptionsChangedListener listener)
     {
         this.optionsChangedListener = listener;
+    }
+
+    /**
+     * Called to change the instrument selection.
+     * @param instrumentIndex The new instrument index
+     */
+    public void changeInstrument(int instrumentIndex)
+    {
+        if (instrumentIndex != instrument)
+            return;
+
+        instrument = instrumentIndex;
+
+        if (optionsChangedListener != null)
+            optionsChangedListener.onInstrumentChanged(instrument);
     }
 
     /**
@@ -191,6 +202,7 @@ public class Options
         editor.putBoolean(CHORDS_INVERSIONS_BUNDLE_ID, useChordInversions);
         editor.putInt(NUM_SLIDER_DIVISIONS_BUNDLE_ID, sliderDivisionsPerNote);
         editor.putFloat(CHECK_ERROR_BUNDLE_ID, (float) allowableCheckError);
+        editor.putInt(INSTRUMENT_BUNDLE_ID, instrument);
 
         // Save hint delays
         for (int i = 0; i < hintTypeDelays.length; ++i)
@@ -215,6 +227,7 @@ public class Options
         useHints = preferences.getBoolean(HINTS_BUNDLE_ID, true);
         useScrambledRootPositions = preferences.getBoolean(CHORDS_SCRAM_POS_BUNDLE_ID, false);
         useChordInversions = preferences.getBoolean(CHORDS_INVERSIONS_BUNDLE_ID, false);
+        instrument = preferences.getInt(INSTRUMENT_BUNDLE_ID, 0);
 
         // TODO temporary
         sliderDivisionsPerNote = DEFAULT_SLIDER_DIVISIONS_PER_NOTE;
@@ -261,5 +274,11 @@ public class Options
          * @param useHints Whether or not hints are now enabled.
          */
         void onHintsOptionsChanged(boolean useHints);
+
+        /**
+         * Called when the instrument selection changes.
+         * @param instrument The new instrument
+         */
+        void onInstrumentChanged(int instrument);
     }
 }

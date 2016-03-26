@@ -28,7 +28,7 @@ public class ScoreTest
     private static final String TEST_SCORE_SHARED_PREFERENCES = "TestScoreSharedPrefs";
 
     /** A ScoreWrapper Object */
-    private Score.ScoreWrapper wrapper;
+    private Score score;
 
     /** A SharedPreferences for saving scores */
     private SharedPreferences scorePreferences;
@@ -39,9 +39,9 @@ public class ScoreTest
     @Before
     public void createScoreWrapper()
     {
-        wrapper = new Score.ScoreWrapper("C");
-        wrapper.getValue().numCorrectGuesses = 5;
-        wrapper.getValue().numTotalGuesses = 10;
+        score = new Score(0, Chord.ChordType.MAJOR);
+        score.getOverallValue().numCorrectGuesses = 5;
+        score.getOverallValue().numTotalGuesses = 10;
         scorePreferences = mActivityRule.getActivity().getSharedPreferences(TEST_SCORE_SHARED_PREFERENCES, Context.MODE_PRIVATE);
     }
 
@@ -49,13 +49,13 @@ public class ScoreTest
     public void loadSaveScoreWrapper()
     {
         // Save
-        wrapper.save(scorePreferences);
+        score.save(scorePreferences);
 
         // Load
-        wrapper.load(scorePreferences);
+        score.load(scorePreferences);
 
-        assertEquals(wrapper.getValue().numCorrectGuesses, 5);
-        assertEquals(wrapper.getValue().numTotalGuesses, 10);
-        assertEquals(wrapper.CHORD_NAME, "C");
+        assertEquals(score.getOverallValue().numCorrectGuesses, 5);
+        assertEquals(score.getOverallValue().numTotalGuesses, 10);
+        assertEquals(score.CHORD_ID, Chord.getChordId(0, Chord.ChordType.MAJOR));
     }
 }

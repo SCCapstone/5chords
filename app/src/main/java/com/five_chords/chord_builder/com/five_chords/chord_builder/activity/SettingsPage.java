@@ -11,12 +11,12 @@ import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.five_chords.chord_builder.Score;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordChooseFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.HintSettingsFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.changeInstrumentFragment;
@@ -46,10 +46,11 @@ public class SettingsPage extends Activity
         optionsAdapter.add(CHOOSE_CHORDS_OPTIONS);
         optionsAdapter.add(EDIT_HINTS_OPTIONS);
         optionsAdapter.add(CLEAR_SCORES_OPTIONS);
-        EDIT_PITCH_OPTIONS.name = (MainActivity.getOptions().usePitchBending)
-                                ? "Pitch Bending is Enabled"
-                                : "Pitch Bending is Disabled";
-        optionsAdapter.add(EDIT_PITCH_OPTIONS);
+//        EDIT_PITCH_OPTIONS.name = "NULL";
+//        (MainActivity.getOptions().usePitchBending)
+//                                ? "Pitch Bending is Enabled"
+//                                : "Pitch Bending is Disabled";
+//        optionsAdapter.add(EDIT_PITCH_OPTIONS);
         optionsAdapter.add(INSTRUMENT_OPTIONS);
 
         // Set click listener
@@ -115,25 +116,25 @@ public class SettingsPage extends Activity
         }
     };
 
-    /**
-     * The SettingsOption for enabling/disabling pitch bending.
-     */
-    private final SettingsOption EDIT_PITCH_OPTIONS = new SettingsOption("Pitch Bending is Enabled")
-    {
-        @Override
-        public void performAction()
-        {
-            if (this.name == "Pitch Bending is Enabled") {
-                this.name = "Pitch Bending is Disabled";
-                MainActivity.getOptions().changePitchOptions(false);
-            } else {
-                this.name = "Pitch Bending is Enabled";
-                MainActivity.getOptions().changePitchOptions(true);
-            }
-
-            optionsAdapter.notifyDataSetChanged();
-        }
-    };
+//    /**
+//     * The SettingsOption for enabling/disabling pitch bending.
+//     */
+//    private final SettingsOption EDIT_PITCH_OPTIONS = new SettingsOption("Pitch Bending is Enabled")
+//    {
+//        @Override
+//        public void performAction()
+//        {
+////            if (this.name == "Pitch Bending is Enabled") { TODO
+////                this.name = "Pitch Bending is Disabled";
+////                MainActivity.getOptions().changePitchOptions(false);
+////            } else {
+////                this.name = "Pitch Bending is Enabled";
+////                MainActivity.getOptions().changePitchOptions(true);
+////            }
+//
+//            optionsAdapter.notifyDataSetChanged();
+//        }
+//    };
 
     /**
      * The SettingsOption for changing the instrument.

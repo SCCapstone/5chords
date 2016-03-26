@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.view.Gravity;
 import android.widget.Toast;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
@@ -322,7 +323,9 @@ public class chordHandler
             }
 
             // Show toast
-            Toast.makeText(activity, activity.getString(R.string.thats_incorrect), Toast.LENGTH_SHORT).show();
+            Toast toast = Toast.makeText(activity, activity.getString(R.string.thats_incorrect), Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
         }
     }
 

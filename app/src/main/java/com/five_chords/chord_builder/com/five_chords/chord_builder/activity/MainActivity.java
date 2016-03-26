@@ -21,7 +21,6 @@ import android.content.DialogInterface;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.app.AlertDialog;
 
 
@@ -31,7 +30,7 @@ import com.five_chords.chord_builder.Options;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 import com.five_chords.chord_builder.chordHandler;
-import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordInstrumentSelectFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordSelectFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView;
@@ -44,7 +43,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements Options.OptionsChangedListener,
@@ -64,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     private SliderFragment sliderFragment;
 
     /** The Fragment for selecting chords and instruments attached to this Activity. */
-    private ChordInstrumentSelectFragment chordInstrumentSelectFragment;
+    private ChordSelectFragment chordInstrumentSelectFragment;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -160,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         // Get references to fragments
         sliderFragment = (SliderFragment)getFragmentManager().findFragmentById(R.id.fragment_sliders);
         chordInstrumentSelectFragment =
-                (ChordInstrumentSelectFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_select);
+                (ChordSelectFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_select);
     }
 
     /**
@@ -327,6 +325,17 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     public void onHintsOptionsChanged(boolean useHints) {
         // Save options
         options.save(this);
+    }
+
+    /**
+     * Called when the instrument selection changes.
+     * @param instrument The new instrument
+     */
+    @Override
+    public void onInstrumentChanged(int instrument) {
+        // Save options
+        options.save(this);
+        soundHandler.switchInstrument(instrument);
     }
 
     @Override

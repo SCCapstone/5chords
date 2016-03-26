@@ -276,7 +276,7 @@ public class Score
      * Loads this Score from the given SharedPreferences.
      * @param savedChordScores The SharedPreferences from which to load
      */
-    private void load(SharedPreferences savedChordScores)
+    public void load(SharedPreferences savedChordScores)
     {
         // Load the history
         discreteScoreHistory.load(savedChordScores, SCORE_ID);
