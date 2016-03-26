@@ -379,6 +379,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     public void onPitchOptionsChanged(boolean usePitchBending) {
         // Save options
         options.save(this);
+        chordHandler.newChord(usePitchBending);
     }
 
     @Override

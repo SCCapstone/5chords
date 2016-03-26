@@ -129,10 +129,7 @@ public class SliderFragment extends Fragment
                     int[] offsets = chordHandler.getCurrentSliderOffset();
                     int[] correctChord = chordHandler.getCurrentCorrectChord();
 
-                    int note = bar.getProgress()/intervals + offsets[slider];
-                    int pitch = 8192 + (4096/intervals * (bar.getProgress()%intervals - correctChord[slider]%intervals));
-
-                    soundHandler.playNote(activity, note, pitch);
+                    soundHandler.playNote(activity, bar.getProgress(), intervals, offsets[slider], correctChord[slider]);
                 }
             }
 
@@ -153,10 +150,7 @@ public class SliderFragment extends Fragment
                     int[] offsets = chordHandler.getCurrentSliderOffset();
                     int[] correctChord = chordHandler.getCurrentCorrectChord();
 
-                    int note = bar.getProgress()/intervals + offsets[slider];
-                    int pitch = 8192 + (4096/intervals * (bar.getProgress()%intervals - correctChord[slider]%intervals));
-
-                    soundHandler.playNote(activity, note, pitch);
+                    soundHandler.playNote(activity, bar.getProgress(), intervals, offsets[slider], correctChord[slider]);
                 } else if (event.getAction() == MotionEvent.ACTION_UP)
                     soundHandler.stopSound();
                 else if (event.getAction() == MotionEvent.ACTION_MOVE)
@@ -221,6 +215,11 @@ public class SliderFragment extends Fragment
         thirdSlider.setMax(max);
         fifthSlider.setMax(max);
         optionSlider.setMax(max);
+
+        rootSlider.setProgress(0);
+        thirdSlider.setProgress(0);
+        fifthSlider.setProgress(0);
+        optionSlider.setProgress(0);
         blockSliders = false;
     }
 }

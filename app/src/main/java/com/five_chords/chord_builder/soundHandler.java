@@ -122,13 +122,24 @@ public class soundHandler extends MainActivity
 
         midi.newMidi(chord.length, 1);
 
-        for (int i = 0; i < chord.length; i++)
-        {
-            int note = chord[i]/intervals + offsets[i];
-            int pitch = 8192 + (4096/intervals * (chord[i]%intervals - correctChord[i]%intervals));
+        int note;
+        int pitch = 8192;
 
-            addNote(note, pitch, i);
-        }
+        if (MainActivity.getOptions().usePitchBending)
+          for (int i = 0; i < chord.length; i++)
+          {
+              note = chord[i]/intervals + offsets[i];
+              pitch = 8192 + (4096/intervals * (chord[i]%intervals - correctChord[i]%intervals));
+
+              addNote(note, pitch, i);
+          }
+        else
+            for (int i = 0; i < chord.length; i++)
+            {
+                note = chord[i] + offsets[i];
+
+                addNote(note, pitch, i);
+            }
 
         try
         {
@@ -146,9 +157,20 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Plays a note
      **/
-    public static void playNote(Activity activity, int note, int pitch)
+    public static void playNote(Activity activity, int progress, int intervals, int offset, int correctNote)
     {
         stopSound();
+
+        int note;
+        int pitch;
+
+        if (MainActivity.getOptions().usePitchBending) {
+            note = progress/intervals + offset;
+            pitch = 8192 + (4096/intervals * (progress%intervals - correctNote%intervals));
+        } else {
+            note = progress + offset;
+            pitch = 8192;
+        }
 
         midi.newMidi(1, 0);
         addNote(note, pitch, 1);

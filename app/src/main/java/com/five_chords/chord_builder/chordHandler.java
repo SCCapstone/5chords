@@ -154,9 +154,8 @@ public class chordHandler
      */
     public static void setSelectedChord(int chordIndex) {
 
-        // Reset wrong streak if needed
-        if (chordIndex != currentChordIndex)
-            currentWrongStreak = 0;
+        // Reset wrong streak
+        currentWrongStreak = 0;
 
         // Update current chord index
         currentChordIndex = chordIndex;
@@ -165,7 +164,7 @@ public class chordHandler
         if (onChordSelectedListener != null)
             onChordSelectedListener.onChordSelected();
 
-        newChord();
+        newChord(MainActivity.getOptions().usePitchBending);
     }
 
     /**
@@ -204,10 +203,16 @@ public class chordHandler
         while (newChordIndex == previousChordIndex);
 
         setSelectedChord(newChordIndex);
-        newChord();
+
+        newChord(MainActivity.getOptions().usePitchBending);
     }
 
-    public static void newChord() {
+    public static void newChord(boolean withPitch) {
+        if (withPitch) newChordWithPitch();
+        else newChordNoPitch();
+    }
+
+    public static void newChordWithPitch() {
         Random random = new Random();
         int notes = random.nextInt(2) + 3;
         int intervalMax = 40/notes;
@@ -240,7 +245,38 @@ public class chordHandler
         sF.setMaxProgress(maxProgress);
     }
 
+    public static void newChordNoPitch() {
+        Random random = new Random();
+        int notes = random.nextInt(6) + 6;
+        int intervalMax = notes;
+        currentNumInterval = 1;
+        int maxProgress = notes;
 
+        int[] thisChord = availableChords[currentChordIndex];
+
+        // Set random note position on sliders
+        int rootNote = random.nextInt(maxProgress);
+        int thirdNote = random.nextInt(maxProgress);
+        int fifthNote = random.nextInt(maxProgress);
+        int optionNote = random.nextInt(maxProgress);
+
+        // This is the new correct seekbar positions
+        currentCorrectChord = (thisChord.length == 3) ?
+                new int[] {rootNote, thirdNote, fifthNote} :
+                new int[] {rootNote, thirdNote, fifthNote, optionNote};
+
+
+        // This is where the first note on the sliders start
+        int rootSliderOffset = thisChord[0] - rootNote;
+        int thirdSliderOffset = thisChord[1] - thirdNote;
+        int fifthSliderOffset = thisChord[2] - fifthNote;
+        int optionSliderOffset = (thisChord.length == 3) ? 0 : thisChord[3] - optionNote;
+
+        currentSliderOffset = new int[] {rootSliderOffset, thirdSliderOffset,
+                fifthSliderOffset, optionSliderOffset};
+
+        sF.setMaxProgress(maxProgress);
+    }
 
     /**
      * Clears the available chord array.
@@ -393,7 +429,6 @@ public class chordHandler
                         public void onClick(DialogInterface dialog, int which)
                         {
                             setSelectedChord(getSelectedChordIndex()); // Resets the wrong streak counter
-                            SliderFragment.resetChordSliders();
                             soundHandler.stopSound();
                         }
 
@@ -403,7 +438,7 @@ public class chordHandler
                         @Override
                         public void onCancel(DialogInterface dialog)
                         {
-                            SliderFragment.resetChordSliders();
+                            setSelectedChord(getSelectedChordIndex()); // Resets the wrong streak counter
                             soundHandler.stopSound();
                         }
                     })

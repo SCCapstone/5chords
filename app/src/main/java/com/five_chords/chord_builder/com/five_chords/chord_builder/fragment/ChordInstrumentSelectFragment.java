@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.five_chords.chord_builder.MainActivity;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 import com.five_chords.chord_builder.chordHandler;
@@ -104,7 +105,7 @@ public class ChordInstrumentSelectFragment extends Fragment
             {
                 // Update the selected chord
                 chordHandler.setSelectedChord(chordSelectSpinner.getSelectedItemPosition());
-                chordHandler.newChord();
+                chordHandler.newChord(MainActivity.getOptions().usePitchBending);
             }
 
             @Override

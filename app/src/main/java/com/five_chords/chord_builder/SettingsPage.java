@@ -43,6 +43,9 @@ public class SettingsPage extends Activity
         optionsAdapter.add(CHOOSE_CHORDS_OPTIONS);
         optionsAdapter.add(EDIT_HINTS_OPTIONS);
         optionsAdapter.add(CLEAR_SCORES_OPTIONS);
+        EDIT_PITCH_OPTIONS.name = (MainActivity.getOptions().usePitchBending)
+                                ? "Pitch Bending is Enabled"
+                                : "Pitch Bending is Disabled";
         optionsAdapter.add(EDIT_PITCH_OPTIONS);
 
         // Set click listener
@@ -113,16 +116,16 @@ public class SettingsPage extends Activity
     /**
      * The SettingsOption for clearing the scores.
      */
-    private final SettingsOption EDIT_PITCH_OPTIONS = new SettingsOption("Enable Pitch Bending - WIP")
+    private final SettingsOption EDIT_PITCH_OPTIONS = new SettingsOption("Pitch Bending is Enabled")
     {
         @Override
         public void performAction()
         {
-            if (this.name == "Enable Pitch Bending - WIP") {
-                this.name = "Disable Pitch Bending - WIP";
+            if (this.name == "Pitch Bending is Enabled") {
+                this.name = "Pitch Bending is Disabled";
                 MainActivity.getOptions().changePitchOptions(false);
             } else {
-                this.name = "Enable Pitch Bending - WIP";
+                this.name = "Pitch Bending is Enabled";
                 MainActivity.getOptions().changePitchOptions(true);
             }
 
