@@ -3,15 +3,18 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 import android.app.Activity;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
-import android.widget.TextView;
 
+import com.five_chords.chord_builder.Note;
+import com.five_chords.chord_builder.Options;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.chordHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar;
 import com.five_chords.chord_builder.soundHandler;
 
@@ -21,19 +24,25 @@ import com.five_chords.chord_builder.soundHandler;
 public class SliderFragment extends Fragment
 {
     /** The slider for the root note */
-    private static VerticalSeekBar rootSlider;
+    private VerticalSeekBar rootSlider;
 
     /** The slider for the third note */
-    private static VerticalSeekBar thirdSlider;
+    private VerticalSeekBar thirdSlider;
 
     /** The slider for the fifth note */
-    private static VerticalSeekBar fifthSlider;
+    private VerticalSeekBar fifthSlider;
 
     /** The slider for the option note */
-    private static VerticalSeekBar optionSlider;
+    private VerticalSeekBar optionSlider;
 
-    /** Don't use onTouch methods when blocking **/
-    private static boolean blockSliders = false;
+    /** Don't use onTouch methods when blocking */
+    private boolean blockSliders = false;
+
+    /** The index of the notes at the bottom of the sliders. */
+    private int minNoteOnSlider;
+
+    /** The index of the notes at the top of the sliders. */
+    private int maxNoteOnSlider;
 
     /**
      * Required empty public constructor.
@@ -41,46 +50,90 @@ public class SliderFragment extends Fragment
     public SliderFragment()
     {   }
 
+//    /**
+//     * Gets the root slider.
+//     * @return The given slider
+//     */
+//    public VerticalSeekBar getRootSlider()
+//    {
+//        return rootSlider;
+//    }
+//
+//    /**
+//     * Gets the third slider.
+//     * @return The given slider
+//     */
+//    public VerticalSeekBar getThirdSlider()
+//    {
+//        return thirdSlider;
+//    }
+//
+//    /**
+//     * Gets the fifth slider.
+//     * @return The given slider
+//     */
+//    public VerticalSeekBar getFifthSlider()
+//    {
+//        return fifthSlider;
+//    }
+//
+//    /**
+//     * Gets the option slider.
+//     * @return The given slider
+//     */
+//    public VerticalSeekBar getOptionSlider()
+//    {
+//        return optionSlider;
+//    }
+
     /**
-     * Gets the root slider.
-     * @return The given slider
+     * Gets the current chord built on the note sliders and puts it in the givn array.
+     * @param chord The array into which to put the built chord
      */
-    public static VerticalSeekBar getRootSlider()
+    public void buildCurrentChord(Note[] chord)
     {
-        return rootSlider;
+        // Set slider bounds to fit chord
+        setSliderBoundsToFitChord(chordHandler.getCurrentSelectedChordSpelling());
+
+        // Assign values
+        getNoteFromSlider(rootSlider, chord[0]);
+        getNoteFromSlider(thirdSlider, chord[1]);
+        getNoteFromSlider(fifthSlider, chord[2]);
+        getNoteFromSlider(optionSlider, chord[3]);
     }
 
     /**
-     * Gets the third slider.
-     * @return The given slider
+     * Gets the current note on the slider, taking into account the number of intermediate slider
+     * positions.
+     * @param slider The slider to test
+     * @param note A Note Object in which to put the value
      */
-    public static VerticalSeekBar getThirdSlider()
+    private void getNoteFromSlider(VerticalSeekBar slider, Note note)
     {
-        return thirdSlider;
-    }
+        SliderNotePosition position = new SliderNotePosition(slider);
 
-    /**
-     * Gets the fifth slider.
-     * @return The given slider
-     */
-    public static VerticalSeekBar getFifthSlider()
-    {
-        return fifthSlider;
-    }
+        int nearestNote;
+        double fracDistToNearestNote;
 
-    /**
-     * Gets the option slider.
-     * @return The given slider
-     */
-    public static VerticalSeekBar getOptionSlider()
-    {
-        return optionSlider;
+        if (position.fracDistAboveNote > 0.5)
+        {
+            nearestNote = position.note + 1;
+            fracDistToNearestNote = position.fracDistAboveNote - 1.0;
+        }
+        else
+        {
+            nearestNote = position.note;
+            fracDistToNearestNote = position.fracDistAboveNote;
+        }
+
+        note.index = nearestNote;
+        note.distanceToIndex = fracDistToNearestNote;
     }
 
     /**
      * Called to reset the positions of the chord sliders.
      */
-    public static void resetChordSliders()
+    public void resetChordSliders()
     {
         VerticalSeekBar slider = rootSlider;
 
@@ -112,11 +165,90 @@ public class SliderFragment extends Fragment
         }
     }
 
+
+    /**
+     * Called to create the View of this SliderFragment.
+     * @param inflater The LayoutInflater to use to inflate the View
+     * @param container The ViewGroup containing the View
+     * @param savedInstanceState The Bundle containing the saved instance state
+     * @return The View of this Fragment
+     */
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    {
+        // Inflate the layout for this fragment
+        View sliders = inflater.inflate(R.layout.fragment_sliders, container, false);
+
+        // Assign sliders
+        rootSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_root);
+        rootSlider.initialize();
+        thirdSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_third);
+        thirdSlider.initialize();
+        fifthSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_fifth);
+        fifthSlider.initialize();
+        optionSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_option);
+        optionSlider.initialize();
+
+        // Add the seek bar listeners
+        Activity activity = getActivity();
+        addSeekBarListener(activity, rootSlider);
+        addSeekBarListener(activity, thirdSlider);
+        addSeekBarListener(activity, fifthSlider);
+        addSeekBarListener(activity, optionSlider);
+
+        return sliders;
+    }
+
+    /**
+     * Gets what the Slider progress would be if it were on the given note.
+     * @param note The note
+     * @return What the Slider progress would be if it were on the given note
+     */
+    public int getSliderProgressForNote(Note note)
+    {
+        int index = note.index;
+        index -= minNoteOnSlider;
+        index *= MainActivity.getOptions().sliderDivisionsPerNote;
+        return index;
+    }
+
+    /**
+     * Sets the bounds of the Sliders to fit the given chord.
+     * @param chord The chord to fit
+     */
+    public void setSliderBoundsToFitChord(Note[] chord)
+    {
+        // Find max and min values
+        int max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
+        for (Note i: chord)
+        {
+            if (i.index > max)
+                max = i.index;
+            if (i.index < min)
+                    min = i.index;
+        }
+
+        // Set values, rounding to nearest multiple of Chord.NUM_NOTES
+        minNoteOnSlider = (min / Note.NUM_NOTES) * Note.NUM_NOTES;
+        maxNoteOnSlider = (max / Note.NUM_NOTES + 1) * Note.NUM_NOTES;
+
+        // Calculate max
+        max = (maxNoteOnSlider - minNoteOnSlider - 1) * MainActivity.getOptions().sliderDivisionsPerNote;
+
+        // Set values
+        blockSliders = true;
+        rootSlider.setMax(max);
+        thirdSlider.setMax(max);
+        fifthSlider.setMax(max);
+        optionSlider.setMax(max);
+        blockSliders = false;
+    }
+
     /**
      * Called to add the seek bar listener to a single seek bar.
-     * @param bar The seekbar to add listeners to
+     * @param bar The VerticalSeekBar to add listeners to
      */
-    private static void addSeekBarListener(final Activity activity, final VerticalSeekBar bar, final int slider)
+    private void addSeekBarListener(final Activity activity, final VerticalSeekBar bar)
     {
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
@@ -124,15 +256,13 @@ public class SliderFragment extends Fragment
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
                 // Only play note if progress change is from user
-                if (seekBar instanceof VerticalSeekBar && ((VerticalSeekBar)seekBar).isTouched() && !blockSliders) {
-                    int intervals = chordHandler.getCurrentNumInterval();
-                    int[] offsets = chordHandler.getCurrentSliderOffset();
-                    int[] correctChord = chordHandler.getCurrentCorrectChord();
-
-                    int note = bar.getProgress()/intervals + offsets[slider];
-                    int pitch = 8192 + (4096/intervals * (bar.getProgress()%intervals - correctChord[slider]%intervals));
-
-                    soundHandler.playNote(activity, note, pitch);
+                if (seekBar instanceof VerticalSeekBar && ((VerticalSeekBar)seekBar).isTouched() && !blockSliders)
+                {
+//                    SliderNotePosition position = new SliderNotePosition(bar);
+//                    soundHandler.playNote(activity, position.note, position.getMidiPitch());
+                    Note note = new Note();
+                    getNoteFromSlider(bar, note);
+                    soundHandler.playNote(activity, note);
                 }
             }
 
@@ -148,16 +278,15 @@ public class SliderFragment extends Fragment
             @Override
             public boolean onTouch(View v, MotionEvent event)
             {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    int intervals = chordHandler.getCurrentNumInterval();
-                    int[] offsets = chordHandler.getCurrentSliderOffset();
-                    int[] correctChord = chordHandler.getCurrentCorrectChord();
-
-                    int note = bar.getProgress()/intervals + offsets[slider];
-                    int pitch = 8192 + (4096/intervals * (bar.getProgress()%intervals - correctChord[slider]%intervals));
-
-                    soundHandler.playNote(activity, note, pitch);
-                } else if (event.getAction() == MotionEvent.ACTION_UP)
+                if (event.getAction() == MotionEvent.ACTION_DOWN)
+                {
+//                    SliderNotePosition position = new SliderNotePosition(bar);
+//                    soundHandler.playNote(activity, position.note, position.getMidiPitch());
+                    Note note = new Note();
+                    getNoteFromSlider(bar, note);
+                    soundHandler.playNote(activity, note);
+                }
+                else if (event.getAction() == MotionEvent.ACTION_UP)
                     soundHandler.stopSound();
                 else if (event.getAction() == MotionEvent.ACTION_MOVE)
                     return false;
@@ -167,60 +296,50 @@ public class SliderFragment extends Fragment
         });
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState)
+    /**
+     * Wrapper class representing the position of a slider as a fractional distance above a note.
+     */
+    public class SliderNotePosition
     {
-        super.onCreate(savedInstanceState);
-    }
+        /** The note position of the slider. */
+        public int note;
+        /** The fractional distance above note position of the slider. */
+        public double fracDistAboveNote;
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View sliders = inflater.inflate(R.layout.fragment_sliders, container, false);
+        /**
+         * Constructor.
+         */
+        public SliderNotePosition()
+        {   }
 
+        /**
+         * Constructs a new SliderNotePosition for the given SeekBar.
+         * @param slider The Seekbar whose position to get
+         */
+        public SliderNotePosition(SeekBar slider)
+        {
+            calculate(slider);
+        }
 
-        // Assign sliders
-        rootSlider = (VerticalSeekBar)sliders.findViewById(R.id.slider_root);
-        rootSlider.initialize();
-        thirdSlider = (VerticalSeekBar)sliders.findViewById(R.id.slider_third);
-        thirdSlider.initialize();
-        fifthSlider = (VerticalSeekBar)sliders.findViewById(R.id.slider_fifth);
-        fifthSlider.initialize();
-        optionSlider = (VerticalSeekBar)sliders.findViewById(R.id.slider_option);
-        optionSlider.initialize();
+//        /**
+//         * Gets the Midi pitch of this SliderNotePosition.
+//         * @return The Midi pitch of this SliderNotePosition
+//         */
+//        public int getMidiPitch()
+//        {
+//            return 8192 + (int)Math.round(fracDistAboveNote * 4096);
+//        }
 
-        // Hide the fourth slider by default
-        sliders.findViewById(R.id.slider_option_layout).setVisibility(View.GONE);
-
-        // Add the seek bar listeners
-        Activity activity = getActivity();
-        addSeekBarListener(activity, rootSlider, 0);
-        addSeekBarListener(activity, thirdSlider, 1);
-        addSeekBarListener(activity, fifthSlider, 2);
-        addSeekBarListener(activity, optionSlider, 3);
-//        setUpGUI.addSeekBarListeners(getActivity(), sliders);
-
-        return sliders;
-    }
-
-    @Override
-    public void onDetach()
-    {
-        super.onDetach();
-
-        rootSlider = null;
-        thirdSlider = null;
-        fifthSlider = null;
-        optionSlider = null;
-    }
-
-    public void setMaxProgress(int max) {
-        blockSliders = true;
-        rootSlider.setMax(max);
-        thirdSlider.setMax(max);
-        fifthSlider.setMax(max);
-        optionSlider.setMax(max);
-        blockSliders = false;
+        /**
+         * Calculates the values of this SliderNotePosition for the given slider.
+         * @param slider The slider whose note position to get
+         */
+        public void calculate(SeekBar slider)
+        {
+            Options options = MainActivity.getOptions();
+            note = slider.getProgress() / options.sliderDivisionsPerNote;
+            fracDistAboveNote = slider.getProgress() / ((double)options.sliderDivisionsPerNote) - note;
+            note += minNoteOnSlider;
+        }
     }
 }

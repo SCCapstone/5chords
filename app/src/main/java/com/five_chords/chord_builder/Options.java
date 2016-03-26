@@ -4,43 +4,70 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class wrapping handles to the possible option values of the application.
  */
 public class Options
 {
-    /** The name of the options in the SharedPreferences */
+    /** The name of the options in the SharedPreferences. */
     public static final String OPTIONS_SAVE_FILENAME = "OptionsFile";
 
-    /** Bundle id for the useMajorChords flag */
-    private static final String MAJOR_CHORDS_BUNDLE_ID = "OptionsFragment.Options.MAJOR";
-
-    /** Bundle id for the useMinorChords flag */
-    private static final String MINOR_CHORDS_BUNDLE_ID = "OptionsFragment.Options.MINOR";
-
-    /** Bundle id for the useDominantChords flag */
-    private static final String DOMINANT_CHORDS_BUNDLE_ID = "OptionsFragment.Options.DOMINANT";
-
-    /** Bundle id for the useHints flag */
+    /** Bundle id for the useHints flag. */
     private static final String HINTS_BUNDLE_ID = "OptionsFragment.Options.HINT";
 
-    /** Bundle id for the hintTypeDelays settings */
+    /** Bundle id for the hintTypeDelays settings. */
     private static final String HINT_DELAYS_BUNDLE_ID = "OptionsFragment.Options.HINT_DELAYS";
 
-    /** Whether or not major chords are being used */
-    public boolean useMajorChords;
+    /** Bundle id for useScrambledRootPositions flag. */
+    private static final String CHORDS_SCRAM_POS_BUNDLE_ID = "OptionsFragment.Options.CHORDS_SCRAM_POS";
 
-    /** Whether or not minor chords are being used */
-    public boolean useMinorChords;
+    /** Bundle id for useChordInversions flag. */
+    private static final String CHORDS_INVERSIONS_BUNDLE_ID = "OptionsFragment.Options.CHORDS_INVERSIONS";
 
-    /** Whether or not dominant chords are being used */
-    public boolean useDominantChords;
+    /** Bundle id for the chords in use list. */
+    private static final String CHORDS_IN_USE_BUNDLE_ID = "OptionsFragment.Options.CHORDS_IN_USE";
+
+    /** Bundle id for the number of intermediate note slider positions. */
+    private static final String NUM_SLIDER_DIVISIONS_BUNDLE_ID = "OptionsFragment.Options.INTER_NOTE_POS";
+
+    /** Bundle id for the maximum allowable error for checking notes on the Chord sliders as a fraction. */
+    private static final String CHECK_ERROR_BUNDLE_ID = "OptionsFragment.Options.CHECK_ERROR";
+
+    /** The default number of slider positions per note. */
+    private static final int DEFAULT_SLIDER_DIVISIONS_PER_NOTE = 1;
+
+    /** The default maximum allowable error for checking notes on the Chord sliders as a fraction. */
+    private static final float DEFAULT_CHECK_ERROR = 0.25f;
+
+    /** The array of default hint delays. */
+    private static final int[] DEFAULT_HINT_DELAYS = new int[] {2, 6, 10};
 
     /** Whether or not hints are enabled */
     public boolean useHints;
 
     /** The number of wrong attempts to wait between hint types. */
     public int[] hintTypeDelays;
+
+    /** The number of intermediate slider positions per note on the Chord sliders. */
+    public int sliderDivisionsPerNote;
+
+    /** The maximum allowable error for checking notes on the Chord sliders as a fraction. */
+    public double allowableCheckError;
+
+    /** Whether or not to use Chord inversions. */
+    public boolean useChordInversions;
+
+    /** Whether or not to use Chord root positions where note after the root may be scrambled. */
+    public boolean useScrambledRootPositions;
+
+    /** Array denoting what chord types are being used. */
+    public boolean[] chordTypesInUseArray;
+
+    /** List containing each ChordType in use. */
+    private List<Chord.ChordType> chordTypesInUse;
 
     /** The OptionsChangedListener attached to this Options. */
     private OptionsChangedListener optionsChangedListener;
@@ -50,11 +77,14 @@ public class Options
      */
     public Options()
     {
-        useMajorChords = true;
-        useMinorChords = false;
-        useDominantChords = false;
+        // Hints
         useHints = true;
-        hintTypeDelays = new int[] {2, 6, 10};
+        hintTypeDelays = new int[3];
+
+        // Chord Types in use
+        chordTypesInUse = new ArrayList<>();
+        chordTypesInUseArray = new boolean[Chord.ChordType.values().length];
+        chordTypesInUseArray[Chord.ChordType.MAJOR.ordinal()] = true;
     }
 
     /**
@@ -64,6 +94,34 @@ public class Options
     private static SharedPreferences getOptionsLoader(Activity activity)
     {
         return activity.getSharedPreferences(OPTIONS_SAVE_FILENAME, Context.MODE_PRIVATE);
+    }
+
+    /**
+     * Gets whether or not this given ChordType is currently in use.
+     * @param type The ChordType to check
+     * @return Whether or not this given ChordType is currently in use
+     */
+    public boolean isUsingChordType(Chord.ChordType type)
+    {
+        return chordTypesInUseArray[type.ordinal()];
+    }
+
+    /**
+     * Gets the number of ChordTypes that are currently in use.
+     * @return The number of ChordTypes that are currently in use
+     */
+    public int getNumChordTypesInUse()
+    {
+        return chordTypesInUse.size();
+    }
+
+    /**
+     * Gets the List containing the ChordTypes that are currently in use.
+     * @return The List containing the ChordTypes that are currently in use
+     */
+    public List<Chord.ChordType> getChordTypesInUse()
+    {
+        return chordTypesInUse;
     }
 
     /**
@@ -98,24 +156,25 @@ public class Options
     }
 
     /**
-     * Called to change the chord type selections.
-     * @param useMajors Whether or not major chords are now being used
-     * @param useMinors  Whether or not minor chords are now being used
-     * @param useDominants  Whether or not dominant chords are now being used
+     * Sets whether or not the ChordType of the given index should be used.
+     * @param index The index of the ChordType
+     * @param use Whether or not the ChordType should be used
      */
-    public void changeChordSelections(boolean useMajors, boolean useMinors, boolean useDominants)
+    public void setChordTypeUse(int index, boolean use)
     {
-        if (this.useMajorChords == useMajors && this.useMinorChords == useMinors &&
-                this.useDominantChords == useDominants)
+        // Do nothing if there are no changes
+        if (chordTypesInUseArray[index] == use)
             return;
 
-        this.useMajorChords = useMajors;
-        this.useMinorChords = useMinors;
-        this.useDominantChords = useDominants;
+        // Set new value
+        chordTypesInUseArray[index] = use;
 
+        // Reset ChordType List
+        populateChordTypesInUse();
+
+        // Notify Listener that changes were made
         if (optionsChangedListener != null)
-            optionsChangedListener.onChordTypeOptionsChanged(this.useMajorChords,
-                    this.useMinorChords, this.useDominantChords);
+            optionsChangedListener.onChordTypeOptionsChanged(chordTypesInUse);
     }
 
     /**
@@ -126,13 +185,20 @@ public class Options
     {
         SharedPreferences.Editor editor = getOptionsLoader(activity).edit();
 
-        editor.putBoolean(MAJOR_CHORDS_BUNDLE_ID, useMajorChords);
-        editor.putBoolean(MINOR_CHORDS_BUNDLE_ID, useMinorChords);
-        editor.putBoolean(DOMINANT_CHORDS_BUNDLE_ID, useDominantChords);
+        // Save flags
         editor.putBoolean(HINTS_BUNDLE_ID, useHints);
+        editor.putBoolean(CHORDS_SCRAM_POS_BUNDLE_ID, useScrambledRootPositions);
+        editor.putBoolean(CHORDS_INVERSIONS_BUNDLE_ID, useChordInversions);
+        editor.putInt(NUM_SLIDER_DIVISIONS_BUNDLE_ID, sliderDivisionsPerNote);
+        editor.putFloat(CHECK_ERROR_BUNDLE_ID, (float) allowableCheckError);
 
+        // Save hint delays
         for (int i = 0; i < hintTypeDelays.length; ++i)
             editor.putInt(HINT_DELAYS_BUNDLE_ID + i, hintTypeDelays[i]);
+
+        // Save chord types in use
+        for (int i = 0; i < chordTypesInUseArray.length; ++i)
+            editor.putBoolean(CHORDS_IN_USE_BUNDLE_ID + i, chordTypesInUseArray[i]);
 
         editor.apply();
     }
@@ -144,13 +210,39 @@ public class Options
     public void load(Activity activity)
     {
         SharedPreferences preferences = getOptionsLoader(activity);
-        useMajorChords = preferences.getBoolean(MAJOR_CHORDS_BUNDLE_ID, true);
-        useMinorChords = preferences.getBoolean(MINOR_CHORDS_BUNDLE_ID, false);
-        useDominantChords = preferences.getBoolean(DOMINANT_CHORDS_BUNDLE_ID, false);
-        useHints = preferences.getBoolean(HINTS_BUNDLE_ID, true);
 
+        // Read flags
+        useHints = preferences.getBoolean(HINTS_BUNDLE_ID, true);
+        useScrambledRootPositions = preferences.getBoolean(CHORDS_SCRAM_POS_BUNDLE_ID, false);
+        useChordInversions = preferences.getBoolean(CHORDS_INVERSIONS_BUNDLE_ID, false);
+
+        // TODO temporary
+        sliderDivisionsPerNote = DEFAULT_SLIDER_DIVISIONS_PER_NOTE;
+//        sliderDivisionsPerNote = preferences.getInt(NUM_SLIDER_DIVISIONS_BUNDLE_ID, DEFAULT_SLIDER_DIVISIONS_PER_NOTE);
+        allowableCheckError = preferences.getFloat(CHECK_ERROR_BUNDLE_ID, DEFAULT_CHECK_ERROR);
+
+        // Read hint delays
         for (int i = 0; i < hintTypeDelays.length; ++i)
-            hintTypeDelays[i] = preferences.getInt(HINT_DELAYS_BUNDLE_ID + i, 2 + i * 4);
+            hintTypeDelays[i] = preferences.getInt(HINT_DELAYS_BUNDLE_ID + i, DEFAULT_HINT_DELAYS[i]);
+
+        // Read chord types in use
+        for (int i = 0; i < chordTypesInUseArray.length; ++i)
+            chordTypesInUseArray[i] = preferences.getBoolean(CHORDS_IN_USE_BUNDLE_ID + i, chordTypesInUseArray[i]);
+
+        // Populate ChordType List
+        populateChordTypesInUse();
+    }
+
+    /**
+     * Fills the List containing the current ChordTypes in use based on the use array.
+     */
+    private void populateChordTypesInUse()
+    {
+        chordTypesInUse.clear();
+
+        for (int i = 0; i < chordTypesInUseArray.length; ++i)
+            if (chordTypesInUseArray[i])
+                chordTypesInUse.add(Chord.ChordType.values()[i]);
     }
 
     /**
@@ -160,11 +252,9 @@ public class Options
     {
         /**
          * Called when the chord type changes.
-         * @param useMajors Whether or not major chords are now being used
-         * @param useMinors  Whether or not minor chords are now being used
-         * @param useDominants  Whether or not dominant chords are now being used
+         * @param chordTypesInUse A List containing the ChordTypes that are now in use
          */
-        void onChordTypeOptionsChanged(boolean useMajors, boolean useMinors, boolean useDominants);
+        void onChordTypeOptionsChanged(List<Chord.ChordType> chordTypesInUse);
 
         /**
          * Called when the hints options changes.

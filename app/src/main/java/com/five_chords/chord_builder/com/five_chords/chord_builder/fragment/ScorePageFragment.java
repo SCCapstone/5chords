@@ -1,71 +1,47 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
-import android.app.Activity;
-import android.app.DialogFragment;
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.five_chords.chord_builder.Chord;
+import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
+import com.five_chords.chord_builder.chordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
-
-import java.util.Date;
-
 
 /**
  * A Fragment containing the score page.
  * @author tstone95
  */
-public class ScorePageFragment extends DialogFragment implements TabLayout.OnTabSelectedListener
+public class ScorePageFragment extends Fragment implements AdapterView.OnItemSelectedListener
 {
-    /** The bundle id for the major chords view flag */
-    private static final String BUNDLE_ID_MAJOR_CHORDS = "ScorePageFragment.onMajorChords";
-
-    /** The bundle id for the minor chords view flag */
-    private static final String BUNDLE_ID_MINOR_CHORDS = "ScorePageFragment.onMinorChords";
+    /** The bundle id for the displayed type. */
+    private static final String BUNDLE_ID_DISPLAYED_TYPE = "ScorePageFragment.displayedType";
 
     /** Handle to the View of this ScorePageFragment */
     private View view;
 
-    /** Stores whether or not major chords are currently selected */
-    private boolean onMajorChords;
-
-    /** Stores whether or not minor chords are currently selected */
-    private boolean onMinorChords;
+    /** The current displayed chordType. */
+    private Chord.ChordType currentType;
 
     /**
      * Required empty public constructor.
      */
     public ScorePageFragment()
     {   }
-
-//    /**
-//     * Create a new instance of ScorePageFragment.
-//     * @param onMajorChords Whether or not major chords should be selected
-//     * @param onMinorChords Whether or not minor chords should be selected
-//     * @return A new new instance of ScorePageFragment
-//     */
-//    public static ScorePageFragment newInstance(boolean onMajorChords, boolean onMinorChords)
-//    {
-//        ScorePageFragment f = new ScorePageFragment();
-//
-//        // Supply arguments to Bundle
-//        Bundle args = new Bundle();
-//        args.putBoolean(BUNDLE_ID_MAJOR_CHORDS, onMajorChords);
-//        args.putBoolean(BUNDLE_ID_MINOR_CHORDS, onMinorChords);
-//        f.setArguments(args);
-//
-//        return f;
-//    }
 
     /**
      * Refreshes the list view containing scores.
@@ -82,36 +58,22 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
         ListView listView = (ListView)view.findViewById(R.id.score_page_scorelist);
         ScoreItemHistoryAdapter adapter = new ScoreItemHistoryAdapter(getActivity(), android.R.layout.simple_list_item_1);
 
-        // Compute the start index into the score name array
-        int startIndex;
+        // Get the current type if needed
+        if (currentType == null)
+        {
+            Bundle arguments = getArguments();
+            if (arguments != null)
+                currentType = Chord.ChordType.values()[arguments.getInt(BUNDLE_ID_DISPLAYED_TYPE, 0)];
+            else
+                currentType = Chord.ChordType.MAJOR;
+        }
 
-        if (onMajorChords)
-            startIndex = 0;
-        else if (onMinorChords)
-            startIndex = 12;
-        else
-            startIndex = 24;
-
-        // Get scores
-        for (int i = 0; i < 12; ++i)
-            adapter.add(Score.scores[startIndex + i]);
+        // Loop over each note
+        for (int i = 0; i < Note.NUM_NOTES; ++i)
+            adapter.add(Score.getScore(chordHandler.getChord(i, currentType)));
 
         // Set the adapter
         listView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-
-        // Set size if dialog
-        if (getDialog() != null)
-        {
-            int width = getResources().getDimensionPixelSize(R.dimen.score_dialog_width);
-            int height = getResources().getDimensionPixelSize(R.dimen.score_dialog_height);
-            getDialog().getWindow().setLayout(width, height);
-        }
     }
 
     /**
@@ -125,122 +87,65 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        // Read arguments
-        Bundle arguments = getArguments();
-
-        if (arguments == null) // Use default values in this case
-        {
-            onMajorChords = true;
-            onMinorChords = false;
-        }
-        else
-        {
-            onMajorChords = arguments.getBoolean(BUNDLE_ID_MAJOR_CHORDS);
-            onMinorChords = arguments.getBoolean(BUNDLE_ID_MINOR_CHORDS);
-        }
-
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_score_page, container, false);
 
-        // Set title
-        if (getDialog() != null)
-            getDialog().setTitle(R.string.scores);
+        // Populate ChordType Spinner
+        Spinner chordSelectSpinner = (Spinner)view.findViewById(R.id.spinner_score_page);
+        ArrayAdapter<Chord.ChordType> adapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1);
 
-        // Create and add tabs
-        addScoreTypeTabs(view);
+        for (Chord.ChordType type: Chord.ChordType.values())
+            adapter.add(type);
 
-        // Populate list view of scores
-        refreshListView();
+        chordSelectSpinner.setAdapter(adapter);
+        chordSelectSpinner.setOnItemSelectedListener(this);
+
+//        // Populate list view of scores
+//        refreshListView();
 
         // Return the created View
         return view;
     }
 
     /**
-     * Called when a tab enters the selected state.
-     * @param tab The tab that was selected
+     * <p>Callback method to be invoked when an item in this view has been
+     * selected. This callback is invoked only when the newly selected
+     * position is different from the previously selected position or if
+     * there was no selected item.</p>
+     * <p/>
+     * Implementers can call getItemAtPosition(position) if they need to access the
+     * data associated with the selected item.
+     *
+     * @param parent   The AdapterView where the selection happened
+     * @param view     The view within the AdapterView that was clicked
+     * @param position The position of the view in the adapter
+     * @param id       The row id of the item that is selected
      */
     @Override
-    public void onTabSelected(TabLayout.Tab tab)
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
     {
-        if (tab.getText() == null)
-            return;
-
-        if (tab.getText().equals(getString(R.string.major_chords)))
-        {
-            onMajorChords = true;
-            onMinorChords = false;
-        }
-        else if (tab.getText().equals(getString(R.string.minor_chords)))
-        {
-            onMajorChords = false;
-            onMinorChords = true;
-        }
-        else if (tab.getText().equals(getString(R.string.dominant_chords)))
-        {
-            onMajorChords = false;
-            onMinorChords = false;
-        }
-
-        // Refresh
-        refreshListView();
+        // Get the new displayed type
+        currentType = Chord.ChordType.values()[position];
 
         // Save arguments
         Bundle arguments = getArguments();
         if (arguments != null)
-        {
-            arguments.putBoolean(BUNDLE_ID_MAJOR_CHORDS, onMajorChords);
-            arguments.putBoolean(BUNDLE_ID_MINOR_CHORDS, onMinorChords);
-        }
+            arguments.putInt(BUNDLE_ID_DISPLAYED_TYPE, currentType.ordinal());
+
+        // Refresh
+        refreshListView();
     }
 
     /**
-     * Called when a tab exits the selected state.
-     * @param tab The tab that was unselected
+     * Callback method to be invoked when the selection disappears from this
+     * view. The selection can disappear for instance when touch is activated
+     * or when the adapter becomes empty.
+     *
+     * @param parent The AdapterView that now contains no selected item.
      */
     @Override
-    public void onTabUnselected(TabLayout.Tab tab)
+    public void onNothingSelected(AdapterView<?> parent)
     {    }
-
-    /**
-     * Called when a tab that is already selected is chosen again by the user. Some applications
-     * may use this action to return to the top level of a category.
-     * @param tab The tab that was reselected.
-     */
-    @Override
-    public void onTabReselected(TabLayout.Tab tab)
-    {    }
-
-    /**
-     * Used to add the score type tabs.
-     * @param view the View to which to add the tabs
-     */
-    private void addScoreTypeTabs(View view)
-    {
-        // Create tabs
-        TabLayout tabs = (TabLayout)view.findViewById(R.id.tabs_score_page);
-        TabLayout.Tab majorTab = tabs.newTab();
-        majorTab.setText(getResources().getString(R.string.major_chords));
-        tabs.addTab(majorTab);
-
-        TabLayout.Tab minorTab = tabs.newTab();
-        minorTab.setText(getResources().getString(R.string.minor_chords));
-        tabs.addTab(minorTab);
-
-        TabLayout.Tab dominantTab = tabs.newTab();
-        dominantTab.setText(getResources().getString(R.string.dominant_chords));
-        tabs.addTab(dominantTab);
-
-        if (onMajorChords)
-            majorTab.select();
-        else if (onMinorChords)
-            minorTab.select();
-        else
-            dominantTab.select();
-
-        // Add listener
-        tabs.setOnTabSelectedListener(this);
-    }
 
     /**
      * Implementation of an ArrayAdapter containing views for displaying the history of a chord's scores.
@@ -284,9 +189,6 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
             // Set chord name
             textView.setText(getLabel(item));
 
-            // Setup history view
-//            item.loadHistory((Activity) getContext(), false); // Make sure the History is loaded
-
             progressView.setWidthPixels(ScoreProgressView.calculateWidth(item.getHistory()));
             progressView.setHeightPixels(ScoreProgressView.calculateHeight());
             progressView.setMinimumWidth(progressView.getWidthPixels());
@@ -305,14 +207,6 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
                 }
             });
 
-             // TODO temporary
-//            Log.w("PIX_WIDTH", item.CHORD_NAME + ": " + progressView.getWidthPixels());
-//            Log.w("DISC_HIST", item.CHORD_NAME + ": " + item.getHistory().size + " points");
-//            int i = 0;
-//            for (Score.ScoreValue value: item.getHistory().values)
-//                Log.w("\tPoint", "(" + (i++) + ") " + (value == null ? "NULL" : value.numCorrectGuesses + " / " + value.numTotalGuesses)
-//                + " Time = " + (value == null ? "0" : "" + new Date(value.time * 1000).toString()));
-
             return view;
         }
 
@@ -323,7 +217,7 @@ public class ScorePageFragment extends DialogFragment implements TabLayout.OnTab
          */
         private String getLabel(Score score)
         {
-            return score.CHORD_NAME + (score.getOverallValue().numTotalGuesses == 0 ?
+            return chordHandler.getChord(score.CHORD_ID).toString() + (score.getOverallValue().numTotalGuesses == 0 ?
                     " - " + getContext().getString(R.string.not_attempted) : "");
         }
     }

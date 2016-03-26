@@ -11,7 +11,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.five_chords.chord_builder.MainActivity;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 

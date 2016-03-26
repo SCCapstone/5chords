@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
-        tools:context=".MainActivity">
+        tools:context=".com.five_chords.chord_builder.activity.MainActivity">
 
         <!-- Fragment containing the chord select spinner -->
         <fragment

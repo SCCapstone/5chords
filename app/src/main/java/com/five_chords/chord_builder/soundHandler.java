@@ -11,6 +11,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
+
 public class soundHandler extends MainActivity
 {
     /** The tag for this class. */
@@ -60,6 +62,14 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Add a note to the MIDI file
      **/
+    public static void addNote(Note note, int channel)
+    {
+        addNote(note.index, 8192 + (int)(4096 * note.distanceToIndex), channel);
+    }
+
+    /****************************************************************
+     * Add a note to the MIDI file
+     **/
     public static void addNote(int note, int pitch, int channel)
     {
         // TODO: use the sliders to change pitch of note
@@ -93,42 +103,13 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Plays a chord
      **/
-    public static void playChord(Activity activity, int[] chord)
+    public static void playChord(Activity activity, Note[] chord)
     {
         stopSound();
 
         midi.newMidi(chord.length, 1);
-        for (int i = 0; i < chord.length; i++) addNote(chord[i], 8192, i);
-
-        try
-        {
-            midi.writeToFile(midiFile);
-            mediaPlayer = MediaPlayer.create(activity, Uri.parse("file://" + midiFile));
-            mediaPlayer.setLooping(true);
-            mediaPlayer.start();
-        }
-        catch (Exception e)
-        { /* Ignored */ }
-
-        Log.d(TAG, "Done Playing Chord");
-    }
-
-    /****************************************************************
-     * Plays a chord
-     **/
-    public static void playBuiltChord(Activity activity, int[] chord, int intervals, int[] offsets, int[] correctChord)
-    {
-        stopSound();
-
-        midi.newMidi(chord.length, 1);
-
         for (int i = 0; i < chord.length; i++)
-        {
-            int note = chord[i]/intervals + offsets[i];
-            int pitch = 8192 + (4096/intervals * (chord[i]%intervals - correctChord[i]%intervals));
-
-            addNote(note, pitch, i);
-        }
+            addNote(chord[i], i);
 
         try
         {
@@ -142,6 +123,36 @@ public class soundHandler extends MainActivity
 
         Log.d(TAG, "Done Playing Chord");
     }
+
+//    /****************************************************************
+//     * Plays a chord
+//     **/
+//    public static void playBuiltChord(Activity activity, int[] chord, int intervals, int[] offsets, int[] correctChord)
+//    {
+//        stopSound();
+//
+//        midi.newMidi(chord.length, 1);
+//
+//        for (int i = 0; i < chord.length; i++)
+//        {
+//            int note = chord[i]/intervals + offsets[i];
+//            int pitch = 8192 + (4096/intervals * (chord[i]%intervals - correctChord[i]%intervals));
+//
+//            addNote(note, pitch, i);
+//        }
+//
+//        try
+//        {
+//            midi.writeToFile(midiFile);
+//            mediaPlayer = MediaPlayer.create(activity, Uri.parse("file://" + midiFile));
+//            mediaPlayer.setLooping(true);
+//            mediaPlayer.start();
+//        }
+//        catch (Exception e)
+//        { /* Ignored */ }
+//
+//        Log.d(TAG, "Done Playing Chord");
+//    }
 
     /****************************************************************
      * Plays a note
@@ -166,6 +177,28 @@ public class soundHandler extends MainActivity
         Log.d(TAG, "Done Playing Note");
     }
 
+    /****************************************************************
+     * Plays a note
+     **/
+    public static void playNote(Activity activity, Note note)
+    {
+        stopSound();
+
+        midi.newMidi(1, 0);
+        addNote(note, 1);
+
+        try
+        {
+            midi.writeToFile(midiFile);
+            mediaPlayer = MediaPlayer.create(activity, Uri.parse("file://" + midiFile));
+            mediaPlayer.setLooping(true);
+            mediaPlayer.start();
+        }
+        catch (Exception e)
+        { /* Ignored */ }
+
+        Log.d(TAG, "Done Playing Note");
+    }
 
     public static void switchInstrument(int i)
     {

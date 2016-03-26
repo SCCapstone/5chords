@@ -6,6 +6,8 @@ import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Log;
 import android.widget.SeekBar;
 
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.FixMethodOrder;

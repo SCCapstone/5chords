@@ -6,8 +6,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import com.five_chords.chord_builder.MainActivity;
-import com.five_chords.chord_builder.Score;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
 import org.junit.Before;
 import org.junit.Rule;
