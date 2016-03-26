@@ -82,6 +82,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         options.load(this);
         options.setOptionsChangedListener(this);
 
+        soundHandler.switchInstrument(options.instrument);
+
         // Lock orientation in portrait mode with small screen devices
         if (!getResources().getBoolean(R.bool.isTablet))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -191,53 +193,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         options.load(this);
         options.setOptionsChangedListener(this);
     }
-
-//    /**
-//     * Called to launch the options dialog.
-//     */
-//    public void launchOptionsDialog() {
-//        FragmentTransaction ft = getFragmentManager().beginTransaction();
-//        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-//
-//        if (prev != null)
-//            ft.remove(prev);
-//
-//        ft.addToBackStack(null);
-//
-//        // Create and show the dialog.
-//        DialogFragment newFragment = OptionsFragment.newInstance(options);
-//        newFragment.show(ft, "dialog");
-//    }
-//
-//    /**
-//     * Called to close the options dialog.
-//     */
-//    public void closeOptionsDialog(View v) {
-//        FragmentTransaction ft = getFragmentManager().beginTransaction();
-//        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-//
-//        if (prev != null) ft.remove(prev);
-//        ft.commit();
-//    }
-
-//    /**
-//     * Called to launch the score page dialog.
-//     *
-//     * @param v The calling View
-//     */
-//    public void launchScorePageDialog(View v) {
-//        FragmentTransaction ft = getFragmentManager().beginTransaction();
-//        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-//
-//        if (prev != null)
-//            ft.remove(prev);
-//
-//        ft.addToBackStack(null);
-//
-//        // Create and show the dialog.
-//        DialogFragment newFragment = ScorePageFragment.newInstance(true, false);
-//        newFragment.show(ft, "dialog");
-//    }
 
     /**
      * Called to update the displayed score.
@@ -380,6 +335,17 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         // Save options
         options.save(this);
         chordHandler.newChord(usePitchBending);
+    }
+
+    /**
+     * Called when the pitch options changes.
+     * @param instrument Whether or not pitch bending is enabled.
+     */
+    @Override
+    public void onInstrumentChanged(int instrument) {
+        // Save options
+        options.save(this);
+        soundHandler.switchInstrument(instrument);
     }
 
     @Override

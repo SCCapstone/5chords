@@ -14,11 +14,8 @@ import android.app.FragmentManager;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SeekBar;
-import android.widget.TextView;
 
-import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordInstrumentSelectFragment;
-import com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordSelectFragment;
 
 public class setUpGUI
 {
@@ -100,7 +97,7 @@ public class setUpGUI
 
         // Update the Chord select spinner
         FragmentManager manager = activity.getFragmentManager();
-        ChordInstrumentSelectFragment fragment = (ChordInstrumentSelectFragment)manager.findFragmentById(R.id.fragment_chord_select);
+        ChordSelectFragment fragment = (ChordSelectFragment)manager.findFragmentById(R.id.fragment_chord_select);
         fragment.updateChordSpinner(activity, chordIndices);
     }
 

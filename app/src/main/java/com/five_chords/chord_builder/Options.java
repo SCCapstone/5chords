@@ -27,8 +27,11 @@ public class Options
     /** Bundle id for the hintTypeDelays settings */
     private static final String HINT_DELAYS_BUNDLE_ID = "OptionsFragment.Options.HINT_DELAYS";
 
-    /** Bundle id for the hintTypeDelays settings */
+    /** Bundle id for the usePitchBending settings */
     private static final String PITCH_BENDING_BUNDLE_ID = "OptionsFragment.Options.BEND_PITCH";
+
+    /** Bundle id for the instrument settings */
+    private static final String INSTRUMENT_BUNDLE_ID = "OptionsFragment.Options.INSTRUMENT";
 
     /** Whether or not major chords are being used */
     public boolean useMajorChords;
@@ -47,6 +50,9 @@ public class Options
 
     /** Does the user want to train with pitch **/
     public boolean usePitchBending;
+
+    /** Which instrument does the user want? **/
+    public int instrument;
 
     /** The OptionsChangedListener attached to this Options. */
     private OptionsChangedListener optionsChangedListener;
@@ -136,6 +142,13 @@ public class Options
             optionsChangedListener.onPitchOptionsChanged(this.usePitchBending);
     }
 
+    public void changeInstrument(int instrumentIndex) {
+        this.instrument = instrumentIndex;
+
+        if (optionsChangedListener != null)
+            optionsChangedListener.onInstrumentChanged(instrument);
+    }
+
     /**
      * Saves this Options.
      * @param activity The current Activity
@@ -149,6 +162,7 @@ public class Options
         editor.putBoolean(DOMINANT_CHORDS_BUNDLE_ID, useDominantChords);
         editor.putBoolean(HINTS_BUNDLE_ID, useHints);
         editor.putBoolean(PITCH_BENDING_BUNDLE_ID, usePitchBending);
+        editor.putInt(INSTRUMENT_BUNDLE_ID, instrument);
 
         for (int i = 0; i < hintTypeDelays.length; ++i)
             editor.putInt(HINT_DELAYS_BUNDLE_ID + i, hintTypeDelays[i]);
@@ -168,6 +182,7 @@ public class Options
         useDominantChords = preferences.getBoolean(DOMINANT_CHORDS_BUNDLE_ID, false);
         useHints = preferences.getBoolean(HINTS_BUNDLE_ID, true);
         usePitchBending = preferences.getBoolean(PITCH_BENDING_BUNDLE_ID, true);
+        instrument = preferences.getInt(INSTRUMENT_BUNDLE_ID,  57);
 
         for (int i = 0; i < hintTypeDelays.length; ++i)
             hintTypeDelays[i] = preferences.getInt(HINT_DELAYS_BUNDLE_ID + i, 2 + i * 4);
@@ -198,5 +213,7 @@ public class Options
          * @param usePitchBending Whether or not pitch bending is enabled.
          */
         void onPitchOptionsChanged(boolean usePitchBending);
+
+        void onInstrumentChanged(int instrument);
     }
 }

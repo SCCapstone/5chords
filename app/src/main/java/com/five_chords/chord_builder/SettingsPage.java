@@ -19,6 +19,7 @@ import android.widget.ListView;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordChooseFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.HintSettingsFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.changeInstrumentFragment;
 
 public class SettingsPage extends Activity
 {
@@ -47,17 +48,16 @@ public class SettingsPage extends Activity
                                 ? "Pitch Bending is Enabled"
                                 : "Pitch Bending is Disabled";
         optionsAdapter.add(EDIT_PITCH_OPTIONS);
+        optionsAdapter.add(INSTRUMENT_OPTIONS);
 
         // Set click listener
-        view.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object obj = parent.getItemAtPosition(position);
 
                 if (obj instanceof SettingsOption)
-                    ((SettingsOption)obj).performAction();
+                    ((SettingsOption) obj).performAction();
             }
         });
 
@@ -114,7 +114,7 @@ public class SettingsPage extends Activity
     };
 
     /**
-     * The SettingsOption for clearing the scores.
+     * The SettingsOption for enabling/disabling pitch bending.
      */
     private final SettingsOption EDIT_PITCH_OPTIONS = new SettingsOption("Pitch Bending is Enabled")
     {
@@ -130,6 +130,18 @@ public class SettingsPage extends Activity
             }
 
             optionsAdapter.notifyDataSetChanged();
+        }
+    };
+
+    /**
+     * The SettingsOption for changing the instrument.
+     */
+    private final SettingsOption INSTRUMENT_OPTIONS = new SettingsOption("Change Instrument")
+    {
+        @Override
+        public void performAction()
+        {
+            launchInstrumentDialog();
         }
     };
 
@@ -167,6 +179,30 @@ public class SettingsPage extends Activity
         // Create and show the dialog.
         DialogFragment newFragment = HintSettingsFragment.newInstance();
         newFragment.show(ft, "dialog");
+    }
+
+    public void launchInstrumentDialog() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+
+        if (prev != null)
+            ft.remove(prev);
+
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = changeInstrumentFragment.newInstance();
+        newFragment.show(ft, "dialog");
+    }
+
+    public void closeInstrumentDialog() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+
+        if (prev != null)
+            ft.remove(prev);
+
+        ft.addToBackStack(null);
     }
 
     /**

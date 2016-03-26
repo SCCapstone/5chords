@@ -72,4 +72,5 @@
     <string name="hint_delay_set_submessage">Select the number of incorrect guesses for each hint type below:</string>
     <string name="hint_delay_set_message">Three types of hints will appear after some number of incorrect guesses.</string>
     <string name="title_activity_contact__us">Contact Us</string>
+    <string name="change_instrument">Change the instrument</string>
 </resources>

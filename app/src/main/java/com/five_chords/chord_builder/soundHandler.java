@@ -196,6 +196,8 @@ public class soundHandler extends MainActivity
         if(i == 2) instrument = ORGAN;
         if(i == 3) instrument = VIOLIN;
         if(i == 4) instrument = FLUTE;
+
+
     }
 
     public static int getInstrument() {
