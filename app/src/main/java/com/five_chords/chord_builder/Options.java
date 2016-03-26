@@ -27,6 +27,9 @@ public class Options
     /** Bundle id for the hintTypeDelays settings */
     private static final String HINT_DELAYS_BUNDLE_ID = "OptionsFragment.Options.HINT_DELAYS";
 
+    /** Bundle id for the hintTypeDelays settings */
+    private static final String PITCH_BENDING_BUNDLE_ID = "OptionsFragment.Options.BEND_PITCH";
+
     /** Whether or not major chords are being used */
     public boolean useMajorChords;
 
@@ -42,6 +45,9 @@ public class Options
     /** The number of wrong attempts to wait between hint types. */
     public int[] hintTypeDelays;
 
+    /** Does the user want to train with pitch **/
+    public boolean usePitchBending;
+
     /** The OptionsChangedListener attached to this Options. */
     private OptionsChangedListener optionsChangedListener;
 
@@ -55,6 +61,7 @@ public class Options
         useDominantChords = false;
         useHints = true;
         hintTypeDelays = new int[] {2, 6, 10};
+        usePitchBending = false;
     }
 
     /**
@@ -119,6 +126,17 @@ public class Options
     }
 
     /**
+     * Called to enable or disable pitch bending
+     * @param usePitch Whether or not pitch bending is enabled
+     */
+    public void changePitchOptions(boolean usePitch) {
+        this.usePitchBending = usePitch;
+
+        if (optionsChangedListener != null)
+            optionsChangedListener.onPitchOptionsChanged(this.usePitchBending);
+    }
+
+    /**
      * Saves this Options.
      * @param activity The current Activity
      */
@@ -130,6 +148,7 @@ public class Options
         editor.putBoolean(MINOR_CHORDS_BUNDLE_ID, useMinorChords);
         editor.putBoolean(DOMINANT_CHORDS_BUNDLE_ID, useDominantChords);
         editor.putBoolean(HINTS_BUNDLE_ID, useHints);
+        editor.putBoolean(PITCH_BENDING_BUNDLE_ID, usePitchBending);
 
         for (int i = 0; i < hintTypeDelays.length; ++i)
             editor.putInt(HINT_DELAYS_BUNDLE_ID + i, hintTypeDelays[i]);
@@ -148,6 +167,7 @@ public class Options
         useMinorChords = preferences.getBoolean(MINOR_CHORDS_BUNDLE_ID, false);
         useDominantChords = preferences.getBoolean(DOMINANT_CHORDS_BUNDLE_ID, false);
         useHints = preferences.getBoolean(HINTS_BUNDLE_ID, true);
+        usePitchBending = preferences.getBoolean(PITCH_BENDING_BUNDLE_ID, true);
 
         for (int i = 0; i < hintTypeDelays.length; ++i)
             hintTypeDelays[i] = preferences.getInt(HINT_DELAYS_BUNDLE_ID + i, 2 + i * 4);
@@ -171,5 +191,12 @@ public class Options
          * @param useHints Whether or not hints are now enabled.
          */
         void onHintsOptionsChanged(boolean useHints);
+
+
+        /**
+         * Called when the pitch options changes.
+         * @param usePitchBending Whether or not pitch bending is enabled.
+         */
+        void onPitchOptionsChanged(boolean usePitchBending);
     }
 }

@@ -97,11 +97,9 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         drawerOptions.add("Help");
         mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, R.id.textLabel, drawerOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        mDrawerLayout.setOnFocusChangeListener(new View.OnFocusChangeListener()
-        {
+        mDrawerLayout.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
-            public void onFocusChange(View v, boolean hasFocus)
-            {
+            public void onFocusChange(View v, boolean hasFocus) {
                 // Make sure sounds are stopped
                 soundHandler.stopSound();
             }
@@ -272,7 +270,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         findViewById(R.id.slider_option_layout).setVisibility(useDominants ? View.VISIBLE : View.GONE);
     }
 
-
     /**
      * Goes to Help page.
      */
@@ -370,6 +367,16 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      */
     @Override
     public void onHintsOptionsChanged(boolean useHints) {
+        // Save options
+        options.save(this);
+    }
+
+    /**
+     * Called when the pitch options changes.
+     * @param usePitchBending Whether or not pitch bending is enabled.
+     */
+    @Override
+    public void onPitchOptionsChanged(boolean usePitchBending) {
         // Save options
         options.save(this);
     }

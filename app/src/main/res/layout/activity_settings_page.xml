@@ -15,7 +15,11 @@
         android:textStyle="bold|italic"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"/>
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignWithParentIfMissing="false"
+        android:layout_alignParentBottom="false"
+        android:gravity="center_horizontal" />
 
     <!-- Separator -->
     <View style="@style/VerticalSeparator"
@@ -29,26 +33,25 @@
         android:layout_height="wrap_content"
         android:onClick="backToMain"
         android:layout_margin="8dp"
-        android:text="Done"
+        android:text="@string/done"
         android:id="@+id/button_done"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/buttons"
         android:textColor="#ffffff"
         android:layout_alignParentBottom="true"/>
 
-    <!-- Fragment containing the settings content -->
-    <fragment
-        android:id="@+id/fragment_settings_content"
+    <!-- settings content -->
+    <ListView
+        android:id="@+id/settings_content"
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:name="com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SettingsFragment"
-        tools:layout="@layout/fragment_settings_content"
         android:layout_below="@id/settings_top_separator"
         android:layout_above="@id/button_done"
         android:layout_alignParentStart="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true">
-    </fragment>
+        android:layout_alignParentRight="true"
+        />
 
 </RelativeLayout>

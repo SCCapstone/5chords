@@ -103,12 +103,12 @@
     </RelativeLayout>
 
     <ListView android:id="@+id/left_drawer"
-        android:layout_width="240dp"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:choiceMode="singleChoice"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="8dp"
+        android:divider="@android:color/black"
+        android:dividerHeight="1dp"
         android:background="@drawable/leather" />
 
 </android.support.v4.widget.DrawerLayout>
