@@ -12,7 +12,7 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:scaleType="centerCrop"
-        tools:context=".MainActivity">
+        tools:context=".com.five_chords.chord_builder.activity.MainActivity">
 
         <!-- Fragment containing the chord select spinner -->
         <fragment
@@ -25,21 +25,6 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_margin="0dp">
-        </fragment>
-
-        <!-- Fragment containing the chord select options -->
-        <fragment
-            android:id="@+id/fragment_chord_select_options"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:name="com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordSelectOptionsFragment"
-            tools:layout="@layout/fragment_chord_select_options"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:layout_below="@id/fragment_chord_select"
             android:layout_margin="0dp">
         </fragment>
 
@@ -80,7 +65,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_below="@id/fragment_chord_select_options"
+            android:layout_below="@id/fragment_chord_select"
             android:layout_above="@id/fragment_chord_check">
         </FrameLayout>
 
@@ -95,7 +80,7 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_below="@id/fragment_chord_select_options"
+            android:layout_below="@id/fragment_chord_select"
             android:layout_above="@id/fragment_chord_check"
             android:layout_margin="0dp">
         </fragment>

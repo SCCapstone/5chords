@@ -135,11 +135,9 @@ public class setUpGUI
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     soundHandler.playChord(activity, chordHandler.getCurrentSelectedChord());
-                   playSelectedChord.setBackgroundResource(R.drawable.testbtn1);
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
-                    playSelectedChord.setBackgroundResource(R.drawable.play_btn_image1);
                 }
                 return true;
             }
