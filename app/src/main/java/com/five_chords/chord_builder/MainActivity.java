@@ -129,6 +129,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         Score.loadScores(this, false);
 
         // Fetch random note
+        chordHandler.setSelectedChord(0);
         updateChordSelectSpinner(true);
 
         // ATTENTION: This was auto-generated to implement the App Indexing API.

@@ -1,6 +1,8 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
 import android.app.Activity;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;
@@ -35,11 +37,17 @@ public class SliderFragment extends Fragment
     /** Don't use onTouch methods when blocking **/
     private static boolean blockSliders = false;
 
+    private static Drawable thumb;
+    private static Drawable thumbTouched;
+
     /**
      * Required empty public constructor.
      */
     public SliderFragment()
-    {   }
+    {
+
+    }
+
 
     /**
      * Gets the root slider.
@@ -87,6 +95,7 @@ public class SliderFragment extends Fragment
         if (slider != null)
         {
             slider.setProgress(0);
+            slider.setThumbOffset(0);
             slider.setTouched(false);
         }
 
@@ -94,6 +103,7 @@ public class SliderFragment extends Fragment
         if (slider != null)
         {
             slider.setProgress(0);
+            slider.setThumbOffset(0);
             slider.setTouched(false);
         }
 
@@ -101,6 +111,7 @@ public class SliderFragment extends Fragment
         if (slider != null)
         {
             slider.setProgress(0);
+            slider.setThumbOffset(0);
             slider.setTouched(false);
         }
 
@@ -108,6 +119,7 @@ public class SliderFragment extends Fragment
         if (slider != null)
         {
             slider.setProgress(0);
+            slider.setThumbOffset(0);
             slider.setTouched(false);
         }
     }
@@ -145,14 +157,20 @@ public class SliderFragment extends Fragment
             @Override
             public boolean onTouch(View v, MotionEvent event)
             {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN)
+                {
                     int intervals = chordHandler.getCurrentNumInterval();
                     int[] offsets = chordHandler.getCurrentSliderOffset();
                     int[] correctChord = chordHandler.getCurrentCorrectChord();
 
                     soundHandler.playNote(activity, bar.getProgress(), intervals, offsets[slider], correctChord[slider]);
-                } else if (event.getAction() == MotionEvent.ACTION_UP)
+                    bar.setThumb(thumbTouched);
+                }
+                else if (event.getAction() == MotionEvent.ACTION_UP)
+                {
                     soundHandler.stopSound();
+                    bar.setThumb(thumb);
+                }
                 else if (event.getAction() == MotionEvent.ACTION_MOVE)
                     return false;
 
@@ -194,6 +212,12 @@ public class SliderFragment extends Fragment
         addSeekBarListener(activity, fifthSlider, 2);
         addSeekBarListener(activity, optionSlider, 3);
 //        setUpGUI.addSeekBarListeners(getActivity(), sliders);
+
+        thumb = getResources().getDrawable(R.drawable.eq_slide_knob);
+        thumb.setBounds(new Rect(0, 0, thumb.getIntrinsicWidth(), thumb.getIntrinsicHeight()));
+
+        thumbTouched = getResources().getDrawable(R.drawable.eq_slide_knob_touched);
+        thumbTouched.setBounds(new Rect(0, 0, thumbTouched.getIntrinsicWidth(), thumbTouched.getIntrinsicHeight()));
 
         return sliders;
     }
