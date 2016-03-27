@@ -11,6 +11,7 @@ package com.five_chords.chord_builder;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -116,13 +117,18 @@ public class setUpGUI
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     soundHandler.playBuiltChord(activity,
-                                                chordHandler.getCurrentPreciseBuiltChord(activity),
-                                                chordHandler.getCurrentNumInterval(),
-                                                chordHandler.getCurrentSliderOffset(),
-                                                chordHandler.getCurrentCorrectChord());
+                            chordHandler.getCurrentPreciseBuiltChord(activity),
+                            chordHandler.getCurrentNumInterval(),
+                            chordHandler.getCurrentSliderOffset(),
+                            chordHandler.getCurrentCorrectChord());
+
+                    playBuiltChord.setBackgroundResource(R.drawable.buttons_touched);
+                    playBuiltChord.setTextColor(Color.parseColor("#00b736"));
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
+                    playBuiltChord.setBackgroundResource(R.drawable.buttons);
+                    playBuiltChord.setTextColor(Color.parseColor("white"));
                 }
                 return true;
             }
@@ -135,9 +141,11 @@ public class setUpGUI
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     soundHandler.playChord(activity, chordHandler.getCurrentSelectedChord());
+                    playSelectedChord.setBackgroundResource(R.drawable.round_button_play_touched);
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
+                    playSelectedChord.setBackgroundResource(R.drawable.round_button_play);
                 }
                 return true;
             }
@@ -150,9 +158,11 @@ public class setUpGUI
                     chordHandler.getRandomChord();
                     activity.updateChordSelectSpinner();
                     soundHandler.playChord(activity, chordHandler.getCurrentSelectedChord());
+                    selectRandomChord.setBackgroundResource(R.drawable.round_button_shuffle_touched);
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
+                    selectRandomChord.setBackgroundResource(R.drawable.round_button_shuffle);
                 }
 
                 return true;
