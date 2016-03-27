@@ -37,8 +37,8 @@ public class SliderFragment extends Fragment
     /** Don't use onTouch methods when blocking **/
     private static boolean blockSliders = false;
 
-    private static Drawable thumb;
-    private static Drawable thumbTouched;
+    private static Drawable[] thumb;
+    private static Drawable[] thumbTouched;
 
     /**
      * Required empty public constructor.
@@ -160,12 +160,12 @@ public class SliderFragment extends Fragment
                     int[] correctChord = chordHandler.getCurrentCorrectChord();
 
                     soundHandler.playNote(activity, bar.getProgress(), intervals, offsets[slider], correctChord[slider]);
-                    bar.setThumb(thumbTouched);
+                    bar.setThumb(thumbTouched[slider]);
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP)
                 {
                     soundHandler.stopSound();
-                    bar.setThumb(thumb);
+                    bar.setThumb(thumb[slider]);
                 }
                 else if (event.getAction() == MotionEvent.ACTION_MOVE)
                     return false;
@@ -187,29 +187,34 @@ public class SliderFragment extends Fragment
         // Inflate the layout for this fragment
         View sliders = inflater.inflate(R.layout.fragment_sliders, container, false);
 
+        // Every slider needs it's own thumb image
+        thumb = new Drawable[4];
+        thumbTouched = new Drawable[4];
 
-        thumb = getResources().getDrawable(R.drawable.eq_slide_knob);
-        thumb.setBounds(new Rect(0, 0, thumb.getIntrinsicWidth(), thumb.getIntrinsicHeight()));
+        for (int i = 0; i < 4; i++) {
+            thumb[i] = getResources().getDrawable(R.drawable.eq_slide_knob);
+            thumb[i].setBounds(new Rect(0, 0, thumb[i].getIntrinsicWidth(), thumb[i].getIntrinsicHeight()));
 
-        thumbTouched = getResources().getDrawable(R.drawable.eq_slide_knob_touched);
-        thumbTouched.setBounds(new Rect(0, 0, thumbTouched.getIntrinsicWidth(), thumbTouched.getIntrinsicHeight()));
+            thumbTouched[i] = getResources().getDrawable(R.drawable.eq_slide_knob_touched);
+            thumbTouched[i].setBounds(new Rect(0, 0, thumbTouched[i].getIntrinsicWidth(), thumbTouched[i].getIntrinsicHeight()));
+        }
 
         // Assign sliders
         rootSlider = (VerticalSeekBar)sliders.findViewById(R.id.slider_root);
         rootSlider.initialize();
-        rootSlider.setThumb(thumb);
+        rootSlider.setThumb(thumb[0]);
 
         thirdSlider = (VerticalSeekBar)sliders.findViewById(R.id.slider_third);
         thirdSlider.initialize();
-        thirdSlider.setThumb(thumb);
+        thirdSlider.setThumb(thumb[1]);
 
         fifthSlider = (VerticalSeekBar)sliders.findViewById(R.id.slider_fifth);
         fifthSlider.initialize();
-        fifthSlider.setThumb(thumb);
+        fifthSlider.setThumb(thumb[2]);
 
         optionSlider = (VerticalSeekBar)sliders.findViewById(R.id.slider_option);
         optionSlider.initialize();
-        optionSlider.setThumb(thumb);
+        optionSlider.setThumb(thumb[3]);
 
         // Hide the fourth slider by default
         sliders.findViewById(R.id.slider_option_layout).setVisibility(View.GONE);
