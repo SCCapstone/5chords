@@ -30,9 +30,9 @@ public class setUpGUI
      * Called to initialize setUpGUI.
      * @param activity The calling MainActivity
      */
-    public static void initialize(MainActivity activity)
+    public static void initialize(MainActivity activity, boolean useMajorChords, boolean useMinorChords, boolean useDominantChords)
     {
-        loadSpinners(activity, true, false, false);
+        loadSpinners(activity, useMajorChords, useMinorChords, useDominantChords);
         assignButtons(activity);
     }
 
@@ -156,7 +156,7 @@ public class setUpGUI
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     chordHandler.getRandomChord();
-                    activity.updateChordSelectSpinner();
+                    activity.updateChordSelectSpinner(true);
                     soundHandler.playChord(activity, chordHandler.getCurrentSelectedChord());
                     selectRandomChord.setBackgroundResource(R.drawable.round_button_shuffle_touched);
                 }

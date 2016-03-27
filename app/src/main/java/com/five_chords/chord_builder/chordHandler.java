@@ -416,7 +416,7 @@ public class chordHandler
                         public void onClick(DialogInterface dialog, int which)
                         {
                             getRandomChord();
-                            activity.updateChordSelectSpinner();
+                            activity.updateChordSelectSpinner(true);
                             SliderFragment.resetChordSliders();
                             soundHandler.stopSound();
 

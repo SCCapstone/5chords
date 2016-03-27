@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -48,6 +49,8 @@ public class ChordSelectFragment extends Fragment
         {
             for (int i = 0; i < 36; ++i) // TODO get constant for 36
                 adapter.add(new ChordDisplayItem(Score.scores[i]));
+
+            adapter.add(new ChordDisplayItem(true));
         }
         else
         {
@@ -55,9 +58,9 @@ public class ChordSelectFragment extends Fragment
             Score.loadScores(activity, false);
 
             for (int i: chordIndices)
-            {
                 adapter.add(new ChordDisplayItem(Score.scores[i]));
-            }
+
+            adapter.add(new ChordDisplayItem(true));
         }
 
         // Set the adapter
@@ -85,19 +88,20 @@ public class ChordSelectFragment extends Fragment
         chordSelectSpinner.setMinimumWidth((int) getResources().getDimension(R.dimen.min_chord_select_slider_size));
 
         // Set the OnItemSelectedListener for the spinners
-        chordSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
+        chordSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
-            {
-                // Update the selected chord
-                chordHandler.setSelectedChord(chordSelectSpinner.getSelectedItemPosition());
-                chordHandler.newChord(MainActivity.getOptions().usePitchBending);
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (position == chordSelectSpinner.getCount() - 1) {
+                    chordHandler.getRandomChord();
+                } else if (position < chordSelectSpinner.getCount()) {
+                    // Update the selected chord
+                    chordHandler.setSelectedChord(chordSelectSpinner.getSelectedItemPosition());
+                    chordHandler.newChord(MainActivity.getOptions().usePitchBending);
+                }
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parentView)
-            { /* Ignore */ }
+            public void onNothingSelected(AdapterView<?> parentView) { /* Ignore */ }
         });
 
         // Inflate the layout for this fragment
@@ -127,6 +131,16 @@ public class ChordSelectFragment extends Fragment
         {
             chordName = score.CHORD_NAME;
             chordDescription = getChordDescription(score.getOverallValue());
+        }
+
+        /**
+         * Creates a new ChordDisplayItem for a random chord.
+         * @param random Is the chord randomized?
+         */
+        public ChordDisplayItem(boolean random)
+        {
+            chordName = "Randomized!";
+            chordDescription = "";
         }
 
         /**
@@ -206,7 +220,7 @@ public class ChordSelectFragment extends Fragment
                 view = LayoutInflater.from(getContext()).inflate(R.layout.component_chord_display_item, parent, false);
 
             // Get components on View
-            ChordDisplayItem item = getItem(position);
+            ChordDisplayItem item = (position == getCount()) ? getItem(position - 1) : getItem(position);
             TextView nameView = (TextView)view.findViewById(R.id.chord_display_chord_name);
             TextView descriptionView = (TextView)view.findViewById(R.id.chord_display_chord_description);
 

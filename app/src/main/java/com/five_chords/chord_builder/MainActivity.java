@@ -76,14 +76,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         // Initialize ScoreProgressView paint
         ScoreProgressView.initializePaint(this);
 
-        // Create Options if needed
-        if (options == null)
-            options = new Options();
-        options.load(this);
-        options.setOptionsChangedListener(this);
-
-        soundHandler.switchInstrument(options.instrument);
-
         // Lock orientation in portrait mode with small screen devices
         if (!getResources().getBoolean(R.bool.isTablet))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -120,13 +112,25 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
             editor.apply();
         }
 
+        // Create Options if needed
+        if (options == null)
+            options = new Options();
+        options.load(this);
+        options.setOptionsChangedListener(this);
+
         // Initialize Static Classes
-        setUpGUI.initialize(this);
         chordHandler.initialize();
         chordHandler.setOnChordSelectedListener(this);
-        chordHandler.setSelectedChord(0);
+
+        // Load
+        setUpGUI.initialize(this, options.useMajorChords, options.useMinorChords, options.useDominantChords);
         soundHandler.initialize(this);
+        soundHandler.switchInstrument(options.instrument);
         Score.loadScores(this, false);
+
+        // Fetch random note
+        updateChordSelectSpinner(true);
+
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -215,9 +219,14 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     /**
      * Called to update the spinner displaying the currently selected chord.
      */
-    public void updateChordSelectSpinner() {
+    public void updateChordSelectSpinner(boolean random) {
         Spinner dropdown = (Spinner) findViewById(R.id.spinner_chord_select);
-        dropdown.setSelection((chordHandler.getSelectedChordIndex()) % dropdown.getCount());
+
+        int selection = (random)
+                      ? dropdown.getCount()
+                      : (chordHandler.getSelectedChordIndex()) % dropdown.getCount();
+
+        dropdown.setSelection(selection);
 
         // Hide dominant slider if needed
         Log.w("Main", "Dominant chord selected");
