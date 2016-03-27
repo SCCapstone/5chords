@@ -93,12 +93,6 @@ public class ChordChooseFragment extends DialogFragment implements CompoundButto
         majorBox = (CheckBox) view.findViewById(R.id.checkbox_major_chords);
         dominantBox = (CheckBox) view.findViewById(R.id.checkbox_dominant_chords);
 
-        // Add listeners
-        updateEnables();
-        minorBox.setOnCheckedChangeListener(this);
-        majorBox.setOnCheckedChangeListener(this);
-        dominantBox.setOnCheckedChangeListener(this);
-
         // Set Default values
         Options options = MainActivity.getOptions();
 
@@ -106,6 +100,12 @@ public class ChordChooseFragment extends DialogFragment implements CompoundButto
         majorBox.setChecked(options.useMajorChords);
         minorBox.setChecked(options.useMinorChords);
         dominantBox.setChecked(options.useDominantChords);
+
+        // Add listeners
+        updateEnables();
+        minorBox.setOnCheckedChangeListener(this);
+        majorBox.setOnCheckedChangeListener(this);
+        dominantBox.setOnCheckedChangeListener(this);
 
         // Return the View
         return view;

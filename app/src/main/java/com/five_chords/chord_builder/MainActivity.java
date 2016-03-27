@@ -123,10 +123,10 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         chordHandler.setOnChordSelectedListener(this);
 
         // Load
+        Score.loadScores(this, false);
         setUpGUI.initialize(this, options.useMajorChords, options.useMinorChords, options.useDominantChords);
         soundHandler.initialize(this);
         soundHandler.switchInstrument(options.instrument);
-        Score.loadScores(this, false);
 
         // Fetch random note
         chordHandler.setSelectedChord(0);
