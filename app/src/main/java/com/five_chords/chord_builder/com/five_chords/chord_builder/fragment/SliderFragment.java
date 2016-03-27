@@ -95,7 +95,6 @@ public class SliderFragment extends Fragment
         if (slider != null)
         {
             slider.setProgress(0);
-            slider.setThumbOffset(0);
             slider.setTouched(false);
         }
 
@@ -103,7 +102,6 @@ public class SliderFragment extends Fragment
         if (slider != null)
         {
             slider.setProgress(0);
-            slider.setThumbOffset(0);
             slider.setTouched(false);
         }
 
@@ -111,7 +109,6 @@ public class SliderFragment extends Fragment
         if (slider != null)
         {
             slider.setProgress(0);
-            slider.setThumbOffset(0);
             slider.setTouched(false);
         }
 
@@ -119,7 +116,6 @@ public class SliderFragment extends Fragment
         if (slider != null)
         {
             slider.setProgress(0);
-            slider.setThumbOffset(0);
             slider.setTouched(false);
         }
     }
@@ -192,15 +188,28 @@ public class SliderFragment extends Fragment
         View sliders = inflater.inflate(R.layout.fragment_sliders, container, false);
 
 
+        thumb = getResources().getDrawable(R.drawable.eq_slide_knob);
+        thumb.setBounds(new Rect(0, 0, thumb.getIntrinsicWidth(), thumb.getIntrinsicHeight()));
+
+        thumbTouched = getResources().getDrawable(R.drawable.eq_slide_knob_touched);
+        thumbTouched.setBounds(new Rect(0, 0, thumbTouched.getIntrinsicWidth(), thumbTouched.getIntrinsicHeight()));
+
         // Assign sliders
         rootSlider = (VerticalSeekBar)sliders.findViewById(R.id.slider_root);
         rootSlider.initialize();
+        rootSlider.setThumb(thumb);
+
         thirdSlider = (VerticalSeekBar)sliders.findViewById(R.id.slider_third);
         thirdSlider.initialize();
+        thirdSlider.setThumb(thumb);
+
         fifthSlider = (VerticalSeekBar)sliders.findViewById(R.id.slider_fifth);
         fifthSlider.initialize();
+        fifthSlider.setThumb(thumb);
+
         optionSlider = (VerticalSeekBar)sliders.findViewById(R.id.slider_option);
         optionSlider.initialize();
+        optionSlider.setThumb(thumb);
 
         // Hide the fourth slider by default
         sliders.findViewById(R.id.slider_option_layout).setVisibility(View.GONE);
@@ -212,12 +221,6 @@ public class SliderFragment extends Fragment
         addSeekBarListener(activity, fifthSlider, 2);
         addSeekBarListener(activity, optionSlider, 3);
 //        setUpGUI.addSeekBarListeners(getActivity(), sliders);
-
-        thumb = getResources().getDrawable(R.drawable.eq_slide_knob);
-        thumb.setBounds(new Rect(0, 0, thumb.getIntrinsicWidth(), thumb.getIntrinsicHeight()));
-
-        thumbTouched = getResources().getDrawable(R.drawable.eq_slide_knob_touched);
-        thumbTouched.setBounds(new Rect(0, 0, thumbTouched.getIntrinsicWidth(), thumbTouched.getIntrinsicHeight()));
 
         return sliders;
     }
