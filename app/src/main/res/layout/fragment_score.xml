@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content">
 
     <!-- Background Color -->
     <FrameLayout
@@ -12,21 +12,17 @@
         android:layout_alignLeft="@id/score_display_title"
         android:layout_alignEnd="@+id/current_score_layout"
         android:layout_alignRight="@id/current_score_layout"
-        android:layout_alignBottom="@+id/overall_score_layout"
-        android:background="@color/trans_black">
-    </FrameLayout>
+        android:layout_alignBottom="@+id/overall_score_layout"/>
 
     <!-- Title Text View -->
    <TextView
        android:id="@id/score_display_title"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:paddingTop="4dp"
-       android:paddingLeft="4dp"
-       android:paddingRight="4dp"
        android:text="@string/score"
+       android:paddingLeft="20dp"
        android:textSize="@dimen/text_size_medium"
-       android:textColor="@android:color/white"
+       android:textColor="@android:color/darker_gray"
        android:layout_alignParentLeft="true"
        android:layout_alignParentStart="true"
        android:layout_alignParentTop="true"/>
@@ -34,9 +30,9 @@
     <!-- Current Score Status -->
     <LinearLayout
         android:id="@id/current_score_layout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
+        android:paddingLeft="8dp"
         android:paddingRight="0dp"
         android:layout_below="@id/score_display_title"
         android:orientation="horizontal">
@@ -63,9 +59,9 @@
     <!-- Overall Score Status -->
     <LinearLayout
         android:id="@id/overall_score_layout"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="16dp"
+        android:paddingLeft="8dp"
         android:paddingRight="0dp"
         android:paddingBottom="4dp"
         android:layout_below="@id/current_score_layout"
