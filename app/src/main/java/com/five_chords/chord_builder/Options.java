@@ -33,6 +33,9 @@ public class Options
     /** Bundle id for the instrument settings */
     private static final String INSTRUMENT_BUNDLE_ID = "OptionsFragment.Options.INSTRUMENT";
 
+    /** Bundle id for the instrument settings */
+    private static final String INVERSION_BUNDLE_ID = "OptionsFragment.Options.INVERSION";
+
     /** Whether or not major chords are being used */
     public boolean useMajorChords;
 
@@ -53,6 +56,9 @@ public class Options
 
     /** Which instrument does the user want? **/
     public int instrument;
+
+    /** Does the user what to practice with chord inversions? **/
+    public boolean useInversion;
 
     /** The OptionsChangedListener attached to this Options. */
     private OptionsChangedListener optionsChangedListener;
@@ -142,11 +148,26 @@ public class Options
             optionsChangedListener.onPitchOptionsChanged(this.usePitchBending);
     }
 
+    /**
+     * Called when an instrument changes.
+     * @param instrumentIndex Which instrument was selected.
+     */
     public void changeInstrument(int instrumentIndex) {
         this.instrument = instrumentIndex;
 
         if (optionsChangedListener != null)
             optionsChangedListener.onInstrumentChanged(instrument);
+    }
+
+    /**
+     * Called to enable or disable chord inversions
+     * @param useInversion Whether or not inversions are enabled
+     */
+    public void changeInversionOptions(boolean useInversion) {
+        this.usePitchBending = useInversion;
+
+        if (optionsChangedListener != null)
+            optionsChangedListener.onChangeInversionOptions(this.useInversion);
     }
 
     /**
@@ -163,6 +184,7 @@ public class Options
         editor.putBoolean(HINTS_BUNDLE_ID, useHints);
         editor.putBoolean(PITCH_BENDING_BUNDLE_ID, usePitchBending);
         editor.putInt(INSTRUMENT_BUNDLE_ID, instrument);
+        editor.putBoolean(INVERSION_BUNDLE_ID, useInversion);
 
         for (int i = 0; i < hintTypeDelays.length; ++i)
             editor.putInt(HINT_DELAYS_BUNDLE_ID + i, hintTypeDelays[i]);
@@ -182,7 +204,8 @@ public class Options
         useDominantChords = preferences.getBoolean(DOMINANT_CHORDS_BUNDLE_ID, false);
         useHints = preferences.getBoolean(HINTS_BUNDLE_ID, true);
         usePitchBending = preferences.getBoolean(PITCH_BENDING_BUNDLE_ID, true);
-        instrument = preferences.getInt(INSTRUMENT_BUNDLE_ID,  57);
+        instrument = preferences.getInt(INSTRUMENT_BUNDLE_ID, 57);
+        useInversion = preferences.getBoolean(INVERSION_BUNDLE_ID, false);
 
         for (int i = 0; i < hintTypeDelays.length; ++i)
             hintTypeDelays[i] = preferences.getInt(HINT_DELAYS_BUNDLE_ID + i, 2 + i * 4);
@@ -214,6 +237,16 @@ public class Options
          */
         void onPitchOptionsChanged(boolean usePitchBending);
 
+        /**
+         * Called when an instrument changes.
+         * @param instrument Which instrument was selected.
+         */
         void onInstrumentChanged(int instrument);
+
+        /**
+         * Called when the inversion options changes.
+         * @param useInversions Whether or not inversions are enabled.
+         */
+        void onChangeInversionOptions(boolean useInversions);
     }
 }

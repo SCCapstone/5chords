@@ -359,6 +359,12 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     }
 
     @Override
+    public void onChangeInversionOptions(boolean useInversions) {
+        options.save(this);
+        chordHandler.newChord(options.usePitchBending);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
 

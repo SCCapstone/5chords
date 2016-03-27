@@ -48,6 +48,10 @@ public class SettingsPage extends Activity
                                 ? "Pitch Bending is Enabled"
                                 : "Pitch Bending is Disabled";
         optionsAdapter.add(EDIT_PITCH_OPTIONS);
+        EDIT_INVERSION_OPTIONS.name = (MainActivity.getOptions().useInversion)
+                                    ? "Chord Inversions are Enabled - WIP"
+                                    : "Chord Inversions are Disabled - WIP";
+        optionsAdapter.add(EDIT_INVERSION_OPTIONS);
         optionsAdapter.add(INSTRUMENT_OPTIONS);
 
         // Set click listener
@@ -142,6 +146,26 @@ public class SettingsPage extends Activity
         public void performAction()
         {
             launchInstrumentDialog();
+        }
+    };
+
+    /**
+     * The SettingsOption for enabling/disabling chord inversions.
+     */
+    private final SettingsOption EDIT_INVERSION_OPTIONS = new SettingsOption("Chord Inversions are Disabled - WIP")
+    {
+        @Override
+        public void performAction()
+        {
+            if (this.name == "Chord Inversions are Disabled - WIP") {
+                this.name = "Chord Inversions are Enabled - WIP";
+                MainActivity.getOptions().changeInversionOptions(true);
+            } else {
+                this.name = "Chord Inversions are Disabled - WIP";
+                MainActivity.getOptions().changeInversionOptions(false);
+            }
+
+            optionsAdapter.notifyDataSetChanged();
         }
     };
 
