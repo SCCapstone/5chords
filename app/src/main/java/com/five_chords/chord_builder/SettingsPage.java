@@ -41,6 +41,7 @@ public class SettingsPage extends Activity
         // Populate the list
         optionsAdapter = new ArrayAdapter<>(this, R.layout.centered_list_items);
 
+        optionsAdapter.add(EDIT_USER_LEVEL_OPTIONS);
         optionsAdapter.add(CHOOSE_CHORDS_OPTIONS);
         optionsAdapter.add(EDIT_HINTS_OPTIONS);
         optionsAdapter.add(CLEAR_SCORES_OPTIONS);
@@ -170,6 +171,18 @@ public class SettingsPage extends Activity
     };
 
     /**
+     * The SettingsOption for enabling/disabling chord inversions.
+     */
+    private final SettingsOption EDIT_USER_LEVEL_OPTIONS = new SettingsOption("User Level - WIP")
+    {
+        @Override
+        public void performAction()
+        {
+            launchUserLevelDialog();
+        }
+    };
+
+    /**
      * Called to launch the choose chords dialog.
      */
     public void launchChooseChordsDialog()
@@ -227,6 +240,21 @@ public class SettingsPage extends Activity
             ft.remove(prev);
 
         ft.addToBackStack(null);
+    }
+
+    public void launchUserLevelDialog() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+
+        if (prev != null)
+            ft.remove(prev);
+
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        // Replace this with user level dialog class
+        //DialogFragment newFragment = changeInstrumentFragment.newInstance();
+        //newFragment.show(ft, "dialog");
     }
 
     /**

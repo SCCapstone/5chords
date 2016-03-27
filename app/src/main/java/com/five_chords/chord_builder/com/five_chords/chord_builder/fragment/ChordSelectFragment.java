@@ -96,7 +96,6 @@ public class ChordSelectFragment extends Fragment
                 } else if (position < chordSelectSpinner.getCount()) {
                     // Update the selected chord
                     chordHandler.setSelectedChord(chordSelectSpinner.getSelectedItemPosition());
-                    chordHandler.newChord(MainActivity.getOptions().usePitchBending);
                 }
             }
 

@@ -222,10 +222,11 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      */
     public void updateChordSelectSpinner(boolean random) {
         Spinner dropdown = (Spinner) findViewById(R.id.spinner_chord_select);
+        int selection = (chordHandler.getSelectedChordIndex()) % dropdown.getCount();
 
-        int selection = (random)
-                      ? dropdown.getCount()
-                      : (chordHandler.getSelectedChordIndex()) % dropdown.getCount();
+        if (random)
+            if (dropdown.getSelectedItemPosition() == dropdown.getCount()-1) return;
+            else selection = dropdown.getCount();
 
         dropdown.setSelection(selection);
 
@@ -363,6 +364,16 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         options.save(this);
         chordHandler.newChord(options.usePitchBending);
     }
+
+    /**
+     * Called to change the user level
+     * @param userLevel the level the user wants to practice at
+     */
+    public void onChangeUserLevel(int userLevel) {
+        options.save(this);
+        //chordHandler.newChord(options.usePitchBending);
+    };
+
 
     @Override
     public void onStart() {

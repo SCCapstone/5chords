@@ -68,6 +68,7 @@ public class chordHandler
     private static int currentWrongStreak;
 
     private static int[] currentCorrectChord;
+    private static int[] currentSelectedChord;
     private static int[] currentSliderOffset;
     private static int currentNumInterval;
 
@@ -111,7 +112,8 @@ public class chordHandler
      * @return The current chord array
      */
     public static int[] getCurrentSelectedChord() {
-        return availableChords[currentChordIndex];
+        if (currentSelectedChord == null) return availableChords[currentChordIndex];
+        return currentSelectedChord;
     }
 
     /**
@@ -160,11 +162,11 @@ public class chordHandler
         // Update current chord index
         currentChordIndex = chordIndex;
 
+        newChord(MainActivity.getOptions().usePitchBending);
+
         // Call the listener
         if (onChordSelectedListener != null)
             onChordSelectedListener.onChordSelected();
-
-        newChord(MainActivity.getOptions().usePitchBending);
     }
 
     /**
@@ -203,8 +205,6 @@ public class chordHandler
         while (newChordIndex == previousChordIndex);
 
         setSelectedChord(newChordIndex);
-
-        newChord(MainActivity.getOptions().usePitchBending);
     }
 
     public static void newChord(boolean withPitch) {
@@ -219,7 +219,7 @@ public class chordHandler
         currentNumInterval = random.nextInt(intervalMax/2) + intervalMax/2;
         int maxProgress = notes*currentNumInterval;
 
-        int[] thisChord = availableChords[currentChordIndex];
+        currentSelectedChord = availableChords[currentChordIndex];
 
         // Set random note position on sliders
         int rootNote = random.nextInt(maxProgress);
@@ -228,19 +228,38 @@ public class chordHandler
         int optionNote = random.nextInt(maxProgress);
 
         // This is the new correct seekbar positions
-        currentCorrectChord = (thisChord.length == 3) ?
+        currentCorrectChord = (currentSelectedChord.length == 3) ?
                 new int[] {rootNote, thirdNote, fifthNote} :
                 new int[] {rootNote, thirdNote, fifthNote, optionNote};
 
 
         // This is where the first note on the sliders start
-        int rootSliderOffset = thisChord[0] - rootNote/currentNumInterval;
-        int thirdSliderOffset = thisChord[1] - thirdNote/currentNumInterval;
-        int fifthSliderOffset = thisChord[2] - fifthNote/currentNumInterval;
-        int optionSliderOffset = (thisChord.length == 3) ? 0 : thisChord[3] - optionNote/currentNumInterval;
+        int rootSliderOffset = currentSelectedChord[0] - rootNote/currentNumInterval;
+        int thirdSliderOffset = currentSelectedChord[1] - thirdNote/currentNumInterval;
+        int fifthSliderOffset = currentSelectedChord[2] - fifthNote/currentNumInterval;
+        int optionSliderOffset = (currentSelectedChord.length == 3) ? 0 : currentSelectedChord[3] - optionNote/currentNumInterval;
 
         currentSliderOffset = new int[] {rootSliderOffset, thirdSliderOffset,
                                          fifthSliderOffset, optionSliderOffset};
+
+        if (MainActivity.getOptions().useInversion) {
+            int inversion = random.nextInt(currentSelectedChord.length);
+            Log.d("this", "inversion is " + inversion);
+            Log.d("offsets are", currentSliderOffset[0] + " " + currentSliderOffset[1] + " " + currentSliderOffset[2]);
+            Log.d("current chord is", currentSelectedChord[0] + " " + currentSelectedChord[1] + " " + currentSelectedChord[2]);
+
+            for (int i=0; i < inversion; i++) {
+                currentSliderOffset[i] += 12;
+                currentSelectedChord[i] += 12;
+            }
+            
+            // TODO: check for out of bounds
+            // each note must observe the bound: note + offset + 60 < 128
+
+            Log.d("new offsets are", currentSliderOffset[0] + " " + currentSliderOffset[1] + " " + currentSliderOffset[2]);
+            Log.d("current chord is", currentSelectedChord[0] + " " + currentSelectedChord[1] + " " + currentSelectedChord[2]);
+        }
+
 
         sF.setMaxProgress(maxProgress);
     }
@@ -252,7 +271,7 @@ public class chordHandler
         currentNumInterval = 1;
         int maxProgress = notes;
 
-        int[] thisChord = availableChords[currentChordIndex];
+        currentSelectedChord = availableChords[currentChordIndex];
 
         // Set random note position on sliders
         int rootNote = random.nextInt(maxProgress);
@@ -261,19 +280,37 @@ public class chordHandler
         int optionNote = random.nextInt(maxProgress);
 
         // This is the new correct seekbar positions
-        currentCorrectChord = (thisChord.length == 3) ?
+        currentCorrectChord = (currentSelectedChord.length == 3) ?
                 new int[] {rootNote, thirdNote, fifthNote} :
                 new int[] {rootNote, thirdNote, fifthNote, optionNote};
 
 
         // This is where the first note on the sliders start
-        int rootSliderOffset = thisChord[0] - rootNote;
-        int thirdSliderOffset = thisChord[1] - thirdNote;
-        int fifthSliderOffset = thisChord[2] - fifthNote;
-        int optionSliderOffset = (thisChord.length == 3) ? 0 : thisChord[3] - optionNote;
+        int rootSliderOffset = currentSelectedChord[0] - rootNote;
+        int thirdSliderOffset = currentSelectedChord[1] - thirdNote;
+        int fifthSliderOffset = currentSelectedChord[2] - fifthNote;
+        int optionSliderOffset = (currentSelectedChord.length == 3) ? 0 : currentSelectedChord[3] - optionNote;
 
         currentSliderOffset = new int[] {rootSliderOffset, thirdSliderOffset,
                 fifthSliderOffset, optionSliderOffset};
+
+        if (MainActivity.getOptions().useInversion) {
+            int inversion = random.nextInt(currentSelectedChord.length);
+            Log.d("this", "inversion is " + inversion);
+            Log.d("offsets are", currentSliderOffset[0] + " " + currentSliderOffset[1] + " " + currentSliderOffset[2]);
+            Log.d("current chord is", currentSelectedChord[0] + " " + currentSelectedChord[1] + " " + currentSelectedChord[2]);
+
+            for (int i=0; i < inversion; i++) {
+                currentSliderOffset[i] += 12;
+                currentSelectedChord[i] += 12;
+            }
+
+            // TODO: check for out of bounds
+            // each note must observe the bound: note + offset + 60 < 128
+
+            Log.d("new offsets are", currentSliderOffset[0] + " " + currentSliderOffset[1] + " " + currentSliderOffset[2]);
+            Log.d("current chord is", currentSelectedChord[0] + " " + currentSelectedChord[1] + " " + currentSelectedChord[2]);
+        }
 
         sF.setMaxProgress(maxProgress);
     }
@@ -295,6 +332,13 @@ public class chordHandler
 
         for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
             int note = i % CHORDS_PER_TYPE;
+
+            // Return the equation for the chord
+            // Bring A, Ab, B and Bb down an octave
+            /*returnArray[i] = (i < 8)
+                           ? new int[] {note, note + 4, note + 7}
+                           : new int[] {note - 12, note + 4 - 12, note + 7 - 12};
+        */
             returnArray[i] = new int[] {note, note + 4, note + 7};
         }
 
@@ -311,6 +355,15 @@ public class chordHandler
 
         for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
             int note = i % CHORDS_PER_TYPE;
+
+            // Return the equation for the chord
+            // Bring A, Ab, B and Bb down an octave
+            /*
+            returnArray[i] = (i < 8)
+                           ? new int[] {note, note + 3, note + 7}
+                           : new int[] {note - 12, note + 3 - 12, note + 7 - 12};
+            */
+
             returnArray[i] = new int[] {note, note + 3, note + 7};
         }
 
@@ -326,6 +379,13 @@ public class chordHandler
 
         for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
             int note = i % CHORDS_PER_TYPE;
+
+            // Return the equation for the chord
+            // Bring A, Ab, B and Bb down an octave
+/*            returnArray[i] = (i < 8)
+                           ? new int[] {note, note + 4, note + 7, note + 10}
+                           : new int[] {note, note + 4 - 12, note + 7 - 12, note + 10 - 12};
+*/
             returnArray[i] = new int[] {note, note + 4, note + 7, note + 10};
         }
 

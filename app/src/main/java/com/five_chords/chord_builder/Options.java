@@ -36,6 +36,9 @@ public class Options
     /** Bundle id for the instrument settings */
     private static final String INVERSION_BUNDLE_ID = "OptionsFragment.Options.INVERSION";
 
+    /** Bundle id for the user levels */
+    private static final String USER_LEVEL = "OptionsFragment.Options.USERLEVEL";
+
     /** Whether or not major chords are being used */
     public boolean useMajorChords;
 
@@ -60,6 +63,9 @@ public class Options
     /** Does the user what to practice with chord inversions? **/
     public boolean useInversion;
 
+    /** What level does the user want to practice at? **/
+    public int userLevel;
+
     /** The OptionsChangedListener attached to this Options. */
     private OptionsChangedListener optionsChangedListener;
 
@@ -74,6 +80,7 @@ public class Options
         useHints = true;
         hintTypeDelays = new int[] {2, 6, 10};
         usePitchBending = false;
+        userLevel = 0;
     }
 
     /**
@@ -164,10 +171,21 @@ public class Options
      * @param useInversion Whether or not inversions are enabled
      */
     public void changeInversionOptions(boolean useInversion) {
-        this.usePitchBending = useInversion;
+        this.useInversion = useInversion;
 
         if (optionsChangedListener != null)
             optionsChangedListener.onChangeInversionOptions(this.useInversion);
+    }
+
+    /**
+     * Called to change the user level
+     * @param userLevel the level the user wants to practice at
+     */
+    public void changeUserLevel(int userLevel) {
+        this.userLevel = userLevel;
+
+        if (optionsChangedListener != null)
+            optionsChangedListener.onChangeUserLevel(this.userLevel);
     }
 
     /**
@@ -185,6 +203,7 @@ public class Options
         editor.putBoolean(PITCH_BENDING_BUNDLE_ID, usePitchBending);
         editor.putInt(INSTRUMENT_BUNDLE_ID, instrument);
         editor.putBoolean(INVERSION_BUNDLE_ID, useInversion);
+        editor.putInt(USER_LEVEL, userLevel);
 
         for (int i = 0; i < hintTypeDelays.length; ++i)
             editor.putInt(HINT_DELAYS_BUNDLE_ID + i, hintTypeDelays[i]);
@@ -206,6 +225,7 @@ public class Options
         usePitchBending = preferences.getBoolean(PITCH_BENDING_BUNDLE_ID, true);
         instrument = preferences.getInt(INSTRUMENT_BUNDLE_ID, 57);
         useInversion = preferences.getBoolean(INVERSION_BUNDLE_ID, false);
+        userLevel = preferences.getInt(USER_LEVEL, 0);
 
         for (int i = 0; i < hintTypeDelays.length; ++i)
             hintTypeDelays[i] = preferences.getInt(HINT_DELAYS_BUNDLE_ID + i, 2 + i * 4);
@@ -248,5 +268,12 @@ public class Options
          * @param useInversions Whether or not inversions are enabled.
          */
         void onChangeInversionOptions(boolean useInversions);
+
+
+        /**
+         * Called to change the user level
+         * @param userLevel the level the user wants to practice at
+         */
+        void onChangeUserLevel(int userLevel);
     }
 }
