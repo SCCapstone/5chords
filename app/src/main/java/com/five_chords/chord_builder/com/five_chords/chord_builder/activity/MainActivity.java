@@ -300,6 +300,12 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
 
         // Update ChordInstrumentSelectFragment
         chordInstrumentSelectFragment.setDisplayedChord(chordHandler.getCurrentSelectedChord());
+
+        // Hide fourth slider if needed
+        if (chordHandler.getCurrentSelectedChord().getNumNotes() != 4)
+            findViewById(R.id.slider_option_layout).setVisibility(View.GONE);
+        else
+            findViewById(R.id.slider_option_layout).setVisibility(View.VISIBLE);
     }
 
     /**
@@ -336,6 +342,30 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         // Save options
         options.save(this);
         soundHandler.switchInstrument(instrument);
+    }
+
+    /**
+     * Called when the chord inversion selection changes.
+     * @param inversions The new inversion selection
+     */
+    @Override
+    public void onInversionSelectionChanged(List<Byte> inversions){
+        // Save options
+        options.save(this);
+    }
+
+    /**
+     * Called when the pitch bend settings change.
+     * @param incrementsPerNote The new increments per note
+     * @param maxCheckError The new max check error
+     */
+    @Override
+    public void onPitchBendSettingsChanged(int incrementsPerNote, double maxCheckError){
+        // Update SliderFragment
+        sliderFragment.setSliderBoundsToFitChord(chordHandler.getCurrentSelectedChordSpelling());
+
+        // Save options
+        options.save(this);
     }
 
     @Override

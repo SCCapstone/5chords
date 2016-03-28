@@ -171,15 +171,17 @@ public class chordHandler
         // Update current chord
         currentSelectedChord = chord;
 
-        // Set the spelling of the chord
+        // Set the value of the chord
         Options options = MainActivity.getOptions();
 
-        if (options.useChordInversions)
-            currentSelectedChord.getRandomSpelling(currentSelectedChordSpelling);
-        else if (options.useScrambledRootPositions)
-            currentSelectedChord.getRandomRootPosition(currentSelectedChordSpelling);
-        else
+        if (options.chordInversionsToUse.isEmpty())
             currentSelectedChord.getRootPosition(currentSelectedChordSpelling);
+        else
+        {
+            int maxInversions = Math.min(options.chordInversionsToUse.size(), currentSelectedChord.getNumNotes() - 1);
+            int inversionToUse = new Random().nextInt(maxInversions);
+            currentSelectedChord.getInversion(currentSelectedChordSpelling, options.chordInversionsToUse.get(inversionToUse));
+        }
 
         // Call the listener
         if (onChordSelectedListener != null)

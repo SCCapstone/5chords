@@ -103,12 +103,12 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Plays a chord
      **/
-    public static void playChord(Activity activity, Note[] chord)
+    public static void playChord(Activity activity, Note[] chord, int numNotes)
     {
         stopSound();
 
-        midi.newMidi(chord.length, 1);
-        for (int i = 0; i < chord.length; i++)
+        midi.newMidi(numNotes, 1);
+        for (int i = 0; i < numNotes; i++)
             addNote(chord[i], i);
 
         try

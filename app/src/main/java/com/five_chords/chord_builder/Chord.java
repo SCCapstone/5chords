@@ -2,9 +2,6 @@ package com.five_chords.chord_builder;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 /**
@@ -109,37 +106,19 @@ public class Chord
         double maxErr = MainActivity.getOptions().allowableCheckError;
 
         for (int i = 0; i < length; ++i)
-            if (Math.abs(chordA[i].getFractionalIndex() - chordB[i].getFractionalIndex()) > maxErr)
+            if (Math.abs(chordA[i].getFractionalIndex() - chordB[i].getFractionalIndex()) >= maxErr)
                 return false;
 
         return true;
     }
 
     /**
-     * Shuffles the indices beyond the given position in the array.
-     * @param array The array to shuffle
-     * @param start The start index; indices larger than this will be shuffled
-     * @param result An array in which to put the result, should be the same size as array
+     * Gets the number of notes of this Chord.
+     * @return The number of notes of this Chord
      */
-    private static void shuffle(int[] array, int start, int[] result)
+    public int getNumNotes()
     {
-        // Copy the indices
-        System.arraycopy(array, 0, result, 0, array.length);
-
-        // Shuffle the indices
-        Random random = new Random();
-
-        // Using the Fisher–Yates shuffle
-        int temp, index;
-        for (int i = array.length - 1; i > start; i--)
-        {
-            index = start + random.nextInt(i + 1 - start);
-
-            // Simple swap
-            temp = array[index];
-            array[index] = array[i];
-            array[i] = temp;
-        }
+        return TYPE.offsets.length;
     }
 
     /**
@@ -156,54 +135,25 @@ public class Chord
     }
 
     /**
-     * Gets the root position of this Chord, randomly ordering the notes after the root.
-     * @param word The array into which to put the given position of this Chord
-     */
-    public void getRandomRootPosition(Note[] word)
-    {
-//        // Shuffle the offsets other than the root TODO
-//        int[] shuffled = new int[TYPE.offsets.length];
-//        shuffle(TYPE.offsets, 1, shuffled);
-//
-//        // Increment offsets that are out of order
-//        for (int i = 2; i < word.length; ++i)
-//            while (word[i].index < word[i - 1].index)
-//                word[i].index += Note.NUM_NOTES;
-//
-//        // Add fundamental position
-//        for (int i = 0; i < word.length; ++i)
-//        {
-//            word[i].index += FUNDAMENTAL;
-//            word[i].distanceToIndex = 0.0;
-//        }
-//
-//        if (TYPE.offsets.length == 3)
-//            word[3].set(-1);
-    }
-
-    /**
      * Gets a random spelling of this Chord.
      * @param word The array into which to put the given position of this Chord
      */
-    public void getRandomSpelling(Note[] word)
+
+    /**
+     * Gets the given inversion for this Chord. Currently this implementation keeps the Note order
+     * and only changes the octaves of the appropriate note.
+     * @param chord A Note array to use to store the inversion
+     * @param inversion The inversion number, must be less than the length of the chord and larger than one
+     */
+    public void getInversion(Note[] chord, int inversion)
     {
-//        // Shuffle the offsets TODO
-//        shuffle(TYPE.offsets, 0, word);
-//
-//        // Increment offsets that are out of order
-//        for (int i = 1; i < word.length; ++i)
-//            while (word[i].index < word[i - 1].index)
-//                word[i].index += Note.NUM_NOTES;
-//
-//        // Add fundamental position
-//        for (int i = 0; i < word.length; ++i)
-//        {
-//            word[i].index += FUNDAMENTAL;
-//            word[i].distanceToIndex = 0.0;
-//        }
-//
-//        if (TYPE.offsets.length == 3)
-//            word[3].set(-1);
+        // Copy the offsets
+        for (int i = 0; i < TYPE.offsets.length; ++i)
+            chord[i].set(TYPE.offsets[i]);
+
+        // Increment the appropriate note octaves
+        for (int i = 0; i < inversion; ++i)
+            chord[i].index += Note.NUM_NOTES;
     }
 
     /**

@@ -49,7 +49,8 @@ public class setUpGUI
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
                     chordHandler.buildCurrentChord(activity);
-                    soundHandler.playChord(activity, chordHandler.getCurrentBuiltChordSpelling());
+                    soundHandler.playChord(activity, chordHandler.getCurrentBuiltChordSpelling(),
+                            chordHandler.getCurrentSelectedChord().getNumNotes());
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
@@ -65,7 +66,8 @@ public class setUpGUI
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
-                    soundHandler.playChord(activity, chordHandler.getCurrentSelectedChordSpelling());
+                    soundHandler.playChord(activity, chordHandler.getCurrentSelectedChordSpelling(),
+                            chordHandler.getCurrentSelectedChord().getNumNotes());
                     playSelectedChord.setBackgroundResource(R.drawable.testbtn1);
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP)
@@ -83,7 +85,8 @@ public class setUpGUI
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
                     chordHandler.getRandomChord();
-                    soundHandler.playChord(activity, chordHandler.getCurrentSelectedChordSpelling());
+                    soundHandler.playChord(activity, chordHandler.getCurrentSelectedChordSpelling(),
+                            chordHandler.getCurrentSelectedChord().getNumNotes());
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
@@ -100,9 +103,11 @@ public class setUpGUI
                 {
                     // Momentarily disable the button
                     v.setEnabled(false);
-                    v.postDelayed(new Runnable() {
+                    v.postDelayed(new Runnable()
+                    {
                         @Override
-                        public void run() {
+                        public void run()
+                        {
                             v.setEnabled(true);
                         }
                     }, 1000L);

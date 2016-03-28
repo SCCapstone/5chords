@@ -21,10 +21,10 @@ public class Options
     /** Bundle id for the hintTypeDelays settings. */
     private static final String HINT_DELAYS_BUNDLE_ID = "OptionsFragment.Options.HINT_DELAYS";
 
-    /** Bundle id for useScrambledRootPositions flag. */
-    private static final String CHORDS_SCRAM_POS_BUNDLE_ID = "OptionsFragment.Options.CHORDS_SCRAM_POS";
+    /** Bundle id for the number of chord inversions in use flag. */
+    private static final String CHORDS_INVERSIONS_SIZE_BUNDLE_ID = "OptionsFragment.Options.CHORDS_INVERSIONS_SIZE";
 
-    /** Bundle id for useChordInversions flag. */
+    /** Bundle id for used Chord inversions. */
     private static final String CHORDS_INVERSIONS_BUNDLE_ID = "OptionsFragment.Options.CHORDS_INVERSIONS";
 
     /** Bundle id for the chords in use list. */
@@ -63,11 +63,8 @@ public class Options
     /** The maximum allowable error for checking notes on the Chord sliders as a fraction. */
     public double allowableCheckError;
 
-    /** Whether or not to use Chord inversions. */
-    public boolean useChordInversions;
-
-    /** Whether or not to use Chord root positions where note after the root may be scrambled. */
-    public boolean useScrambledRootPositions;
+    /** The chord inversions to use. */
+    public List<Byte> chordInversionsToUse;
 
     /** Array denoting what chord types are being used. */
     public boolean[] chordTypesInUseArray;
@@ -87,10 +84,16 @@ public class Options
         useHints = true;
         hintTypeDelays = new int[3];
 
+        // Slider divisions per note
+        sliderDivisionsPerNote = DEFAULT_SLIDER_DIVISIONS_PER_NOTE;
+
         // Chord Types in use
         chordTypesInUse = new ArrayList<>();
         chordTypesInUseArray = new boolean[Chord.ChordType.values().length];
         chordTypesInUseArray[Chord.ChordType.MAJOR.ordinal()] = true;
+
+        // Chord Inversions to use
+        chordInversionsToUse = new ArrayList<>();
     }
 
     /**
@@ -127,6 +130,54 @@ public class Options
     public void setOptionsChangedListener(OptionsChangedListener listener)
     {
         this.optionsChangedListener = listener;
+    }
+
+
+    /**
+     * Adds a chord inversion to use. 0 denotes first inversion, 1 denotes second, and so on.
+     * @param inversion The inversion to add
+     */
+    public void addChordInversion(byte inversion)
+    {
+        if (!chordInversionsToUse.contains(inversion))
+        {
+            chordInversionsToUse.add(inversion);
+
+            if (optionsChangedListener != null)
+                optionsChangedListener.onInversionSelectionChanged(chordInversionsToUse);
+        }
+    }
+
+    /**
+     * Removes a chord inversion. Zero denotes first inversion, One denotes second, and so on.
+     * @param inversion The inversion to remove
+     */
+    public void removeChordInversion(byte inversion)
+    {
+        if (!chordInversionsToUse.remove(Byte.valueOf(inversion)))
+        {
+            chordInversionsToUse.add(inversion);
+
+            if (optionsChangedListener != null)
+                optionsChangedListener.onInversionSelectionChanged(chordInversionsToUse);
+        }
+    }
+
+    /**
+     * Called to change the pitch bend settings.
+     * @param incrementsPerNote The new number of increments per note
+     * @param maxCheckError The new max check error
+     */
+    public void changePitchBendSettings(int incrementsPerNote, double maxCheckError)
+    {
+        if (incrementsPerNote != sliderDivisionsPerNote && maxCheckError != allowableCheckError)
+        {
+            sliderDivisionsPerNote = incrementsPerNote;
+            allowableCheckError = maxCheckError;
+
+            if (optionsChangedListener != null)
+                optionsChangedListener.onPitchBendSettingsChanged(sliderDivisionsPerNote, allowableCheckError);
+        }
     }
 
     /**
@@ -198,8 +249,6 @@ public class Options
 
         // Save flags
         editor.putBoolean(HINTS_BUNDLE_ID, useHints);
-        editor.putBoolean(CHORDS_SCRAM_POS_BUNDLE_ID, useScrambledRootPositions);
-        editor.putBoolean(CHORDS_INVERSIONS_BUNDLE_ID, useChordInversions);
         editor.putInt(NUM_SLIDER_DIVISIONS_BUNDLE_ID, sliderDivisionsPerNote);
         editor.putFloat(CHECK_ERROR_BUNDLE_ID, (float) allowableCheckError);
         editor.putInt(INSTRUMENT_BUNDLE_ID, instrument);
@@ -211,6 +260,11 @@ public class Options
         // Save chord types in use
         for (int i = 0; i < chordTypesInUseArray.length; ++i)
             editor.putBoolean(CHORDS_IN_USE_BUNDLE_ID + i, chordTypesInUseArray[i]);
+
+        // Save chord inversions to use
+        editor.putInt(CHORDS_INVERSIONS_SIZE_BUNDLE_ID, chordInversionsToUse.size());
+        for (int i = 0; i < chordInversionsToUse.size(); ++i)
+            editor.putInt(CHORDS_INVERSIONS_BUNDLE_ID + i, chordInversionsToUse.get(i));
 
         editor.apply();
     }
@@ -225,13 +279,8 @@ public class Options
 
         // Read flags
         useHints = preferences.getBoolean(HINTS_BUNDLE_ID, true);
-        useScrambledRootPositions = preferences.getBoolean(CHORDS_SCRAM_POS_BUNDLE_ID, false);
-        useChordInversions = preferences.getBoolean(CHORDS_INVERSIONS_BUNDLE_ID, false);
         instrument = preferences.getInt(INSTRUMENT_BUNDLE_ID, 0);
-
-        // TODO temporary
-        sliderDivisionsPerNote = DEFAULT_SLIDER_DIVISIONS_PER_NOTE;
-//        sliderDivisionsPerNote = preferences.getInt(NUM_SLIDER_DIVISIONS_BUNDLE_ID, DEFAULT_SLIDER_DIVISIONS_PER_NOTE);
+        sliderDivisionsPerNote = preferences.getInt(NUM_SLIDER_DIVISIONS_BUNDLE_ID, DEFAULT_SLIDER_DIVISIONS_PER_NOTE);
         allowableCheckError = preferences.getFloat(CHECK_ERROR_BUNDLE_ID, DEFAULT_CHECK_ERROR);
 
         // Read hint delays
@@ -241,6 +290,11 @@ public class Options
         // Read chord types in use
         for (int i = 0; i < chordTypesInUseArray.length; ++i)
             chordTypesInUseArray[i] = preferences.getBoolean(CHORDS_IN_USE_BUNDLE_ID + i, chordTypesInUseArray[i]);
+
+        // Load chord inversions to use
+        int size = preferences.getInt(CHORDS_INVERSIONS_SIZE_BUNDLE_ID, 0);
+        for (int i = 0; i < size; ++i)
+            chordInversionsToUse.add((byte)preferences.getInt(CHORDS_INVERSIONS_BUNDLE_ID + i, 1));
 
         // Populate ChordType List
         populateChordTypesInUse();
@@ -280,5 +334,18 @@ public class Options
          * @param instrument The new instrument
          */
         void onInstrumentChanged(int instrument);
+
+        /**
+         * Called when the chord inversion selection changes.
+         * @param inversions The new inversion selection
+         */
+        void onInversionSelectionChanged(List<Byte> inversions);
+
+        /**
+         * Called when the pitch bend settings change.
+         * @param incrementsPerNote The new increments per note
+         * @param maxCheckError The new max check error
+         */
+        void onPitchBendSettingsChanged(int incrementsPerNote, double maxCheckError);
     }
 }

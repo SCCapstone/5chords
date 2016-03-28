@@ -102,6 +102,38 @@ public class SliderFragment extends Fragment
         getNoteFromSlider(optionSlider, chord[3]);
     }
 
+    // TODO
+    public void test()
+    {
+        Note[] chord = new Note[] {new Note(), new Note(), new Note(), new Note()};
+        buildCurrentChord(chord);
+
+        Log.e("SliderFragment", "Test");
+        Log.e("->", "Min Note on Sliders = " + minNoteOnSlider);
+        Log.e("->", "Max Note on Sliders = " + maxNoteOnSlider);
+
+        String value = "";
+        for (int i = 0; i < chord.length; ++i)
+        {
+            value += chord[i].getFractionalIndex();
+            if (i != chord.length - 1)
+                value += "\t";
+        }
+
+        Log.e("->", "Slider Values = " + value);
+
+        value = "";
+        chord = chordHandler.getCurrentSelectedChordSpelling();
+        for (int i = 0; i < chord.length; ++i)
+        {
+            value += chord[i].getFractionalIndex();
+            if (i != chord.length - 1)
+                value += "\t";
+        }
+
+        Log.e("->", "Selected Chord Notes = " + value);
+    }
+
     /**
      * Gets the current note on the slider, taking into account the number of intermediate slider
      * positions.
@@ -181,12 +213,16 @@ public class SliderFragment extends Fragment
 
         // Assign sliders
         rootSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_root);
+        rootSlider.setThumbOffset(0);
         rootSlider.initialize();
         thirdSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_third);
+        thirdSlider.setThumbOffset(0);
         thirdSlider.initialize();
         fifthSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_fifth);
+        fifthSlider.setThumbOffset(0);
         fifthSlider.initialize();
         optionSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_option);
+        optionSlider.setThumbOffset(0);
         optionSlider.initialize();
 
         // Add the seek bar listeners
@@ -195,6 +231,9 @@ public class SliderFragment extends Fragment
         addSeekBarListener(activity, thirdSlider);
         addSeekBarListener(activity, fifthSlider);
         addSeekBarListener(activity, optionSlider);
+
+        // Hide fourth slider by default
+        sliders.findViewById(R.id.slider_option_layout).setVisibility(View.GONE);
 
         return sliders;
     }
@@ -258,12 +297,12 @@ public class SliderFragment extends Fragment
                 // Only play note if progress change is from user
                 if (seekBar instanceof VerticalSeekBar && ((VerticalSeekBar)seekBar).isTouched() && !blockSliders)
                 {
-//                    SliderNotePosition position = new SliderNotePosition(bar);
-//                    soundHandler.playNote(activity, position.note, position.getMidiPitch());
                     Note note = new Note();
                     getNoteFromSlider(bar, note);
                     soundHandler.playNote(activity, note);
                 }
+
+                test(); // TODO
             }
 
             public void onStartTrackingTouch(SeekBar seekBar)
@@ -280,8 +319,6 @@ public class SliderFragment extends Fragment
             {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
-//                    SliderNotePosition position = new SliderNotePosition(bar);
-//                    soundHandler.playNote(activity, position.note, position.getMidiPitch());
                     Note note = new Note();
                     getNoteFromSlider(bar, note);
                     soundHandler.playNote(activity, note);
