@@ -4,22 +4,26 @@
  * @date 06 November 2015
  * @author: Drea,Steven,Zach,Kevin,Bo
  */
-package com.five_chords.chord_builder;
+package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import com.five_chords.chord_builder.Score;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordChooseFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordInversionSettingsFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.HintSettingsFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.PitchBendSettingsFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.changeInstrumentFragment;
+
+import com.five_chords.chord_builder.R;
 
 public class SettingsPage extends Activity
 {
@@ -41,18 +45,11 @@ public class SettingsPage extends Activity
         // Populate the list
         optionsAdapter = new ArrayAdapter<>(this, R.layout.centered_list_items);
 
-        optionsAdapter.add(EDIT_USER_LEVEL_OPTIONS);
         optionsAdapter.add(CHOOSE_CHORDS_OPTIONS);
         optionsAdapter.add(EDIT_HINTS_OPTIONS);
         optionsAdapter.add(CLEAR_SCORES_OPTIONS);
-        EDIT_PITCH_OPTIONS.name = (MainActivity.getOptions().usePitchBending)
-                                ? "Pitch Bending is Enabled"
-                                : "Pitch Bending is Disabled";
-        optionsAdapter.add(EDIT_PITCH_OPTIONS);
-        EDIT_INVERSION_OPTIONS.name = (MainActivity.getOptions().useInversion)
-                                    ? "Chord Inversions are Enabled - WIP"
-                                    : "Chord Inversions are Disabled - WIP";
-        optionsAdapter.add(EDIT_INVERSION_OPTIONS);
+        optionsAdapter.add(PITCH_BEND_OPTIONS);
+        optionsAdapter.add(CHORD_INVERSION_OPTIONS);
         optionsAdapter.add(INSTRUMENT_OPTIONS);
 
         // Set click listener
@@ -95,6 +92,30 @@ public class SettingsPage extends Activity
     };
 
     /**
+     * The SettingsOption for changing the Pitch bend settings.
+     */
+    private final SettingsOption PITCH_BEND_OPTIONS = new SettingsOption("Edit Pitch Bend Settings")
+    {
+        @Override
+        public void performAction()
+        {
+            launchPitchBendSettingsDialog();
+        }
+    };
+
+    /**
+     * The SettingsOption for changing the Pitch bend settings.
+     */
+    private final SettingsOption CHORD_INVERSION_OPTIONS = new SettingsOption("Choose Chord Inversions")
+    {
+        @Override
+        public void performAction()
+        {
+            launchChordInversionSettingsDialog();
+        }
+    };
+
+    /**
      * The SettingsOption for editing hints.
      */
     private final SettingsOption EDIT_HINTS_OPTIONS = new SettingsOption("Edit Hint Settings")
@@ -119,26 +140,6 @@ public class SettingsPage extends Activity
     };
 
     /**
-     * The SettingsOption for enabling/disabling pitch bending.
-     */
-    private final SettingsOption EDIT_PITCH_OPTIONS = new SettingsOption("Pitch Bending is Enabled")
-    {
-        @Override
-        public void performAction()
-        {
-            if (this.name == "Pitch Bending is Enabled") {
-                this.name = "Pitch Bending is Disabled";
-                MainActivity.getOptions().changePitchOptions(false);
-            } else {
-                this.name = "Pitch Bending is Enabled";
-                MainActivity.getOptions().changePitchOptions(true);
-            }
-
-            optionsAdapter.notifyDataSetChanged();
-        }
-    };
-
-    /**
      * The SettingsOption for changing the instrument.
      */
     private final SettingsOption INSTRUMENT_OPTIONS = new SettingsOption("Change Instrument")
@@ -147,38 +148,6 @@ public class SettingsPage extends Activity
         public void performAction()
         {
             launchInstrumentDialog();
-        }
-    };
-
-    /**
-     * The SettingsOption for enabling/disabling chord inversions.
-     */
-    private final SettingsOption EDIT_INVERSION_OPTIONS = new SettingsOption("Chord Inversions are Disabled - WIP")
-    {
-        @Override
-        public void performAction()
-        {
-            if (this.name == "Chord Inversions are Disabled - WIP") {
-                this.name = "Chord Inversions are Enabled - WIP";
-                MainActivity.getOptions().changeInversionOptions(true);
-            } else {
-                this.name = "Chord Inversions are Disabled - WIP";
-                MainActivity.getOptions().changeInversionOptions(false);
-            }
-
-            optionsAdapter.notifyDataSetChanged();
-        }
-    };
-
-    /**
-     * The SettingsOption for enabling/disabling chord inversions.
-     */
-    private final SettingsOption EDIT_USER_LEVEL_OPTIONS = new SettingsOption("User Level - WIP")
-    {
-        @Override
-        public void performAction()
-        {
-            launchUserLevelDialog();
         }
     };
 
@@ -218,6 +187,45 @@ public class SettingsPage extends Activity
         newFragment.show(ft, "dialog");
     }
 
+    /**
+     * Called to launch the pitch setting dialog.
+     */
+    public void launchPitchBendSettingsDialog()
+    {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+
+        if (prev != null)
+            ft.remove(prev);
+
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = PitchBendSettingsFragment.newInstance();
+        newFragment.show(ft, "dialog");
+    }
+
+    /**
+     * Called to launch the inversion settings dialog.
+     */
+    public void launchChordInversionSettingsDialog()
+    {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+
+        if (prev != null)
+            ft.remove(prev);
+
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        DialogFragment newFragment = ChordInversionSettingsFragment.newInstance();
+        newFragment.show(ft, "dialog");
+    }
+
+    /**
+     * Launches the Instrument select dialog
+     */
     public void launchInstrumentDialog() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("dialog");
@@ -230,31 +238,6 @@ public class SettingsPage extends Activity
         // Create and show the dialog.
         DialogFragment newFragment = changeInstrumentFragment.newInstance();
         newFragment.show(ft, "dialog");
-    }
-
-    public void closeInstrumentDialog() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-
-        if (prev != null)
-            ft.remove(prev);
-
-        ft.addToBackStack(null);
-    }
-
-    public void launchUserLevelDialog() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-
-        if (prev != null)
-            ft.remove(prev);
-
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        // Replace this with user level dialog class
-        //DialogFragment newFragment = changeInstrumentFragment.newInstance();
-        //newFragment.show(ft, "dialog");
     }
 
     /**

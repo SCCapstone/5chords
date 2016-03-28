@@ -11,91 +11,68 @@ package com.five_chords.chord_builder;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.content.DialogInterface;
-import android.util.Log;
 import android.view.Gravity;
-import android.widget.SeekBar;
 import android.widget.Toast;
 
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
-import com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class chordHandler
 {
-    /** Denotes the first level of hints */
+    /** Denotes the first level of hints. */
     public static final byte HINT_ONE = 1;
 
-    /** Denotes the second level of hints */
+    /** Denotes the second level of hints. */
     public static final byte HINT_TWO = 2;
 
-    /** Denotes the third level of hints */
+    /** Denotes the third level of hints. */
     public static final byte HINT_THREE = 3;
 
-//    /** Denotes a 'small' number of times that the user has guessed the wrong chord */
-//    private static int NUM_TIMES_WRONG_SMALL = 2;
-//
-//    /** Denotes a 'medium' number of times that the user has guessed the wrong chord */
-//    private static int NUM_TIMES_WRONG_MEDIUM = 6;
-//
-//    /** Denotes a 'large' number of times that the user has guessed the wrong chord */
-//    private static int NUM_TIMES_WRONG_LARGE = 12;
+    /** The current Chord selected on the chord spinner. */
+    private static Chord currentSelectedChord;
 
-    /** The number of chords per type (Major, Minor, Dominant) */
-    private static final int CHORDS_PER_TYPE = 12;
+    /** Contains the spelling of current chord built by the user on the sliders. */
+    private static Note[] currentBuiltChordSpelling = new Note[4];
 
-    /** The minimum number of notes per chord (for Major and Minor) */
-    private static final int MIN_NOTES_PER_CHORD = 3;
+    /** Contains the spelling of the current chord selected on the chord spinner. */
+    private static Note[] currentSelectedChordSpelling = new Note[4];
 
-//    /** The maximum number of notes per chord (for Dominant) */
-//    private static final int MAX_NOTES_PER_CHORD = 4;
-
-    /** Array containing the currently available chords */
-    private static int[][] availableChords = null;
-
-    /** Contains the current chord built by the user on the sliders */
-    private static int[] currentBuiltChord;
-
-    /** Contains the current chord built by the user on the sliders at the VerticalSeekBar precision */
-    private static int[] currentPreciseBuiltChord;
-
-    /** Records the current chord index */
-    private static int currentChordIndex;
+    static
+    {
+        for (int i = 0; i < 4; ++i)
+        {
+            currentBuiltChordSpelling[i] = new Note();
+            currentSelectedChordSpelling[i] = new Note();
+        }
+    }
 
     /** Records the current wrong streak of the current chord for hinting purposes. */
     private static int currentWrongStreak;
 
-    private static int[] currentCorrectChord;
-    private static int[] currentSelectedChord;
-    private static int[] currentSliderOffset;
-    private static int currentNumInterval;
-
-    /** The OnDominantChordSelectedListener attached to the chordHandler. */
+    /** The OnChordSelectedListener attached to the chordHandler. */
     private static OnChordSelectedListener onChordSelectedListener;
 
-    private static SliderFragment sF;
+    /** The map of used chords. */
+    private static Map<Long, Chord> chords = new HashMap<>();
 
     /**
      * Static class.
      */
     private chordHandler()
-    {
-        sF = new SliderFragment();
-    }
+    {    }
 
     /**
-     * Called to initialize this chordHandler.
+     * Initializes this chordHandler.
      */
     public static void initialize()
     {
-        clearChords();
-        addMajorChords();
-        addMinorChords();
-        addDominantChords();
-
-        sF = new SliderFragment();
+        currentSelectedChord = getChord(0, Chord.ChordType.MAJOR);
     }
 
     /**
@@ -108,61 +85,103 @@ public class chordHandler
     }
 
     /**
-     * Get the chord array at the current chord index.
-     * @return The current chord array
+     * Gets the spelling of the current selected chord.
+     * @return The spelling of the current selected chord
      */
-    public static int[] getCurrentSelectedChord() {
-        if (currentSelectedChord == null) return availableChords[currentChordIndex];
+    public static Note[] getCurrentSelectedChordSpelling()
+    {
+        return currentSelectedChordSpelling;
+    }
+
+    /**
+     * Gets the spelling of the current built chord.
+     * @return The spelling of the current built chord
+     */
+    public static Note[] getCurrentBuiltChordSpelling()
+    {
+        return currentBuiltChordSpelling;
+    }
+
+//    /**
+//     * Called to notify chordHandler that the built chord has changed.
+//     */
+//    public static void builtChordChanged()
+//    {
+//        currentSelectedChordSpelling = null;
+//        currentBuiltChordSpelling = null;
+//    }
+
+    /**
+     * Gets the currently selected Chord.
+     * @return The currently selected Chord
+     */
+    public static Chord getCurrentSelectedChord()
+    {
         return currentSelectedChord;
     }
 
     /**
-     * Gets the current built chord.
-     * @param activity The current Activity
-     * @return The current built chord
+     * Gets the Chord of the given name and type.
+     * @param fundamental The value of the fundamental note
+     * @param type The type of the chord
+     * @return The Chord of the given name and type
      */
-    public static int[] getCurrentBuiltChord(Activity activity) {
+    public static Chord getChord(int fundamental, Chord.ChordType type)
+    {
+        long id = Chord.getChordId(fundamental, type);
+        Chord chord = chords.get(id);
 
-        if (currentBuiltChord == null)
-            buildCurrentChord(activity);
+        if (chord == null)
+        {
+            chord = new Chord(fundamental, type);
+            chords.put(id, chord);
+        }
 
-        return currentBuiltChord;
+        return chord;
     }
 
     /**
-     * Gets the current precise built chord.
-     * @param activity The current Activity
-     * @return The current precise built chord
+     * Gets the Chord of the given id.
+     * @param id The id of the Chord
+     * @return The Chord of the given name and type
      */
-    public static int[] getCurrentPreciseBuiltChord(Activity activity) {
+    public static Chord getChord(long id)
+    {
+        Chord chord = chords.get(id);
 
-        if (currentPreciseBuiltChord == null)
-            buildCurrentPreciseChord(activity);
+        if (chord == null)
+        {
+            chord = new Chord(id);
+            chords.put(id, chord);
+        }
 
-        return currentPreciseBuiltChord;
+        return chord;
     }
 
     /**
-     * Called to notify chordHandler that the built chord has changed.
+     * Called to set currently selected chord.
+     * @param chord The new Chord
      */
-    public static void builtChordChanged() {
-        currentBuiltChord = null;
-        currentPreciseBuiltChord = null;
-    }
+    public static void setSelectedChord(Chord chord)
+    {
+        // Reset wrong streak if needed
+        if (chord != currentSelectedChord)
+            currentWrongStreak = 0;
 
-    /**
-     * Called to set the index of the currently selected chord.
-     * @param chordIndex The index of the new chord
-     */
-    public static void setSelectedChord(int chordIndex) {
+        // Update current chord
+        currentSelectedChord = chord;
 
-        // Reset wrong streak
-        currentWrongStreak = 0;
+        // Set the value of the chord
+        Options options = MainActivity.getOptions();
 
-        // Update current chord index
-        currentChordIndex = chordIndex;
-
-        newChord(MainActivity.getOptions().usePitchBending);
+        if (options.chordInversionsToUse.isEmpty())
+            currentSelectedChord.getRootPosition(currentSelectedChordSpelling);
+        else
+        {
+            int maxInversions = Math.min(options.chordInversionsToUse.size(), currentSelectedChord.getNumNotes() - 1);
+            int inversionToUse = new Random().nextInt(maxInversions);
+            currentSelectedChord.getInversion(currentSelectedChordSpelling, options.chordInversionsToUse.get(inversionToUse));
+        }
 
         // Call the listener
         if (onChordSelectedListener != null)
@@ -170,288 +189,62 @@ public class chordHandler
     }
 
     /**
-     * Gets the index of the currently selected chord.
-     * @return The index of the currently selected chord
-     */
-    public static int getSelectedChordIndex() {
-        return currentChordIndex;
-    }
-
-    public static int[] getCurrentCorrectChord() {
-        return currentCorrectChord;
-    }
-
-    public static int getCurrentNumInterval() {
-        return currentNumInterval;
-    }
-
-    public static int[] getCurrentSliderOffset() {
-        return currentSliderOffset;
-    }
-
-    /**
      * Changes the current chord to a random chord.
      */
-    public static void getRandomChord() {
-        int previousChordIndex = currentChordIndex;
-        int newChordIndex;
+    public static void getRandomChord()
+    {
+        Options options = MainActivity.getOptions();
         Random random = new Random();
 
-        // Make sure new chord index is different than the previous
+        // Select a random type from the available types
+        Chord.ChordType newType = options.getChordTypesInUse().get(random.nextInt(options.getNumChordTypesInUse()));
+
+        // Select a random chord of the type, making sure that it is different than the current chord
+        int newChordFund;
+        int previousChordFund = currentSelectedChord.FUNDAMENTAL;
+
         do
         {
-            newChordIndex = random.nextInt(availableChords.length - 1);
+            newChordFund = random.nextInt(Note.NUM_NOTES);
         }
-        while (newChordIndex == previousChordIndex);
+        while (newChordFund == previousChordFund);
 
-        setSelectedChord(newChordIndex);
+        // Get the chosen chord
+        setSelectedChord(getChord(newChordFund, newType));
     }
 
-    public static void newChord(boolean withPitch) {
-        if (withPitch) newChordWithPitch();
-        else newChordNoPitch();
-    }
+//    /**
+//     * Clears the available chord array.
+//     */
+//    public static void clearChords() {
+//        availableChords = null;
+//    }
 
-    public static void newChordWithPitch() {
-        Random random = new Random();
-        int notes = random.nextInt(2) + 3;
-        int intervalMax = 40/notes;
-        currentNumInterval = random.nextInt(intervalMax/2) + intervalMax/2;
-        int maxProgress = notes*currentNumInterval;
-
-        currentSelectedChord = availableChords[currentChordIndex];
-
-        // Set random note position on sliders
-        int rootNote = random.nextInt(maxProgress);
-        int thirdNote = random.nextInt(maxProgress);
-        int fifthNote = random.nextInt(maxProgress);
-        int optionNote = random.nextInt(maxProgress);
-
-        // This is the new correct seekbar positions
-        currentCorrectChord = (currentSelectedChord.length == 3) ?
-                new int[] {rootNote, thirdNote, fifthNote} :
-                new int[] {rootNote, thirdNote, fifthNote, optionNote};
-
-
-        // This is where the first note on the sliders start
-        int rootSliderOffset = currentSelectedChord[0] - rootNote/currentNumInterval;
-        int thirdSliderOffset = currentSelectedChord[1] - thirdNote/currentNumInterval;
-        int fifthSliderOffset = currentSelectedChord[2] - fifthNote/currentNumInterval;
-        int optionSliderOffset = (currentSelectedChord.length == 3) ? 0 : currentSelectedChord[3] - optionNote/currentNumInterval;
-
-        currentSliderOffset = new int[] {rootSliderOffset, thirdSliderOffset,
-                                         fifthSliderOffset, optionSliderOffset};
-
-        if (MainActivity.getOptions().useInversion) {
-            int inversion = random.nextInt(currentSelectedChord.length);
-            Log.d("this", "inversion is " + inversion);
-            Log.d("offsets are", currentSliderOffset[0] + " " + currentSliderOffset[1] + " " + currentSliderOffset[2]);
-            Log.d("current chord is", currentSelectedChord[0] + " " + currentSelectedChord[1] + " " + currentSelectedChord[2]);
-
-            for (int i=0; i < inversion; i++) {
-                currentSliderOffset[i] += 12;
-                currentSelectedChord[i] += 12;
-            }
-            
-            // TODO: check for out of bounds
-            // each note must observe the bound: note + offset + 60 < 128
-
-            Log.d("new offsets are", currentSliderOffset[0] + " " + currentSliderOffset[1] + " " + currentSliderOffset[2]);
-            Log.d("current chord is", currentSelectedChord[0] + " " + currentSelectedChord[1] + " " + currentSelectedChord[2]);
-        }
-
-
-        sF.setMaxProgress(maxProgress);
-    }
-
-    public static void newChordNoPitch() {
-        Random random = new Random();
-        int notes = random.nextInt(6) + 6;
-        int intervalMax = notes;
-        currentNumInterval = 1;
-        int maxProgress = notes;
-
-        currentSelectedChord = availableChords[currentChordIndex];
-
-        // Set random note position on sliders
-        int rootNote = random.nextInt(maxProgress);
-        int thirdNote = random.nextInt(maxProgress);
-        int fifthNote = random.nextInt(maxProgress);
-        int optionNote = random.nextInt(maxProgress);
-
-        // This is the new correct seekbar positions
-        currentCorrectChord = (currentSelectedChord.length == 3) ?
-                new int[] {rootNote, thirdNote, fifthNote} :
-                new int[] {rootNote, thirdNote, fifthNote, optionNote};
-
-
-        // This is where the first note on the sliders start
-        int rootSliderOffset = currentSelectedChord[0] - rootNote;
-        int thirdSliderOffset = currentSelectedChord[1] - thirdNote;
-        int fifthSliderOffset = currentSelectedChord[2] - fifthNote;
-        int optionSliderOffset = (currentSelectedChord.length == 3) ? 0 : currentSelectedChord[3] - optionNote;
-
-        currentSliderOffset = new int[] {rootSliderOffset, thirdSliderOffset,
-                fifthSliderOffset, optionSliderOffset};
-
-        if (MainActivity.getOptions().useInversion) {
-            int inversion = random.nextInt(currentSelectedChord.length);
-            Log.d("this", "inversion is " + inversion);
-            Log.d("offsets are", currentSliderOffset[0] + " " + currentSliderOffset[1] + " " + currentSliderOffset[2]);
-            Log.d("current chord is", currentSelectedChord[0] + " " + currentSelectedChord[1] + " " + currentSelectedChord[2]);
-
-            for (int i=0; i < inversion; i++) {
-                currentSliderOffset[i] += 12;
-                currentSelectedChord[i] += 12;
-            }
-
-            // TODO: check for out of bounds
-            // each note must observe the bound: note + offset + 60 < 128
-
-            Log.d("new offsets are", currentSliderOffset[0] + " " + currentSliderOffset[1] + " " + currentSliderOffset[2]);
-            Log.d("current chord is", currentSelectedChord[0] + " " + currentSelectedChord[1] + " " + currentSelectedChord[2]);
-        }
-
-        sF.setMaxProgress(maxProgress);
-    }
-
-    /**
-     * Clears the available chord array.
-     */
-    public static void clearChords() {
-        availableChords = null;
-    }
-
-    /**
-     * Adds the major chords to the available chord array.
-     */
-    public static void addMajorChords() {
-
-        int len = availableChords == null ? 0 : availableChords.length;
-        int[][] returnArray = createEmptyChordArray();
-
-        for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
-            int note = i % CHORDS_PER_TYPE;
-
-            // Return the equation for the chord
-            // Bring A, Ab, B and Bb down an octave
-            /*returnArray[i] = (i < 8)
-                           ? new int[] {note, note + 4, note + 7}
-                           : new int[] {note - 12, note + 4 - 12, note + 7 - 12};
-        */
-            returnArray[i] = new int[] {note, note + 4, note + 7};
-        }
-
-        availableChords = returnArray;
-    }
-
-    /**
-     * Adds the minor chords to the available chord array.
-     */
-    public static void addMinorChords() {
-
-        int len = availableChords == null ? 0 : availableChords.length;
-        int[][] returnArray = createEmptyChordArray();
-
-        for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
-            int note = i % CHORDS_PER_TYPE;
-
-            // Return the equation for the chord
-            // Bring A, Ab, B and Bb down an octave
-            /*
-            returnArray[i] = (i < 8)
-                           ? new int[] {note, note + 3, note + 7}
-                           : new int[] {note - 12, note + 3 - 12, note + 7 - 12};
-            */
-
-            returnArray[i] = new int[] {note, note + 3, note + 7};
-        }
-
-        availableChords = returnArray;
-    }
-
-    /**
-     * Adds the dominant chords to the available chord array.
-     */
-    public static void addDominantChords() {
-        int len = availableChords == null ? 0 : availableChords.length;
-        int[][] returnArray = createEmptyChordArray();
-
-        for (int i = len; i < len + CHORDS_PER_TYPE; i++) {
-            int note = i % CHORDS_PER_TYPE;
-
-            // Return the equation for the chord
-            // Bring A, Ab, B and Bb down an octave
-/*            returnArray[i] = (i < 8)
-                           ? new int[] {note, note + 4, note + 7, note + 10}
-                           : new int[] {note, note + 4 - 12, note + 7 - 12, note + 10 - 12};
-*/
-            returnArray[i] = new int[] {note, note + 4, note + 7, note + 10};
-        }
-
-        availableChords = returnArray;
-    }
-
-    /**
-     * Checks whether two chords (as integer arrays) are equivalent.
-     * @param builtChord The array containing the notes of the built chord
-     * @param setChord The array containing the notes of the set chord
-     */
-    public static boolean compareChords(int[] builtChord, int[] setChord)
-    {
-        Log.d("set chord", setChord[0] + ", " + setChord[1] + ", " + setChord[2]);
-        Log.d("built chord", builtChord[0] + ", " + builtChord[1] + ", " + builtChord[2]);
-        Log.d("intervals", "" + currentNumInterval);
-        Log.d("offsets", currentSliderOffset[0] + ", " + currentSliderOffset[1] + ", " + currentSliderOffset[2]);
-
-        return !(setChord == null || builtChord == null || setChord.length != builtChord.length) &&
-                Arrays.equals(builtChord, setChord);
-    }
+//    /**
+//     * Checks whether two chords (as integer arrays) are equivalent.
+//     * @param chordA The array containing the notes of the first
+//     * @param chordB The array containing the notes of the second chord
+//     */
+//    public static boolean compareChords(int[] chordA, int[] chordB)
+//    {
+//
+//
+//        return !(setChord == null || builtChord == null || setChord.length != builtChord.length) &&
+//                Arrays.equals(builtChord, setChord);
+//    }
 
     /**
      * Builds the current chord that the user has defined on the sliders.
      * @param activity The current Activity
      */
-    private static void buildCurrentChord(Activity activity)
+    public static void buildCurrentChord(Activity activity)
     {
-        int root = ((VerticalSeekBar) activity.findViewById(R.id.slider_root)).getProgress();
-        int third = ((VerticalSeekBar) activity.findViewById(R.id.slider_third)).getProgress();
-        int fifth = ((VerticalSeekBar) activity.findViewById(R.id.slider_fifth)).getProgress();
-        int seventh = ((VerticalSeekBar) activity.findViewById(R.id.slider_option)).getProgress();
+        Fragment fragment = activity.getFragmentManager().findFragmentById(R.id.fragment_sliders);
 
-        if (getCurrentSelectedChord().length == MIN_NOTES_PER_CHORD)
+        if (fragment != null && fragment instanceof SliderFragment)
         {
-            currentBuiltChord = new int[]{root/currentNumInterval + currentSliderOffset[0],
-                                          third/currentNumInterval + currentSliderOffset[1],
-                                          fifth/currentNumInterval + currentSliderOffset[2]};
-        }
-        else
-        {
-            currentBuiltChord = new int[]{root/currentNumInterval + currentSliderOffset[0],
-                                          third/currentNumInterval + currentSliderOffset[1],
-                                          fifth/currentNumInterval + currentSliderOffset[2],
-                                          seventh/currentNumInterval + currentSliderOffset[3]};
-        }
-    }
-
-    /**
-     * Builds the current precise chord that the user has defined on the sliders.
-     * @param activity The current Activity
-     */
-    private static void buildCurrentPreciseChord(Activity activity)
-    {
-        int root = ((SeekBar) activity.findViewById(R.id.slider_root)).getProgress();
-        int third = ((SeekBar) activity.findViewById(R.id.slider_third)).getProgress();
-        int fifth = ((SeekBar) activity.findViewById(R.id.slider_fifth)).getProgress();
-        int seventh = ((SeekBar) activity.findViewById(R.id.slider_option)).getProgress();
-
-        if (getCurrentSelectedChord().length == MIN_NOTES_PER_CHORD)
-        {
-            currentPreciseBuiltChord = new int[]{root, third, fifth};
-        }
-        else
-        {
-            currentPreciseBuiltChord = new int[]{root, third, fifth, seventh};
+            SliderFragment sliderFragment = (SliderFragment)fragment;
+            sliderFragment.buildCurrentChord(currentBuiltChordSpelling);
         }
     }
 
@@ -461,7 +254,16 @@ public class chordHandler
      */
     public static void checkCurrentChord(final MainActivity activity)
     {
-        boolean isCorrect = compareChords(getCurrentPreciseBuiltChord(activity), getCurrentCorrectChord());
+        // Make sure the current Chord is built
+        buildCurrentChord(activity);
+
+        // Test correctness
+        boolean isCorrect = Chord.compareChords(currentBuiltChordSpelling, currentSelectedChordSpelling,
+                getCurrentSelectedChord().TYPE.offsets.length);
+
+        // Set the score
+        Score.getCurrentScore().update(activity, isCorrect);
+        activity.updateDisplayedScore();
 
         // Handle result TODO add sounds for right and wrong
         if (isCorrect)
@@ -476,8 +278,7 @@ public class chordHandler
                         public void onClick(DialogInterface dialog, int which)
                         {
                             getRandomChord();
-                            activity.updateChordSelectSpinner(true);
-                            SliderFragment.resetChordSliders();
+                            activity.getSliderFragment().resetChordSliders();
                             soundHandler.stopSound();
 
                         }
@@ -488,7 +289,8 @@ public class chordHandler
                         @Override
                         public void onClick(DialogInterface dialog, int which)
                         {
-                            setSelectedChord(getSelectedChordIndex()); // Resets the wrong streak counter
+                            setSelectedChord(currentSelectedChord); // Resets the wrong streak counter
+                            activity.getSliderFragment().resetChordSliders();
                             soundHandler.stopSound();
                         }
 
@@ -498,7 +300,7 @@ public class chordHandler
                         @Override
                         public void onCancel(DialogInterface dialog)
                         {
-                            setSelectedChord(getSelectedChordIndex()); // Resets the wrong streak counter
+                            activity.getSliderFragment().resetChordSliders();
                             soundHandler.stopSound();
                         }
                     })
@@ -527,31 +329,6 @@ public class chordHandler
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
         }
-
-        // Set the score
-        Score.getCurrentScore().update(activity, isCorrect);
-        activity.updateDisplayedScore();
-
-        builtChordChanged();
-    }
-
-    /**
-     * Creates a blank chord array, which will contain the currently available chords if non-null.
-     * @return A blank chord array
-     */
-    private static int[][] createEmptyChordArray()
-    {
-        int[][] returnArray;
-
-        if (availableChords == null)
-            returnArray = new int[CHORDS_PER_TYPE][];
-        else
-        {
-            returnArray = new int[availableChords.length + CHORDS_PER_TYPE][];
-            System.arraycopy(availableChords, 0, returnArray, 0, availableChords.length);
-        }
-
-        return returnArray;
     }
 
     /**

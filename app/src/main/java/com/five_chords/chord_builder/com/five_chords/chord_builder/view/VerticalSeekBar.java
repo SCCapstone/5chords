@@ -9,7 +9,6 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.SeekBar;
@@ -133,7 +132,6 @@ public class VerticalSeekBar extends SeekBar
             case MotionEvent.ACTION_UP:
                 isTouched = true;
                 setProgress(getMax() - (int) (getMax() * event.getY() / getHeight()));
-                chordHandler.builtChordChanged();
                 onSizeChanged(getWidth(), getHeight(), 0, 0);
 
                 break;

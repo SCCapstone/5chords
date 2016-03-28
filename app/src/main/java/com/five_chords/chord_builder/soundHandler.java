@@ -11,6 +11,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
+
 public class soundHandler extends MainActivity
 {
     /** The tag for this class. */
@@ -60,6 +62,14 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Add a note to the MIDI file
      **/
+    public static void addNote(Note note, int channel)
+    {
+        addNote(note.index, 8192 + (int)(4096 * note.distanceToIndex), channel);
+    }
+
+    /****************************************************************
+     * Add a note to the MIDI file
+     **/
     public static void addNote(int note, int pitch, int channel)
     {
         // TODO: use the sliders to change pitch of note
@@ -93,12 +103,13 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Plays a chord
      **/
-    public static void playChord(Activity activity, int[] chord)
+    public static void playChord(Activity activity, Note[] chord, int numNotes)
     {
         stopSound();
 
-        midi.newMidi(chord.length, 1);
-        for (int i = 0; i < chord.length; i++) addNote(chord[i], 8192, i);
+        midi.newMidi(numNotes, 1);
+        for (int i = 0; i < numNotes; i++)
+            addNote(chord[i], i);
 
         try
         {
@@ -113,64 +124,42 @@ public class soundHandler extends MainActivity
         Log.d(TAG, "Done Playing Chord");
     }
 
-    /****************************************************************
-     * Plays a chord
-     **/
-    public static void playBuiltChord(Activity activity, int[] chord, int intervals, int[] offsets, int[] correctChord)
-    {
-        stopSound();
-
-        midi.newMidi(chord.length, 1);
-
-        int note;
-        int pitch = 8192;
-
-        if (MainActivity.getOptions().usePitchBending)
-          for (int i = 0; i < chord.length; i++)
-          {
-              note = chord[i]/intervals + offsets[i];
-              pitch = 8192 + (4096/intervals * (chord[i]%intervals - correctChord[i]%intervals));
-
-              addNote(note, pitch, i);
-          }
-        else
-            for (int i = 0; i < chord.length; i++)
-            {
-                note = chord[i] + offsets[i];
-
-                addNote(note, pitch, i);
-            }
-
-        try
-        {
-            midi.writeToFile(midiFile);
-            mediaPlayer = MediaPlayer.create(activity, Uri.parse("file://" + midiFile));
-            mediaPlayer.setLooping(true);
-            mediaPlayer.start();
-        }
-        catch (Exception e)
-        { /* Ignored */ }
-
-        Log.d(TAG, "Done Playing Chord");
-    }
+//    /****************************************************************
+//     * Plays a chord
+//     **/
+//    public static void playBuiltChord(Activity activity, int[] chord, int intervals, int[] offsets, int[] correctChord)
+//    {
+//        stopSound();
+//
+//        midi.newMidi(chord.length, 1);
+//
+//        for (int i = 0; i < chord.length; i++)
+//        {
+//            int note = chord[i]/intervals + offsets[i];
+//            int pitch = 8192 + (4096/intervals * (chord[i]%intervals - correctChord[i]%intervals));
+//
+//            addNote(note, pitch, i);
+//        }
+//
+//        try
+//        {
+//            midi.writeToFile(midiFile);
+//            mediaPlayer = MediaPlayer.create(activity, Uri.parse("file://" + midiFile));
+//            mediaPlayer.setLooping(true);
+//            mediaPlayer.start();
+//        }
+//        catch (Exception e)
+//        { /* Ignored */ }
+//
+//        Log.d(TAG, "Done Playing Chord");
+//    }
 
     /****************************************************************
      * Plays a note
      **/
-    public static void playNote(Activity activity, int progress, int intervals, int offset, int correctNote)
+    public static void playNote(Activity activity, int note, int pitch)
     {
         stopSound();
-
-        int note;
-        int pitch;
-
-        if (MainActivity.getOptions().usePitchBending) {
-            note = progress/intervals + offset;
-            pitch = 8192 + (4096/intervals * (progress%intervals - correctNote%intervals));
-        } else {
-            note = progress + offset;
-            pitch = 8192;
-        }
 
         midi.newMidi(1, 0);
         addNote(note, pitch, 1);
@@ -188,6 +177,28 @@ public class soundHandler extends MainActivity
         Log.d(TAG, "Done Playing Note");
     }
 
+    /****************************************************************
+     * Plays a note
+     **/
+    public static void playNote(Activity activity, Note note)
+    {
+        stopSound();
+
+        midi.newMidi(1, 0);
+        addNote(note, 1);
+
+        try
+        {
+            midi.writeToFile(midiFile);
+            mediaPlayer = MediaPlayer.create(activity, Uri.parse("file://" + midiFile));
+            mediaPlayer.setLooping(true);
+            mediaPlayer.start();
+        }
+        catch (Exception e)
+        { /* Ignored */ }
+
+        Log.d(TAG, "Done Playing Note");
+    }
 
     public static void switchInstrument(int i)
     {
@@ -196,8 +207,6 @@ public class soundHandler extends MainActivity
         if(i == 2) instrument = ORGAN;
         if(i == 3) instrument = VIOLIN;
         if(i == 4) instrument = FLUTE;
-
-
     }
 
     public static int getInstrument() {

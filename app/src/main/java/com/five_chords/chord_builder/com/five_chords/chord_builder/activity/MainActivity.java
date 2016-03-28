@@ -6,7 +6,7 @@
  * @date 06 November 2015
  * @author: Drea,Steven,Zach,Kevin,Bo
  */
-package com.five_chords.chord_builder;
+package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -16,25 +16,33 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.content.DialogInterface;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.app.AlertDialog;
 
 
+import com.five_chords.chord_builder.Chord;
+import com.five_chords.chord_builder.Note;
+import com.five_chords.chord_builder.Options;
+import com.five_chords.chord_builder.R;
+import com.five_chords.chord_builder.Score;
+import com.five_chords.chord_builder.chordHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordSelectFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView;
+import com.five_chords.chord_builder.setUpGUI;
+import com.five_chords.chord_builder.soundHandler;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import android.util.Log;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements Options.OptionsChangedListener,
@@ -49,6 +57,12 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
 
     /** The List of items in the navigation pane. */
     private static ListView mDrawerList;
+
+    /** The Fragment containing the chord build sliders attached to this Activity. */
+    private SliderFragment sliderFragment;
+
+    /** The Fragment for selecting chords and instruments attached to this Activity. */
+    private ChordSelectFragment chordInstrumentSelectFragment;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -76,6 +90,12 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         // Initialize ScoreProgressView paint
         ScoreProgressView.initializePaint(this);
 
+        // Create Options if needed
+        if (options == null)
+            options = new Options();
+        options.load(this);
+        options.setOptionsChangedListener(this);
+
         // Lock orientation in portrait mode with small screen devices
         if (!getResources().getBoolean(R.bool.isTablet))
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -84,16 +104,17 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         ArrayList<String> drawerOptions = new ArrayList<>();
-        drawerOptions.add("Play");
-        drawerOptions.add("History");
+        drawerOptions.add("View History");
         drawerOptions.add("Settings");
         drawerOptions.add("About");
         drawerOptions.add("Help");
         mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, R.id.textLabel, drawerOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        mDrawerLayout.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+        mDrawerLayout.setOnFocusChangeListener(new View.OnFocusChangeListener()
+        {
             @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+            public void onFocusChange(View v, boolean hasFocus)
+            {
                 // Make sure sounds are stopped
                 soundHandler.stopSound();
             }
@@ -112,48 +133,18 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
             editor.apply();
         }
 
-        // Create Options if needed
-        if (options == null)
-            options = new Options();
-        options.load(this);
-        options.setOptionsChangedListener(this);
-
         // Initialize Static Classes
+        setUpGUI.initialize(this);
         chordHandler.initialize();
         chordHandler.setOnChordSelectedListener(this);
-
-        // Load
-        Score.loadScores(this, false);
-        setUpGUI.initialize(this, options.useMajorChords, options.useMinorChords, options.useDominantChords);
         soundHandler.initialize(this);
-        soundHandler.switchInstrument(options.instrument);
+        Score.loadScores(this, false);
 
-        // Fetch random note
-        chordHandler.setSelectedChord(0);
-        updateChordSelectSpinner(true);
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-    }
-
-    /**
-     * Called when a new chord is selected.
-     */
-    @Override
-    public void onChordSelected()
-    {
-        // Update current chord score
-        updateDisplayedScore();
-
-        // Hide dominant slider if needed
-        findViewById(R.id.slider_option_layout).setVisibility(
-                chordHandler.getCurrentSelectedChord().length == 4 ? View.VISIBLE : View.GONE);
     }
 
     @Override
     protected void onDestroy() {
-
         // Make sure sound stops
         soundHandler.stopSound();
 
@@ -163,6 +154,11 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     @Override
     protected void onResume() {
         super.onResume();
+
+        // Get references to fragments
+        sliderFragment = (SliderFragment)getFragmentManager().findFragmentById(R.id.fragment_sliders);
+        chordInstrumentSelectFragment =
+                (ChordSelectFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_select);
     }
 
     /**
@@ -175,7 +171,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
 
         // Save options
         options.save(this);
-//        options.writeToBundle(savedInstanceState);
 
         // Call superclass method
         super.onSaveInstanceState(savedInstanceState);
@@ -200,6 +195,14 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     }
 
     /**
+     * Gets the SliderFragment within this MainActivity.
+     * @return The SliderFragment within this MainActivity
+     */
+    public SliderFragment getSliderFragment() {
+        return sliderFragment;
+    }
+
+    /**
      * Called to update the displayed score.
      */
     public void updateDisplayedScore() {
@@ -214,26 +217,9 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         // Set the Views
         currentProgress.setText(current.getCurrentValue().getDisplayString());
         overallProgress.setText(current.getOverallValue().getDisplayString());
-    }
 
-
-    /**
-     * Called to update the spinner displaying the currently selected chord.
-     */
-    public void updateChordSelectSpinner(boolean random) {
-        Spinner dropdown = (Spinner) findViewById(R.id.spinner_chord_select);
-        int selection = (chordHandler.getSelectedChordIndex()) % dropdown.getCount();
-
-        if (random)
-            if (dropdown.getSelectedItemPosition() == dropdown.getCount()-1) return;
-            else selection = dropdown.getCount();
-
-        dropdown.setSelection(selection);
-
-        // Hide dominant slider if needed
-        Log.w("Main", "Dominant chord selected");
-        boolean useDominants = chordHandler.getCurrentSelectedChord().length == 4;
-        findViewById(R.id.slider_option_layout).setVisibility(useDominants ? View.VISIBLE : View.GONE);
+//        // Update the Chord Select Spinner
+//        chordInstrumentSelectFragment.updateDisplayedChord();
     }
 
     /**
@@ -268,14 +254,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         startActivity(intent);
     }
 
-    /****************************************************************
-     * Opens the Start Page
-     **/
-    public void openStartPage() {
-        Intent intent = new Intent(this, StartPage.class);
-        startActivity(intent);
-    }
-
     /**
      * Generates one instance of the given type of hint.
      *
@@ -283,47 +261,65 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      */
     public void makeHint(final byte type) {
         // Calculate the chord differences
-        final int[] builtChord = chordHandler.getCurrentPreciseBuiltChord(this);
-        final int[] selectedChord = chordHandler.getCurrentCorrectChord();
+        final Note[] builtChord = chordHandler.getCurrentBuiltChordSpelling();
+        final Note[] selectedChord = chordHandler.getCurrentSelectedChordSpelling();
 
         // Add hints
         SliderHintView view;
 
         // Root slider
         view = (SliderHintView) findViewById(R.id.slider_root_layout);
-        view.setHint(type, builtChord[0], selectedChord[0], 500L);
+        view.setHint(type, builtChord[0], selectedChord[0], sliderFragment, 500L);
 
         // Third slider
         view = (SliderHintView) findViewById(R.id.slider_third_layout);
-        view.setHint(type, builtChord[1], selectedChord[1], 500L);
+        view.setHint(type, builtChord[1], selectedChord[1], sliderFragment, 500L);
 
         // Fifth slider
         view = (SliderHintView) findViewById(R.id.slider_fifth_layout);
-        view.setHint(type, builtChord[2], selectedChord[2], 500L);
+        view.setHint(type, builtChord[2], selectedChord[2], sliderFragment, 500L);
 
         // Option slider
-        if (builtChord.length == 4 && selectedChord.length == 4)
+        if (chordHandler.getCurrentSelectedChord().TYPE.offsets.length == 4)
         {
             view = (SliderHintView) findViewById(R.id.slider_option_layout);
-            view.setHint(type, builtChord[3], selectedChord[3], 500L);
+            view.setHint(type, builtChord[3], selectedChord[3], sliderFragment, 500L);
         }
+    }
+
+    /**
+     * Called when a new chord is selected.
+     */
+    @Override
+    public void onChordSelected() {
+        // Update current chord score
+        updateDisplayedScore();
+
+        // Update slider bounds
+        sliderFragment.setSliderBoundsToFitChord(chordHandler.getCurrentSelectedChordSpelling());
+
+        // Update ChordInstrumentSelectFragment
+        chordInstrumentSelectFragment.setDisplayedChord(chordHandler.getCurrentSelectedChord());
+
+        // Hide fourth slider if needed
+        if (chordHandler.getCurrentSelectedChord().getNumNotes() != 4)
+            findViewById(R.id.slider_option_layout).setVisibility(View.GONE);
+        else
+            findViewById(R.id.slider_option_layout).setVisibility(View.VISIBLE);
     }
 
     /**
      * Called when the chord type changes.
      *
-     * @param useMajors    Whether or not major chords are now being used
-     * @param useMinors    Whether or not minor chords are now being used
-     * @param useDominants Whether or not dominant chords are now being used
+     * @param chordTypesInUse A List containing the ChordTypes that are now in use
      */
     @Override
-    public void onChordTypeOptionsChanged(boolean useMajors, boolean useMinors, boolean useDominants) {
-
+    public void onChordTypeOptionsChanged(List<Chord.ChordType> chordTypesInUse) {
         // Save options
         options.save(this);
 
         // Update the spinners
-        setUpGUI.loadSpinners(this, useMajors, useMinors, useDominants);
+        chordInstrumentSelectFragment.updateAvailableChordTypes(this);
     }
 
     /**
@@ -338,19 +334,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     }
 
     /**
-     * Called when the pitch options changes.
-     * @param usePitchBending Whether or not pitch bending is enabled.
-     */
-    @Override
-    public void onPitchOptionsChanged(boolean usePitchBending) {
-        // Save options
-        options.save(this);
-        chordHandler.newChord(usePitchBending);
-    }
-
-    /**
-     * Called when the pitch options changes.
-     * @param instrument Whether or not pitch bending is enabled.
+     * Called when the instrument selection changes.
+     * @param instrument The new instrument
      */
     @Override
     public void onInstrumentChanged(int instrument) {
@@ -359,21 +344,29 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         soundHandler.switchInstrument(instrument);
     }
 
+    /**
+     * Called when the chord inversion selection changes.
+     * @param inversions The new inversion selection
+     */
     @Override
-    public void onChangeInversionOptions(boolean useInversions) {
+    public void onInversionSelectionChanged(List<Byte> inversions){
+        // Save options
         options.save(this);
-        chordHandler.newChord(options.usePitchBending);
     }
 
     /**
-     * Called to change the user level
-     * @param userLevel the level the user wants to practice at
+     * Called when the pitch bend settings change.
+     * @param incrementsPerNote The new increments per note
+     * @param maxCheckError The new max check error
      */
-    public void onChangeUserLevel(int userLevel) {
-        options.save(this);
-        //chordHandler.newChord(options.usePitchBending);
-    };
+    @Override
+    public void onPitchBendSettingsChanged(int incrementsPerNote, double maxCheckError){
+        // Update SliderFragment
+        sliderFragment.setSliderBoundsToFitChord(chordHandler.getCurrentSelectedChordSpelling());
 
+        // Save options
+        options.save(this);
+    }
 
     @Override
     public void onStart() {
@@ -444,15 +437,13 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id) {
             switch (position) {
-                case 0:
+                case 0: toScorePage();
                     break;
-                case 1: toScorePage();
+                case 1: toSettingsPage();
                     break;
-                case 2: toSettingsPage();
+                case 2: toAboutPage();
                     break;
-                case 3: toAboutPage();
-                    break;
-                case 4: toHelpPage();
+                case 3: toHelpPage();
                     break;
             }
             mDrawerLayout.closeDrawer(mDrawerList);

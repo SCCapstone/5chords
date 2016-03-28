@@ -5,27 +5,40 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.five_chords.chord_builder.MainActivity;
+import com.five_chords.chord_builder.Chord;
+import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 import com.five_chords.chord_builder.chordHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
+import com.five_chords.chord_builder.soundHandler;
 
 /**
- * A Fragment containing the chord select slider.
+ * A Fragment containing the chord select slider and the instrument select slider.
  * @author tstone95
  */
 public class ChordSelectFragment extends Fragment
 {
+//    /** The available instruments names */
+//    public static final String[] INSTRUMENT_NAMES = {"Trumpet", "Piano", "Organ", "Violin", "Flute"};
+//
+//    /** The available instrument icons */
+//    public static final int[] INSTRUMENT_ICONS = {R.drawable.trumpet, R.drawable.piano, R.drawable.organ,
+//            R.drawable.violin, R.drawable.flute};
+
     /** Reference to the Spinner for selecting chords contained in this Fragment. */
     private Spinner chordSelectSpinner;
+
+//    /** Reference to the Spinner for selecting instruments contained in this Fragment. */
+//    private Spinner instrumentSelectSpinner;
 
     /**
      * Required empty public constructor.
@@ -34,37 +47,60 @@ public class ChordSelectFragment extends Fragment
     {   }
 
     /**
+     * Sets the Chord that should be displayed on the Chord spinner.
+     * @param chord The Chord that should be displayed on the Chord spinner
+     */
+    public void setDisplayedChord(Chord chord)
+    {
+        // Get the Chord's position in the spinner
+        int position = -1;
+
+        for (int i = 0; position == -1 && i < chordSelectSpinner.getCount(); ++i)
+        {
+            if (chord.ID == ((ChordDisplayItem)chordSelectSpinner.getItemAtPosition(i)).chord.ID)
+                position = i;
+        }
+
+        if (position != -1)
+            chordSelectSpinner.setSelection(position);
+    }
+
+    /**
      * Updates the types of chords available in the Chord spinner on this Fragment.
      * @param activity The current Activity
-     * @param chordIndices The indices of the new chords for the Spinner
      */
-    public void updateChordSpinner(final Activity activity, int[] chordIndices)
+    public void updateAvailableChordTypes(final Activity activity)
     {
         // Populate the chord select spinner
         ChordDisplayItemAdapter adapter =
                 new ChordDisplayItemAdapter(activity, android.R.layout.simple_spinner_dropdown_item);
 
+        // Make sure scores are loaded
+        Score.loadScores(activity, false);
+
         // Load items
-        if (chordIndices == null) // Assumed to mean load all chords
+        for (Chord.ChordType type: MainActivity.getOptions().getChordTypesInUse())
         {
-            for (int i = 0; i < 36; ++i) // TODO get constant for 36
-                adapter.add(new ChordDisplayItem(Score.scores[i]));
-
-            adapter.add(new ChordDisplayItem(true));
-        }
-        else
-        {
-            // Make sure scores are loaded
-            Score.loadScores(activity, false);
-
-            for (int i: chordIndices)
-                adapter.add(new ChordDisplayItem(Score.scores[i]));
-
-            adapter.add(new ChordDisplayItem(true));
+            for (int i = 0; i < Note.NUM_NOTES; ++i)
+            {
+                adapter.add(new ChordDisplayItem(chordHandler.getChord(i, type)));
+            }
         }
 
         // Set the adapter
         chordSelectSpinner.setAdapter(adapter);
+    }
+
+    /**
+     * Called when the Activity containing this Fragment is resumed.
+     */
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        // Update the available chord types
+        updateAvailableChordTypes(getActivity());
     }
 
     /**
@@ -83,25 +119,54 @@ public class ChordSelectFragment extends Fragment
 
         // Get the Spinners
         chordSelectSpinner = (Spinner)view.findViewById(R.id.spinner_chord_select);
+//        instrumentSelectSpinner = (Spinner)view.findViewById(R.id.spinner_instrument);
 
         // Set minimum sizes
         chordSelectSpinner.setMinimumWidth((int) getResources().getDimension(R.dimen.min_chord_select_slider_size));
 
         // Set the OnItemSelectedListener for the spinners
-        chordSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        chordSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                if (position == chordSelectSpinner.getCount() - 1) {
-                    chordHandler.getRandomChord();
-                } else if (position < chordSelectSpinner.getCount()) {
-                    // Update the selected chord
-                    chordHandler.setSelectedChord(chordSelectSpinner.getSelectedItemPosition());
-                }
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+            {
+                // Update the selected chord
+                ChordDisplayItem item = (ChordDisplayItem)parentView.getItemAtPosition(position);
+                chordHandler.setSelectedChord(item.chord);
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parentView) { /* Ignore */ }
+            public void onNothingSelected(AdapterView<?> parentView)
+            { /* Ignore */ }
         });
+
+//        // Set the OnItemSelectedListener for the spinner
+//        instrumentSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+//        {
+//            @Override
+//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
+//            {
+//                // Update the selected chord
+//                soundHandler.switchInstrument(instrumentSelectSpinner.getSelectedItemPosition());
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> parentView)
+//            { /* Ignore */ }
+//        });
+//
+////        // Populate chord select spinner
+////        updateAvailableChordTypes(getActivity());
+//
+//        // Populate the instrument select spinner
+//        InstrumentDisplayItemAdapter adapter = new InstrumentDisplayItemAdapter(getActivity(),
+//                android.R.layout.simple_spinner_dropdown_item);
+//
+//        // Add instruments indices
+//        for (int i = 0; i < INSTRUMENT_NAMES.length; ++i)
+//            adapter.add(i);
+//
+//        instrumentSelectSpinner.setAdapter(adapter);
 
         // Inflate the layout for this fragment
         return view;
@@ -114,32 +179,32 @@ public class ChordSelectFragment extends Fragment
     {
         /** The chord description matrix */
         public static String[] CHORD_DESCRIPTION_MATRIX = new String[] {"Not Attempted", "Beginner", "Shows Promise",
-                            "Difficult", "Good", "Very Good", "Challenging", "Very Good", "Expert", "Mastered"};
+                "Difficult", "Good", "Very Good", "Challenging", "Very Good", "Expert", "Mastered"};
 
-        /** The name of the Chord */
-        private String chordName;
+//        /** The name of the Chord */
+//        private String chordName;
+        /** The Chord to display. */
+        private Chord chord;
 
         /** The chord description */
         private String chordDescription;
 
         /**
          * Creates a new ChordDisplayItem from a ScoreWrapper.
-         * @param score The Score of the chord to display
+         * @param chord The Chord to display
          */
-        public ChordDisplayItem(Score score)
+        public ChordDisplayItem(Chord chord)
         {
-            chordName = score.CHORD_NAME;
-            chordDescription = getChordDescription(score.getOverallValue());
+            this.chord = chord;
+            update();
         }
 
         /**
-         * Creates a new ChordDisplayItem for a random chord.
-         * @param random Is the chord randomized?
+         * Updates this ChordDisplayItem.
          */
-        public ChordDisplayItem(boolean random)
+        public void update()
         {
-            chordName = "Randomized!";
-            chordDescription = "";
+            chordDescription = getChordDescription(Score.getScore(chord).getOverallValue());
         }
 
         /**
@@ -219,11 +284,11 @@ public class ChordSelectFragment extends Fragment
                 view = LayoutInflater.from(getContext()).inflate(R.layout.component_chord_display_item, parent, false);
 
             // Get components on View
-            ChordDisplayItem item = (position == getCount()) ? getItem(position - 1) : getItem(position);
+            ChordDisplayItem item = getItem(position);
             TextView nameView = (TextView)view.findViewById(R.id.chord_display_chord_name);
             TextView descriptionView = (TextView)view.findViewById(R.id.chord_display_chord_description);
 
-            nameView.setText(item.chordName);
+            nameView.setText(item.chord.toString());
             descriptionView.setText(item.chordDescription);
 
             return view;

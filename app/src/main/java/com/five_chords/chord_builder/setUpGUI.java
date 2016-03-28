@@ -9,14 +9,12 @@
  */
 package com.five_chords.chord_builder;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.graphics.Color;
+
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
-import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordSelectFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
 public class setUpGUI
 {
@@ -30,76 +28,9 @@ public class setUpGUI
      * Called to initialize setUpGUI.
      * @param activity The calling MainActivity
      */
-    public static void initialize(MainActivity activity, boolean useMajorChords, boolean useMinorChords, boolean useDominantChords)
+    public static void initialize(MainActivity activity)
     {
-        loadSpinners(activity, useMajorChords, useMinorChords, useDominantChords);
         assignButtons(activity);
-    }
-
-    /**
-     * loadSpinners function
-     * This method consists of two dropdown menus, one for instruments selection and one for chord
-     * selection.
-     * @param activity The calling Activity
-     * @param majorChords Whether or not to load the major chords
-     * @param minorChords Whether or not to load the minor chords
-     * @param dominantChords Whether or not to load the dominant chords
-     */
-    public static void loadSpinners(final Activity activity, boolean majorChords, boolean minorChords, boolean dominantChords)
-    {
-        // Clear the list of currently loaded chords
-        chordHandler.clearChords();
-
-        // An array of the indices of the available chords
-        int[] chordIndices;
-
-        // All chords added
-        if (majorChords && minorChords && dominantChords)
-        {
-            chordHandler.addMajorChords();
-            chordHandler.addMinorChords();
-            chordHandler.addDominantChords();
-            chordIndices = null;
-        }
-        else
-        {
-            int i = 0;
-            chordIndices = new int[12 * ((majorChords ? 1:0) + (minorChords ? 1:0) + (dominantChords ? 1:0))]; // TODO get constant for 12
-
-            // Add major chords
-            if (majorChords)
-            {
-                for (int j = 0; j < 12; ++j)
-                    chordIndices[i + j] = j;
-                i += 12;
-
-                chordHandler.addMajorChords();
-            }
-
-            // Add minor chords
-            if (minorChords)
-            {
-                for (int j = 0; j < 12; ++j)
-                    chordIndices[i + j] = 12 + j;
-                i += 12;
-
-                chordHandler.addMinorChords();
-            }
-
-            // Add dominant chords
-            if (dominantChords)
-            {
-                for (int j = 0; j < 12; ++j)
-                    chordIndices[i + j] = 24 + j;
-
-                chordHandler.addDominantChords();
-            }
-        }
-
-        // Update the Chord select spinner
-        FragmentManager manager = activity.getFragmentManager();
-        ChordSelectFragment fragment = (ChordSelectFragment)manager.findFragmentById(R.id.fragment_chord_select);
-        fragment.updateChordSpinner(activity, chordIndices);
     }
 
     /**
@@ -115,20 +46,14 @@ public class setUpGUI
         playBuiltChord.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    soundHandler.playBuiltChord(activity,
-                            chordHandler.getCurrentPreciseBuiltChord(activity),
-                            chordHandler.getCurrentNumInterval(),
-                            chordHandler.getCurrentSliderOffset(),
-                            chordHandler.getCurrentCorrectChord());
-
-                    playBuiltChord.setBackgroundResource(R.drawable.buttons_touched);
-                    playBuiltChord.setTextColor(Color.parseColor("#00b736"));
+                if (event.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    chordHandler.buildCurrentChord(activity);
+                    soundHandler.playChord(activity, chordHandler.getCurrentBuiltChordSpelling(),
+                            chordHandler.getCurrentSelectedChord().getNumNotes());
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
-                    playBuiltChord.setBackgroundResource(R.drawable.buttons);
-                    playBuiltChord.setTextColor(Color.parseColor("white"));
                 }
                 return true;
             }
@@ -139,13 +64,16 @@ public class setUpGUI
         playSelectedChord.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    soundHandler.playChord(activity, chordHandler.getCurrentSelectedChord());
-                    playSelectedChord.setBackgroundResource(R.drawable.round_button_play_touched);
+                if (event.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    soundHandler.playChord(activity, chordHandler.getCurrentSelectedChordSpelling(),
+                            chordHandler.getCurrentSelectedChord().getNumNotes());
+                    playSelectedChord.setBackgroundResource(R.drawable.testbtn1);
                 }
-                if (event.getAction() == MotionEvent.ACTION_UP) {
+                if (event.getAction() == MotionEvent.ACTION_UP)
+                {
                     soundHandler.stopSound();
-                    playSelectedChord.setBackgroundResource(R.drawable.round_button_play);
+                    playSelectedChord.setBackgroundResource(R.drawable.play_btn_image1);
                 }
                 return true;
             }
@@ -154,15 +82,14 @@ public class setUpGUI
         selectRandomChord.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN)
+                {
                     chordHandler.getRandomChord();
-                    activity.updateChordSelectSpinner(true);
-                    soundHandler.playChord(activity, chordHandler.getCurrentSelectedChord());
-                    selectRandomChord.setBackgroundResource(R.drawable.round_button_shuffle_touched);
+                    soundHandler.playChord(activity, chordHandler.getCurrentSelectedChordSpelling(),
+                            chordHandler.getCurrentSelectedChord().getNumNotes());
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
-                    selectRandomChord.setBackgroundResource(R.drawable.round_button_shuffle);
                 }
 
                 return true;
@@ -176,9 +103,11 @@ public class setUpGUI
                 {
                     // Momentarily disable the button
                     v.setEnabled(false);
-                    v.postDelayed(new Runnable() {
+                    v.postDelayed(new Runnable()
+                    {
                         @Override
-                        public void run() {
+                        public void run()
+                        {
                             v.setEnabled(true);
                         }
                     }, 1000L);

@@ -8,8 +8,10 @@ import android.graphics.Path;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
+import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.chordHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
 
 /**
@@ -22,7 +24,7 @@ public class SliderHintView extends LinearLayout
     private static final Paint PAINT = new Paint();
 
     /** The delay between hint updates in milliseconds */
-    private static final long HINT_UPDATE_DELAY = 16L;
+    private static final long HINT_UPDATE_DELAY = 12L;
 
     // Setup Paint
     static
@@ -32,6 +34,9 @@ public class SliderHintView extends LinearLayout
 
     /** The current on this SliderHintView */
     private Hint hint;
+
+    /** The current SliderFragment. */
+    private SliderFragment sliderFragment;
 
     /** The lock to use for synchronization */
     private final Object HINT_LOCK = new Object();
@@ -72,17 +77,18 @@ public class SliderHintView extends LinearLayout
     /**
      * Sets the Hint on this SliderHintView.
      * @param type The type of hint
-     * @param builtChordPosition The position of the built chord
-     * @param selectedChordPosition The position of the selected chord
+     * @param testNote The test Note
+     * @param actualNote The actual Note
+     * @param sliderFragment The current SliderFragment in use
      * @param delay The delay to display the hint, in milliseconds
      */
-    public void setHint(final byte type, final int builtChordPosition,
-                        final int selectedChordPosition, long delay)
+    public void setHint(final byte type, final Note testNote,
+                        final Note actualNote, final SliderFragment sliderFragment, long delay)
     {
         postDelayed(new Runnable() {
             @Override
             public void run() {
-                setHint(type, builtChordPosition, selectedChordPosition);
+                setHint(type, testNote, actualNote, sliderFragment);
             }
         }, delay);
     }
@@ -90,26 +96,31 @@ public class SliderHintView extends LinearLayout
     /**
      * Sets the Hint on this SliderHintView.
      * @param type The type of hint
-     * @param builtChordPosition The position of the built chord
-     * @param selectedChordPosition The position of the selected chord
+     * @param testNote The test Note
+     * @param actualNote The actual Note
      */
-    private void setHint(byte type, int builtChordPosition, int selectedChordPosition)
+    private void setHint(byte type, Note testNote, Note actualNote, SliderFragment sliderFragment)
     {
+        this.sliderFragment = sliderFragment;
+
         synchronized (HINT_LOCK)
         {
-            int diff = (builtChordPosition - selectedChordPosition);
+            double diff = testNote.getFractionalIndex() - actualNote.getFractionalIndex();
+
+            if (Math.abs(diff) < MainActivity.getOptions().allowableCheckError)
+                diff = 0.0;
 
             if (type == chordHandler.HINT_ONE)
-                hint = new CircleHint(builtChordPosition, diff == 0 ? Color.GREEN : Color.RED);
+                hint = new CircleHint(testNote, diff == 0.0 ? Color.GREEN : Color.RED);
             else if (type == chordHandler.HINT_TWO)
             {
-                if (diff == 0)
-                    hint = new CircleHint(builtChordPosition, Color.GREEN);
+                if (diff == 0.0)
+                    hint = new CircleHint(testNote, Color.GREEN);
                 else
-                    hint = new TriangleHint(builtChordPosition, diff < 0);
+                    hint = new TriangleHint(testNote, diff < 0.0);
             }
             else if (type == chordHandler.HINT_THREE)
-                hint = new CircleHint(selectedChordPosition, diff == 0 ? Color.GREEN : Color.BLUE);
+                hint = new CircleHint(actualNote, diff == 0.0 ? Color.GREEN : Color.BLUE);
 
             HINT_LOCK.notify();
         }
@@ -149,7 +160,7 @@ public class SliderHintView extends LinearLayout
     /**
      * Gets the thumb position and size of the slider in this SliderHintView.
      * @param pos Will be filled with the new position, must be size three (size is stored at index two)
-     * @param desiredProgress The progress value of the thumb to use
+     * @param desiredProgress The desired thumb progress
      */
     private void getThumbPosition(int[] pos, int desiredProgress)
     {
@@ -249,12 +260,12 @@ public class SliderHintView extends LinearLayout
 
         /**
          * Constructs a new CircleHint
-         * @param offset The offset
+         * @param note The Note on which this Hint will appear
          * @param color The color of this CircleHint
          */
-        public CircleHint(int offset, int color)
+        public CircleHint(Note note, int color)
         {
-            super (offset);
+            super (note);
             this.color = color;
             radius = position[2] * 0.5f;
         }
@@ -292,12 +303,12 @@ public class SliderHintView extends LinearLayout
 
         /**
          * Constructs a new TriangleHint
-         * @param offset The offset
+         * @param note The Note on which this Hint will appear
          * @param up Whether or not this TriangleHint faces up
          */
-        public TriangleHint(int offset, boolean up)
+        public TriangleHint(Note note, boolean up)
         {
-            super(offset, 20, 40);
+            super(note, 20, 40);
 
             final float sign = up ? 1.0f : -1.0f;
             final float x = position[0];
@@ -347,21 +358,21 @@ public class SliderHintView extends LinearLayout
 
         /**
          * Constructs a new Hint.
-         * @param offset The offset value
+         * @param note The Note on which this Hint will appear
          */
-        public Hint(int offset)
+        public Hint(Note note)
         {
-            this (offset, 20, 40);
+            this (note, 30, 50);
         }
 
 
         /**
          * Constructs a new Hint.
-         * @param offset The offset value
+         * @param note The Note on which this Hint will appear
          * @param growTime The grow time
          * @param fadeTime The fade time
          */
-        public Hint(int offset, int growTime, int fadeTime)
+        public Hint(Note note, int growTime, int fadeTime)
         {
             GROW_TIME = growTime;
             FADE_TIME = fadeTime;
@@ -369,7 +380,7 @@ public class SliderHintView extends LinearLayout
             alpha = 1.0f;
             position = new int[3];
 
-            getThumbPosition(position, offset);
+            getThumbPosition(position, sliderFragment.getSliderProgressForNote(note));
         }
 
         /**

@@ -11,21 +11,24 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Toast;
 
-import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
 
 public class Score
 {
     /** The name of the saved chord scores in the SharedPreferences */
     public static final String CHORD_SCORES_SAVE_FILENAME = "ScoreFile";
+
+    /** The Bundle id for the number of saved scores. */
+    private static final String NUM_SAVED_SCORES_BUNDLE_ID = "Score.NUM_SAVED_SCORES";
+
+    /** The Bundle id a single saved score. */
+    private static final String SAVED_SCORE_BUNDLE_ID = "Score.SAVED_SCORE";
 
     /** Tags for the score history view */
     public static final String[] HISTORY_TAGS = new String[] {"Current", "1H", "2H", "6H", "12H", "1D",
@@ -37,11 +40,14 @@ public class Score
                                                                         96 * 3600L, 168 * 3600L, 336 * 3600L,
                                                                         672 * 3600L, 1344 * 3600L, 4032 * 3600L, 8064 * 3600L};
 
-    /** The array of chord Scores */
-    public static Score[] scores;
+    /** The map of used scores. */
+    private static Map<Long, Score> scores = new HashMap<>();
 
-    /** The chord name of this Score. */
-    public final String CHORD_NAME;
+    /** The chord id of this Score. */
+    public final long CHORD_ID;
+
+    /** The id of this Score. */
+    public final String SCORE_ID;
 
     /** Records the overall value of this Score. */
     private ScoreValue overallValue;
@@ -54,10 +60,22 @@ public class Score
 
     /**
      * Constructs a new Score for the given chord.
+     * @param chord The Chord for the Score
      */
-    public Score(String chordName)
+    public Score(Chord chord)
     {
-        CHORD_NAME = chordName;
+        this (chord.FUNDAMENTAL, chord.TYPE);
+    }
+
+    /**
+     * Constructs a new Score for the given chord.
+     * @param fundamental The fundamental note of the chord for the Score
+     * @param type The ChordType of the chord for the Score
+     */
+    public Score(int fundamental, Chord.ChordType type)
+    {
+        CHORD_ID = Chord.getChordId(fundamental, type);
+        SCORE_ID = "" + CHORD_ID;
         overallValue = new ScoreValue();
         currentValue = new ScoreValue();
         discreteScoreHistory = new DiscreteScoreHistory();
@@ -87,7 +105,22 @@ public class Score
      */
     public static Score getCurrentScore()
     {
-        return scores[chordHandler.getSelectedChordIndex()];
+        return getScore(chordHandler.getCurrentSelectedChord());
+    }
+
+    /**
+     * Gets the Score for the given Chord.
+     * @param chord The Chord whose Score to get.
+     * @return The Score for the given Chord
+     */
+    public static Score getScore(Chord chord)
+    {
+        Score score = scores.get(chord.ID);
+
+        if (score == null)
+            score = new Score(chord);
+
+        return score;
     }
 
     /**
@@ -111,6 +144,7 @@ public class Score
                         SharedPreferences.Editor editor = savedChordScores.edit();
                         editor.clear();
                         editor.apply();
+                        scores.clear();
 
                         // Reload scores
                         loadScores(activity, true);
@@ -131,23 +165,58 @@ public class Score
      */
     public static void loadScores(Activity main, boolean overwrite)
     {
-        if (!overwrite && scores != null)
+        if (!overwrite && !scores.isEmpty())
             return;
 
-        // Grab the array of chord names from the resources
-        final String[] chordNames = main.getResources().getStringArray(R.array.chordNames);
-
-        // Initialize score array
-        scores = new Score[chordNames.length];
+        // Clear score array
+        scores.clear();
 
         // Load scores
         final SharedPreferences savedChordScores = getScoreLoader(main);
+        int numScores = savedChordScores.getInt(NUM_SAVED_SCORES_BUNDLE_ID, 0);
 
-        for (int i = 0; i < scores.length; ++i)
+        // Read elements
+        long id;
+        Chord chord;
+        Score score;
+        for (int i = 0; i < numScores; ++i)
         {
-            scores[i] = new Score(chordNames[i]);
-            scores[i].load(savedChordScores);
+            id = savedChordScores.getLong(SAVED_SCORE_BUNDLE_ID + i, -1L);
+
+            if (id != -1L)
+            {
+                chord = chordHandler.getChord(id);
+                score = new Score(chord);
+                score.load(savedChordScores);
+                scores.put(id, score);
+            }
         }
+    }
+
+    /**
+     * Updates and saves the list containing which Scores have been loaded.
+     * @param score The new Score to include
+     * @param preferences The SharedPreferences to use to save
+     */
+    private static void updateSavedScores(Score score, SharedPreferences preferences)
+    {
+        if (scores.containsKey(score.CHORD_ID))
+            return;
+
+        SharedPreferences.Editor editor = preferences.edit();
+
+        // Update the set
+        scores.put(score.CHORD_ID, score);
+
+        // Write the number of elements in the set
+        editor.putInt(NUM_SAVED_SCORES_BUNDLE_ID, scores.size());
+
+        // Write the elements of the set
+        int i = 0;
+        for (long L: scores.keySet())
+            editor.putLong(SAVED_SCORE_BUNDLE_ID + (i++), L);
+
+        editor.apply();
     }
 
     /**
@@ -207,13 +276,13 @@ public class Score
      * Loads this Score from the given SharedPreferences.
      * @param savedChordScores The SharedPreferences from which to load
      */
-    private void load(SharedPreferences savedChordScores)
+    public void load(SharedPreferences savedChordScores)
     {
         // Load the history
-        discreteScoreHistory.load(savedChordScores, CHORD_NAME);
+        discreteScoreHistory.load(savedChordScores, SCORE_ID);
 
         // Load the overall value
-        overallValue.load(savedChordScores, CHORD_NAME, -1);
+        overallValue.load(savedChordScores, SCORE_ID, -1);
     }
 
     /**
@@ -225,12 +294,15 @@ public class Score
         SharedPreferences.Editor editor = savedChordScores.edit();
 
         // Save the history
-        discreteScoreHistory.save(editor, CHORD_NAME);
+        discreteScoreHistory.save(editor, SCORE_ID);
 
         // Save the overall value
-        overallValue.save(editor, CHORD_NAME, -1);
+        overallValue.save(editor, SCORE_ID, -1);
 
         editor.apply();
+
+        // Make sure this Score is saved in the global list
+        updateSavedScores(this, savedChordScores);
     }
 
     /**

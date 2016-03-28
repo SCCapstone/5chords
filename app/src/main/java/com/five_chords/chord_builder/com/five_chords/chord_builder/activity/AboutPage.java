@@ -5,7 +5,7 @@
  * @date 06 November 2015
  * @author: Drea,Steven,Zach,Kevin,Bo
  */
-package com.five_chords.chord_builder;
+package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.five_chords.chord_builder.R;
 
 public class AboutPage extends AppCompatActivity
 {

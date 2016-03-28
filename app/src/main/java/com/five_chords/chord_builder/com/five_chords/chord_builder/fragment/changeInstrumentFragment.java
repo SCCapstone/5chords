@@ -12,17 +12,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.five_chords.chord_builder.MainActivity;
 import com.five_chords.chord_builder.R;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
+
 /**
  * A Fragment containing the chord select slider and the instrument select slider.
  * @author tstone95
  */
 public class changeInstrumentFragment extends DialogFragment
 {
-
-    private int instrument;
-
     /** The available instruments names */
     public static final String[] INSTRUMENT_NAMES = {"Trumpet", "Piano", "Organ", "Violin", "Flute"};
 

@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.five_chords.chord_builder.demo">
+    tools:context=".com.five_chords.chord_builder.activity.demo">
 
     <ImageView
         android:layout_width="wrap_content"

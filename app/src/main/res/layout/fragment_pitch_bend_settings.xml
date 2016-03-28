@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_margin="4dp">
+
+    <!-- Description -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="italic"
+        android:text="Select the number of subdivisions to use between notes:"/>
+
+    <!-- The SeekBar layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="8dp">
+
+        <!-- Left Label -->
+        <TextView
+            android:id="@+id/textview_pitch_slider_left"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size_medium"
+            android:text="1"/>
+
+        <!-- SeekBar -->
+        <SeekBar
+            android:id="@+id/seekbar_note_divisions"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"/>
+
+        <!-- Right Label -->
+        <TextView
+            android:id="@+id/textview_pitch_slider_right"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size_medium"
+            android:text="100"/>
+
+    </LinearLayout>
+
+    <!-- Separator -->
+    <View style="@style/VerticalSeparator"/>
+
+    <!-- Description -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="italic"
+        android:text="Select the allowable checking error:"/>
+
+    <!-- The SeekBar layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="8dp">
+
+        <!-- Left Label -->
+        <TextView
+            android:id="@+id/textview_pitch_slider_diff_left"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size_medium"
+            android:text="Easy"/>
+
+        <!-- SeekBar -->
+        <SeekBar
+            android:id="@+id/seekbar_check_difficulties"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"/>
+
+        <!-- Right Label -->
+        <TextView
+            android:id="@+id/textview_pitch_slider_diff_right"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="@dimen/text_size_medium"
+            android:text="Hard"/>
+
+    </LinearLayout>
+
+
+</LinearLayout>
