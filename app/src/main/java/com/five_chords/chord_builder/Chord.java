@@ -27,7 +27,15 @@ public class Chord
         MAJOR("Major", "Maj", 0, 4, 7),
         MINOR("Minor", "Min", 0, 3, 7),
         DOMINANT("Dominant", "Dom", 0, 4, 7, 10),
-        AUGMENTED_TRIAD("Augmented Triad", "Aug", 0, 4, 8);
+        AUGMENTED_TRIAD("Augmented Triad", "Aug", 0, 4, 8),
+        DIMINISHED_TRIAD("Diminished Triad", "Dim", 0, 3, 6),
+        DIMINISHED_SEVENTH("Diminished Seventh", "Dim7", 0, 3, 6, 9),
+        MINOR_SEVENTH("Minor Seventh", "Min7", 0, 3, 7, 10),
+        MINOR_MAJOR_SEVENTH("Minor Major Seventh", "mM7", 0, 3, 7, 11),
+        MAJOR_SEVENTH("Minor Seventh", "Maj7", 0, 4, 7, 11),
+        AUGMENTED_SEVENTH("Minor Seventh", "Aug7", 0, 4, 8, 10),
+        AUGMENTED_MAJOR_SEVENTH("Minor Seventh", "AugMaj7", 0, 4, 8, 11);
+
 
         /** The name of the ChordType. */
         public final String name;

@@ -8,6 +8,7 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +16,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.five_chords.chord_builder.Chord;
 import com.five_chords.chord_builder.R;
 
 public class SettingsChords extends Activity
@@ -28,6 +30,8 @@ public class SettingsChords extends Activity
     public boolean useDominantChords;
     public boolean useAugmentedChords;
 
+    private static boolean[] chordOptions;
+
     /**
      * Activity Creator
      */
@@ -40,34 +44,29 @@ public class SettingsChords extends Activity
         // Inflate the layout for this fragment
         ListView view = (ListView) findViewById(R.id.settings_content);
 
-        // set chord type selections
-        useMajorChords = MainActivity.getOptions().chordTypesInUseArray[0];
-        useMinorChords = MainActivity.getOptions().chordTypesInUseArray[1];
-        useDominantChords = MainActivity.getOptions().chordTypesInUseArray[2];
-        useAugmentedChords = MainActivity.getOptions().chordTypesInUseArray[3];
-
-        // Populate the list
+        chordOptions = MainActivity.getOptions().chordTypesInUseArray;
         optionsAdapter = new ArrayAdapter<>(this, R.layout.centered_list_items);
 
-        MAJOR_CHORD_OPTION.name = (useMajorChords)
-                                ? "Major Triad Chords are Enabled"
-                                : "Major Triad Chords are Disabled";
-        optionsAdapter.add(MAJOR_CHORD_OPTION);
+        for (final Chord.ChordType type: Chord.ChordType.values())
+        {
+            optionsAdapter.add(new SettingsOption(type + " Chords are " + ((chordOptions[type.ordinal()]) ? "Enabled" : "Disabled")) {
+                @Override
+                public void performAction() {
+                    if (this.name.contains("Disabled")) {
+                        this.name = type + " Chords are Enabled";
+                        chordOptions[type.ordinal()] = true;
+                    } else {
+                        chordOptions[type.ordinal()] = false;
+                        if (isValidSelection())
+                            this.name = type +" Chords are Disabled";
+                        else
+                            chordOptions[type.ordinal()] = true;
+                    }
 
-        MINOR_CHORD_OPTION.name = (useMinorChords)
-                                ? "Minor Triad Chords are Enabled"
-                                : "Minor Triad Chords are Disabled";
-        optionsAdapter.add(MINOR_CHORD_OPTION);
-
-        DOMINANT_CHORD_OPTION.name = (useDominantChords)
-                                   ? "Dominant Seventh Chords are Enabled"
-                                   : "Dominant Seventh Chords are Disabled";
-        optionsAdapter.add(DOMINANT_CHORD_OPTION);
-
-        AUGMENTED_CHORD_OPTION.name = (useAugmentedChords)
-                                    ? "Augmented Triad Chords are Enabled"
-                                    : "Augmented Triad Chords are Disabled";
-        optionsAdapter.add(AUGMENTED_CHORD_OPTION);
+                    optionsAdapter.notifyDataSetChanged();
+                }
+            });
+        }
 
         // Set click listener
         view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -94,120 +93,23 @@ public class SettingsChords extends Activity
      */
     public void backToMain(View view)
     {
-        MainActivity.getOptions().setChordTypeUse(0, useMajorChords);
-        MainActivity.getOptions().setChordTypeUse(1, useMinorChords);
-        MainActivity.getOptions().setChordTypeUse(2, useDominantChords);
-        MainActivity.getOptions().setChordTypeUse(3, useAugmentedChords);
+        for (Chord.ChordType type: Chord.ChordType.values()) {
+            MainActivity.getOptions().setChordTypeUse(type.ordinal(), chordOptions[type.ordinal()]);
+            Log.d("this", type.ordinal() + " " + chordOptions[type.ordinal()]);
+        }
         finish();
     }
 
-    /**
-     * The SettingsOption for using major chords.
-     */
-    private final SettingsOption MAJOR_CHORD_OPTION = new SettingsOption("Major Triad Chords are Enabled")
-    {
-        @Override
-        public void performAction()
-        {
-            if (this.name == "Major Triad Chords are Disabled") {
-                this.name = "Major Triad Chords are Enabled";
-                useMajorChords = true;
-            } else {
-                useMajorChords = false;
-                if (isValidSelection())
-                    this.name = "Major Triad Chords are Disabled";
-                else
-                    useMajorChords = true;
-            }
-
-            optionsAdapter.notifyDataSetChanged();
-        }
-    };
-
-    /**
-     * The SettingsOption for using minor chords.
-     */
-    private final SettingsOption MINOR_CHORD_OPTION = new SettingsOption("Minor Triad Chords are Enabled")
-    {
-        @Override
-        public void performAction()
-        {
-            if (this.name == "Minor Triad Chords are Disabled") {
-                this.name = "Minor Triad Chords are Enabled";
-                useMinorChords = true;
-            } else {
-                useMinorChords = false;
-                if (isValidSelection())
-                    this.name = "Minor Triad Chords are Disabled";
-                else
-                  useMinorChords = true;
-            }
-
-            optionsAdapter.notifyDataSetChanged();
-        }
-    };
-
-    /**
-     * The SettingsOption for using dominant chords.
-     */
-    private final SettingsOption DOMINANT_CHORD_OPTION = new SettingsOption("Dominant Seventh Chords are Enabled")
-    {
-        @Override
-        public void performAction()
-        {
-            if (this.name == "Dominant Seventh Chords are Disabled") {
-                this.name = "Dominant Seventh Chords are Enabled";
-                useDominantChords = true;
-            } else {
-                useDominantChords = false;
-                if (isValidSelection())
-                    this.name = "Dominant Seventh Chords are Disabled";
-                else
-                    useDominantChords = true;
-            }
-
-            optionsAdapter.notifyDataSetChanged();
-        }
-    };
-
-
-    /**
-     * The SettingsOption for using augmented chords.
-     */
-    private final SettingsOption AUGMENTED_CHORD_OPTION = new SettingsOption("Augmented Triad Chords are Enabled")
-    {
-        @Override
-        public void performAction()
-        {
-            if (this.name == "Augmented Triad Chords are Disabled") {
-                this.name = "Augmented Triad Chords are Enabled";
-                useAugmentedChords = true;
-            } else {
-                useAugmentedChords = false;
-                if (isValidSelection())
-                    this.name = "Augmented Triad Chords are Disabled";
-                else
-                    useAugmentedChords = true;
-            }
-
-            optionsAdapter.notifyDataSetChanged();
-        }
-    };
-
     private boolean isValidSelection() {
-        if (useMajorChords || useMinorChords || useDominantChords || useAugmentedChords)
-        {
-            return true;
-        }
-        else
-        {
-            // Show toast
-            Toast toast = Toast.makeText(activity, activity.getString(R.string.settingsChordsInvalid), Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
+        for (boolean chordOption : chordOptions)
+            if (chordOption) return true;
 
-            return false;
-        }
+        // Show toast
+        Toast toast = Toast.makeText(activity, activity.getString(R.string.settingsChordsInvalid), Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+
+        return false;
     }
 
     /**

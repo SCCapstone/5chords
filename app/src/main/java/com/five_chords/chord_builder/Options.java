@@ -221,10 +221,6 @@ public class Options
      */
     public void setChordTypeUse(int index, boolean use)
     {
-        // Do nothing if there are no changes
-        if (chordTypesInUseArray[index] == use)
-            return;
-
         // Set new value
         chordTypesInUseArray[index] = use;
 
