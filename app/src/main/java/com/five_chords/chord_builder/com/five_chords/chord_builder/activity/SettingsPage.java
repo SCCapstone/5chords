@@ -158,6 +158,7 @@ public class SettingsPage extends Activity
     {
         Intent intent = new Intent(this, SettingsChords.class);
         startActivity(intent);
+        this.overridePendingTransition(0, 0);
     }
 
     /**

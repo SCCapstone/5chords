@@ -98,6 +98,7 @@ public class SettingsChords extends Activity
             Log.d("this", type.ordinal() + " " + chordOptions[type.ordinal()]);
         }
         finish();
+        this.overridePendingTransition(0, 0);
     }
 
     private boolean isValidSelection() {
