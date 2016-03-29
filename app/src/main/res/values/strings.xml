@@ -58,7 +58,7 @@
     <string name="history">History</string>
     <string name="overall">Overall</string>
     <string name="about">About</string>
-    <string name="back">&lt;</string>
+    <string name="back">←</string>
     <string name="clear_scores">Clear Scores</string>
     <string name="clear">Clear</string>
     <string name="done">Done</string>

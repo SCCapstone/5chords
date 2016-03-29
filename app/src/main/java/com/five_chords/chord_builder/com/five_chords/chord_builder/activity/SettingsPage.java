@@ -27,7 +27,6 @@ import com.five_chords.chord_builder.R;
 public class SettingsPage extends Activity
 {
     private ArrayAdapter<SettingsOption> optionsAdapter;
-    private Activity activity;
 
     /**
      * Activity Creator
@@ -63,8 +62,6 @@ public class SettingsPage extends Activity
 
         // Get the list view of settings
         view.setAdapter(optionsAdapter);
-
-        activity = this;
     }
 
     /**
