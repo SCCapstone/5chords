@@ -51,9 +51,11 @@ public class setUpGUI
                     chordHandler.buildCurrentChord(activity);
                     soundHandler.playChord(activity, chordHandler.getCurrentBuiltChordSpelling(),
                             chordHandler.getCurrentSelectedChord().getNumNotes());
+                    playBuiltChord.setBackgroundResource(R.drawable.buttons_touched);
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
+                    playBuiltChord.setBackgroundResource(R.drawable.buttons_touched);
                 }
                 return true;
             }
@@ -68,12 +70,12 @@ public class setUpGUI
                 {
                     soundHandler.playChord(activity, chordHandler.getCurrentSelectedChordSpelling(),
                             chordHandler.getCurrentSelectedChord().getNumNotes());
-                    playSelectedChord.setBackgroundResource(R.drawable.testbtn1);
+                    playSelectedChord.setBackgroundResource(R.drawable.round_button_play_touched);
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP)
                 {
                     soundHandler.stopSound();
-                    playSelectedChord.setBackgroundResource(R.drawable.play_btn_image1);
+                    playSelectedChord.setBackgroundResource(R.drawable.round_button_play);
                 }
                 return true;
             }
@@ -87,9 +89,11 @@ public class setUpGUI
                     chordHandler.getRandomChord();
                     soundHandler.playChord(activity, chordHandler.getCurrentSelectedChordSpelling(),
                             chordHandler.getCurrentSelectedChord().getNumNotes());
+                    selectRandomChord.setBackgroundResource(R.drawable.round_button_shuffle_touched);
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
+                    selectRandomChord.setBackgroundResource(R.drawable.round_button_shuffle);
                 }
 
                 return true;

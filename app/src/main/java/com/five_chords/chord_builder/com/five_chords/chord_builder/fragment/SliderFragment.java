@@ -1,6 +1,8 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
 import android.app.Activity;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Log;
@@ -43,6 +45,10 @@ public class SliderFragment extends Fragment
 
     /** The index of the notes at the top of the sliders. */
     private int maxNoteOnSlider;
+
+    private static Drawable[] thumb;
+    private static Drawable[] thumbTouched;
+
 
     /**
      * Required empty public constructor.
@@ -211,26 +217,41 @@ public class SliderFragment extends Fragment
         // Inflate the layout for this fragment
         View sliders = inflater.inflate(R.layout.fragment_sliders, container, false);
 
+        // Every slider needs it's own thumb image
+        thumb = new Drawable[4];
+        thumbTouched = new Drawable[4];
+
+        for (int i = 0; i < 4; i++) {
+            thumb[i] = getResources().getDrawable(R.drawable.eq_slide_knob);
+            thumb[i].setBounds(new Rect(0, 0, thumb[i].getIntrinsicWidth(), thumb[i].getIntrinsicHeight()));
+
+            thumbTouched[i] = getResources().getDrawable(R.drawable.eq_slide_knob_touched);
+            thumbTouched[i].setBounds(new Rect(0, 0, thumbTouched[i].getIntrinsicWidth(), thumbTouched[i].getIntrinsicHeight()));
+        }
+
         // Assign sliders
         rootSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_root);
-        rootSlider.setThumbOffset(0);
         rootSlider.initialize();
+        rootSlider.setThumb(thumb[0]);
+
         thirdSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_third);
-        thirdSlider.setThumbOffset(0);
         thirdSlider.initialize();
+        thirdSlider.setThumb(thumb[1]);
+
         fifthSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_fifth);
-        fifthSlider.setThumbOffset(0);
         fifthSlider.initialize();
+        fifthSlider.setThumb(thumb[2]);
+
         optionSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_option);
-        optionSlider.setThumbOffset(0);
         optionSlider.initialize();
+        optionSlider.setThumb(thumb[3]);
 
         // Add the seek bar listeners
         Activity activity = getActivity();
-        addSeekBarListener(activity, rootSlider);
-        addSeekBarListener(activity, thirdSlider);
-        addSeekBarListener(activity, fifthSlider);
-        addSeekBarListener(activity, optionSlider);
+        addSeekBarListener(activity, rootSlider, 0);
+        addSeekBarListener(activity, thirdSlider, 1);
+        addSeekBarListener(activity, fifthSlider, 2);
+        addSeekBarListener(activity, optionSlider, 3);
 
         // Hide fourth slider by default
         sliders.findViewById(R.id.slider_option_layout).setVisibility(View.GONE);
@@ -287,7 +308,7 @@ public class SliderFragment extends Fragment
      * Called to add the seek bar listener to a single seek bar.
      * @param bar The VerticalSeekBar to add listeners to
      */
-    private void addSeekBarListener(final Activity activity, final VerticalSeekBar bar)
+    private void addSeekBarListener(final Activity activity, final VerticalSeekBar bar, final int slider)
     {
         bar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener()
         {
@@ -322,9 +343,12 @@ public class SliderFragment extends Fragment
                     Note note = new Note();
                     getNoteFromSlider(bar, note);
                     soundHandler.playNote(activity, note);
+                    bar.setThumb(thumbTouched[slider]);
                 }
-                else if (event.getAction() == MotionEvent.ACTION_UP)
+                else if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
+                    bar.setThumb(thumb[slider]);
+                }
                 else if (event.getAction() == MotionEvent.ACTION_MOVE)
                     return false;
 

@@ -50,8 +50,13 @@ public class ChordSelectFragment extends Fragment
      * Sets the Chord that should be displayed on the Chord spinner.
      * @param chord The Chord that should be displayed on the Chord spinner
      */
-    public void setDisplayedChord(Chord chord)
+    public void setDisplayedChord(Chord chord, boolean random)
     {
+        if (random) {
+            chordSelectSpinner.setSelection(chordSelectSpinner.getCount()-1);
+            return;
+        }
+
         // Get the Chord's position in the spinner
         int position = -1;
 
@@ -86,6 +91,8 @@ public class ChordSelectFragment extends Fragment
                 adapter.add(new ChordDisplayItem(chordHandler.getChord(i, type)));
             }
         }
+
+        adapter.add(new ChordDisplayItem(new Chord("Random")));
 
         // Set the adapter
         chordSelectSpinner.setAdapter(adapter);
@@ -130,9 +137,11 @@ public class ChordSelectFragment extends Fragment
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
             {
+                if (position == chordSelectSpinner.getCount() - 1) return;
+
                 // Update the selected chord
                 ChordDisplayItem item = (ChordDisplayItem)parentView.getItemAtPosition(position);
-                chordHandler.setSelectedChord(item.chord);
+                chordHandler.setSelectedChord(item.chord, false);
             }
 
             @Override
@@ -284,11 +293,11 @@ public class ChordSelectFragment extends Fragment
                 view = LayoutInflater.from(getContext()).inflate(R.layout.component_chord_display_item, parent, false);
 
             // Get components on View
-            ChordDisplayItem item = getItem(position);
+            ChordDisplayItem item = (position == getCount()) ? getItem(position - 1) : getItem(position);
             TextView nameView = (TextView)view.findViewById(R.id.chord_display_chord_name);
             TextView descriptionView = (TextView)view.findViewById(R.id.chord_display_chord_description);
 
-            nameView.setText(item.chord.toString());
+            nameView.setText((position == getCount() - 1) ? "Randomized!" : item.chord.toString());
             descriptionView.setText(item.chordDescription);
 
             return view;

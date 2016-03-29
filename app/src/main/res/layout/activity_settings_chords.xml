@@ -2,14 +2,14 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              tools:context=".StartPage">
+              tools:context=".SettingsChords">
 
     <!-- Title -->
     <TextView
         android:id="@+id/textview_settings_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/settings"
+        android:text="@string/settingsChords"
         android:textSize="@dimen/text_size_title"
         android:layout_margin="24dp"
         android:textStyle="bold|italic"

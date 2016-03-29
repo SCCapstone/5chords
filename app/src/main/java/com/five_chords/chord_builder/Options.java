@@ -186,9 +186,6 @@ public class Options
      */
     public void changeInstrument(int instrumentIndex)
     {
-        if (instrumentIndex != instrument)
-            return;
-
         instrument = instrumentIndex;
 
         if (optionsChangedListener != null)
@@ -294,7 +291,7 @@ public class Options
         // Load chord inversions to use
         int size = preferences.getInt(CHORDS_INVERSIONS_SIZE_BUNDLE_ID, 0);
         for (int i = 0; i < size; ++i)
-            chordInversionsToUse.add((byte)preferences.getInt(CHORDS_INVERSIONS_BUNDLE_ID + i, 1));
+            chordInversionsToUse.add((byte)preferences.getInt(CHORDS_INVERSIONS_BUNDLE_ID + i, 0));
 
         // Populate ChordType List
         populateChordTypesInUse();

@@ -134,10 +134,11 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         }
 
         // Initialize Static Classes
-        setUpGUI.initialize(this);
         chordHandler.initialize();
         chordHandler.setOnChordSelectedListener(this);
         soundHandler.initialize(this);
+        setUpGUI.initialize(this);
+        soundHandler.switchInstrument(options.instrument);
         Score.loadScores(this, false);
 
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -291,7 +292,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * Called when a new chord is selected.
      */
     @Override
-    public void onChordSelected() {
+    public void onChordSelected(boolean random) {
         // Update current chord score
         updateDisplayedScore();
 
@@ -299,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         sliderFragment.setSliderBoundsToFitChord(chordHandler.getCurrentSelectedChordSpelling());
 
         // Update ChordInstrumentSelectFragment
-        chordInstrumentSelectFragment.setDisplayedChord(chordHandler.getCurrentSelectedChord());
+        chordInstrumentSelectFragment.setDisplayedChord(chordHandler.getCurrentSelectedChord(), random);
 
         // Hide fourth slider if needed
         if (chordHandler.getCurrentSelectedChord().getNumNotes() != 4)

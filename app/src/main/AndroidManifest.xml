@@ -37,6 +37,12 @@
                 android:value=".com.five_chords.chord_builder.activity.MainActivity" />
         </activity>
 
+
+        <!-- Chords Settings Page Activity -->
+        <activity
+            android:name=".com.five_chords.chord_builder.activity.SettingsChords"
+            android:label="Settings for Chords" />
+
         <!-- Help Page Activity -->
         <activity
             android:name=".com.five_chords.chord_builder.activity.HelpPage"

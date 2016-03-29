@@ -10,14 +10,13 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.five_chords.chord_builder.Score;
-import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordChooseFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordInversionSettingsFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.HintSettingsFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.PitchBendSettingsFragment;
@@ -45,9 +44,9 @@ public class SettingsPage extends Activity
         // Populate the list
         optionsAdapter = new ArrayAdapter<>(this, R.layout.centered_list_items);
 
+        optionsAdapter.add(EDIT_USER_LEVEL_OPTIONS);
         optionsAdapter.add(CHOOSE_CHORDS_OPTIONS);
         optionsAdapter.add(EDIT_HINTS_OPTIONS);
-        optionsAdapter.add(CLEAR_SCORES_OPTIONS);
         optionsAdapter.add(PITCH_BEND_OPTIONS);
         optionsAdapter.add(CHORD_INVERSION_OPTIONS);
         optionsAdapter.add(INSTRUMENT_OPTIONS);
@@ -87,7 +86,7 @@ public class SettingsPage extends Activity
         @Override
         public void performAction()
         {
-            launchChooseChordsDialog();
+            toChordSettings();
         }
     };
 
@@ -128,18 +127,6 @@ public class SettingsPage extends Activity
     };
 
     /**
-     * The SettingsOption for clearing the scores.
-     */
-    private final SettingsOption CLEAR_SCORES_OPTIONS = new SettingsOption("Clear Scores")
-    {
-        @Override
-        public void performAction()
-        {
-            Score.resetScores(activity);
-        }
-    };
-
-    /**
      * The SettingsOption for changing the instrument.
      */
     private final SettingsOption INSTRUMENT_OPTIONS = new SettingsOption("Change Instrument")
@@ -151,22 +138,26 @@ public class SettingsPage extends Activity
         }
     };
 
+
+    /**
+     * The SettingsOption for enabling/disabling chord inversions.
+     */
+    private final SettingsOption EDIT_USER_LEVEL_OPTIONS = new SettingsOption("User Level - WIP")
+    {
+        @Override
+        public void performAction()
+        {
+            launchUserLevelDialog();
+        }
+    };
+
     /**
      * Called to launch the choose chords dialog.
      */
-    public void launchChooseChordsDialog()
+    public void toChordSettings()
     {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-
-        if (prev != null)
-            ft.remove(prev);
-
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        DialogFragment newFragment = ChordChooseFragment.newInstance();
-        newFragment.show(ft, "dialog");
+        Intent intent = new Intent(this, SettingsChords.class);
+        startActivity(intent);
     }
 
     /**
@@ -238,6 +229,21 @@ public class SettingsPage extends Activity
         // Create and show the dialog.
         DialogFragment newFragment = changeInstrumentFragment.newInstance();
         newFragment.show(ft, "dialog");
+    }
+
+    public void launchUserLevelDialog() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+
+        if (prev != null)
+            ft.remove(prev);
+
+        ft.addToBackStack(null);
+
+        // Create and show the dialog.
+        // Replace this with user level dialog class
+        //DialogFragment newFragment = changeInstrumentFragment.newInstance();
+        //newFragment.show(ft, "dialog");
     }
 
     /**

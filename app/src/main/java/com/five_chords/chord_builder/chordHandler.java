@@ -162,7 +162,7 @@ public class chordHandler
      * Called to set currently selected chord.
      * @param chord The new Chord
      */
-    public static void setSelectedChord(Chord chord)
+    public static void setSelectedChord(Chord chord, boolean isRandom)
     {
         // Reset wrong streak if needed
         if (chord != currentSelectedChord)
@@ -185,7 +185,7 @@ public class chordHandler
 
         // Call the listener
         if (onChordSelectedListener != null)
-            onChordSelectedListener.onChordSelected();
+            onChordSelectedListener.onChordSelected(isRandom);
     }
 
     /**
@@ -210,7 +210,7 @@ public class chordHandler
         while (newChordFund == previousChordFund);
 
         // Get the chosen chord
-        setSelectedChord(getChord(newChordFund, newType));
+        setSelectedChord(getChord(newChordFund, newType), true);
     }
 
 //    /**
@@ -289,7 +289,7 @@ public class chordHandler
                         @Override
                         public void onClick(DialogInterface dialog, int which)
                         {
-                            setSelectedChord(currentSelectedChord); // Resets the wrong streak counter
+                            setSelectedChord(currentSelectedChord, false); // Resets the wrong streak counter
                             activity.getSliderFragment().resetChordSliders();
                             soundHandler.stopSound();
                         }
@@ -339,6 +339,6 @@ public class chordHandler
         /**
          * Called when a new chord is selected.
          */
-        void onChordSelected();
+        void onChordSelected(boolean random);
     }
 }

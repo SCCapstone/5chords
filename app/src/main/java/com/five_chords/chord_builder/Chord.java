@@ -83,6 +83,13 @@ public class Chord
         TYPE = ChordType.values()[(int)(id >>> Integer.SIZE)];
     }
 
+    public Chord(String random) {
+        ID = 0;
+        FUNDAMENTAL = 0;
+        TYPE = ChordType.values()[0];
+    }
+
+
     /**
      * Gets a unique value from the fundamental note - ChordType pair.
      * @param fundamental The fundamental note
