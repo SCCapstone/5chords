@@ -1,6 +1,6 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
-import android.app.DialogFragment;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +17,7 @@ import com.five_chords.chord_builder.Options;
  * A Fragment containing the hint settings.
  * @author tstone95
  */
-public class HintSettingsFragment extends DialogFragment implements CompoundButton.OnCheckedChangeListener,
+public class HintSettingsFragment extends Activity implements CompoundButton.OnCheckedChangeListener,
         NumberPicker.OnValueChangeListener
 {
     /** The available hint delay settings. */
@@ -141,30 +141,24 @@ public class HintSettingsFragment extends DialogFragment implements CompoundButt
     }
 
     /**
-     * Called when the View containing this Fragment has been created.
-     * @param inflater The inflater to use to inflate the Fragment
-     * @param container The ViewGroup container
+     * Called when the Activity has been created.
      * @param savedInstanceState The saved instance state
      * @return This Fragment's layout
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
+    public void onCreate(Bundle savedInstanceState)
     {
+        super.onCreate(savedInstanceState);
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_hint_settings, container, false);
-
-        // Set title
-        if (getDialog() != null)
-            getDialog().setTitle(R.string.edit_hint_settings);
+        setContentView(R.layout.fragment_hint_settings);
 
         // Get Views
-        hintsSwitch = (Switch)view.findViewById(R.id.switch_hints);
-        hintDelay1Picker = (NumberPicker)view.findViewById(R.id.hint_level1_picker);
+        hintsSwitch = (Switch) findViewById(R.id.switch_hints);
+        hintDelay1Picker = (NumberPicker) findViewById(R.id.hint_level1_picker);
         initPicker(hintDelay1Picker);
-        hintDelay2Picker = (NumberPicker)view.findViewById(R.id.hint_level2_picker);
+        hintDelay2Picker = (NumberPicker) findViewById(R.id.hint_level2_picker);
         initPicker(hintDelay2Picker);
-        hintDelay3Picker = (NumberPicker)view.findViewById(R.id.hint_level3_picker);
+        hintDelay3Picker = (NumberPicker) findViewById(R.id.hint_level3_picker);
         initPicker(hintDelay3Picker);
 
         // Set default values
@@ -173,9 +167,6 @@ public class HintSettingsFragment extends DialogFragment implements CompoundButt
         hintDelay1Picker.setValue(options.hintTypeDelays[0]);
         hintDelay2Picker.setValue(options.hintTypeDelays[1]);
         hintDelay3Picker.setValue(options.hintTypeDelays[2]);
-
-        // Return the View
-        return view;
     }
 
     /**
@@ -189,4 +180,16 @@ public class HintSettingsFragment extends DialogFragment implements CompoundButt
         picker.setDisplayedValues(PICKER_DISPLAY_VALUES);
         picker.setOnValueChangedListener(this);
     }
+
+
+    /**
+     * Goes back to mainActivity on Call
+     * @ param  Button Call
+     * The MainActivity call
+     */
+    public void backToMain(View view)
+    {
+        finish();
+    }
+
 }

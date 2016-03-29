@@ -22,7 +22,7 @@
         android:id="@+id/textview_settings_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/settingsChords"
+        android:text="@string/instruments"
         android:textSize="@dimen/text_size_title"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="24dp"
@@ -34,9 +34,11 @@
           android:id="@+id/settings_top_separator"
           android:layout_below="@id/textview_settings_title"/>
 
+    <!-- Done button -->
+
     <!-- settings content -->
     <ListView
-        android:id="@+id/settings_content"
+        android:id="@+id/instruments"
         android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

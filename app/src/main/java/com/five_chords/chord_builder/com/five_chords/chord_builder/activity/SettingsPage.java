@@ -104,7 +104,7 @@ public class SettingsPage extends Activity
         @Override
         public void performAction()
         {
-            launchEditHintsDialog();
+            toHintOptions();
         }
     };
 
@@ -116,7 +116,7 @@ public class SettingsPage extends Activity
         @Override
         public void performAction()
         {
-            launchInstrumentDialog();
+            toInstrumentSelection();
         }
     };
 
@@ -156,36 +156,20 @@ public class SettingsPage extends Activity
     /**
      * Called to launch the edit hints dialog.
      */
-    public void launchEditHintsDialog()
+    public void toHintOptions()
     {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-
-        if (prev != null)
-            ft.remove(prev);
-
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        DialogFragment newFragment = HintSettingsFragment.newInstance();
-        newFragment.show(ft, "dialog");
+        Intent intent = new Intent(this, HintSettingsFragment.class);
+        startActivity(intent);
+        this.overridePendingTransition(0, 0);
     }
 
     /**
-     * Launches the Instrument select dialog
+     * Launches the Instrument select
      */
-    public void launchInstrumentDialog() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-
-        if (prev != null)
-            ft.remove(prev);
-
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        DialogFragment newFragment = changeInstrumentFragment.newInstance();
-        newFragment.show(ft, "dialog");
+    public void toInstrumentSelection() {
+        Intent intent = new Intent(this, SettingsInstruments.class);
+        startActivity(intent);
+        this.overridePendingTransition(0, 0);
     }
 
     public void launchUserLevelDialog() {

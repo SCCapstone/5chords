@@ -25,11 +25,6 @@ public class SettingsChords extends Activity
     private Activity activity;
 
     /** The chords the user wants to use */
-    public boolean useMajorChords;
-    public boolean useMinorChords;
-    public boolean useDominantChords;
-    public boolean useAugmentedChords;
-
     private static boolean[] chordOptions;
 
     /**

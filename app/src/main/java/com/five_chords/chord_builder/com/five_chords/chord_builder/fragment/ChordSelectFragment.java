@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -19,7 +18,6 @@ import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 import com.five_chords.chord_builder.chordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
-import com.five_chords.chord_builder.soundHandler;
 
 /**
  * A Fragment containing the chord select slider and the instrument select slider.
@@ -27,18 +25,9 @@ import com.five_chords.chord_builder.soundHandler;
  */
 public class ChordSelectFragment extends Fragment
 {
-//    /** The available instruments names */
-//    public static final String[] INSTRUMENT_NAMES = {"Trumpet", "Piano", "Organ", "Violin", "Flute"};
-//
-//    /** The available instrument icons */
-//    public static final int[] INSTRUMENT_ICONS = {R.drawable.trumpet, R.drawable.piano, R.drawable.organ,
-//            R.drawable.violin, R.drawable.flute};
 
     /** Reference to the Spinner for selecting chords contained in this Fragment. */
     private Spinner chordSelectSpinner;
-
-//    /** Reference to the Spinner for selecting instruments contained in this Fragment. */
-//    private Spinner instrumentSelectSpinner;
 
     /**
      * Required empty public constructor.
