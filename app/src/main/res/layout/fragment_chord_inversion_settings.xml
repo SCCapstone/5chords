@@ -10,41 +10,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
+        android:gravity="center"
         android:textSize="@dimen/text_size_medium"
         android:textStyle="italic"
         android:text="Select which inversions to use:"/>
 
+    <!-- Inversion selection -->
+    <ListView
+        android:id="@+id/inversion_list"
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        />
 
-    <!-- First Inversion CheckBox-->
-    <CheckBox
-        android:id="@+id/checkbox_first_inversion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="First Inversion"/>
-
-    <!-- Second Inversion CheckBox-->
-    <CheckBox
-        android:id="@+id/checkbox_second_inversion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="Second Inversion"/>
-
-    <!-- Third Inversion CheckBox-->
-    <CheckBox
-        android:id="@+id/checkbox_third_inversion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="Third Inversion"/>
-
-    <!-- Fourth Inversion CheckBox-->
-    <CheckBox
-        android:id="@+id/checkbox_fourth_inversion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="8dp"
-        android:text="Fourth Inversion"/>
 
 </LinearLayout>

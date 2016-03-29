@@ -65,6 +65,7 @@
     <string name="options">Options</string>
     <string name="settings">Settings</string>
     <string name="settingsChords">Chords</string>
+    <string name="advanced">Advanced</string>
     <string name="settingsChordsInvalid">You must have at least one chord type selected</string>
     <string name="pitch_bend_settings">Select Pitch Bend Settings</string>
     <string name="chord_inversion_settings">Select Chord Inversions</string>

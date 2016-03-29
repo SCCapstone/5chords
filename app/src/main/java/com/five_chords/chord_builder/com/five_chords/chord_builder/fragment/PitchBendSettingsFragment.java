@@ -1,6 +1,7 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,7 +24,7 @@ import org.w3c.dom.Text;
  * A Fragment containing the pitch bend settings.
  * @author tstone95
  */
-public class PitchBendSettingsFragment extends DialogFragment implements SeekBar.OnSeekBarChangeListener
+public class PitchBendSettingsFragment extends Fragment implements SeekBar.OnSeekBarChangeListener
 {
     /** The maximum allowed distance to a Note as a fraction to consider checking correct. */
     public static double MAXIMUM_CHECK_ERROR = 0.5;
@@ -78,10 +79,6 @@ public class PitchBendSettingsFragment extends DialogFragment implements SeekBar
     {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_pitch_bend_settings, container, false);
-
-        // Set title
-        if (getDialog() != null)
-            getDialog().setTitle(R.string.pitch_bend_settings);
 
         // Init Increment SeekBar
         divisionSetBar = (SeekBar)view.findViewById(R.id.seekbar_note_divisions);

@@ -45,10 +45,9 @@ public class SettingsPage extends Activity
         optionsAdapter = new ArrayAdapter<>(this, R.layout.centered_list_items);
 
         optionsAdapter.add(EDIT_USER_LEVEL_OPTIONS);
-        optionsAdapter.add(CHOOSE_CHORDS_OPTIONS);
+        optionsAdapter.add(CHOOSE_CHORD_TYPES);
+        optionsAdapter.add(CHOOSE_CHORD_OPTIONS);
         optionsAdapter.add(EDIT_HINTS_OPTIONS);
-        optionsAdapter.add(PITCH_BEND_OPTIONS);
-        optionsAdapter.add(CHORD_INVERSION_OPTIONS);
         optionsAdapter.add(INSTRUMENT_OPTIONS);
 
         // Set click listener
@@ -81,7 +80,7 @@ public class SettingsPage extends Activity
     /**
      * The SettingsOption for choosing chords.
      */
-    private final SettingsOption CHOOSE_CHORDS_OPTIONS = new SettingsOption("Choose Chords")
+    private final SettingsOption CHOOSE_CHORD_TYPES = new SettingsOption("Choose Chords")
     {
         @Override
         public void performAction()
@@ -90,27 +89,10 @@ public class SettingsPage extends Activity
         }
     };
 
-    /**
-     * The SettingsOption for changing the Pitch bend settings.
-     */
-    private final SettingsOption PITCH_BEND_OPTIONS = new SettingsOption("Edit Pitch Bend Settings")
-    {
+    private final SettingsOption CHOOSE_CHORD_OPTIONS = new SettingsOption("Chord Options") {
         @Override
-        public void performAction()
-        {
-            launchPitchBendSettingsDialog();
-        }
-    };
-
-    /**
-     * The SettingsOption for changing the Pitch bend settings.
-     */
-    private final SettingsOption CHORD_INVERSION_OPTIONS = new SettingsOption("Choose Chord Inversions")
-    {
-        @Override
-        public void performAction()
-        {
-            launchChordInversionSettingsDialog();
+        public void performAction() {
+            toChordOptions();
         }
     };
 
@@ -162,6 +144,16 @@ public class SettingsPage extends Activity
     }
 
     /**
+     * Called to launch the choose chord options.
+     */
+    public void toChordOptions()
+    {
+        Intent intent = new Intent(this, SettingsChordOptions.class);
+        startActivity(intent);
+        this.overridePendingTransition(0, 0);
+    }
+
+    /**
      * Called to launch the edit hints dialog.
      */
     public void launchEditHintsDialog()
@@ -176,42 +168,6 @@ public class SettingsPage extends Activity
 
         // Create and show the dialog.
         DialogFragment newFragment = HintSettingsFragment.newInstance();
-        newFragment.show(ft, "dialog");
-    }
-
-    /**
-     * Called to launch the pitch setting dialog.
-     */
-    public void launchPitchBendSettingsDialog()
-    {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-
-        if (prev != null)
-            ft.remove(prev);
-
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        DialogFragment newFragment = PitchBendSettingsFragment.newInstance();
-        newFragment.show(ft, "dialog");
-    }
-
-    /**
-     * Called to launch the inversion settings dialog.
-     */
-    public void launchChordInversionSettingsDialog()
-    {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-
-        if (prev != null)
-            ft.remove(prev);
-
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        DialogFragment newFragment = ChordInversionSettingsFragment.newInstance();
         newFragment.show(ft, "dialog");
     }
 
