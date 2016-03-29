@@ -170,7 +170,7 @@ public class Options
      */
     public void changePitchBendSettings(int incrementsPerNote, double maxCheckError)
     {
-        if (incrementsPerNote != sliderDivisionsPerNote && maxCheckError != allowableCheckError)
+        if (incrementsPerNote != sliderDivisionsPerNote || maxCheckError != allowableCheckError)
         {
             sliderDivisionsPerNote = incrementsPerNote;
             allowableCheckError = maxCheckError;
@@ -278,9 +278,7 @@ public class Options
         useHints = preferences.getBoolean(HINTS_BUNDLE_ID, true);
         instrument = preferences.getInt(INSTRUMENT_BUNDLE_ID, 0);
         sliderDivisionsPerNote = preferences.getInt(NUM_SLIDER_DIVISIONS_BUNDLE_ID, DEFAULT_SLIDER_DIVISIONS_PER_NOTE);
-        // TODO
-        allowableCheckError = DEFAULT_CHECK_ERROR;
-//                preferences.getFloat(CHECK_ERROR_BUNDLE_ID, DEFAULT_CHECK_ERROR);
+        allowableCheckError = preferences.getFloat(CHECK_ERROR_BUNDLE_ID, DEFAULT_CHECK_ERROR);
 
         // Read hint delays
         for (int i = 0; i < hintTypeDelays.length; ++i)

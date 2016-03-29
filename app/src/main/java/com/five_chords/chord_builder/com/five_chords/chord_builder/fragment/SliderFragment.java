@@ -108,37 +108,37 @@ public class SliderFragment extends Fragment
         getNoteFromSlider(optionSlider, chord[3]);
     }
 
-    // TODO
-    public void test()
-    {
-        Note[] chord = new Note[] {new Note(), new Note(), new Note(), new Note()};
-        buildCurrentChord(chord);
-
-        Log.e("SliderFragment", "Test");
-        Log.e("->", "Min Note on Sliders = " + minNoteOnSlider);
-        Log.e("->", "Max Note on Sliders = " + maxNoteOnSlider);
-
-        String value = "";
-        for (int i = 0; i < chord.length; ++i)
-        {
-            value += chord[i].getFractionalIndex();
-            if (i != chord.length - 1)
-                value += "\t";
-        }
-
-        Log.e("->", "Slider Values = " + value);
-
-        value = "";
-        chord = chordHandler.getCurrentSelectedChordSpelling();
-        for (int i = 0; i < chord.length; ++i)
-        {
-            value += chord[i].getFractionalIndex();
-            if (i != chord.length - 1)
-                value += "\t";
-        }
-
-        Log.e("->", "Selected Chord Notes = " + value);
-    }
+//    // TODO
+//    public void test()
+//    {
+//        Note[] chord = new Note[] {new Note(), new Note(), new Note(), new Note()};
+//        buildCurrentChord(chord);
+//
+//        Log.e("SliderFragment", "Test");
+//        Log.e("->", "Min Note on Sliders = " + minNoteOnSlider);
+//        Log.e("->", "Max Note on Sliders = " + maxNoteOnSlider);
+//
+//        String value = "";
+//        for (int i = 0; i < chord.length; ++i)
+//        {
+//            value += chord[i].getFractionalIndex();
+//            if (i != chord.length - 1)
+//                value += "\t";
+//        }
+//
+//        Log.e("->", "Slider Values = " + value);
+//
+//        value = "";
+//        chord = chordHandler.getCurrentSelectedChordSpelling();
+//        for (int i = 0; i < chord.length; ++i)
+//        {
+//            value += chord[i].getFractionalIndex();
+//            if (i != chord.length - 1)
+//                value += "\t";
+//        }
+//
+//        Log.e("->", "Selected Chord Notes = " + value);
+//    }
 
     /**
      * Gets the current note on the slider, taking into account the number of intermediate slider
@@ -323,7 +323,7 @@ public class SliderFragment extends Fragment
                     soundHandler.playNote(activity, note);
                 }
 
-                test(); // TODO
+//                test(); // TODO
             }
 
             public void onStartTrackingTouch(SeekBar seekBar)

@@ -2,6 +2,7 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,12 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.Main
  */
 public class PitchBendSettingsFragment extends DialogFragment implements SeekBar.OnSeekBarChangeListener
 {
+    /** The maximum allowed distance to a Note as a fraction to consider checking correct. */
+    private static double MAXIMUM_CHECK_ERROR = 0.5;
+
+    /** The minimum allowed distance to a Note as a fraction to consider checking correct. */
+    private static double MINIMUM_CHECK_ERROR = 0.1;
+
     /** The maximum number of divisions per note. */
     private static final int MAXIMUM_DIVISIONS_PER_NOTE = 100;
 
@@ -76,6 +83,12 @@ public class PitchBendSettingsFragment extends DialogFragment implements SeekBar
         // Init Difficulty SeekBar
         difficultySetBar = (SeekBar)view.findViewById(R.id.seekbar_check_difficulties);
         difficultySetBar.setMax(MAXIMUM_DIFFICULTY_VALUE);
+
+        // Set default progress, calculating backwards from the error margin value
+        double v = MainActivity.getOptions().allowableCheckError - MINIMUM_CHECK_ERROR;
+        v /= (MAXIMUM_CHECK_ERROR - MINIMUM_CHECK_ERROR);
+        v = 1.0 - v;
+        difficultySetBar.setProgress((int)(MAXIMUM_DIFFICULTY_VALUE * v));
         difficultySetBar.setOnSeekBarChangeListener(this);
 
         // Return the View
@@ -93,9 +106,14 @@ public class PitchBendSettingsFragment extends DialogFragment implements SeekBar
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
     {
+        // Get number of divisions between notes
         int divisions = 1 + divisionSetBar.getProgress();
-        double checkError = 0.01 + (MAXIMUM_DIFFICULTY_VALUE - difficultySetBar.getProgress() / (double)difficultySetBar.getProgress()) * 0.49; // TODO Make constants
 
+        // Get the allowable error margin (will be in range MINIMUM_CHECK_ERROR to MAXIMUM_CHECK_ERROR)
+        double checkError = 1.0 - difficultySetBar.getProgress() / (double)MAXIMUM_DIFFICULTY_VALUE;
+        checkError = MINIMUM_CHECK_ERROR + checkError * (MAXIMUM_CHECK_ERROR - MINIMUM_CHECK_ERROR);
+
+        // Update options
         MainActivity.getOptions().changePitchBendSettings(divisions, checkError);
     }
 
