@@ -19,7 +19,7 @@
         <fragment
             android:id="@+id/fragment_chord_select"
             android:layout_width="fill_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:name="com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordSelectFragment"
             tools:layout="@layout/fragment_chord_select"
             android:background="@drawable/leather"
@@ -41,39 +41,20 @@
             android:layout_marginLeft="0dp"
             android:layout_marginRight="0dp"
             android:layout_marginTop="0dp"
-            android:layout_above="@+id/footer_frame">
+            android:layout_above="@+id/fragment_chord_check">
         </fragment>
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:layout_width="fill_parent"
+        <!-- Fragment containing the chord play options -->
+        <fragment
+            android:id="@+id/fragment_chord_check"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/footer_frame"
-            style="?android:attr/buttonBarButtonStyle"
             android:layout_alignParentBottom="true"
-            android:baselineAligned="false"
+            android:name="com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.CheckFragment"
+            tools:layout="@layout/fragment_check"
             android:layout_margin="0dp">
+        </fragment>
 
-            <!-- Fragment containing the chord play options -->
-            <fragment
-                android:id="@+id/fragment_chord_check"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:name="com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.CheckFragment"
-                tools:layout="@layout/fragment_check"
-                android:layout_margin="0dp">
-            </fragment>
-
-            <!-- Fragment containing the Score display -->
-            <fragment
-                android:id="@+id/fragment_score_display"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:name="com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScoreFragment"
-                tools:layout="@layout/fragment_score"
-                android:layout_margin="0dp">
-            </fragment>
-        </LinearLayout>
     </RelativeLayout>
 
     <ListView android:id="@+id/left_drawer"

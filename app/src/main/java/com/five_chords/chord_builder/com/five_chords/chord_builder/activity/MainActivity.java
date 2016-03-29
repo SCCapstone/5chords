@@ -209,16 +209,14 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      */
     public void updateDisplayedScore() {
 
-        // Get the TextViews
-        TextView currentProgress = (TextView) findViewById(R.id.textview_current_score);
-        TextView overallProgress = (TextView) findViewById(R.id.textview_overall_score);
+        // Get the TextView
+        TextView currentProgress = (TextView) findViewById(R.id.textview_score_display);
 
         // Get the current Score
         Score current = Score.getCurrentScore();
 
         // Set the Views
         currentProgress.setText(current.getCurrentValue().getDisplayString());
-        overallProgress.setText(current.getOverallValue().getDisplayString());
 
 //        // Update the Chord Select Spinner
 //        chordInstrumentSelectFragment.updateDisplayedChord();

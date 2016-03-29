@@ -31,4 +31,7 @@
     <!-- Size of the instrument icon images in the instrument select spinner -->
     <dimen name="instrument_icon_height">64dp</dimen>
 
+    <!-- Size of the Chord play buttons -->
+    <dimen name="chord_play_button_size">72dp</dimen>
+
 </resources>

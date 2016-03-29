@@ -42,7 +42,7 @@ public class ChordSelectFragment extends Fragment
     public void setDisplayedChord(Chord chord, boolean random)
     {
         if (random) {
-            chordSelectSpinner.setSelection(chordSelectSpinner.getCount()-1);
+            chordSelectSpinner.setSelection(chordSelectSpinner.getCount() - 1);
             return;
         }
 
@@ -115,10 +115,9 @@ public class ChordSelectFragment extends Fragment
 
         // Get the Spinners
         chordSelectSpinner = (Spinner)view.findViewById(R.id.spinner_chord_select);
-//        instrumentSelectSpinner = (Spinner)view.findViewById(R.id.spinner_instrument);
 
-        // Set minimum sizes
-        chordSelectSpinner.setMinimumWidth((int) getResources().getDimension(R.dimen.min_chord_select_slider_size));
+//        // Set minimum sizes
+//        chordSelectSpinner.setMinimumWidth((int) getResources().getDimension(R.dimen.min_chord_select_slider_size));
 
         // Set the OnItemSelectedListener for the spinners
         chordSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
@@ -137,34 +136,6 @@ public class ChordSelectFragment extends Fragment
             public void onNothingSelected(AdapterView<?> parentView)
             { /* Ignore */ }
         });
-
-//        // Set the OnItemSelectedListener for the spinner
-//        instrumentSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-//        {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
-//            {
-//                // Update the selected chord
-//                soundHandler.switchInstrument(instrumentSelectSpinner.getSelectedItemPosition());
-//            }
-//
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parentView)
-//            { /* Ignore */ }
-//        });
-//
-////        // Populate chord select spinner
-////        updateAvailableChordTypes(getActivity());
-//
-//        // Populate the instrument select spinner
-//        InstrumentDisplayItemAdapter adapter = new InstrumentDisplayItemAdapter(getActivity(),
-//                android.R.layout.simple_spinner_dropdown_item);
-//
-//        // Add instruments indices
-//        for (int i = 0; i < INSTRUMENT_NAMES.length; ++i)
-//            adapter.add(i);
-//
-//        instrumentSelectSpinner.setAdapter(adapter);
 
         // Inflate the layout for this fragment
         return view;
