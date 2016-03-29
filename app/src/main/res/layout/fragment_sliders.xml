@@ -31,8 +31,6 @@
             android:indeterminate="false"
             android:thumb="@layout/seekbar_thumb"
             android:tag="@string/seek_bar_tag"
-            android:max="18"
-            android:progress="9"
             android:background="@drawable/eq_slide_background"
             android:progressTint="#000000" />
 
@@ -59,8 +57,6 @@
             android:indeterminate="false"
             android:thumb="@layout/seekbar_thumb"
             android:tag="@string/seek_bar_tag"
-            android:max="18"
-            android:progress="9"
             android:background="@drawable/eq_slide_background"
             android:progressTint="#000000" />
         <!--android:thumb="@drawable/abc_btn_radio_to_on_mtrl_015"-->
@@ -88,8 +84,6 @@
             android:indeterminate="false"
             android:thumb="@layout/seekbar_thumb"
             android:tag="@string/seek_bar_tag"
-            android:max="18"
-            android:progress="9"
             android:background="@drawable/eq_slide_background"
             android:progressTint="#000000" />
 
@@ -116,8 +110,6 @@
             android:indeterminate="false"
             android:thumb="@layout/seekbar_thumb"
             android:tag="@string/seek_bar_tag"
-            android:max="18"
-            android:progress="9"
             android:background="@drawable/eq_slide_background"
             android:progressTint="#000000" />
 

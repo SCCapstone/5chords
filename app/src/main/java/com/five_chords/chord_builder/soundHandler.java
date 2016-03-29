@@ -154,28 +154,28 @@ public class soundHandler extends MainActivity
 //        Log.d(TAG, "Done Playing Chord");
 //    }
 
-    /****************************************************************
-     * Plays a note
-     **/
-    public static void playNote(Activity activity, int note, int pitch)
-    {
-        stopSound();
-
-        midi.newMidi(1, 0);
-        addNote(note, pitch, 1);
-
-        try
-        {
-            midi.writeToFile(midiFile);
-            mediaPlayer = MediaPlayer.create(activity, Uri.parse("file://" + midiFile));
-            mediaPlayer.setLooping(true);
-            mediaPlayer.start();
-        }
-        catch (Exception e)
-        { /* Ignored */ }
-
-        Log.d(TAG, "Done Playing Note");
-    }
+//    /****************************************************************
+//     * Plays a note
+//     **/
+//    public static void playNote(Activity activity, int note, int pitch)
+//    {
+//        stopSound();
+//
+//        midi.newMidi(1, 0);
+//        addNote(note, pitch, 1);
+//
+//        try
+//        {
+//            midi.writeToFile(midiFile);
+//            mediaPlayer = MediaPlayer.create(activity, Uri.parse("file://" + midiFile));
+//            mediaPlayer.setLooping(true);
+//            mediaPlayer.start();
+//        }
+//        catch (Exception e)
+//        { /* Ignored */ }
+//
+//        Log.d(TAG, "Done Playing Note");
+//    }
 
     /****************************************************************
      * Plays a note

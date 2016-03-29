@@ -172,6 +172,7 @@ public class SliderFragment extends Fragment
         if (slider != null)
         {
             slider.setProgress(0);
+            slider.setThumbOffset(0);
             slider.setTouched(false);
         }
 
@@ -179,6 +180,7 @@ public class SliderFragment extends Fragment
         if (slider != null)
         {
             slider.setProgress(0);
+            slider.setThumbOffset(0);
             slider.setTouched(false);
         }
 
@@ -186,6 +188,7 @@ public class SliderFragment extends Fragment
         if (slider != null)
         {
             slider.setProgress(0);
+            slider.setThumbOffset(0);
             slider.setTouched(false);
         }
 
@@ -193,6 +196,7 @@ public class SliderFragment extends Fragment
         if (slider != null)
         {
             slider.setProgress(0);
+            slider.setThumbOffset(0);
             slider.setTouched(false);
         }
     }
