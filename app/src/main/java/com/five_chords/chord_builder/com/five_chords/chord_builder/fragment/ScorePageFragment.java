@@ -183,12 +183,15 @@ public class ScorePageFragment extends Fragment implements AdapterView.OnItemSel
 
             // Get components on View
             Score item = getItem(position);
-            TextView textView = (TextView)view.findViewById(R.id.score_history_chord_name);
+            TextView nameView = (TextView)view.findViewById(R.id.score_history_chord_name);
+            TextView descriptionView = (TextView)view.findViewById(R.id.score_history_chord_description);
             ScoreProgressView progressView = (ScoreProgressView)view.findViewById(R.id.score_history_progress_view);
 
-            // Set chord name
-            textView.setText(getLabel(item));
+            // Set chord text
+            nameView.setText(chordHandler.getChord(item.CHORD_ID).toString());
+            descriptionView.setText(getLabel(item));
 
+            // Set size
             progressView.setWidthPixels(ScoreProgressView.calculateWidth(item.getHistory()));
             progressView.setHeightPixels(ScoreProgressView.calculateHeight());
             progressView.setMinimumWidth(progressView.getWidthPixels());
@@ -217,8 +220,8 @@ public class ScorePageFragment extends Fragment implements AdapterView.OnItemSel
          */
         private String getLabel(Score score)
         {
-            return chordHandler.getChord(score.CHORD_ID).toString() + (score.getOverallValue().numTotalGuesses == 0 ?
-                    " - " + getContext().getString(R.string.not_attempted) : "");
+            return score.getOverallValue().numTotalGuesses == 0 ? getContext().getString(R.string.not_attempted) :
+                   score.getOverallValue().getDisplayPercentageString() + " Overall";
         }
     }
 }

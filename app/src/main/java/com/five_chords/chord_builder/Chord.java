@@ -64,7 +64,7 @@ public class Chord
         @Override
         public String toString()
         {
-            return name;
+            return name + " Chords";
         }
     }
 

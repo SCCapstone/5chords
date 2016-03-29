@@ -44,7 +44,7 @@ public class SettingsChords extends Activity
 
         for (final Chord.ChordType type: Chord.ChordType.values())
         {
-            optionsAdapter.add(new SettingsOption(type + " Chords are " + ((chordOptions[type.ordinal()]) ? "Enabled" : "Disabled")) {
+            optionsAdapter.add(new SettingsOption(type + " are " + ((chordOptions[type.ordinal()]) ? "Enabled" : "Disabled")) {
                 @Override
                 public void performAction() {
                     if (this.name.contains("Disabled")) {

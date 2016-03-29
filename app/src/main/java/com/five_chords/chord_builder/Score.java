@@ -530,5 +530,14 @@ public class Score
         {
             return numCorrectGuesses + " / " + numTotalGuesses;
         }
+
+        /**
+         * Gets a String for displaying the value of this ScoreValue as a percentage.
+         * @return A String for displaying the value of this ScoreValue as a percentage
+         */
+        public String getDisplayPercentageString()
+        {
+            return "" + Math.round(numCorrectGuesses * 100.0 / numTotalGuesses) + " %";
+        }
     }
 }
