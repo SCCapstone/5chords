@@ -11,10 +11,13 @@ import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.SeekBar;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.five_chords.chord_builder.Options;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
+
+import org.w3c.dom.Text;
 
 /**
  * A Fragment containing the pitch bend settings.
@@ -23,22 +26,28 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.Main
 public class PitchBendSettingsFragment extends DialogFragment implements SeekBar.OnSeekBarChangeListener
 {
     /** The maximum allowed distance to a Note as a fraction to consider checking correct. */
-    private static double MAXIMUM_CHECK_ERROR = 0.5;
+    public static double MAXIMUM_CHECK_ERROR = 0.5;
 
     /** The minimum allowed distance to a Note as a fraction to consider checking correct. */
-    private static double MINIMUM_CHECK_ERROR = 0.1;
-
-    /** The maximum number of divisions per note. */
-    private static final int MAXIMUM_DIVISIONS_PER_NOTE = 100;
+    public static double MINIMUM_CHECK_ERROR = 0.0;
 
     /** The maximum difficulty value. */
     private static final int MAXIMUM_DIFFICULTY_VALUE = 100;
+
+    /** The allowable divisions between notes. */
+    private static final int[] ALLOWABLE_DIVISIONS_BETWEEN_NOTES = new int[] {1, 2, 4, 8, 16, 32, 64, 128};
 
     /** The note division setting bar. */
     private SeekBar divisionSetBar;
 
     /** The difficulty setting bar. */
     private SeekBar difficultySetBar;
+
+    /** The label for the divisionSetBar. */
+    private TextView divisionBarLabel;
+
+    /** The label for the difficultySetBar. */
+    private TextView difficultyBarLabel;
 
     /**
      * Required empty public constructor.
@@ -76,20 +85,37 @@ public class PitchBendSettingsFragment extends DialogFragment implements SeekBar
 
         // Init Increment SeekBar
         divisionSetBar = (SeekBar)view.findViewById(R.id.seekbar_note_divisions);
-        divisionSetBar.setMax(MAXIMUM_DIVISIONS_PER_NOTE - 1);
-        divisionSetBar.setProgress(MainActivity.getOptions().sliderDivisionsPerNote + 1);
+        divisionSetBar.setMax(ALLOWABLE_DIVISIONS_BETWEEN_NOTES.length - 1);
         divisionSetBar.setOnSeekBarChangeListener(this);
 
         // Init Difficulty SeekBar
-        difficultySetBar = (SeekBar)view.findViewById(R.id.seekbar_check_difficulties);
+        difficultySetBar = (SeekBar)view.findViewById(R.id.seekbar_check_error);
         difficultySetBar.setMax(MAXIMUM_DIFFICULTY_VALUE);
+        difficultySetBar.setOnSeekBarChangeListener(this);
 
-        // Set default progress, calculating backwards from the error margin value
+        // Get references to labels
+        divisionBarLabel = (TextView)view.findViewById(R.id.textview_pitch_slider_label);
+        difficultyBarLabel = (TextView)view.findViewById(R.id.textview_pitch_check_error_label);
+
+        // Set default progress for division bar
+        int p = -1;
+        for (int i = 0; p == -1 && i < ALLOWABLE_DIVISIONS_BETWEEN_NOTES.length; ++i)
+        {
+            if (MainActivity.getOptions().sliderDivisionsPerNote == ALLOWABLE_DIVISIONS_BETWEEN_NOTES[i])
+                p = i;
+        }
+        if (p == -1)
+            p = 0;
+
+        divisionSetBar.setProgress(p);
+
+        // Set default progress for difficulty bar
         double v = MainActivity.getOptions().allowableCheckError - MINIMUM_CHECK_ERROR;
         v /= (MAXIMUM_CHECK_ERROR - MINIMUM_CHECK_ERROR);
-        v = 1.0 - v;
-        difficultySetBar.setProgress((int)(MAXIMUM_DIFFICULTY_VALUE * v));
-        difficultySetBar.setOnSeekBarChangeListener(this);
+        difficultySetBar.setProgress((int) (MAXIMUM_DIFFICULTY_VALUE * v));
+
+        // Set default values
+        setBarLabels();
 
         // Return the View
         return view;
@@ -106,15 +132,30 @@ public class PitchBendSettingsFragment extends DialogFragment implements SeekBar
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
     {
+        if (!fromUser)
+            return;
+
         // Get number of divisions between notes
-        int divisions = 1 + divisionSetBar.getProgress();
+        int divisions = ALLOWABLE_DIVISIONS_BETWEEN_NOTES[divisionSetBar.getProgress()];
 
         // Get the allowable error margin (will be in range MINIMUM_CHECK_ERROR to MAXIMUM_CHECK_ERROR)
-        double checkError = 1.0 - difficultySetBar.getProgress() / (double)MAXIMUM_DIFFICULTY_VALUE;
+        double checkError = difficultySetBar.getProgress() / (double)MAXIMUM_DIFFICULTY_VALUE;
         checkError = MINIMUM_CHECK_ERROR + checkError * (MAXIMUM_CHECK_ERROR - MINIMUM_CHECK_ERROR);
+
+        // Update labels
+        setBarLabels();
 
         // Update options
         MainActivity.getOptions().changePitchBendSettings(divisions, checkError);
+    }
+
+    /**
+     * Sets the labels of the SeekBars in the Fragment.
+     */
+    public void setBarLabels()
+    {
+        divisionBarLabel.setText("" + ALLOWABLE_DIVISIONS_BETWEEN_NOTES[divisionSetBar.getProgress()]);
+        difficultyBarLabel.setText("" + Math.round(MainActivity.getOptions().allowableCheckError * 100.0) + " %");
     }
 
     /**

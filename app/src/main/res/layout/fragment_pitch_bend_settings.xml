@@ -14,39 +14,34 @@
         android:textStyle="italic"
         android:text="Select the number of subdivisions to use between notes:"/>
 
-    <!-- The SeekBar layout -->
-    <LinearLayout
+    <!-- The SeekBar layout for the number of intervals between notes -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="8dp">
 
-        <!-- Left Label -->
+        <!-- Label -->
         <TextView
-            android:id="@+id/textview_pitch_slider_left"
-            android:layout_width="0dp"
+            android:id="@+id/textview_pitch_slider_label"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="@dimen/text_size_medium"
-            android:text="1"/>
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/text_size_medium"/>
 
         <!-- SeekBar -->
         <SeekBar
             android:id="@+id/seekbar_note_divisions"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="6"/>
+            android:layout_margin="4dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/textview_pitch_slider_label"/>
 
-        <!-- Right Label -->
-        <TextView
-            android:id="@+id/textview_pitch_slider_right"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="@dimen/text_size_medium"
-            android:text="100"/>
-
-    </LinearLayout>
+    </RelativeLayout>
 
     <!-- Separator -->
     <View style="@style/VerticalSeparator"/>
@@ -58,41 +53,36 @@
         android:layout_margin="8dp"
         android:textSize="@dimen/text_size_medium"
         android:textStyle="italic"
-        android:text="Select the allowable checking error:"/>
+        android:text="Select the allowable error margin:"/>
 
-    <!-- The SeekBar layout -->
-    <LinearLayout
+    <!-- The SeekBar layout for the checking error margin -->
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_margin="8dp">
 
-        <!-- Left Label -->
+        <!-- Label -->
         <TextView
-            android:id="@+id/textview_pitch_slider_diff_left"
-            android:layout_width="0dp"
+            android:id="@+id/textview_pitch_check_error_label"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="@dimen/text_size_medium"
-            android:text="Easy"/>
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/text_size_medium"/>
 
         <!-- SeekBar -->
         <SeekBar
-            android:id="@+id/seekbar_check_difficulties"
-            android:layout_width="0dp"
+            android:id="@+id/seekbar_check_error"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="4"/>
+            android:layout_margin="4dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
+            android:layout_toLeftOf="@id/textview_pitch_check_error_label"/>
 
-        <!-- Right Label -->
-        <TextView
-            android:id="@+id/textview_pitch_slider_diff_right"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="@dimen/text_size_medium"
-            android:text="Hard"/>
-
-    </LinearLayout>
+    </RelativeLayout>
 
 
 </LinearLayout>

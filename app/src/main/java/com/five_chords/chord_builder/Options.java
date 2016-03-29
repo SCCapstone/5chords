@@ -3,6 +3,10 @@ package com.five_chords.chord_builder;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.PitchBendSettingsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +47,7 @@ public class Options
     private static final int DEFAULT_SLIDER_DIVISIONS_PER_NOTE = 1;
 
     /** The default maximum allowable error for checking notes on the Chord sliders as a fraction. */
-    private static final float DEFAULT_CHECK_ERROR = 0.25f;
+    private static final float DEFAULT_CHECK_ERROR = (float) PitchBendSettingsFragment.MAXIMUM_CHECK_ERROR;
 
     /** The array of default hint delays. */
     private static final int[] DEFAULT_HINT_DELAYS = new int[] {2, 6, 10};
