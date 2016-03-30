@@ -295,6 +295,9 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         // Update slider bounds
         sliderFragment.setSliderBoundsToFitChord(chordHandler.getCurrentSelectedChordSpelling());
 
+        // Reset chord sliders
+        sliderFragment.resetChordSliders();
+
         // Update ChordInstrumentSelectFragment
         chordInstrumentSelectFragment.setDisplayedChord(chordHandler.getCurrentSelectedChord(), random);
 

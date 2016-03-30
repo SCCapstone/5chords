@@ -55,42 +55,6 @@ public class SliderFragment extends Fragment
     public SliderFragment()
     {   }
 
-//    /**
-//     * Gets the root slider.
-//     * @return The given slider
-//     */
-//    public VerticalSeekBar getRootSlider()
-//    {
-//        return rootSlider;
-//    }
-//
-//    /**
-//     * Gets the third slider.
-//     * @return The given slider
-//     */
-//    public VerticalSeekBar getThirdSlider()
-//    {
-//        return thirdSlider;
-//    }
-//
-//    /**
-//     * Gets the fifth slider.
-//     * @return The given slider
-//     */
-//    public VerticalSeekBar getFifthSlider()
-//    {
-//        return fifthSlider;
-//    }
-//
-//    /**
-//     * Gets the option slider.
-//     * @return The given slider
-//     */
-//    public VerticalSeekBar getOptionSlider()
-//    {
-//        return optionSlider;
-//    }
-
     /**
      * Gets the current chord built on the note sliders and puts it in the givn array.
      * @param chord The array into which to put the built chord
@@ -172,34 +136,12 @@ public class SliderFragment extends Fragment
      */
     public void resetChordSliders()
     {
-        VerticalSeekBar slider = rootSlider;
-
-        if (slider != null)
-        {
-            slider.setProgress(0);
-            slider.setTouched(false);
-        }
-
-        slider = thirdSlider;
-        if (slider != null)
-        {
-            slider.setProgress(0);
-            slider.setTouched(false);
-        }
-
-        slider = fifthSlider;
-        if (slider != null)
-        {
-            slider.setProgress(0);
-            slider.setTouched(false);
-        }
-
-        slider = optionSlider;
-        if (slider != null)
-        {
-            slider.setProgress(0);
-            slider.setTouched(false);
-        }
+        blockSliders = true;
+        rootSlider.setProgress(0);
+        thirdSlider.setProgress(0);
+        fifthSlider.setProgress(0);
+        optionSlider.setProgress(0);
+        blockSliders = false;
     }
 
 
@@ -296,13 +238,9 @@ public class SliderFragment extends Fragment
 
         // Set values
         blockSliders = true;
-        rootSlider.setProgress(0);
         rootSlider.setMax(max);
-        thirdSlider.setProgress(0);
         thirdSlider.setMax(max);
-        fifthSlider.setProgress(0);
         fifthSlider.setMax(max);
-        optionSlider.setProgress(0);
         optionSlider.setMax(max);
         blockSliders = false;
     }
@@ -319,7 +257,7 @@ public class SliderFragment extends Fragment
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
                 // Only play note if progress change is from user
-                if (seekBar instanceof VerticalSeekBar && ((VerticalSeekBar)seekBar).isTouched() && !blockSliders)
+                if (seekBar instanceof VerticalSeekBar && !blockSliders)
                 {
                     Note note = new Note();
                     getNoteFromSlider(bar, note);

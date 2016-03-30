@@ -17,9 +17,6 @@ import com.five_chords.chord_builder.chordHandler;
 
 public class VerticalSeekBar extends SeekBar
 {
-    /** Indicates whether or not this SeekBar is currently touched by the user */
-    private boolean isTouched;
-
     /**
      * Constructs a new VerticalSeekBar.
      * @param context The Context to set
@@ -56,24 +53,6 @@ public class VerticalSeekBar extends SeekBar
     public void initialize()
     {
         setProgress(0);
-    }
-
-    /**
-     * Gets whether or not this VerticalSeekBar is currently being touched by the user.
-     * @return Whether or not this VerticalSeekBar is currently being touched by the user
-     */
-    public boolean isTouched()
-    {
-        return isTouched;
-    }
-
-    /**
-     * Sets the touch flag of this VerticalSeekBar.
-     * @param touched The new value of the touch flag
-     */
-    public void setTouched(boolean touched)
-    {
-        isTouched = touched;
     }
 
     /**
@@ -130,14 +109,12 @@ public class VerticalSeekBar extends SeekBar
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
             case MotionEvent.ACTION_UP:
-                isTouched = true;
                 setProgress(getMax() - (int) (getMax() * event.getY() / getHeight()));
                 onSizeChanged(getWidth(), getHeight(), 0, 0);
 
                 break;
 
             case MotionEvent.ACTION_CANCEL:
-                isTouched = false;
                 break;
         }
         return true;
