@@ -10,11 +10,15 @@
 package com.five_chords.chord_builder;
 
 
+import android.graphics.drawable.StateListDrawable;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
+
+import java.util.Arrays;
 
 public class setUpGUI
 {
@@ -51,18 +55,16 @@ public class setUpGUI
                     chordHandler.buildCurrentChord(activity);
                     soundHandler.playChord(activity, chordHandler.getCurrentBuiltChordSpelling(),
                             chordHandler.getCurrentSelectedChord().getNumNotes());
-                    playBuiltChord.setBackgroundResource(R.drawable.buttons_touched);
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
-                    playBuiltChord.setBackgroundResource(R.drawable.buttons_touched);
                 }
-                return true;
+                return false;
             }
         });
 
-        //This will listen for touch on whether to play the sound, and to now change the image of the button
-        //decided this was a better option as, it listens for onclick already
+        // This will listen for touch on whether to play the sound, and to now change the image of the button
+        // decided this was a better option as, it listens for onclick already
         playSelectedChord.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -70,14 +72,12 @@ public class setUpGUI
                 {
                     soundHandler.playChord(activity, chordHandler.getCurrentSelectedChordSpelling(),
                             chordHandler.getCurrentSelectedChord().getNumNotes());
-                    playSelectedChord.setBackgroundResource(R.drawable.round_button_play_touched);
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP)
                 {
                     soundHandler.stopSound();
-                    playSelectedChord.setBackgroundResource(R.drawable.round_button_play);
                 }
-                return true;
+                return false;
             }
         });
 
@@ -89,14 +89,12 @@ public class setUpGUI
                     chordHandler.getRandomChord();
                     soundHandler.playChord(activity, chordHandler.getCurrentSelectedChordSpelling(),
                             chordHandler.getCurrentSelectedChord().getNumNotes());
-                    selectRandomChord.setBackgroundResource(R.drawable.round_button_shuffle_touched);
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandler.stopSound();
-                    selectRandomChord.setBackgroundResource(R.drawable.round_button_shuffle);
                 }
 
-                return true;
+                return false;
             }
         });
 
@@ -119,7 +117,7 @@ public class setUpGUI
                     // Check the result
                     chordHandler.checkCurrentChord(activity);
                 }
-                return true;
+                return false;
             }
         });
     }

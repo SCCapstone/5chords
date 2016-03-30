@@ -12,8 +12,7 @@
         android:layout_margin="8dp"
         android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:background="@drawable/round_button_play"
-        android:textColor="#ffffff" />
+        android:background="@drawable/play_button_selector"/>
 
     <!-- Button to select a random chord -->
     <Button
@@ -23,8 +22,7 @@
         android:layout_margin="8dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/round_button_shuffle"
-        android:textColor="#ffffff" />
+        android:background="@drawable/random_button_selector"/>
 
     <!-- Layout containing chord spinner and score view -->
     <LinearLayout
