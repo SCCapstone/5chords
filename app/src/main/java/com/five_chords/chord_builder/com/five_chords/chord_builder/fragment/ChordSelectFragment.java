@@ -5,10 +5,12 @@ import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -18,6 +20,7 @@ import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 import com.five_chords.chord_builder.chordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
+import com.five_chords.chord_builder.soundHandler;
 
 /**
  * A Fragment containing the chord select slider and the instrument select slider.
@@ -113,13 +116,47 @@ public class ChordSelectFragment extends Fragment
         // Inflate the View
         View view = inflater.inflate(R.layout.fragment_chord_select, container, false);
 
-        // Get the Spinners
+        // Initialize Buttons
+        final Button playSelectedChord = (Button) view.findViewById(R.id.button_select_chord_play);
+        final Button selectRandomChord = (Button) view.findViewById(R.id.button_select_random_chord);
+
+        // Set the function of the play button
+        playSelectedChord.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    soundHandler.playChord(getActivity(), chordHandler.getCurrentSelectedChordSpelling(),
+                            chordHandler.getCurrentSelectedChord().getNumNotes());
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP)
+                {
+                    soundHandler.stopSound();
+                }
+                return false;
+            }
+        });
+
+        // Set the function of the random button
+        selectRandomChord.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    chordHandler.getRandomChord();
+                    soundHandler.playChord(getActivity(), chordHandler.getCurrentSelectedChordSpelling(),
+                            chordHandler.getCurrentSelectedChord().getNumNotes());
+                }
+                else if (event.getAction() == MotionEvent.ACTION_UP) {
+                    soundHandler.stopSound();
+                }
+
+                return false;
+            }
+        });
+
+        // Initialize Chord Select Spinner
         chordSelectSpinner = (Spinner)view.findViewById(R.id.spinner_chord_select);
-
-//        // Set minimum sizes
-//        chordSelectSpinner.setMinimumWidth((int) getResources().getDimension(R.dimen.min_chord_select_slider_size));
-
-        // Set the OnItemSelectedListener for the spinners
         chordSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
         {
             @Override

@@ -16,7 +16,6 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.content.DialogInterface;
 import android.widget.AdapterView;
@@ -35,7 +34,6 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.Chor
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView;
-import com.five_chords.chord_builder.setUpGUI;
 import com.five_chords.chord_builder.soundHandler;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -138,7 +136,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         chordHandler.initialize();
         chordHandler.setOnChordSelectedListener(this);
         soundHandler.initialize(this);
-        setUpGUI.initialize(this);
         soundHandler.switchInstrument(options.instrument);
         Score.loadScores(this, false);
 

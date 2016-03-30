@@ -1,12 +1,18 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.five_chords.chord_builder.R;
+import com.five_chords.chord_builder.chordHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
+import com.five_chords.chord_builder.soundHandler;
 
 /**
  * A Fragment containing the chord check buttons.
@@ -32,6 +38,57 @@ public class CheckFragment extends Fragment
                              Bundle savedInstanceState)
     {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_check, container, false);
+        View view =  inflater.inflate(R.layout.fragment_check, container, false);
+
+        // Initialize Buttons
+        final Button checkChord = (Button) view.findViewById(R.id.button_check_user_chord);
+        final Button playBuiltChord = (Button) view.findViewById(R.id.button_playback_slider_chord);
+
+        // Set the preview button function
+        playBuiltChord.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN)
+                {
+                    chordHandler.buildCurrentChord(getActivity());
+                    soundHandler.playChord(getActivity(), chordHandler.getCurrentBuiltChordSpelling(),
+                            chordHandler.getCurrentSelectedChord().getNumNotes());
+                }
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    soundHandler.stopSound();
+                }
+                return false;
+            }
+        });
+
+        // Set the check button function
+        checkChord.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(final View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP)
+                {
+                    // Momentarily disable the button
+                    v.setEnabled(false);
+                    v.postDelayed(new Runnable()
+                    {
+                        @Override
+                        public void run()
+                        {
+                            v.setEnabled(true);
+                        }
+                    }, 1000L);
+
+                    // Check the result
+                    Activity activity = getActivity();
+
+                    if (activity instanceof MainActivity)
+                        chordHandler.checkCurrentChord((MainActivity)activity);
+                }
+                return false;
+            }
+        });
+
+        // Return the view
+        return view;
     }
 }
