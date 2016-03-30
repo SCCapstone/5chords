@@ -9,9 +9,6 @@
  */
 package com.five_chords.chord_builder;
 
-
-import android.graphics.drawable.StateListDrawable;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;

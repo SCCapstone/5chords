@@ -5,7 +5,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -297,9 +296,13 @@ public class SliderFragment extends Fragment
 
         // Set values
         blockSliders = true;
+        rootSlider.setProgress(0);
         rootSlider.setMax(max);
+        thirdSlider.setProgress(0);
         thirdSlider.setMax(max);
+        fifthSlider.setProgress(0);
         fifthSlider.setMax(max);
+        optionSlider.setProgress(0);
         optionSlider.setMax(max);
         blockSliders = false;
     }
