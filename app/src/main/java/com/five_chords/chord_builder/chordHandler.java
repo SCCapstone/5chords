@@ -76,6 +76,14 @@ public class chordHandler
     }
 
     /**
+     * Resets the counter for the number of times the user has incorrectly guessed the current chord.
+     */
+    public static void resetCurrentWrongStreak()
+    {
+        currentWrongStreak = 0;
+    }
+
+    /**
      * Sets the OnChordSelectedListener attached to the chordHandler.
      * @param listener The new listener
      */
@@ -292,7 +300,7 @@ public class chordHandler
         // OR if we don't want to wait
         //activity.showChordCheckResult();
 
-//        // Handle result TODO add sounds for right and wrong
+//        // Handle result
 //        if (isCorrect)
 //        {
 //            // Launch dialog

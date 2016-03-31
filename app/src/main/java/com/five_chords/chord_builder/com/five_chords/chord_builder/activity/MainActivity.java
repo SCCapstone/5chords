@@ -3,6 +3,7 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.preference.PreferenceManager;
@@ -79,6 +80,15 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
 
     /** Thread to use for chord playback when the user guesses incorrectly. */
     private Thread playbackThread;
+
+//    /** The ToneGenerator to use for playing correct and wrong sounds. */
+//    private ToneGenerator toneGenerator;
+
+    /** The MediaPlayer to use for playing the correct sound. */
+    private MediaPlayer correctSoundPlayer;
+
+    /** The MediaPlayer to use for playing the wrong sound. */
+    private MediaPlayer wrongSoundPlayer;
 
 //    /** The chord playback functionality. */
 //    private Runnable playBackFunction = new Runnable()
@@ -182,6 +192,10 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
 
         // Create the client to handle contacting the developers
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+
+        // Create the sound player
+        correctSoundPlayer = MediaPlayer.create(this, R.raw.correct);
+        wrongSoundPlayer = MediaPlayer.create(this, R.raw.wrong);
     }
 
     /**
@@ -191,6 +205,10 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     protected void onDestroy() {
         // Make sure sound stops
         soundHandler.stopSound();
+
+        // Clean up sound players
+        correctSoundPlayer.release();
+        wrongSoundPlayer.release();
 
         super.onDestroy();
     }
@@ -372,9 +390,12 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         Score.getCurrentScore().update(this, isCorrect);
         updateDisplayedScore();
 
-        // Handle result TODO add sounds for right and wrong
+        // Handle result
         if (isCorrect)
         {
+            // Play sound
+            correctSoundPlayer.start();
+
             // Launch dialog
             new AlertDialog.Builder(this)
                     .setTitle(getString(R.string.thats_correct))
@@ -394,7 +415,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
                         @Override
                         public void onClick(DialogInterface dialog, int which)
                         {
-                            chordHandler.setSelectedChord(chordHandler.getCurrentSelectedChord(), false); // Resets the wrong streak counter
+                            chordHandler.resetCurrentWrongStreak();
+//                            chordHandler.setSelectedChord(chordHandler.getCurrentSelectedChord(), false); // Resets the wrong streak counter
                             getSliderFragment().resetChordSliders();
                             soundHandler.stopSound();
                         }
@@ -413,6 +435,9 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         }
         else
         {
+            // Play sound
+            wrongSoundPlayer.start();
+
             // Show hints if needed
             chordHandler.makeHints(this);
 
