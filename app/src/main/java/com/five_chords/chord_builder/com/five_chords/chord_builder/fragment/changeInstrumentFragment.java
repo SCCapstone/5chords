@@ -1,7 +1,9 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
-import android.app.Activity;
 import android.app.DialogFragment;
+import android.app.Fragment;
+import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +21,7 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.Main
  * A Fragment containing the chord select slider and the instrument select slider.
  * @author tstone95
  */
-public class changeInstrumentFragment extends DialogFragment
+public class changeInstrumentFragment extends Fragment
 {
     /** The available instruments names */
     public static final String[] INSTRUMENT_NAMES = {"Trumpet", "Piano", "Organ", "Violin", "Flute"};
@@ -42,14 +44,10 @@ public class changeInstrumentFragment extends DialogFragment
         // Inflate the View
         View view = inflater.inflate(R.layout.fragment_change_instrument, container, false);
 
-        // Set title
-        if (getDialog() != null)
-            getDialog().setTitle(R.string.change_instrument);
-
         ListView instrumentListView = (ListView)view.findViewById(R.id.instruments);
 
         // Populate the instrument select spinner
-        CustomList adapter = new CustomList(this.getActivity(), INSTRUMENT_NAMES, INSTRUMENT_ICONS);
+        CustomList adapter = new CustomList(getActivity(), R.layout.list_item_text_with_image);
         instrumentListView.setAdapter(adapter);
 
         // Set click listener
@@ -57,7 +55,6 @@ public class changeInstrumentFragment extends DialogFragment
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 MainActivity.getOptions().changeInstrument(position);
-                closeFragment();
             }
         });
 
@@ -66,42 +63,54 @@ public class changeInstrumentFragment extends DialogFragment
     }
 
     /**
-     * Create a new instance of changeInstrumentFragment.
-     * @return A new instance of changeInstrumentFragment
+     * A Custom list to contain images and text.
      */
-    public static changeInstrumentFragment newInstance()
-    {
-        changeInstrumentFragment f = new changeInstrumentFragment();
-        return f;
-    }
-
-    public void closeFragment() {
-        getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-    }
-
-
     public class CustomList extends ArrayAdapter<String>{
 
-        private final Activity context;
-        private final String[] text;
-        private final int[] imageId;
-        public CustomList(Activity context, String[] text, int[] imageId) {
-            super(context, R.layout.list_item_text_with_image, text);
-            this.context = context;
-            this.text = text;
-            this.imageId = imageId;
+        /**
+         * Constructor.
+         *
+         * @param context  The current context
+         * @param resource The resource ID for a layout file containing a TextView to use
+         */
+        public CustomList(Context context, int resource)
+        {
+            super(context, resource);
         }
+
+        /**
+         * Get the view that displays the data at the specified position.
+         * @param position The position of the item
+         * @param convertView The old view
+         * @param parent The parent viewgroup
+         * @return The view that displays the data
+         */
         @Override
-        public View getView(int position, View view, ViewGroup parent) {
-            LayoutInflater inflater = context.getLayoutInflater();
-            View rowView= inflater.inflate(R.layout.list_item_text_with_image, null, true);
-            TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
+        public View getView(int position, View convertView, ViewGroup parent) {
 
-            ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
-            txtTitle.setText(text[position]);
+            View view;
 
-            imageView.setImageResource(imageId[position]);
-            return rowView;
+            // Reuse old view if possible
+            if (convertView != null)
+                view = convertView;
+            else
+                view = LayoutInflater.from(getContext()).inflate(R.layout.list_item_text_with_image, parent, false);
+
+            // Get components on View
+            TextView txtTitle = (TextView) view.findViewById(R.id.txt);
+            ImageView imageView = (ImageView) view.findViewById(R.id.img);
+
+            // Set component values
+            txtTitle.setText(INSTRUMENT_NAMES[position]);
+            imageView.setImageResource(INSTRUMENT_ICONS[position]);
+
+            // Make the current instrument name bold
+            if (MainActivity.getOptions().instrument == position)
+                txtTitle.setTypeface(null, Typeface.BOLD);
+            else
+                txtTitle.setTypeface(null, Typeface.NORMAL);
+
+            return view;
         }
     }
 
