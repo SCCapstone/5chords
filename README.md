@@ -1,15 +1,37 @@
 ####
-# 5chords, PreAlpha
+# 5chords, Beta
 #
 
-This is the very early version I showed in the meeting with an audio fix (i think).
-I only added major chords for now, it won't be a hastle to add minor or diminished or whatever he wants.
-Also it only have piano/middle octive notes (directory is app/src/main/res/raw).
+**Purpose and Description**
 
-The Random button will pick a random number from 0-11, get and play the corresponding chord from the chord array.
-The Chord button just replays the chord.
-The Check button gets the slider notes, plays them, and checks agaisnt the chord notes.
-Displays yes/no on one label and the correct slider values on the other.
-The fourth slider doesn't do anything, the others have values from 0-18 (3rd octive C - 4th octive F#).
+Chord Builder is an application to help music students learn music theory and intonation without the skills required to play an instrument perfectly. 
+Chord Builder allows users to build and play musical chords on a simple user interface, with the goal of reproducing chords played by the app. 
 
-If you get an AudioTrack error I don't know how to fix it. It might go away if we replace SoundPool with the new SoundPool.Builder library. If you get AUDIO_OUTPUT_FLAG_FAST error the sound will still play. The internet says it has something to do with the sample rate.
+**Installation**
+
+WIP
+
+**General Usage**
+
+Use the vertical sliders on the main screen of the application to build a chord note by note. These notes can be played individually by touching the slider thumb for each note or all at once by pressing the _PREVIEW_ button at the bottom of the screen.
+
+The goal of the app is to reproduce musical chords; use the region at the top of the main screen to choose and play chords that you want to reproduce. Chords can be chosen specifically by selecting them on the spinner at the top of the screen or at random by using the shuffle button on the right. The chosen chord can be played by pressing the play button on the left. 
+
+If the spinner does not contain the chords you want to replicate, navigate to the settings by swiping the navigation pane in from the left and clicking _SETTINGS_ → _CHOOSE CHORDS_. On this screen you can select which chords you want to be available on the main screen. A list of the chords that are currently supported in this app is included at the end of this document. 
+
+A variety of other settings including hints, instrument selection, and slider granularity are also included on the _SETTINGS_ page.
+
+The users current progress in correctly reproducing chords can be viewed at the top of the main screen beneath the chord selection spinner or over time by clicking _VIEW_HISTORY_ on the navigation pane.
+
+**_Available Chords_**
+* Major
+* Minor
+* Dominant
+* Augmented Triad
+* Diminished Triad
+* Diminished Seventh
+* Minor Seventh
+* Minor Major Seventh
+* Major Seventh
+* Augmented Seventh
+* Augmented Major Seventh
