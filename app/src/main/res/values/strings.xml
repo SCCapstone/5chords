@@ -85,8 +85,16 @@
     <string name="contact_professional_musician">Contact Musician</string>
     <string name="basics_for_playing">Basics For Playing</string>
     <string name="contact_us">Contact Us</string>
+    <string name="about_us">About Us</string>
+    <string name="created_by">Created By:</string>
 
     <!-- Long Strings -->
+    <string name="about_page_content">We are 5Chords!\n\nWe are students at the University of South Carolina working on our Capstone Computing Project.
+        \n\nTogether we have developed an application that will help music students learn music theory and intonation without the skills required to play an instrument perfectly.
+        \n\nOur goal is to give music learners an easier method to learn music theory."</string>
+
+    <string name="about_page_credits"> Drea Zeagler\nZachary Askins\nKevin Hyun\nTheodore Stone\n</string>
+
     <string name="help_page_content">♫ Use the vertical sliders on the main screen of the application to build a chord note by note.
         \n\n♫ Play these notes individually by touching the slider thumb for each note or all at once by pressing the PREVIEW button at the bottom of the screen.
         \n\n♫ Use the buttons at the top main screen to choose and play chords that you want to reproduce.

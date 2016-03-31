@@ -12,45 +12,52 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- Title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="About Us:"
-            android:id="@+id/textView3"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="16dp"
+            android:text="@string/about_us"
+            android:textSize="@dimen/text_size_large"
+            android:textColor="@android:color/black"
             android:textStyle="bold" />
 
+        <!-- Content -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="We are 5Chords!\nWe are students at the University of South Carolina working on our Capstone Computing Project. \nTogether We have developed an application that will help music students learn music theory and intonation without the skills required to play them perfectly. Our goal is to give music learners an easier method to learn music theory."
-            android:textStyle="bold"
+            android:text="@string/about_page_content"
             android:textSize="@dimen/text_size_medium" />
 
+        <!-- Credits title -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Created by:\nDrea Zeagler\nZachary Askins\nKevin Hyun\nTheodore Stone\n"
-            android:textStyle="bold"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/created_by"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold" />
+
+        <!-- Credits -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="@string/about_page_credits"
             android:textSize="@dimen/text_size_medium" />
 
+        <!-- Done button -->
         <Button
             style="?android:attr/buttonStyleSmall"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="backToMain"
-            android:text="Done"
-            android:id="@+id/button_done"
             android:layout_gravity="center_horizontal"
-            android:background="@drawable/buttons"
+            android:background="@drawable/button_selector"
+            android:onClick="backToMain"
+            android:text="@string/done"
             android:textColor="#ffffff"/>
-
-
-
-
 
     </LinearLayout>
 
