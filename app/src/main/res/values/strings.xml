@@ -81,4 +81,18 @@
     <string name="hint_delay_set_message">Three types of hints will appear after some number of incorrect guesses.</string>
     <string name="title_activity_contact__us">Contact Us</string>
     <string name="change_instrument">Change the instrument</string>
+    <string name="contact_developers">Contact Developers</string>
+    <string name="contact_professional_musician">Contact Musician</string>
+    <string name="basics_for_playing">Basics For Playing</string>
+    <string name="contact_us">Contact Us</string>
+
+    <!-- Long Strings -->
+    <string name="help_page_content">♫ Use the vertical sliders on the main screen of the application to build a chord note by note.
+        \n\n♫ Play these notes individually by touching the slider thumb for each note or all at once by pressing the PREVIEW button at the bottom of the screen.
+        \n\n♫ Use the buttons at the top main screen to choose and play chords that you want to reproduce.
+        \n\n♫ Test whether the current built chords matches the current selected chord by pressing CHECK at the bottom of the screen.
+        \n\n♫ Choose more chord types by swiping the navigation pane in from the left and clicking SETTINGS → CHOOSE CHORDS.
+        </string>
+
+    <string name="contact_us_description">Please feel free to contact both a professional musician\'s help or the developer team below with your email.</string>
 </resources>

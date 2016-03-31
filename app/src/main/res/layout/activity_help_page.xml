@@ -17,8 +17,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Basics for playing:"
+        android:text="@string/basics_for_playing"
+        android:textSize="@dimen/text_size_large"
+        android:textColor="@android:color/black"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="16dp"
         android:textStyle="bold"/>
@@ -26,59 +27,71 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" \u2022 To use this application, you must first select a chord to replicate using either the drop down menu or the 'Random Chord' button.\n \u2022 After that you will hear a number of notes, also called a cord.\n \u2022 Your job is to use the sliders to match the chord, and then press the 'CHECK' button to see if you are correct.\n \u2022 Note: if you want to hear the cord again, press the 'PREVIEW' button."
-            android:textSize="16dp"
-            android:textStyle="bold"
+            android:text="@string/help_page_content"
+            android:textSize="@dimen/text_size_medium"
             android:singleLine="false"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Contact Us"
             android:layout_marginTop="32dp"
             android:layout_marginBottom="16dp"
+            android:text="@string/contact_us"
+            android:textSize="@dimen/text_size_large"
+            android:textColor="@android:color/black"
             android:textStyle="bold"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Please feel free to contact both a professional musician&apos;s help or the developer team below with your email."
-            android:textSize="16dp"
+            android:layout_margin="4dp"
+            android:text="@string/contact_us_description"
+            android:textSize="@dimen/text_size_medium"
             android:singleLine="false" />
 
         <LinearLayout
+            style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
             <Button
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="Contact Developers"
                 android:id="@+id/contact_dev"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/buttons"
+                android:padding="4dp"
+                android:background="@drawable/button_selector"
+                android:ellipsize="end"
+                android:text="@string/contact_developers"
+                android:textSize="@dimen/text_size_small"
                 android:textColor="#ffffff" />
 
             <Button
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:text="Contact Professional Muscian"
                 android:id="@+id/contact_pro"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:background="@drawable/buttons"
+                android:padding="4dp"
+                android:background="@drawable/button_selector"
+                android:ellipsize="end"
+                android:text="@string/contact_professional_musician"
+                android:textSize="@dimen/text_size_small"
                 android:textColor="#ffffff" />
 
             <Button
+                android:id="@+id/button_done"
+                style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:text="Done"
-                android:onClick="backToMain"
-                android:id="@+id/button_done"
                 android:layout_weight="1"
-                android:background="@drawable/buttons"
+                android:padding="4dp"
+                android:background="@drawable/button_selector"
+                android:onClick="backToMain"
+                android:text="@string/done"
+                android:textSize="@dimen/text_size_medium"
                 android:textColor="#ffffff" />
 
 
