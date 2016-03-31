@@ -249,89 +249,116 @@ public class chordHandler
     }
 
     /**
+     * Called when Hints should be displayed.
+     * @param activity The current MainActivity
+     */
+    public static void makeHints(MainActivity activity)
+    {
+        // Increment the wrong streak counter
+        currentWrongStreak++;
+
+        // Show hints
+        if (MainActivity.getOptions().useHints)
+        {
+            int[] hintDelays = MainActivity.getOptions().hintTypeDelays;
+
+            if (currentWrongStreak > hintDelays[2])
+                activity.makeHint(HINT_THREE);
+            else if (currentWrongStreak > hintDelays[1])
+                activity.makeHint(HINT_TWO);
+            else if (currentWrongStreak > hintDelays[0])
+                activity.makeHint(HINT_ONE);
+        }
+    }
+
+    /**
+     * Tests whether or not the current selected and built chords are correct.
+     * @return Whether or not the current selected and built chords are correct
+     */
+    public static boolean testCurrentChords()
+    {
+        return Chord.compareChords(currentBuiltChordSpelling, currentSelectedChordSpelling,
+                getCurrentSelectedChord().TYPE.offsets.length);
+    }
+
+    /**
      * Called when the user checks the current chord.
      * @param activity Handle to the MainActivity
      */
     public static void checkCurrentChord(final MainActivity activity)
     {
-        // Make sure the current Chord is built
-        buildCurrentChord(activity);
+        activity.showChordSequence();
 
-        // Test correctness
-        boolean isCorrect = Chord.compareChords(currentBuiltChordSpelling, currentSelectedChordSpelling,
-                getCurrentSelectedChord().TYPE.offsets.length);
+        // OR if we don't want to wait
+        //activity.showChordCheckResult();
 
-        // Set the score
-        Score.getCurrentScore().update(activity, isCorrect);
-        activity.updateDisplayedScore();
-
-        // Handle result TODO add sounds for right and wrong
-        if (isCorrect)
-        {
-            // Launch dialog
-            new AlertDialog.Builder(activity)
-                    .setTitle(activity.getString(R.string.thats_correct))
-                    .setMessage("Do you want to try another chord?")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            getRandomChord();
-                            activity.getSliderFragment().resetChordSliders();
-                            soundHandler.stopSound();
-
-                        }
-
-                    })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            setSelectedChord(currentSelectedChord, false); // Resets the wrong streak counter
-                            activity.getSliderFragment().resetChordSliders();
-                            soundHandler.stopSound();
-                        }
-
-                    })
-                    .setOnCancelListener(new DialogInterface.OnCancelListener()
-                    {
-                        @Override
-                        public void onCancel(DialogInterface dialog)
-                        {
-                            activity.getSliderFragment().resetChordSliders();
-                            soundHandler.stopSound();
-                        }
-                    })
-                    .show();
-        }
-        else
-        {
-            // Increment the wrong streak counter
-            currentWrongStreak++;
-
-            // Show hints
-            if (MainActivity.getOptions().useHints)
-            {
-                int[] hintDelays = MainActivity.getOptions().hintTypeDelays;
-
-                if (currentWrongStreak > hintDelays[2])
-                    activity.makeHint(HINT_THREE);
-                else if (currentWrongStreak > hintDelays[1])
-                    activity.makeHint(HINT_TWO);
-                else if (currentWrongStreak > hintDelays[0])
-                    activity.makeHint(HINT_ONE);
-            }
-
-            // Show toast
-            Toast toast = Toast.makeText(activity, activity.getString(R.string.thats_incorrect), Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-
-            // Show correct chord
-            activity.showCorrectChord();
-        }
+//        // Handle result TODO add sounds for right and wrong
+//        if (isCorrect)
+//        {
+//            // Launch dialog
+//            new AlertDialog.Builder(activity)
+//                    .setTitle(activity.getString(R.string.thats_correct))
+//                    .setMessage("Do you want to try another chord?")
+//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+//                    {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which)
+//                        {
+//                            getRandomChord();
+//                            activity.getSliderFragment().resetChordSliders();
+//                            soundHandler.stopSound();
+//
+//                        }
+//
+//                    })
+//                    .setNegativeButton("No", new DialogInterface.OnClickListener()
+//                    {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which)
+//                        {
+//                            setSelectedChord(currentSelectedChord, false); // Resets the wrong streak counter
+//                            activity.getSliderFragment().resetChordSliders();
+//                            soundHandler.stopSound();
+//                        }
+//
+//                    })
+//                    .setOnCancelListener(new DialogInterface.OnCancelListener()
+//                    {
+//                        @Override
+//                        public void onCancel(DialogInterface dialog)
+//                        {
+//                            activity.getSliderFragment().resetChordSliders();
+//                            soundHandler.stopSound();
+//                        }
+//                    })
+//                    .show();
+//        }
+//        else
+//        {
+//            // Increment the wrong streak counter
+//            currentWrongStreak++;
+//
+//            // Show hints
+//            if (MainActivity.getOptions().useHints)
+//            {
+//                int[] hintDelays = MainActivity.getOptions().hintTypeDelays;
+//
+//                if (currentWrongStreak > hintDelays[2])
+//                    activity.makeHint(HINT_THREE);
+//                else if (currentWrongStreak > hintDelays[1])
+//                    activity.makeHint(HINT_TWO);
+//                else if (currentWrongStreak > hintDelays[0])
+//                    activity.makeHint(HINT_ONE);
+//            }
+//
+//            // Show toast
+//            Toast toast = Toast.makeText(activity, activity.getString(R.string.thats_incorrect), Toast.LENGTH_SHORT);
+//            toast.setGravity(Gravity.CENTER, 0, 0);
+//            toast.show();
+//
+//            // Show correct chord
+//            activity.showChordSequence();
+//        }
     }
 
     /**

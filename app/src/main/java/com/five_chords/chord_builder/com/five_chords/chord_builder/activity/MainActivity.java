@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.content.DialogInterface;
@@ -39,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * The Main Activity. This class contains callbacks to handle the majority of the
@@ -49,7 +51,7 @@ import android.widget.TextView;
  * @author Drea,Steven,Zach,Kevin,Bo,Theodore
  */
 public class MainActivity extends AppCompatActivity implements Options.OptionsChangedListener,
-        chordHandler.OnChordSelectedListener
+        chordHandler.OnChordSelectedListener, View.OnClickListener
 {
     /** The current options selected in this MainActivity. */
     private static Options options;
@@ -78,37 +80,15 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     /** Thread to use for chord playback when the user guesses incorrectly. */
     private Thread playbackThread;
 
-    /** The chord playback functionality. */
-    private Runnable playBackFunction = new Runnable()
-    {
-        @Override
-        public void run()
-        {
-            // Sleep
-            try {Thread.sleep(750L);} catch (InterruptedException e) {/* Do nothing */}
-
-            // Play Built chord
-            MainActivity.this.checkFragment.playBuiltChord(true);
-
-            // Sleep
-            try {Thread.sleep(1500L);} catch (InterruptedException e) {/* Do nothing */}
-
-            // Stop Built chord
-            MainActivity.this.checkFragment.playBuiltChord(false);
-
-            // Sleep
-            try {Thread.sleep(500L);} catch (InterruptedException e) {/* Do nothing */}
-
-            // Play Correct chord
-            MainActivity.this.chordSelectFragment.playSelectedChord(true);
-
-            // Sleep
-            try {Thread.sleep(1500L);} catch (InterruptedException e) {/* Do nothing */}
-
-            // Stop Correct chord
-            MainActivity.this.chordSelectFragment.playSelectedChord(false);
-        }
-    };
+//    /** The chord playback functionality. */
+//    private Runnable playBackFunction = new Runnable()
+//    {
+//        @Override
+//        public void run()
+//        {
+//
+//        }
+//    };
 
     /**
      * Gets the current global Options wrapper, creating a default Options if the global is null.
@@ -252,12 +232,28 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     protected void onResume() {
         super.onResume();
 
+        // Set listener to Views
+        findViewById(R.id.MainLayout).setOnClickListener(this);
+
         // Get references to fragments
         sliderFragment = (SliderFragment)getFragmentManager().findFragmentById(R.id.fragment_sliders);
         chordInstrumentSelectFragment =
                 (ChordSelectFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_select);
         checkFragment = (CheckFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_check);
         chordSelectFragment = (ChordSelectFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_select);
+    }
+
+    /**
+     * Called when this Activity is paused.
+     */
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+
+        // Stop the playback thread if needed
+        if (playbackThread != null && playbackThread.isAlive())
+            playbackThread.interrupt();
     }
 
     /**
@@ -349,12 +345,82 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     }
 
     /**
-     * Shows the correct chord.
+     * Shows the chord sequence.
      */
-    public void showCorrectChord()
+    public void showChordSequence()
     {
-        playbackThread = new Thread(playBackFunction);
+        // Stop the playback thread if needed
+        if (playbackThread != null && playbackThread.isAlive())
+            playbackThread.interrupt();
+
+        playbackThread = new PlaybackSequence();
         playbackThread.start();
+    }
+
+    /**
+     * Shows the chord check result dialog.
+     */
+    public void showChordCheckResult()
+    {
+        // Make sure the current Chord is built
+        chordHandler.buildCurrentChord(this);
+
+        // Test correctness
+        boolean isCorrect = chordHandler.testCurrentChords();
+
+        // Set the score
+        Score.getCurrentScore().update(this, isCorrect);
+        updateDisplayedScore();
+
+        // Handle result TODO add sounds for right and wrong
+        if (isCorrect)
+        {
+            // Launch dialog
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.thats_correct))
+                    .setMessage("Do you want to try another chord?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            chordHandler.getRandomChord();
+                            getSliderFragment().resetChordSliders();
+                            soundHandler.stopSound();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which)
+                        {
+                            chordHandler.setSelectedChord(chordHandler.getCurrentSelectedChord(), false); // Resets the wrong streak counter
+                            getSliderFragment().resetChordSliders();
+                            soundHandler.stopSound();
+                        }
+
+                    })
+                    .setOnCancelListener(new DialogInterface.OnCancelListener()
+                    {
+                        @Override
+                        public void onCancel(DialogInterface dialog)
+                        {
+                            getSliderFragment().resetChordSliders();
+                            soundHandler.stopSound();
+                        }
+                    })
+                    .show();
+        }
+        else
+        {
+            // Show hints if needed
+            chordHandler.makeHints(this);
+
+            // Show toast
+            Toast toast = Toast.makeText(this, this.getString(R.string.thats_incorrect), Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        }
     }
 
     /**
@@ -388,6 +454,18 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
             view = (SliderHintView) findViewById(R.id.slider_option_layout);
             view.setHint(type, builtChord[3], selectedChord[3], sliderFragment, 500L);
         }
+    }
+
+    /**
+     * Called when a view has been clicked.
+     *
+     * @param v The view that was clicked.
+     */
+    @Override
+    public void onClick(View v)
+    {
+        if (playbackThread != null && !playbackThread.isInterrupted())
+            playbackThread.interrupt();
     }
 
     /**
@@ -513,6 +591,80 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
                     break;
             }
             mDrawerLayout.closeDrawer(mDrawerList);
+        }
+    }
+
+    /**
+     * A Thread to handle the playback sequence.
+     */
+    private class PlaybackSequence extends Thread
+    {
+        /**
+         * Starts executing the active part of the class' code. This method is
+         * called when a thread is started that has been created with a class which
+         * implements {@code Runnable}.
+         */
+        @Override
+        public void run()
+        {
+            // Sleep
+            try {Thread.sleep(50L);} catch (InterruptedException e)
+            {
+                onEnd();
+                return;
+            }
+
+            // Play Built chord
+            MainActivity.this.checkFragment.playBuiltChord(true);
+
+            // Sleep
+            try {Thread.sleep(1000L);} catch (InterruptedException e)
+            {
+                MainActivity.this.checkFragment.playBuiltChord(false);
+                onEnd();
+                return;
+            }
+
+            // Stop Built chord
+            MainActivity.this.checkFragment.playBuiltChord(false);
+
+            // Sleep
+            try {Thread.sleep(250L);} catch (InterruptedException e)
+            {
+                onEnd();
+                return;
+            }
+
+            // Play Correct chord
+            MainActivity.this.chordSelectFragment.playSelectedChord(true);
+
+            // Sleep
+            try {Thread.sleep(1000L);} catch (InterruptedException e)
+            {
+                MainActivity.this.chordSelectFragment.playSelectedChord(false);
+                onEnd();
+                return;
+            }
+
+            // Stop Correct chord
+            MainActivity.this.chordSelectFragment.playSelectedChord(false);
+
+            onEnd();
+        }
+
+        /**
+         * Called when this PlaybackSequence ends.
+         */
+        public void onEnd()
+        {
+            runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    showChordCheckResult();
+                }
+            });
         }
     }
 }
