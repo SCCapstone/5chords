@@ -1,39 +1,36 @@
-/**
- * The Score page.
- * This class sets up the Score Page and it's buttons. The Score Page contains the score history views.
- * @version 1.0
- * @date 16 March 2016
- * @author: Drea,Steven,Zach,Theodore
- */
 package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
-import android.content.Intent;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.Button;
 
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 
-
+/**
+ * The Score page Activity. ScorePage contains the history view for each chord as well as a slider to select
+ * which chord types to see. ScorePage also contains a button to reset scores.
+ * @date 31 March 2016
+ * @author Drea,Steven,Zach,Theodore
+ */
 public class ScorePage extends AppCompatActivity
 {
-    @Override
     /**
-     * Creation code for the Score Page.
+     * Called when this Activity is created.
+     * @param savedInstanceState Bundle containing the saved instance state
      */
+    @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score_page);
     }
 
-   /**
-    * Goes back to mainActivity on Call
-    * @ param  Button Call
-    * The MainActivity call
-    */
+    /**
+     * Called to return to the MainActivity.
+     * @param view The calling View
+     */
     public void backToMain(View view)
     {
         finish();
@@ -46,7 +43,5 @@ public class ScorePage extends AppCompatActivity
     public void clearScores(View view)
     {
         Score.resetScores(this);
-
-        // TODO Invalidate Score History Fragment
     }
 }

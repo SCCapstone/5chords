@@ -1,9 +1,3 @@
-/*************************************************************************************************
- * Activity containing the App settings user interface.
- * @version 1.0
- * @date 06 November 2015
- * @author: Drea,Steven,Zach,Kevin,Bo
- */
 package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
 import android.app.Activity;
@@ -19,16 +13,20 @@ import android.widget.Toast;
 import com.five_chords.chord_builder.Chord;
 import com.five_chords.chord_builder.R;
 
+/**
+ * Activity containing the chord type selection. This Activity ensures that at least one chord type will
+ * always be selected.
+ * @date 06 November 2015
+ * @author Drea,Steven,Zach,Kevin,Bo,Theodore
+ */
 public class SettingsChords extends Activity
 {
-    private ArrayAdapter<SettingsOption> optionsAdapter;
-    private Activity activity;
-
-    /** The chords the user wants to use */
+    /** The chords the user wants to use. */
     private static boolean[] chordOptions;
 
     /**
-     * Activity Creator
+     * Called when this Activity is created.
+     * @param savedInstanceState Bundle containing the saved instance state
      */
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,11 +38,11 @@ public class SettingsChords extends Activity
         ListView view = (ListView) findViewById(R.id.settings_content);
 
         chordOptions = MainActivity.getOptions().chordTypesInUseArray;
-        optionsAdapter = new ArrayAdapter<>(this, R.layout.centered_list_items);
+        final ArrayAdapter<SettingsPage.SettingsOption> optionsAdapter = new ArrayAdapter<>(this, R.layout.centered_list_items);
 
         for (final Chord.ChordType type: Chord.ChordType.values())
         {
-            optionsAdapter.add(new SettingsOption(type + " are " + ((chordOptions[type.ordinal()]) ? "Enabled" : "Disabled")) {
+            optionsAdapter.add(new SettingsPage.SettingsOption(type + " are " + ((chordOptions[type.ordinal()]) ? "Enabled" : "Disabled")) {
                 @Override
                 public void performAction() {
                     if (this.name.contains("Disabled")) {
@@ -69,22 +67,18 @@ public class SettingsChords extends Activity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object obj = parent.getItemAtPosition(position);
 
-                if (obj instanceof SettingsOption)
-                    ((SettingsOption) obj).performAction();
+                if (obj instanceof SettingsPage.SettingsOption)
+                    ((SettingsPage.SettingsOption) obj).performAction();
             }
         });
 
         // Get the list view of settings
         view.setAdapter(optionsAdapter);
-
-        activity = this;
     }
 
-
     /**
-     * Goes back to mainActivity on Call
-     * @ param  Button Call
-     * The MainActivity call
+     * Called to return to the MainActivity.
+     * @param view The calling View
      */
     public void backToMain(View view)
     {
@@ -96,48 +90,19 @@ public class SettingsChords extends Activity
         this.overridePendingTransition(0, 0);
     }
 
+    /**
+     * Tests whether or not at least one chord type is enabled.
+     * @return Whether or not at least one chord type is enabled
+     */
     private boolean isValidSelection() {
         for (boolean chordOption : chordOptions)
             if (chordOption) return true;
 
         // Show toast
-        Toast toast = Toast.makeText(activity, activity.getString(R.string.settingsChordsInvalid), Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(this, getString(R.string.settingsChordsInvalid), Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
 
         return false;
-    }
-
-    /**
-     * Class representing an object in the SettingsPage list of options.
-     */
-    public abstract class SettingsOption
-    {
-        /** The name of the SettingsOption. */
-        public String name;
-
-        /**
-         * Constructs a new SettingsOption.
-         * @param name The name of the SettingsOption
-         */
-        public SettingsOption(String name)
-        {
-            this.name = name;
-        }
-
-        /**
-         * Called to perform the action of this SettingsOption.
-         */
-        public abstract void performAction();
-
-        /**
-         * Gets a String representation of this SettingsObject.
-         * @return A String representation of this SettingsObject
-         */
-        @Override
-        public String toString()
-        {
-            return name;
-        }
     }
 }

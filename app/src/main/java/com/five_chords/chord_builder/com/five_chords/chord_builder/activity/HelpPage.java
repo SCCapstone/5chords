@@ -1,10 +1,3 @@
-/*************************************************************************************************
- * HelpPage.java
- * This class sets up the Help Page and its buttons
- * @version 1.0
- * @date 06 November 2015
- * @author: Drea,Steven,Zach,Kevin,Bo
- */
 package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
 import android.content.Intent;
@@ -15,13 +8,19 @@ import android.widget.Button;
 
 import com.five_chords.chord_builder.R;
 
+
+/**
+ * The Help page Activity.
+ * @date 31 March 2016
+ * @author Drea,Steven,Zach,Kevin,Bo
+ */
 public class HelpPage extends AppCompatActivity
 {
-    @Override
-    /*************************************************************
-     * Create Activity to have help page for users
-     *
+    /**
+     * Called when this Activity is created.
+     * @param savedInstanceState Bundle containing the saved instance state
      */
+    @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -42,9 +41,7 @@ public class HelpPage extends AppCompatActivity
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
 
                 emailIntent.setType("message/rfc822");
-                //standard ARPA startin
                 startActivity(Intent.createChooser(emailIntent, "Choose your email client:"));
-                //startActivityForResult(emailIntent,"Send" );
             }
         });
 
@@ -67,11 +64,9 @@ public class HelpPage extends AppCompatActivity
         });
     }
 
-
     /**
-     * Goes back to mainActivity on Call
-     * @ param Button Call
-     * MainActivity Call
+     * Called to return to the MainActivity.
+     * @param view The calling View
      */
     public void backToMain(View view)
     {

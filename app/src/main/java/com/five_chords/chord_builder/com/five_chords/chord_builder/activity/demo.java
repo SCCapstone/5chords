@@ -1,12 +1,5 @@
-/*************************************************************************************************
- * demo.java
- * @version 1.0
- * @date 06 November 2015
- * @author: Drea,Steven,Zach,Kevin,Bo
- */
 package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -15,14 +8,20 @@ import android.widget.ImageView;
 
 import com.five_chords.chord_builder.R;
 
+/**
+ * The startup demo Activity.
+ * @version 1.0
+ * @date 06 November 2015
+ * @author Drea,Steven,Zach,Kevin,Bo
+ */
 public class demo extends AppCompatActivity
 {
-    @Override
     /**
      * Activity Create and checks first launch
      * If first launch, go to Tutorial, otherwise
      * Goes straight to the MainActivity
      */
+    @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -41,10 +40,10 @@ public class demo extends AppCompatActivity
             }
         });
     }
+
     /**
-     * Goes to mainActivity on Call
-     * @ param  Button Call
-     *  Initiates MainActivity
+     * Called to go the MainActivity.
+     * @param view The calling View
      */
     public void skip_button(View view)
     {

@@ -1,15 +1,9 @@
-/*************************************************************************************************
- * Activity containing the App settings user interface.
- * @version 1.0
- * @date 06 November 2015
- * @author: Drea,Steven,Zach,Kevin,Bo
- */
 package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,12 +12,15 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.five_chords.chord_builder.Chord;
 import com.five_chords.chord_builder.R;
 
-public class SettingsInstruments extends Activity
+/**
+ * Activity containing the instrument selection.
+ * @date 31 March 2016
+ * @author Drea,Steven,Zach,Kevin,Bo,Theodore
+ */
+public class SettingsInstruments extends Activity implements AdapterView.OnItemClickListener
 {
     /** The available instruments names */
     public static final String[] INSTRUMENT_NAMES = {"Trumpet", "Piano", "Organ", "Violin", "Flute"};
@@ -32,37 +29,31 @@ public class SettingsInstruments extends Activity
     public static final int[] INSTRUMENT_ICONS = {R.drawable.trumpet, R.drawable.piano, R.drawable.organ,
             R.drawable.violin, R.drawable.flute};
 
+    /** The array of instrument name view handles. */
+    private TextView[] instrumentNames;
 
     /**
-     * Activity Creator
+     * Called when this Activity is created.
+     * @param savedInstanceState Bundle containing the saved instance state
      */
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        // Create the instrument name array
+        instrumentNames = new TextView[INSTRUMENT_NAMES.length];
+
+        // Set content view
         setContentView(R.layout.activity_settings_instrument);
 
-        ListView instrumentListView = (ListView) findViewById(R.id.instruments);
-
         // Populate the instrument select spinner
-        CustomList adapter = new CustomList(this, INSTRUMENT_NAMES, INSTRUMENT_ICONS);
-        instrumentListView.setAdapter(adapter);
-
-        // Set click listener
-        instrumentListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                MainActivity.getOptions().changeInstrument(position);
-                backToMain(view);
-            }
-        });
+        populateInstrumentSelector();
     }
 
-
     /**
-     * Goes back to mainActivity on Call
-     * @ param  Button Call
-     * The MainActivity call
+     * Called to return to the MainActivity.
+     * @param view The calling View
      */
     public void backToMain(View view)
     {
@@ -70,28 +61,90 @@ public class SettingsInstruments extends Activity
         this.overridePendingTransition(0, 0);
     }
 
+    /**
+     * Callback method to be invoked when an item in this AdapterView has
+     * been clicked.
+     * <p/>
+     * Implementers can call getItemAtPosition(position) if they need
+     * to access the data associated with the selected item.
+     *
+     * @param parent   The AdapterView where the click happened.
+     * @param view     The view within the AdapterView that was clicked (this
+     *                 will be a view provided by the adapter)
+     * @param position The position of the view in the adapter.
+     * @param id       The row id of the item that was clicked.
+     */
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+    {
+        MainActivity.getOptions().changeInstrument(position);
+        populateInstrumentSelector();
+    }
+
+    /**
+     * Populates the instrument selector.
+     */
+    private void populateInstrumentSelector()
+    {
+        ListView instrumentListView = (ListView) findViewById(R.id.instruments);
+        instrumentListView.setOnItemClickListener(null);
+
+        // Populate the instrument select spinner
+        CustomList adapter = new CustomList(this, R.layout.list_item_text_with_image);
+        adapter.addAll(INSTRUMENT_NAMES);
+        instrumentListView.setAdapter(adapter);
+
+        // Set click listener
+        instrumentListView.setOnItemClickListener(this);
+    }
+
+    /**
+     * A Custom list to contain images and text.
+     */
     public class CustomList extends ArrayAdapter<String>{
 
-        private final Activity context;
-        private final String[] text;
-        private final int[] imageId;
-        public CustomList(Activity context, String[] text, int[] imageId) {
-            super(context, R.layout.list_item_text_with_image, text);
-            this.context = context;
-            this.text = text;
-            this.imageId = imageId;
+        /**
+         * Constructor.
+         *
+         * @param context  The current context
+         * @param resource The resource ID for a layout file containing a TextView to use
+         */
+        public CustomList(Context context, int resource)
+        {
+            super(context, resource);
         }
+
+        /**
+         * Get the view that displays the data at the specified position.
+         * @param position The position of the item
+         * @param convertView The old view
+         * @param parent The parent viewgroup
+         * @return The view that displays the data
+         */
         @Override
-        public View getView(int position, View view, ViewGroup parent) {
-            LayoutInflater inflater = context.getLayoutInflater();
-            View rowView= inflater.inflate(R.layout.list_item_text_with_image, null, true);
-            TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
+        public View getView(int position, View convertView, ViewGroup parent) {
 
-            ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
-            txtTitle.setText(text[position]);
+            View view;
 
-            imageView.setImageResource(imageId[position]);
-            return rowView;
+            // Reuse old view if possible
+            if (convertView != null)
+                view = convertView;
+            else
+                view = LayoutInflater.from(getContext()).inflate(R.layout.list_item_text_with_image, parent, false);
+
+            // Get components on View
+            TextView txtTitle = (TextView) view.findViewById(R.id.txt);
+            ImageView imageView = (ImageView) view.findViewById(R.id.img);
+            instrumentNames[position] = txtTitle;
+
+            // Set component values
+            txtTitle.setText(INSTRUMENT_NAMES[position]);
+            imageView.setImageResource(INSTRUMENT_ICONS[position]);
+
+            // Make the name of the currently selected instrument bold
+            txtTitle.setTypeface(null, (position == MainActivity.getOptions().instrument) ? Typeface.BOLD : Typeface.NORMAL);
+
+            return view;
         }
     }
 

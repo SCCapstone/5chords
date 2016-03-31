@@ -17,10 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordInversionSettingsFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.HintSettingsFragment;
-import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.PitchBendSettingsFragment;
-import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.changeInstrumentFragment;
 
 import com.five_chords.chord_builder.R;
 
@@ -187,7 +184,7 @@ public class SettingsPage extends Activity
     /**
      * Class representing an object in the SettingsPage list of options.
      */
-    public abstract class SettingsOption
+    public static abstract class SettingsOption
     {
         /** The name of the SettingsOption. */
         public String name;

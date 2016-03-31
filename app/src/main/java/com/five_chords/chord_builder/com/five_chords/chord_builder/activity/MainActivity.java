@@ -1,11 +1,3 @@
-/*************************************************************************************************
- * MainActivity.java
- * This class is where most of the activity happened. This is where all the other class and their
- * functions will be called from.
- * @version 1.0
- * @date 06 November 2015
- * @author: Drea,Steven,Zach,Kevin,Bo
- */
 package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
 import android.content.Intent;
@@ -44,18 +36,25 @@ import java.util.List;
 
 import android.widget.TextView;
 
+/**
+ * The Main Activity. This class contains callbacks to handle the majority of the
+ * applications functionality as well handles to some of the main fragments.
+ * MainActivity also contains and maintains the global use Options object and hosts
+ * the navigation pane.
+ * @date 31 March 2016
+ * @author Drea,Steven,Zach,Kevin,Bo,Theodore
+ */
 public class MainActivity extends AppCompatActivity implements Options.OptionsChangedListener,
         chordHandler.OnChordSelectedListener
 {
-
     /** The current options selected in this MainActivity. */
     private static Options options;
 
     /** The DrawerLayout containing the navigation pane. */
-    private static DrawerLayout mDrawerLayout;
+    private DrawerLayout mDrawerLayout;
 
     /** The List of items in the navigation pane. */
-    private static ListView mDrawerList;
+    private ListView mDrawerList;
 
     /** The Fragment containing the chord build sliders attached to this Activity. */
     private SliderFragment sliderFragment;
@@ -63,10 +62,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     /** The Fragment for selecting chords and instruments attached to this Activity. */
     private ChordSelectFragment chordInstrumentSelectFragment;
 
-    /**
-     * ATTENTION: This was auto-generated to implement the App Indexing API.
-     * See https://g.co/AppIndexing/AndroidStudio for more information.
-     */
+    /** The client to handle contacting the developers. */
     private GoogleApiClient client;
 
     /**
@@ -81,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         return options;
     }
 
+    /**
+     * Called when this Activity is created.
+     * @param savedInstanceState Bundle containing the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,9 +139,13 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         soundHandler.switchInstrument(options.instrument);
         Score.loadScores(this, false);
 
+        // Create the client to handle contacting the developers
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
+    /**
+     * Called when this Activity is destroyed.
+     */
     @Override
     protected void onDestroy() {
         // Make sure sound stops
@@ -150,6 +154,39 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         super.onDestroy();
     }
 
+    /**
+     * Called when this Activity is started.
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // Setup the system for contacting the developers
+        client.connect();
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, "Main Page",
+                Uri.parse("http://host/path"),
+                Uri.parse("android-app://com.five_chords.chord_builder/http/host/path"));
+        AppIndex.AppIndexApi.start(client, viewAction);
+    }
+
+    /**
+     * Called when this Activity is stopped.
+     */
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // Clean up the system for contacting the developers
+        Action viewAction = Action.newAction(Action.TYPE_VIEW, "Main Page",
+                Uri.parse("http://host/path"),
+                Uri.parse("android-app://com.five_chords.chord_builder/http/host/path"));
+        AppIndex.AppIndexApi.end(client, viewAction);
+        client.disconnect();
+    }
+
+    /**
+     * Called when this Activity is resumed.
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -214,9 +251,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
 
         // Set the Views
         currentProgress.setText(current.getCurrentValue().getDisplayString());
-
-//        // Update the Chord Select Spinner
-//        chordInstrumentSelectFragment.updateDisplayedChord();
     }
 
     /**
@@ -366,46 +400,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
 
         // Save options
         options.save(this);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        client.connect();
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.five_chords.chord_builder/http/host/path")
-        );
-        AppIndex.AppIndexApi.start(client, viewAction);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-
-        // ATTENTION: This was auto-generated to implement the App Indexing API.
-        // See https://g.co/AppIndexing/AndroidStudio for more information.
-        Action viewAction = Action.newAction(
-                Action.TYPE_VIEW, // TODO: choose an action type.
-                "Main Page", // TODO: Define a title for the content shown.
-                // TODO: If you have web page content that matches this app activity's content,
-                // make sure this auto-generated web page URL is correct.
-                // Otherwise, set the URL to null.
-                Uri.parse("http://host/path"),
-                // TODO: Make sure this auto-generated app deep link URI is correct.
-                Uri.parse("android-app://com.five_chords.chord_builder/http/host/path")
-        );
-        AppIndex.AppIndexApi.end(client, viewAction);
-        client.disconnect();
     }
 
     /**

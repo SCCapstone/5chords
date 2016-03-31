@@ -1,9 +1,3 @@
-/*************************************************************************************************
- * Activity containing the App settings user interface.
- * @version 1.0
- * @date 06 November 2015
- * @author: Drea,Steven,Zach,Kevin,Bo
- */
 package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
 import android.app.Activity;
@@ -20,14 +14,19 @@ import com.five_chords.chord_builder.Chord;
 import com.five_chords.chord_builder.Options;
 import com.five_chords.chord_builder.R;
 
+/**
+ * Activity containing the App settings user interface.
+ * @date 06 November 2015
+ * @author Drea,Steven,Zach,Kevin,Bo,Theodore
+ */
 public class SettingsChordOptions extends Activity
 {
-    private ArrayAdapter<SettingsOption> optionsAdapter;
-    private Activity activity;
-    private static String[] inversionTypes;
+    /** The inversion type names. */
+    private static final String[] INVERSION_TYPES = new String[] {"First", "Second", "Third", "Fourth"};
 
     /**
-     * Activity Creator
+     * Called when this Activity is created.
+     * @param savedInstanceState Bundle containing the saved instance state
      */
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,12 +41,11 @@ public class SettingsChordOptions extends Activity
         // Populate the list
         byte i = 0;
         Options options = MainActivity.getOptions();
-        optionsAdapter = new ArrayAdapter<>(this, R.layout.centered_list_items);
-        inversionTypes = new String[] {"First", "Second", "Third", "Fourth"};
+        final ArrayAdapter<SettingsPage.SettingsOption> optionsAdapter = new ArrayAdapter<>(this, R.layout.centered_list_items);
 
-        for (final String type: inversionTypes)
+        for (final String type: INVERSION_TYPES)
         {
-            optionsAdapter.add(new SettingsOption(type + " Inversions are " + (options.chordInversionsToUse.contains(i++) ? "Enabled" : "Disabled")) {
+            optionsAdapter.add(new SettingsPage.SettingsOption(type + " Inversions are " + (options.chordInversionsToUse.contains(i++) ? "Enabled" : "Disabled")) {
                 @Override
                 public void performAction() {
                     if (this.name.contains("Disabled")) {
@@ -69,8 +67,8 @@ public class SettingsChordOptions extends Activity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Object obj = parent.getItemAtPosition(position);
 
-                if (obj instanceof SettingsOption)
-                    ((SettingsOption) obj).performAction();
+                if (obj instanceof SettingsPage.SettingsOption)
+                    ((SettingsPage.SettingsOption) obj).performAction();
             }
         });
 
@@ -78,11 +76,9 @@ public class SettingsChordOptions extends Activity
         list.setAdapter(optionsAdapter);
     }
 
-
     /**
-     * Goes back to mainActivity on Call
-     * @ param  Button Call
-     * The MainActivity call
+     * Called to return to the MainActivity.
+     * @param view The calling View
      */
     public void backToMain(View view)
     {
@@ -90,22 +86,20 @@ public class SettingsChordOptions extends Activity
         this.overridePendingTransition(0, 0);
     }
 
-
-
     /**
      * Called when the checked state of a compound button has changed.
      *
-     * @param inverionType The inversion to change.
+     * @param inversionType The inversion to change.
      * @param isSelected  Was it selected?.
      */
-    public void inversionsChanged(String inverionType, boolean isSelected)
+    public void inversionsChanged(String inversionType, boolean isSelected)
     {
         Options options = MainActivity.getOptions();
 
         byte i = 0;
-        for (String type : inversionTypes)
+        for (String type : INVERSION_TYPES)
         {
-            if (type == inverionType)
+            if (type.equals(inversionType))
             {
                 if (isSelected)
                     options.addChordInversion(i);
@@ -113,39 +107,6 @@ public class SettingsChordOptions extends Activity
                     options.removeChordInversion(i);
             }
             ++i;
-        }
-    }
-
-    /**
-     * Class representing an object in the SettingsPage list of options.
-     */
-    public abstract class SettingsOption
-    {
-        /** The name of the SettingsOption. */
-        public String name;
-
-        /**
-         * Constructs a new SettingsOption.
-         * @param name The name of the SettingsOption
-         */
-        public SettingsOption(String name)
-        {
-            this.name = name;
-        }
-
-        /**
-         * Called to perform the action of this SettingsOption.
-         */
-        public abstract void performAction();
-
-        /**
-         * Gets a String representation of this SettingsObject.
-         * @return A String representation of this SettingsObject
-         */
-        @Override
-        public String toString()
-        {
-            return name;
         }
     }
 }

@@ -1,25 +1,22 @@
-/*************************************************************************************************
- * AboutPage.java
- * This class sets up the About Us Page and its buttons
- * @version 1.0
- * @date 06 November 2015
- * @author: Drea,Steven,Zach,Kevin,Bo
- */
 package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.five_chords.chord_builder.R;
 
+/**
+ * The About page Activity.
+ * @date 31 March 2016
+ * @author Drea,Steven,Zach,Kevin,Bo,Theodore
+ */
+
 public class AboutPage extends AppCompatActivity
 {
     /**
-     * Activity Creator
+     * Called when this Activity is created.
+     * @param savedInstanceState Bundle containing the saved instance state
      */
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -29,9 +26,8 @@ public class AboutPage extends AppCompatActivity
     }
 
     /**
-     * Goes back to mainActivity on Call
-     * @ param  Button Call
-     * The MainActivity call
+     * Called to return to the MainActivity.
+     * @param view The calling View
      */
     public void backToMain(View view)
     {
