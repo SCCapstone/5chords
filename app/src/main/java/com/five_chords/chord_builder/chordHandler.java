@@ -328,6 +328,9 @@ public class chordHandler
             Toast toast = Toast.makeText(activity, activity.getString(R.string.thats_incorrect), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.CENTER, 0, 0);
             toast.show();
+
+            // Show correct chord
+            activity.showCorrectChord();
         }
     }
 

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,9 +29,11 @@ import com.five_chords.chord_builder.soundHandler;
  */
 public class ChordSelectFragment extends Fragment
 {
-
     /** Reference to the Spinner for selecting chords contained in this Fragment. */
     private Spinner chordSelectSpinner;
+
+    /** The button for playing the currently selected chord. */
+    private Button playSelectedChordButton;
 
     /**
      * Required empty public constructor.
@@ -91,6 +94,15 @@ public class ChordSelectFragment extends Fragment
     }
 
     /**
+     * Called to play the selected chord programmatically.
+     * @param play Whether or not to play the chord
+     */
+    public void playSelectedChord(boolean play)
+    {
+        MainActivity.pressButton(playSelectedChordButton, play);
+    }
+
+    /**
      * Called when the Activity containing this Fragment is resumed.
      */
     @Override
@@ -118,6 +130,7 @@ public class ChordSelectFragment extends Fragment
 
         // Initialize Buttons
         final Button playSelectedChord = (Button) view.findViewById(R.id.button_select_chord_play);
+        playSelectedChordButton = playSelectedChord;
         final Button selectRandomChord = (Button) view.findViewById(R.id.button_select_random_chord);
 
         // Set the function of the play button

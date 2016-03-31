@@ -20,11 +20,23 @@ import com.five_chords.chord_builder.soundHandler;
  */
 public class CheckFragment extends Fragment
 {
+    /** The Button for playing the built chord. */
+    private Button playBuiltChordButton;
+
     /**
      * Required empty public constructor.
      */
     public CheckFragment()
     {   }
+
+    /**
+     * Called to play the build chord programmatically.
+     * @param play Whether or not to play the chord
+     */
+    public void playBuiltChord(boolean play)
+    {
+        MainActivity.pressButton(playBuiltChordButton, play);
+    }
 
     /**
      * Called when the View containing this Fragment has been created.
@@ -43,6 +55,7 @@ public class CheckFragment extends Fragment
         // Initialize Buttons
         final Button checkChord = (Button) view.findViewById(R.id.button_check_user_chord);
         final Button playBuiltChord = (Button) view.findViewById(R.id.button_playback_slider_chord);
+        playBuiltChordButton = playBuiltChord;
 
         // Set the preview button function
         playBuiltChord.setOnTouchListener(new View.OnTouchListener() {

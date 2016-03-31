@@ -4,14 +4,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.content.DialogInterface;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.app.AlertDialog;
 
@@ -22,6 +25,7 @@ import com.five_chords.chord_builder.Options;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 import com.five_chords.chord_builder.chordHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.CheckFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordSelectFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
@@ -62,8 +66,49 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     /** The Fragment for selecting chords and instruments attached to this Activity. */
     private ChordSelectFragment chordInstrumentSelectFragment;
 
+    /** The Fragment containing the chord check button. */
+    private CheckFragment checkFragment;
+
+    /** The Fragment containing the chord selection interface. */
+    private ChordSelectFragment chordSelectFragment;
+
     /** The client to handle contacting the developers. */
     private GoogleApiClient client;
+
+    /** Thread to use for chord playback when the user guesses incorrectly. */
+    private Thread playbackThread;
+
+    /** The chord playback functionality. */
+    private Runnable playBackFunction = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            // Sleep
+            try {Thread.sleep(750L);} catch (InterruptedException e) {/* Do nothing */}
+
+            // Play Built chord
+            MainActivity.this.checkFragment.playBuiltChord(true);
+
+            // Sleep
+            try {Thread.sleep(1500L);} catch (InterruptedException e) {/* Do nothing */}
+
+            // Stop Built chord
+            MainActivity.this.checkFragment.playBuiltChord(false);
+
+            // Sleep
+            try {Thread.sleep(500L);} catch (InterruptedException e) {/* Do nothing */}
+
+            // Play Correct chord
+            MainActivity.this.chordSelectFragment.playSelectedChord(true);
+
+            // Sleep
+            try {Thread.sleep(1500L);} catch (InterruptedException e) {/* Do nothing */}
+
+            // Stop Correct chord
+            MainActivity.this.chordSelectFragment.playSelectedChord(false);
+        }
+    };
 
     /**
      * Gets the current global Options wrapper, creating a default Options if the global is null.
@@ -75,6 +120,22 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
             options = new Options();
 
         return options;
+    }
+
+    /**
+     * Called to programmatically press a Button.
+     * @param button The Button to press
+     * @param press Whether to press or release the Button
+     */
+    public static void pressButton(Button button, boolean press)
+    {
+        MotionEvent motionEvent = MotionEvent.obtain(
+                SystemClock.uptimeMillis(),
+                SystemClock.uptimeMillis(),
+                press ? MotionEvent.ACTION_DOWN : MotionEvent.ACTION_UP,
+                0.0f, 0.0f, 1.0f, 1.0f, 0, 0.0f, 0.0f, 0, 0
+        );
+        button.dispatchTouchEvent(motionEvent);
     }
 
     /**
@@ -195,6 +256,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         sliderFragment = (SliderFragment)getFragmentManager().findFragmentById(R.id.fragment_sliders);
         chordInstrumentSelectFragment =
                 (ChordSelectFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_select);
+        checkFragment = (CheckFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_check);
+        chordSelectFragment = (ChordSelectFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_select);
     }
 
     /**
@@ -239,21 +302,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     }
 
     /**
-     * Called to update the displayed score.
-     */
-    public void updateDisplayedScore() {
-
-        // Get the TextView
-        TextView currentProgress = (TextView) findViewById(R.id.textview_score_display);
-
-        // Get the current Score
-        Score current = Score.getCurrentScore();
-
-        // Set the Views
-        currentProgress.setText(current.getCurrentValue().getDisplayString());
-    }
-
-    /**
      * Goes to Help page.
      */
     public void toHelpPage() {
@@ -283,6 +331,30 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     public void toScorePage() {
         Intent intent = new Intent(this, ScorePage.class);
         startActivity(intent);
+    }
+
+    /**
+     * Called to update the displayed score.
+     */
+    public void updateDisplayedScore() {
+
+        // Get the TextView
+        TextView currentProgress = (TextView) findViewById(R.id.textview_score_display);
+
+        // Get the current Score
+        Score current = Score.getCurrentScore();
+
+        // Set the Views
+        currentProgress.setText(current.getCurrentValue().getDisplayString());
+    }
+
+    /**
+     * Shows the correct chord.
+     */
+    public void showCorrectChord()
+    {
+        playbackThread = new Thread(playBackFunction);
+        playbackThread.start();
     }
 
     /**
