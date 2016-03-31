@@ -144,7 +144,6 @@ public class SliderFragment extends Fragment
         blockSliders = false;
     }
 
-
     /**
      * Called to create the View of this SliderFragment.
      * @param inflater The LayoutInflater to use to inflate the View

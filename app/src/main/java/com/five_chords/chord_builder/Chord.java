@@ -32,9 +32,9 @@ public class Chord
         DIMINISHED_SEVENTH("Diminished Seventh", "Dim7", 0, 3, 6, 9),
         MINOR_SEVENTH("Minor Seventh", "Min7", 0, 3, 7, 10),
         MINOR_MAJOR_SEVENTH("Minor Major Seventh", "mM7", 0, 3, 7, 11),
-        MAJOR_SEVENTH("Minor Seventh", "Maj7", 0, 4, 7, 11),
-        AUGMENTED_SEVENTH("Minor Seventh", "Aug7", 0, 4, 8, 10),
-        AUGMENTED_MAJOR_SEVENTH("Minor Seventh", "AugMaj7", 0, 4, 8, 11);
+        MAJOR_SEVENTH("Major Seventh", "Maj7", 0, 4, 7, 11),
+        AUGMENTED_SEVENTH("Augmented Seventh", "Aug7", 0, 4, 8, 10),
+        AUGMENTED_MAJOR_SEVENTH("Augmented Major Seventh", "AugMaj7", 0, 4, 8, 11);
 
 
         /** The name of the ChordType. */
