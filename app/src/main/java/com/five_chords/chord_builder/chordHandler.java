@@ -10,11 +10,7 @@
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.DialogInterface;
-import android.view.Gravity;
-import android.widget.Toast;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
@@ -119,15 +115,6 @@ public class chordHandler
         return currentBuiltChordSpelling;
     }
 
-//    /**
-//     * Called to notify chordHandler that the built chord has changed.
-//     */
-//    public static void builtChordChanged()
-//    {
-//        currentSelectedChordSpelling = null;
-//        currentBuiltChordSpelling = null;
-//    }
-
     /**
      * Gets the currently selected Chord.
      * @return The currently selected Chord
@@ -230,26 +217,6 @@ public class chordHandler
         setSelectedChord(getChord(newChordFund, newType), true);
     }
 
-//    /**
-//     * Clears the available chord array.
-//     */
-//    public static void clearChords() {
-//        availableChords = null;
-//    }
-
-//    /**
-//     * Checks whether two chords (as integer arrays) are equivalent.
-//     * @param chordA The array containing the notes of the first
-//     * @param chordB The array containing the notes of the second chord
-//     */
-//    public static boolean compareChords(int[] chordA, int[] chordB)
-//    {
-//
-//
-//        return !(setChord == null || builtChord == null || setChord.length != builtChord.length) &&
-//                Arrays.equals(builtChord, setChord);
-//    }
-
     /**
      * Builds the current chord that the user has defined on the sliders.
      * @param activity The current Activity
@@ -308,74 +275,6 @@ public class chordHandler
 
         // OR if we don't want to wait
         //activity.showChordCheckResult();
-
-//        // Handle result
-//        if (isCorrect)
-//        {
-//            // Launch dialog
-//            new AlertDialog.Builder(activity)
-//                    .setTitle(activity.getString(R.string.thats_correct))
-//                    .setMessage("Do you want to try another chord?")
-//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-//                    {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which)
-//                        {
-//                            getRandomChord();
-//                            activity.getSliderFragment().resetChordSliders();
-//                            soundHandler.stopSound();
-//
-//                        }
-//
-//                    })
-//                    .setNegativeButton("No", new DialogInterface.OnClickListener()
-//                    {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which)
-//                        {
-//                            setSelectedChord(currentSelectedChord, false); // Resets the wrong streak counter
-//                            activity.getSliderFragment().resetChordSliders();
-//                            soundHandler.stopSound();
-//                        }
-//
-//                    })
-//                    .setOnCancelListener(new DialogInterface.OnCancelListener()
-//                    {
-//                        @Override
-//                        public void onCancel(DialogInterface dialog)
-//                        {
-//                            activity.getSliderFragment().resetChordSliders();
-//                            soundHandler.stopSound();
-//                        }
-//                    })
-//                    .show();
-//        }
-//        else
-//        {
-//            // Increment the wrong streak counter
-//            currentWrongStreak++;
-//
-//            // Show hints
-//            if (MainActivity.getOptions().useHints)
-//            {
-//                int[] hintDelays = MainActivity.getOptions().hintTypeDelays;
-//
-//                if (currentWrongStreak > hintDelays[2])
-//                    activity.makeHint(HINT_THREE);
-//                else if (currentWrongStreak > hintDelays[1])
-//                    activity.makeHint(HINT_TWO);
-//                else if (currentWrongStreak > hintDelays[0])
-//                    activity.makeHint(HINT_ONE);
-//            }
-//
-//            // Show toast
-//            Toast toast = Toast.makeText(activity, activity.getString(R.string.thats_incorrect), Toast.LENGTH_SHORT);
-//            toast.setGravity(Gravity.CENTER, 0, 0);
-//            toast.show();
-//
-//            // Show correct chord
-//            activity.showChordSequence();
-//        }
     }
 
     /**

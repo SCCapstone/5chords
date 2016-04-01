@@ -1,14 +1,11 @@
 package com.five_chords.chord_builder;
 
-import android.util.Log;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Arrays;
 
 import static org.junit.Assert.*;
 

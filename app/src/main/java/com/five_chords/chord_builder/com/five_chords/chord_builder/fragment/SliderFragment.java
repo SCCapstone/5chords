@@ -245,6 +245,28 @@ public class SliderFragment extends Fragment
     }
 
     /**
+     * Gets a String representantation of this SliderFragment.
+     * @return A String representantation of this SliderFragment
+     */
+    public String toString()
+    {
+        // Get the slider positions
+        Note[] chord = new Note[] {new Note(), new Note(), new Note(), new Note()};
+        buildCurrentChord(chord);
+
+        String value = "";
+        for (int i = 0; i < chord.length; ++i)
+        {
+            value += chord[i].getFractionalIndex();
+            if (i != chord.length - 1)
+                value += "\t";
+        }
+
+        return "SliderFragment: Min Note = " + minNoteOnSlider + ", Max Note = " + maxNoteOnSlider +
+                "\n\tSlider Notes = " + value;
+    }
+
+    /**
      * Called to add the seek bar listener to a single seek bar.
      * @param bar The VerticalSeekBar to add listeners to
      */

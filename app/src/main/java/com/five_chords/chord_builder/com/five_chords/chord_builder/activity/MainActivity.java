@@ -81,24 +81,11 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     /** Thread to use for chord playback when the user guesses incorrectly. */
     private Thread playbackThread;
 
-//    /** The ToneGenerator to use for playing correct and wrong sounds. */
-//    private ToneGenerator toneGenerator;
-
     /** The MediaPlayer to use for playing the correct sound. */
     private MediaPlayer correctSoundPlayer;
 
     /** The MediaPlayer to use for playing the wrong sound. */
     private MediaPlayer wrongSoundPlayer;
-
-//    /** The chord playback functionality. */
-//    private Runnable playBackFunction = new Runnable()
-//    {
-//        @Override
-//        public void run()
-//        {
-//
-//        }
-//    };
 
     /**
      * Gets the current global Options wrapper, creating a default Options if the global is null.
