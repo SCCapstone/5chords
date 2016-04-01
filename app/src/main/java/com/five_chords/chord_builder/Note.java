@@ -49,4 +49,14 @@ public class Note
     {
         return index + distanceToIndex;
     }
+
+    /**
+     * Gets a String representation of this Note.
+     * @return A String representation of this Note
+     */
+    @Override
+    public String toString()
+    {
+        return "Note: index = " + index + ", distance = " + distanceToIndex;
+    }
 }

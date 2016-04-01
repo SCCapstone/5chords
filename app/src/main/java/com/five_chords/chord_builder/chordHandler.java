@@ -76,6 +76,15 @@ public class chordHandler
     }
 
     /**
+     * Gets the counter for the number of times the user has incorrectly guessed the current chord.
+     * @return The counter for the number of times the user has incorrectly guessed the current chord
+     */
+    public static int getCurrentWrongStreak()
+    {
+        return currentWrongStreak;
+    }
+
+    /**
      * Resets the counter for the number of times the user has incorrectly guessed the current chord.
      */
     public static void resetCurrentWrongStreak()

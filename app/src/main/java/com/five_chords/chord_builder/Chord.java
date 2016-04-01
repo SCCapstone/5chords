@@ -121,7 +121,7 @@ public class Chord
         double maxErr = MainActivity.getOptions().allowableCheckError;
 
         for (int i = 0; i < length; ++i)
-            if (Math.abs(chordA[i].getFractionalIndex() - chordB[i].getFractionalIndex()) >= maxErr)
+            if (Math.abs(chordA[i].getFractionalIndex() - chordB[i].getFractionalIndex()) > maxErr)
                 return false;
 
         return true;
