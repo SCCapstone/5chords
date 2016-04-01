@@ -7,10 +7,6 @@
 Chord Builder is an application to help music students learn music theory and intonation without the skills required to play an instrument perfectly. 
 Chord Builder allows users to build and play musical chords on a simple user interface, with the goal of reproducing chords played by the app. 
 
-**Installation**
-
-WIP
-
 **General Usage**
 
 Use the vertical sliders on the main screen of the application to build a chord note by note. These notes can be played individually by touching the slider thumb for each note or all at once by pressing the _PREVIEW_ button at the bottom of the screen.
