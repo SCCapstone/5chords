@@ -1,59 +1,49 @@
-package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
+package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.Switch;
 
-import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Options;
 
 /**
- * A Fragment containing the hint settings.
+ * Activity containing the interface for changing the check settings. This Activity contains a switch to toggle
+ * the check sequence and a switch to toggle showing hints, as well as the number pickers for selecting
+ * the delays between hint types.
  * @author tstone95
  */
-public class HintSettingsFragment extends Activity implements CompoundButton.OnCheckedChangeListener,
+public class CheckSettingsActivity extends Activity implements CompoundButton.OnCheckedChangeListener,
         NumberPicker.OnValueChangeListener
 {
     /** The available hint delay settings. */
     private static final String[] PICKER_DISPLAY_VALUES = new String[25];
 
+    /** Initialize the hint delay settings. */
     static
     {
         for (int i = 0; i < PICKER_DISPLAY_VALUES.length; ++i)
             PICKER_DISPLAY_VALUES[i] = "" + i;
     }
 
-    /** The hints switch */
+    /** The show answer sequence switch */
+    private Switch showAnswerSeqSwitch;
+
+    /** The hints switch. */
     private Switch hintsSwitch;
+
     /** The NumberPicker for type 1 hint delays. */
     private NumberPicker hintDelay1Picker;
+
     /** The NumberPicker for type 2 hint delays. */
     private NumberPicker hintDelay2Picker;
+
     /** The NumberPicker for type 3 hint delays. */
     private NumberPicker hintDelay3Picker;
-
-    /**
-     * Required empty public constructor.
-     */
-    public HintSettingsFragment()
-    {   }
-
-    /**
-     * Create a new instance of HintSettingsFragment.
-     * @return A new instance of HintSettingsFragment
-     */
-    public static HintSettingsFragment newInstance()
-    {
-        HintSettingsFragment f = new HintSettingsFragment();
-
-        return f;
-    }
 
     /**
      * Gets the delay for type 1 hints
@@ -92,13 +82,18 @@ public class HintSettingsFragment extends Activity implements CompoundButton.OnC
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
     {
         // Use Hints were changed
-        if (buttonView instanceof Switch)
+        if (buttonView.getId() == R.id.switch_hints)
         {
             MainActivity.getOptions().changeHints(isChecked, getHintDelay1(), getHintDelay2(), getHintDelay3());
 
             hintDelay1Picker.setEnabled(isChecked);
             hintDelay2Picker.setEnabled(isChecked);
             hintDelay3Picker.setEnabled(isChecked);
+        }
+        // Show answer sequence was changed
+        else if (buttonView.getId() == R.id.switch_check_sequence)
+        {
+            MainActivity.getOptions().setShowAnswerSequence(isChecked);
         }
     }
 
@@ -143,17 +138,19 @@ public class HintSettingsFragment extends Activity implements CompoundButton.OnC
     /**
      * Called when the Activity has been created.
      * @param savedInstanceState The saved instance state
-     * @return This Fragment's layout
      */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         // Inflate the layout for this fragment
-        setContentView(R.layout.fragment_hint_settings);
+        setContentView(R.layout.fragment_check_settings);
 
         // Get Views
+        showAnswerSeqSwitch = (Switch) findViewById(R.id.switch_check_sequence);
         hintsSwitch = (Switch) findViewById(R.id.switch_hints);
+
         hintDelay1Picker = (NumberPicker) findViewById(R.id.hint_level1_picker);
         initPicker(hintDelay1Picker);
         hintDelay2Picker = (NumberPicker) findViewById(R.id.hint_level2_picker);
@@ -163,10 +160,15 @@ public class HintSettingsFragment extends Activity implements CompoundButton.OnC
 
         // Set default values
         Options options = MainActivity.getOptions();
+        showAnswerSeqSwitch.setChecked(options.showAnswerSequence);
         hintsSwitch.setChecked(options.useHints);
         hintDelay1Picker.setValue(options.hintTypeDelays[0]);
         hintDelay2Picker.setValue(options.hintTypeDelays[1]);
         hintDelay3Picker.setValue(options.hintTypeDelays[2]);
+
+        // Add listeners
+        showAnswerSeqSwitch.setOnCheckedChangeListener(this);
+        hintsSwitch.setOnCheckedChangeListener(this);
     }
 
     /**
@@ -181,15 +183,12 @@ public class HintSettingsFragment extends Activity implements CompoundButton.OnC
         picker.setOnValueChangedListener(this);
     }
 
-
     /**
-     * Goes back to mainActivity on Call
-     * @ param  Button Call
-     * The MainActivity call
+     * Called to return to the MainActivity.
+     * @param view The calling View
      */
     public void backToMain(View view)
     {
         finish();
     }
-
 }

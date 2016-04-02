@@ -1,6 +1,5 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;

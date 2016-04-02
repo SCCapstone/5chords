@@ -530,6 +530,17 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     }
 
     /**
+     * Called when the showAnswerSequence flag changes.
+     * @param showAnswerSeq The new value of the showAnswerSequence flag
+     */
+    @Override
+    public void onShowAnswerSequenceChanged(boolean showAnswerSeq) {
+        // Save options
+        options.save(this);
+    }
+
+
+    /**
      * Called when the instrument selection changes.
      * @param instrument The new instrument
      */

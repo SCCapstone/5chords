@@ -56,7 +56,7 @@
 
         <!-- Hint Settings Page Activity -->
         <activity
-            android:name=".com.five_chords.chord_builder.fragment.HintSettingsFragment"
+            android:name=".com.five_chords.chord_builder.activity.CheckSettingsActivity"
             android:label="Hint Options" />
 
         <!-- Help Page Activity -->

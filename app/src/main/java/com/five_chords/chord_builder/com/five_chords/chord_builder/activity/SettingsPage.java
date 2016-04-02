@@ -1,15 +1,6 @@
-/*************************************************************************************************
- * Activity containing the App settings user interface.
- * @version 1.0
- * @date 06 November 2015
- * @author: Drea,Steven,Zach,Kevin,Bo
- */
 package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
 import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,16 +8,20 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.HintSettingsFragment;
-
 import com.five_chords.chord_builder.R;
 
+/**
+ * Activity containing the App settings user interface. This interface contains buttons to navigate to several sub
+ * activities where particular settings can be changed.
+ * @version 1.0
+ * @date 2 April 2016
+ * @author Drea,Steven,Zach,Kevin,Bo,Theodore
+ */
 public class SettingsPage extends Activity
 {
-    private ArrayAdapter<SettingsOption> optionsAdapter;
-
     /**
-     * Activity Creator
+     * Called when this Activity is created.
+     * @param savedInstanceState Bundle containing the saved instance state
      */
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,12 +33,11 @@ public class SettingsPage extends Activity
         ListView view = (ListView) findViewById(R.id.settings_content);
 
         // Populate the list
-        optionsAdapter = new ArrayAdapter<>(this, R.layout.centered_list_items);
+        ArrayAdapter<SettingsOption> optionsAdapter = new ArrayAdapter<>(this, R.layout.centered_list_items);
 
-        optionsAdapter.add(EDIT_USER_LEVEL_OPTIONS);
         optionsAdapter.add(CHOOSE_CHORD_TYPES);
         optionsAdapter.add(CHOOSE_CHORD_OPTIONS);
-        optionsAdapter.add(EDIT_HINTS_OPTIONS);
+        optionsAdapter.add(CHOOSE_CHECK_OPTIONS);
         optionsAdapter.add(INSTRUMENT_OPTIONS);
 
         // Set click listener
@@ -62,9 +56,8 @@ public class SettingsPage extends Activity
     }
 
     /**
-     * Goes back to mainActivity on Call
-     * @ param  Button Call
-     * The MainActivity call
+     * Called to return to the MainActivity.
+     * @param view The calling View
      */
     public void backToMain(View view)
     {
@@ -83,6 +76,9 @@ public class SettingsPage extends Activity
         }
     };
 
+    /**
+     * The SettingsOption for choosing the chord options.
+     */
     private final SettingsOption CHOOSE_CHORD_OPTIONS = new SettingsOption("Chord Options") {
         @Override
         public void performAction() {
@@ -91,14 +87,14 @@ public class SettingsPage extends Activity
     };
 
     /**
-     * The SettingsOption for editing hints.
+     * The SettingsOption for choosing the check options.
      */
-    private final SettingsOption EDIT_HINTS_OPTIONS = new SettingsOption("Edit Hint Settings")
+    private final SettingsOption CHOOSE_CHECK_OPTIONS = new SettingsOption("Check Options")
     {
         @Override
         public void performAction()
         {
-            toHintOptions();
+            toCheckOptions();
         }
     };
 
@@ -114,19 +110,6 @@ public class SettingsPage extends Activity
         }
     };
 
-
-    /**
-     * The SettingsOption for enabling/disabling chord inversions.
-     */
-    private final SettingsOption EDIT_USER_LEVEL_OPTIONS = new SettingsOption("User Level - WIP")
-    {
-        @Override
-        public void performAction()
-        {
-            launchUserLevelDialog();
-        }
-    };
-
     /**
      * Called to launch the choose chords dialog.
      */
@@ -138,7 +121,7 @@ public class SettingsPage extends Activity
     }
 
     /**
-     * Called to launch the choose chord options.
+     * Called to goto the choose chord options.
      */
     public void toChordOptions()
     {
@@ -148,37 +131,22 @@ public class SettingsPage extends Activity
     }
 
     /**
-     * Called to launch the edit hints dialog.
+     * Called to goto the choose check options.
      */
-    public void toHintOptions()
+    public void toCheckOptions()
     {
-        Intent intent = new Intent(this, HintSettingsFragment.class);
+        Intent intent = new Intent(this, CheckSettingsActivity.class);
         startActivity(intent);
         this.overridePendingTransition(0, 0);
     }
 
     /**
-     * Launches the Instrument select
+     * Called to goto the instrument selection activity.
      */
     public void toInstrumentSelection() {
         Intent intent = new Intent(this, SettingsInstruments.class);
         startActivity(intent);
         this.overridePendingTransition(0, 0);
-    }
-
-    public void launchUserLevelDialog() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-
-        if (prev != null)
-            ft.remove(prev);
-
-        ft.addToBackStack(null);
-
-        // Create and show the dialog.
-        // Replace this with user level dialog class
-        //DialogFragment newFragment = changeInstrumentFragment.newInstance();
-        //newFragment.show(ft, "dialog");
     }
 
     /**

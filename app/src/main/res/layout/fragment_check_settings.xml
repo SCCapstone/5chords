@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <!-- Back arrow -->
+    <Button
+        android:id="@+id/textview_go_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:text="@string/back"
+        android:textColor="@color/trans_black"
+        android:textSize="@dimen/text_size_title"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:textStyle="bold"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="false"
+        android:onClick="backToMain" />
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/textview_settings_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/check_options"
+        android:textSize="@dimen/text_size_title"
+        android:singleLine="false"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
+        android:layout_marginLeft="42dp"
+        android:layout_marginRight="42dp"
+        android:gravity="center_horizontal"
+        android:textStyle="bold|italic"
+        android:layout_centerHorizontal="true" />
+
+    <!-- Separator -->
+    <View style="@style/VerticalSeparator"
+        android:id="@+id/settings_top_separator"
+        android:layout_below="@id/textview_settings_title"/>
+
+    <!-- Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/settings_top_separator"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Enable check sequence checkbox -->
+            <Switch
+                android:id="@+id/switch_check_sequence"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/enable_answer_sequence"/>
+
+            <!-- Separator -->
+            <View style="@style/VerticalSeparator"/>
+
+            <!-- Enable hints checkbox -->
+            <Switch
+                android:id="@+id/switch_hints"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:text="@string/enable_hints"/>
+
+            <!-- Hint text -->
+            <TextView
+                android:id="@+id/hint_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="@string/hint_delay_set_message"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="italic"/>
+
+            <!-- Hint subtext -->
+            <TextView
+                android:id="@+id/hint_text_submessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:text="@string/hint_delay_set_submessage"
+                android:textSize="@dimen/text_size_medium"
+                android:textStyle="italic"/>
+
+            <!-- Layout containing selectors for hint intervals -->
+            <LinearLayout
+                android:id="@+id/hint_interval_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <!-- Level 1 picker -->
+                <NumberPicker
+                    android:id="@+id/hint_level1_picker"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                </NumberPicker>
+
+                <!-- Level 2 picker -->
+                <NumberPicker
+                    android:id="@+id/hint_level2_picker"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                </NumberPicker>
+
+                <!-- Level 3 picker -->
+                <NumberPicker
+                    android:id="@+id/hint_level3_picker"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1">
+                </NumberPicker>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</RelativeLayout>

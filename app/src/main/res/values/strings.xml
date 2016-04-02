@@ -48,6 +48,7 @@
     <string name="select_chords">Select Chords</string>
     <string name="enable_pitch">Enable Pitch Bending</string>
     <string name="disable_pitch">Disable Pitch Bending</string>
+    <string name="enable_answer_sequence">Toggle Answer Sequence</string>
     <string name="random_chord">Random Chord</string>
     <string name="instrument">Instrument</string>
     <string name="major_chords">Major Chords</string>
@@ -68,10 +69,11 @@
     <string name="advanced">Advanced</string>
     <string name="instruments">Instruments</string>
     <string name="hints">Hints</string>
+    <string name="check_options">Check Options</string>
     <string name="settingsChordsInvalid">You must have at least one chord type selected</string>
     <string name="pitch_bend_settings">Select Pitch Bend Settings</string>
     <string name="chord_inversion_settings">Select Chord Inversions</string>
-    <string name="enable_hints">Enable Hints</string>
+    <string name="enable_hints">Toggle Hints</string>
     <string name="edit_hint_settings">Edit Hint Settings</string>
     <string name="edit">Edit</string>
     <string name="choose_chords">Choose Chords</string>

@@ -271,10 +271,11 @@ public class chordHandler
      */
     public static void checkCurrentChord(final MainActivity activity)
     {
-        activity.showChordSequence();
-
-        // OR if we don't want to wait
-        //activity.showChordCheckResult();
+        // Either show the answer sequence or go right to the answer
+        if (MainActivity.getOptions().showAnswerSequence)
+            activity.showChordSequence();
+        else
+            activity.showChordCheckResult();
     }
 
     /**

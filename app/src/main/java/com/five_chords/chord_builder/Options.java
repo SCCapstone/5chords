@@ -40,8 +40,11 @@ public class Options
     /** Bundle id for the maximum allowable error for checking notes on the Chord sliders as a fraction. */
     private static final String CHECK_ERROR_BUNDLE_ID = "OptionsFragment.Options.CHECK_ERROR";
 
-    /** Bundle id for the instrument settings */
+    /** Bundle id for the instrument settings. */
     private static final String INSTRUMENT_BUNDLE_ID = "OptionsFragment.Options.INSTRUMENT";
+
+    /** Bundle id for the show answer sequence flag. */
+    private static final String SHOW_ANS_SEQ_BUNDLE_ID = "OptionsFragment.Options.ANS_SEQ";
 
     /** The default number of slider positions per note. */
     private static final int DEFAULT_SLIDER_DIVISIONS_PER_NOTE = 1;
@@ -60,6 +63,9 @@ public class Options
 
     /** Which instrument does the user want? **/
     public int instrument;
+
+    /** Whether or not to show the answer sequence when the user guesses. */
+    public boolean showAnswerSequence;
 
     /** The number of intermediate slider positions per note on the Chord sliders. */
     public int sliderDivisionsPerNote;
@@ -87,6 +93,9 @@ public class Options
         // Hints
         useHints = true;
         hintTypeDelays = new int[3];
+
+        // Show answer sequence
+        showAnswerSequence = true;
 
         // Slider divisions per note
         sliderDivisionsPerNote = DEFAULT_SLIDER_DIVISIONS_PER_NOTE;
@@ -136,6 +145,16 @@ public class Options
         this.optionsChangedListener = listener;
     }
 
+    /**
+     * Called to change the show answer sequence flag.
+     * @param show The new value of the show answer sequence flag
+     */
+    public void setShowAnswerSequence(boolean show)
+    {
+        showAnswerSequence = show;
+        if (optionsChangedListener != null)
+            optionsChangedListener.onShowAnswerSequenceChanged(showAnswerSequence);
+    }
 
     /**
      * Adds a chord inversion to use. 0 denotes first inversion, 1 denotes second, and so on.
@@ -325,6 +344,12 @@ public class Options
          * @param useHints Whether or not hints are now enabled.
          */
         void onHintsOptionsChanged(boolean useHints);
+
+        /**
+         * Called when the showAnswerSequence flag changes.
+         * @param showAnswerSeq The new value of the showAnswerSequence flag
+         */
+        void onShowAnswerSequenceChanged(boolean showAnswerSeq);
 
         /**
          * Called when the instrument selection changes.
