@@ -84,52 +84,117 @@
                 android:textSize="@dimen/text_size_medium"
                 android:textStyle="italic"/>
 
-            <!-- Hint subtext -->
-            <TextView
-                android:id="@+id/hint_text_submessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:text="@string/hint_delay_set_submessage"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="italic"/>
+            <!--&lt;!&ndash; Hint subtext &ndash;&gt;-->
+            <!--<TextView-->
+                <!--android:id="@+id/hint_text_submessage"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_margin="4dp"-->
+                <!--android:text="@string/hint_delay_set_submessage"-->
+                <!--android:textSize="@dimen/text_size_medium"-->
+                <!--android:textStyle="italic"/>-->
 
             <!-- Layout containing selectors for hint intervals -->
             <LinearLayout
                 android:id="@+id/hint_interval_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:baselineAligned="false"
                 android:orientation="horizontal">
 
-                <!-- Level 1 picker -->
-                <NumberPicker
-                    android:id="@+id/hint_level1_picker"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
-                </NumberPicker>
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_margin="4dp">
 
-                <!-- Level 2 picker -->
-                <NumberPicker
-                    android:id="@+id/hint_level2_picker"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-                </NumberPicker>
+                    <!-- Picker text -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/first_hint_delay"
+                        android:textSize="@dimen/text_size_small"/>
 
-                <!-- Level 3 picker -->
-                <NumberPicker
-                    android:id="@+id/hint_level3_picker"
+                    <!-- Level 1 picker -->
+                    <NumberPicker
+                        android:id="@+id/hint_level1_picker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </NumberPicker>
+
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1">
-                </NumberPicker>
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_margin="4dp">
+
+                    <!-- Picker text -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/second_hint_delay"
+                        android:textSize="@dimen/text_size_small"/>
+
+                    <!-- Level 1 picker -->
+                    <NumberPicker
+                        android:id="@+id/hint_level2_picker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </NumberPicker>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_margin="4dp">
+
+                    <!-- Picker text -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/third_hint_delay"
+                        android:textSize="@dimen/text_size_small"/>
+
+                    <!-- Level 1 picker -->
+                    <NumberPicker
+                        android:id="@+id/hint_level3_picker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    </NumberPicker>
+
+                </LinearLayout>
+
+
+                <!--&lt;!&ndash; Level 2 picker &ndash;&gt;-->
+                <!--<NumberPicker-->
+                    <!--android:id="@+id/hint_level2_picker"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1">-->
+                <!--</NumberPicker>-->
+
+                <!--&lt;!&ndash; Level 3 picker &ndash;&gt;-->
+                <!--<NumberPicker-->
+                    <!--android:id="@+id/hint_level3_picker"-->
+                    <!--android:layout_width="0dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_weight="1">-->
+                <!--</NumberPicker>-->
 
             </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
-
 
 </RelativeLayout>
