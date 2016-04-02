@@ -22,7 +22,7 @@ public class CheckSettingsActivityTest
     /** A Random to use in some of the tests. */
     private Random random;
 
-    /** The MainActivity rule. */
+    /** The Activity rule. */
     @Rule
     public ActivityTestRule<CheckSettingsActivity> mActivityRule = new ActivityTestRule<>(CheckSettingsActivity.class);
 
