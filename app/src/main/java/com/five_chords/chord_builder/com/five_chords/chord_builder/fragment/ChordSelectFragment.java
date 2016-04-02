@@ -87,7 +87,8 @@ public class ChordSelectFragment extends Fragment
             }
         }
 
-        adapter.add(new ChordDisplayItem(new Chord("Random")));
+        // Add random chord placeholder
+        adapter.add(new ChordDisplayItem(new Chord()));
 
         // Set the adapter
         chordSelectSpinner.setAdapter(adapter);

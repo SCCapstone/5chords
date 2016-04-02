@@ -1,8 +1,7 @@
 package com.five_chords.chord_builder;
 
-import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
-import java.util.Random;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
 /**
  * Class representing a single Chord.
@@ -35,7 +34,6 @@ public class Chord
         MAJOR_SEVENTH("Major Seventh", "Maj7", 0, 4, 7, 11),
         AUGMENTED_SEVENTH("Augmented Seventh", "Aug7", 0, 4, 8, 10),
         AUGMENTED_MAJOR_SEVENTH("Augmented Major Seventh", "AugMaj7", 0, 4, 8, 11);
-
 
         /** The name of the ChordType. */
         public final String name;
@@ -81,6 +79,14 @@ public class Chord
     }
 
     /**
+     * Constructs a new Chord of type 0 and fundamental 0.
+     */
+    public Chord()
+    {
+        this (0L);
+    }
+
+    /**
      * Constructs a new Chord.
      * @param id The id of the Chord
      */
@@ -90,13 +96,6 @@ public class Chord
         FUNDAMENTAL = (int)id;
         TYPE = ChordType.values()[(int)(id >>> Integer.SIZE)];
     }
-
-    public Chord(String random) {
-        ID = 0;
-        FUNDAMENTAL = 0;
-        TYPE = ChordType.values()[0];
-    }
-
 
     /**
      * Gets a unique value from the fundamental note - ChordType pair.
@@ -110,7 +109,7 @@ public class Chord
     }
 
     /**
-     * Compares two Chords represented by int arrays.
+     * Compares two Chords represented by Note arrays.
      * @param chordA The first chord to compare
      * @param chordB The second chord to compare
      * @param length The number of Notes to compare in each chord
@@ -120,9 +119,30 @@ public class Chord
     {
         double maxErr = MainActivity.getOptions().allowableCheckError;
 
+        // Check that each note of chordA is represented somewhere in chordB, up to length
+        boolean foundNote;
+
+        // Loop over each note of chordA
         for (int i = 0; i < length; ++i)
-            if (Math.abs(chordA[i].getFractionalIndex() - chordB[i].getFractionalIndex()) > maxErr)
+        {
+            foundNote = false;
+
+            // Loop over the notes of chordB, looking for the current note in chordA
+            for (int j = 0; !foundNote && j < length; ++j)
+            {
+                if (Math.abs(chordB[i].getFractionalIndex() - chordA[j].getFractionalIndex()) <= maxErr)
+                    // The note was found, within the allowable error margin
+                    foundNote = true;
+            }
+
+            // If the note was not found, the chords do not match
+            if (!foundNote)
                 return false;
+        }
+
+//        for (int i = 0; i < length; ++i)
+//            if (Math.abs(chordA[i].getFractionalIndex() - chordB[i].getFractionalIndex()) > maxErr)
+//                return false;
 
         return true;
     }
