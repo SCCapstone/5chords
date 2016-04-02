@@ -21,6 +21,7 @@ public class chordHandlerTest
     /** A Note array to use in testing. */
     private Note[] spelling;
 
+    /** The MainActivity rule. */
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 

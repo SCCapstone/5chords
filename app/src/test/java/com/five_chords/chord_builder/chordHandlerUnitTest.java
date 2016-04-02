@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
  * Unit Test class for chordHandler.
  * Created by Theodore on 4/1/2016.
  */
-public class chordHandlerTest
+public class chordHandlerUnitTest
 {
     /** A Note array to use in testing. */
     private Note[] spelling;

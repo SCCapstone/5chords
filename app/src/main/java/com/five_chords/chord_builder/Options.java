@@ -268,6 +268,7 @@ public class Options
         editor.putInt(NUM_SLIDER_DIVISIONS_BUNDLE_ID, sliderDivisionsPerNote);
         editor.putFloat(CHECK_ERROR_BUNDLE_ID, (float) allowableCheckError);
         editor.putInt(INSTRUMENT_BUNDLE_ID, instrument);
+        editor.putBoolean(SHOW_ANS_SEQ_BUNDLE_ID, showAnswerSequence);
 
         // Save hint delays
         for (int i = 0; i < hintTypeDelays.length; ++i)
@@ -298,6 +299,7 @@ public class Options
         instrument = preferences.getInt(INSTRUMENT_BUNDLE_ID, 0);
         sliderDivisionsPerNote = preferences.getInt(NUM_SLIDER_DIVISIONS_BUNDLE_ID, DEFAULT_SLIDER_DIVISIONS_PER_NOTE);
         allowableCheckError = preferences.getFloat(CHECK_ERROR_BUNDLE_ID, DEFAULT_CHECK_ERROR);
+        showAnswerSequence = preferences.getBoolean(SHOW_ANS_SEQ_BUNDLE_ID, true);
 
         // Read hint delays
         for (int i = 0; i < hintTypeDelays.length; ++i)
