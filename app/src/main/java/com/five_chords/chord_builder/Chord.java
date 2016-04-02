@@ -170,11 +170,6 @@ public class Chord
     }
 
     /**
-     * Gets a random spelling of this Chord.
-     * @param word The array into which to put the given position of this Chord
-     */
-
-    /**
      * Gets the given inversion for this Chord. Currently this implementation keeps the Note order
      * and only changes the octaves of the appropriate note.
      * @param chord A Note array to use to store the inversion
@@ -184,7 +179,7 @@ public class Chord
     {
         // Copy the offsets
         for (int i = 0; i < TYPE.offsets.length; ++i)
-            chord[i].set(TYPE.offsets[i]);
+            chord[i].set(FUNDAMENTAL + TYPE.offsets[i]);
 
         // Increment the appropriate note octaves
         for (int i = 0; i < inversion; ++i)

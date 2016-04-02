@@ -33,12 +33,6 @@ public class chordHandlerUnitTest
         }
     }
 
-    @After
-    public void tearDown() throws Exception
-    {
-
-    }
-
     /**
      * Tests resetting the current wrong streak counter.
      * @throws Exception
