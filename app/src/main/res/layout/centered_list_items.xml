@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@android:id/text1"
+    android:id="@+id/textview_centered_list_items"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:layout_width="fill_parent"
-    android:textSize="20sp"
+    android:textSize="@dimen/text_size_medium"
     android:paddingLeft="6dip"
     android:paddingRight="6dip"
     android:gravity="center" />

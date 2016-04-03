@@ -101,8 +101,8 @@ public class SettingsInstruments extends Activity implements AdapterView.OnItemC
     /**
      * A Custom list to contain images and text.
      */
-    public class CustomList extends ArrayAdapter<String>{
-
+    public class CustomList extends ArrayAdapter<String>
+    {
         /**
          * Constructor.
          *

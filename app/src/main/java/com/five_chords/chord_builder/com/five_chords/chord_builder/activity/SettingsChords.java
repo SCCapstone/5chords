@@ -1,13 +1,18 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
 import android.app.Activity;
+import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.five_chords.chord_builder.Chord;
@@ -19,10 +24,13 @@ import com.five_chords.chord_builder.R;
  * @date 06 November 2015
  * @author Drea,Steven,Zach,Kevin,Bo,Theodore
  */
-public class SettingsChords extends Activity
+public class SettingsChords extends Activity implements AdapterView.OnItemClickListener
 {
     /** The chords the user wants to use. */
-    private static boolean[] chordOptions;
+    private boolean[] chordOptions;
+
+    /** The ChordSelectAdapter containing the tabs to select chords. */
+//    private ChordSelectAdapter chordSelectAdapter;
 
     /**
      * Called when this Activity is created.
@@ -34,46 +42,20 @@ public class SettingsChords extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_chords);
 
-        // Inflate the layout for this fragment
-        ListView view = (ListView) findViewById(R.id.settings_content);
-
+        // Get the reference to the chord type usage array
         chordOptions = MainActivity.getOptions().chordTypesInUseArray;
-        final ArrayAdapter<SettingsPage.SettingsOption> optionsAdapter = new ArrayAdapter<>(this, R.layout.centered_list_items);
 
-        for (final Chord.ChordType type: Chord.ChordType.values())
-        {
-            optionsAdapter.add(new SettingsPage.SettingsOption(type + " are " + ((chordOptions[type.ordinal()]) ? "Enabled" : "Disabled")) {
-                @Override
-                public void performAction() {
-                    if (this.name.contains("Disabled")) {
-                        this.name = type + " Chords are Enabled";
-                        chordOptions[type.ordinal()] = true;
-                    } else {
-                        chordOptions[type.ordinal()] = false;
-                        if (isValidSelection())
-                            this.name = type +" Chords are Disabled";
-                        else
-                            chordOptions[type.ordinal()] = true;
-                    }
+        // Get the chord ListView
+        ListView chordListView = (ListView) findViewById(R.id.settings_content);
+        chordListView.setOnItemClickListener(null);
 
-                    optionsAdapter.notifyDataSetChanged();
-                }
-            });
-        }
+        // Populate the instrument select spinner
+        ChordSelectAdapter chordSelectAdapter =  new ChordSelectAdapter(this, R.layout.centered_list_items);
+        chordSelectAdapter.addAll(Chord.ChordType.values());
+        chordListView.setAdapter(chordSelectAdapter);
 
         // Set click listener
-        view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Object obj = parent.getItemAtPosition(position);
-
-                if (obj instanceof SettingsPage.SettingsOption)
-                    ((SettingsPage.SettingsOption) obj).performAction();
-            }
-        });
-
-        // Get the list view of settings
-        view.setAdapter(optionsAdapter);
+        chordListView.setOnItemClickListener(this);
     }
 
     /**
@@ -82,10 +64,13 @@ public class SettingsChords extends Activity
      */
     public void backToMain(View view)
     {
-        for (Chord.ChordType type: Chord.ChordType.values()) {
+        // Update chord types in use
+        for (Chord.ChordType type: Chord.ChordType.values())
+        {
             MainActivity.getOptions().setChordTypeUse(type.ordinal(), chordOptions[type.ordinal()]);
             Log.d("this", type.ordinal() + " " + chordOptions[type.ordinal()]);
         }
+
         finish();
         this.overridePendingTransition(0, 0);
     }
@@ -94,15 +79,120 @@ public class SettingsChords extends Activity
      * Tests whether or not at least one chord type is enabled.
      * @return Whether or not at least one chord type is enabled
      */
-    private boolean isValidSelection() {
+    private boolean isValidSelection()
+    {
+        // If at least one ChordType is enabled return true
         for (boolean chordOption : chordOptions)
-            if (chordOption) return true;
+            if (chordOption)
+                return true;
 
-        // Show toast
+        // Otherwise show toast
         Toast toast = Toast.makeText(this, getString(R.string.settingsChordsInvalid), Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
 
         return false;
+    }
+
+    /**
+     * Callback method to be invoked when an item in this AdapterView has
+     * been clicked.
+     * <p/>
+     * Implementers can call getItemAtPosition(position) if they need
+     * to access the data associated with the selected item.
+     *
+     * @param parent   The AdapterView where the click happened.
+     * @param view     The view within the AdapterView that was clicked (this
+     *                 will be a view provided by the adapter)
+     * @param position The position of the view in the adapter.
+     * @param id       The row id of the item that was clicked.
+     */
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+    {
+        // Toggle the chord type
+        chordOptions[position] = !chordOptions[position];
+
+        // Make sure there is still at least one type selected
+        if (!isValidSelection())
+            chordOptions[position] = true;
+
+        // Update the label on the View
+        TextView nameView = (TextView)view;
+        nameView.setTextSize(getResources().getDimensionPixelSize(R.dimen.text_size_small));
+        nameView.setText(getChordTypeLabel(Chord.ChordType.values()[position], chordOptions[position]));
+        nameView.setTypeface(null, chordOptions[position] ? Typeface.BOLD : Typeface.NORMAL);
+    }
+
+    /**
+     * Gets the label for a Chord type used in the Adapter.
+     * @param type The ChordType whose label to get
+     * @param enabled Whether or not the ChordType is currently enabled
+     * @return The label for a Chord type used in the Adapter
+     */
+    private String getChordTypeLabel(Chord.ChordType type, boolean enabled)
+    {
+        return type.toString() + " are " + (enabled ? "Enabled" : "Disabled");
+    }
+
+    /**
+     * ArrayAdapter containing ChordTypes.
+     */
+    private class ChordSelectAdapter extends ArrayAdapter<Chord.ChordType>
+    {
+        /**
+         * Constructor.
+         *
+         * @param context  The current context
+         * @param resource The resource ID for a layout file containing a TextView to use
+         */
+        public ChordSelectAdapter(Context context, int resource)
+        {
+            super(context, resource);
+        }
+
+        /**
+         * Get the view that displays the data at the specified position.
+         * @param position The position of the item
+         * @param convertView The old view
+         * @param parent The parent viewgroup
+         * @return The view that displays the data
+         */
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent)
+        {
+            View view;
+
+            // Reuse old view if possible
+            if (convertView != null && convertView.getId() == R.id.textview_centered_list_items)
+                view = convertView;
+            else
+                view = LayoutInflater.from(getContext()).inflate(R.layout.centered_list_items, parent, false);
+
+            // Get components on View
+            Chord.ChordType item = getItem(position);
+            TextView nameView = (TextView)view;
+
+            // Check whether the current chord type is enabled
+            boolean enabled = MainActivity.getOptions().chordTypesInUseArray[item.ordinal()];
+
+            // Set Text
+            nameView.setTextSize(getResources().getDimension(R.dimen.text_size_small));
+            nameView.setText(getChordTypeLabel(item, enabled));
+            nameView.setTypeface(null, enabled ? Typeface.BOLD : Typeface.NORMAL);
+
+            return view;
+        }
+
+        /**
+         * Gets the label for a Chord type used in the Adapter.
+         * @param type The ChordType whose label to get
+         * @param enabled Whether or not the ChordType is currently enabled
+         * @return The label for a Chord type used in the Adapter
+         */
+        private String getChordTypeLabel(Chord.ChordType type, boolean enabled)
+        {
+            return type.toString() + " are " + (enabled ? "Enabled" : "Disabled");
+        }
     }
 }
