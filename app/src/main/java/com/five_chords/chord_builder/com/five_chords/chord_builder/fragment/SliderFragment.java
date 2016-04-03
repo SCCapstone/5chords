@@ -37,7 +37,7 @@ public class SliderFragment extends Fragment
     private VerticalSeekBar optionSlider;
 
     /** Don't use onTouch methods when blocking */
-    private boolean blockSliders = false;
+    private boolean isBlocked = false;
 
     /** The index of the notes at the bottom of the sliders. */
     private int minNoteOnSlider;
@@ -45,9 +45,10 @@ public class SliderFragment extends Fragment
     /** The index of the notes at the top of the sliders. */
     private int maxNoteOnSlider;
 
+    /** Every slider gets it's own thumb image and soundHandler **/
     private static Drawable[] thumb;
     private static Drawable[] thumbTouched;
-
+    private static soundHandler[] soundHandlers;
 
     /**
      * Required empty public constructor.
@@ -136,12 +137,20 @@ public class SliderFragment extends Fragment
      */
     public void resetChordSliders()
     {
-        blockSliders = true;
+        isBlocked = true;
         rootSlider.setProgress(0);
         thirdSlider.setProgress(0);
         fifthSlider.setProgress(0);
         optionSlider.setProgress(0);
-        blockSliders = false;
+        isBlocked = false;
+    }
+
+    /**
+     * Stop sound from all sliders
+     */
+    public void silenceSliders() {
+        for (soundHandler sH : soundHandlers)
+            sH.stopSound();
     }
 
     /**
@@ -160,6 +169,7 @@ public class SliderFragment extends Fragment
         // Every slider needs it's own thumb image
         thumb = new Drawable[4];
         thumbTouched = new Drawable[4];
+        soundHandlers = new soundHandler[4];
 
         for (int i = 0; i < 4; i++) {
             thumb[i] = getResources().getDrawable(R.drawable.eq_slide_knob);
@@ -173,18 +183,23 @@ public class SliderFragment extends Fragment
         rootSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_root);
         rootSlider.initialize();
         rootSlider.setThumb(thumb[0]);
+        soundHandlers[0] = new soundHandler(getActivity(), "slider0");
 
         thirdSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_third);
         thirdSlider.initialize();
         thirdSlider.setThumb(thumb[1]);
+        soundHandlers[1] = new soundHandler(getActivity(), "slider1");
 
         fifthSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_fifth);
         fifthSlider.initialize();
         fifthSlider.setThumb(thumb[2]);
+        soundHandlers[2] = new soundHandler(getActivity(), "slider2");
 
         optionSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_option);
         optionSlider.initialize();
         optionSlider.setThumb(thumb[3]);
+        soundHandlers[3] = new soundHandler(getActivity(), "slider3");
+
 
         // Add the seek bar listeners
         Activity activity = getActivity();
@@ -236,12 +251,16 @@ public class SliderFragment extends Fragment
         max = (maxNoteOnSlider - minNoteOnSlider - 1) * MainActivity.getOptions().sliderDivisionsPerNote;
 
         // Set values
-        blockSliders = true;
+        isBlocked = true;
         rootSlider.setMax(max);
         thirdSlider.setMax(max);
         fifthSlider.setMax(max);
         optionSlider.setMax(max);
-        blockSliders = false;
+        isBlocked = false;
+    }
+
+    public void setIsBlocked(boolean blocked) {
+        isBlocked = blocked;
     }
 
     /**
@@ -277,12 +296,14 @@ public class SliderFragment extends Fragment
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
+                if (isBlocked) return;
+
                 // Only play note if progress change is from user
-                if (seekBar instanceof VerticalSeekBar && !blockSliders)
+                if (seekBar instanceof VerticalSeekBar)
                 {
                     Note note = new Note();
                     getNoteFromSlider(bar, note);
-                    soundHandler.playNote(activity, note);
+                    soundHandlers[slider].playNote(activity, note);
                 }
 
 //                test(); // TODO
@@ -300,15 +321,17 @@ public class SliderFragment extends Fragment
             @Override
             public boolean onTouch(View v, MotionEvent event)
             {
+                if (isBlocked) return true;
+
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
                     Note note = new Note();
                     getNoteFromSlider(bar, note);
-                    soundHandler.playNote(activity, note);
+                    soundHandlers[slider].playNote(activity, note);
                     bar.setThumb(thumbTouched[slider]);
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    soundHandler.stopSound();
+                    soundHandlers[slider].stopSound();
                     bar.setThumb(thumb[slider]);
                 }
                 else if (event.getAction() == MotionEvent.ACTION_MOVE)

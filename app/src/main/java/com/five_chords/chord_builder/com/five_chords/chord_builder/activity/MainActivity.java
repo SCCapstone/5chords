@@ -64,16 +64,16 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     private ListView mDrawerList;
 
     /** The Fragment containing the chord build sliders attached to this Activity. */
-    private SliderFragment sliderFragment;
+    private static SliderFragment sliderFragment;
 
     /** The Fragment for selecting chords and instruments attached to this Activity. */
-    private ChordSelectFragment chordInstrumentSelectFragment;
+    private static ChordSelectFragment chordInstrumentSelectFragment;
 
     /** The Fragment containing the chord check button. */
-    private CheckFragment checkFragment;
+    private static CheckFragment checkFragment;
 
     /** The Fragment containing the chord selection interface. */
-    private ChordSelectFragment chordSelectFragment;
+    private static ChordSelectFragment chordSelectFragment;
 
     /** The client to handle contacting the developers. */
     private GoogleApiClient client;
@@ -153,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
             public void onFocusChange(View v, boolean hasFocus)
             {
                 // Make sure sounds are stopped
-                soundHandler.stopSound();
+                stopAllSound();
             }
         });
 
@@ -173,7 +173,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         // Initialize Static Classes
         chordHandler.initialize();
         chordHandler.setOnChordSelectedListener(this);
-        soundHandler.initialize(this);
         soundHandler.switchInstrument(options.instrument);
         Score.loadScores(this, false);
 
@@ -191,7 +190,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     @Override
     protected void onDestroy() {
         // Make sure sound stops
-        soundHandler.stopSound();
+        sliderFragment.silenceSliders();
+        //Buttons.silenceButtons();
 
         // Clean up sound players
         correctSoundPlayer.release();
@@ -392,9 +392,9 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
                         @Override
                         public void onClick(DialogInterface dialog, int which)
                         {
+                            stopAllSound();
                             chordHandler.getRandomChord();
                             getSliderFragment().resetChordSliders();
-                            soundHandler.stopSound();
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener()
@@ -402,10 +402,10 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
                         @Override
                         public void onClick(DialogInterface dialog, int which)
                         {
+                            stopAllSound();
                             chordHandler.resetCurrentWrongStreak();
 //                            chordHandler.setSelectedChord(chordHandler.getCurrentSelectedChord(), false); // Resets the wrong streak counter
                             getSliderFragment().resetChordSliders();
-                            soundHandler.stopSound();
                         }
 
                     })
@@ -414,8 +414,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
                         @Override
                         public void onCancel(DialogInterface dialog)
                         {
+                            stopAllSound();
                             getSliderFragment().resetChordSliders();
-                            soundHandler.stopSound();
                         }
                     })
                     .show();
@@ -576,11 +576,31 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     }
 
     /**
+     * Called to stop all playback
+     */
+    public static void stopAllSound() {
+        sliderFragment.silenceSliders();
+        checkFragment.silenceButtons();
+        chordSelectFragment.silenceButtons();
+    }
+
+    /**
+     * Send signals to block playbask
+     * @param blocked is the sound blocked (true) or allowed (false)?
+     */
+    public static void blockAllSound(boolean blocked) {
+        sliderFragment.setIsBlocked(blocked);
+    }
+
+
+
+    /**
      * Called when the user attempts to back out of the MainActivity to launch a dialog
      * confirming this action.
      */
     @Override
     public void onBackPressed() {
+        stopAllSound();
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Exit")
@@ -638,18 +658,18 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
             }
 
             // Play Built chord
-            MainActivity.this.checkFragment.playBuiltChord(true);
+            checkFragment.playBuiltChord(true);
 
             // Sleep
             try {Thread.sleep(1000L);} catch (InterruptedException e)
             {
-                MainActivity.this.checkFragment.playBuiltChord(false);
+                checkFragment.playBuiltChord(false);
                 onEnd();
                 return;
             }
 
             // Stop Built chord
-            MainActivity.this.checkFragment.playBuiltChord(false);
+            checkFragment.playBuiltChord(false);
 
             // Sleep
             try {Thread.sleep(250L);} catch (InterruptedException e)
@@ -659,18 +679,43 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
             }
 
             // Play Correct chord
-            MainActivity.this.chordSelectFragment.playSelectedChord(true);
+            chordSelectFragment.playSelectedChord(true);
 
             // Sleep
             try {Thread.sleep(1000L);} catch (InterruptedException e)
             {
-                MainActivity.this.chordSelectFragment.playSelectedChord(false);
+                chordSelectFragment.playSelectedChord(false);
                 onEnd();
                 return;
             }
 
             // Stop Correct chord
-            MainActivity.this.chordSelectFragment.playSelectedChord(false);
+            chordSelectFragment.playSelectedChord(false);
+
+
+
+
+
+
+            // Play Correct chord
+            checkFragment.playBuiltChord(true);
+            chordSelectFragment.playSelectedChord(true);
+
+            // Sleep
+            try {Thread.sleep(1000L);} catch (InterruptedException e)
+            {
+                checkFragment.playBuiltChord(false);
+                chordSelectFragment.playSelectedChord(false);
+                onEnd();
+                return;
+            }
+
+            // Stop Correct chord
+            checkFragment.playBuiltChord(false);
+            chordSelectFragment.playSelectedChord(false);
+
+
+
 
             onEnd();
         }

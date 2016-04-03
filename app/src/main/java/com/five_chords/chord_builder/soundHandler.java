@@ -30,27 +30,24 @@ public class soundHandler extends MainActivity
     static final int VIOLIN = 41;
     static final int FLUTE = 74;
 
-    static MediaPlayer mediaPlayer;
-    static soundHandlerMidi midi;
-    static String midiFile;
     static int instrument = PIANO;
+    MediaPlayer mediaPlayer;
+    soundHandlerMidi midi;
+    String midiFile;
 
     /**
      * Static class.
      */
-    private soundHandler()
-    {   }
-
-    /**
-     * Called to initialize the SoundHandler.
-     */
-    public static void initialize(Activity main)
+    public soundHandler(Activity main, String midiFileName)
     {
-        midiFile = main.getFilesDir() + "/midi.mid";
+        midiFile = main.getFilesDir() + midiFileName + ".mid";
         midi = new soundHandlerMidi();
     }
 
-    public static void stopSound() {
+    /**
+     * Stop the media player
+     */
+    public void stopSound() {
         Log.d(TAG, "Stop Sound");
         try {
             mediaPlayer.release();
@@ -62,7 +59,7 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Add a note to the MIDI file
      **/
-    public static void addNote(Note note, int channel)
+    public void addNote(Note note, int channel)
     {
         addNote(note.index, 8192 + (int)(4096 * note.distanceToIndex), channel);
     }
@@ -70,7 +67,7 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Add a note to the MIDI file
      **/
-    public static void addNote(int note, int pitch, int channel)
+    public void addNote(int note, int pitch, int channel)
     {
         // TODO: use the sliders to change pitch of note
         //       replace 8192 (centered) with the new pitch
@@ -103,7 +100,7 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Plays a chord
      **/
-    public static void playChord(Activity activity, Note[] chord, int numNotes)
+    public void playChord(Activity activity, Note[] chord, int numNotes)
     {
         stopSound();
 
@@ -157,7 +154,7 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Plays a note
      **/
-    public static void playNote(Activity activity, int note, int pitch)
+    public void playNote(Activity activity, int note, int pitch)
     {
         stopSound();
 
@@ -180,7 +177,7 @@ public class soundHandler extends MainActivity
     /****************************************************************
      * Plays a note
      **/
-    public static void playNote(Activity activity, Note note)
+    public void playNote(Activity activity, Note note)
     {
         stopSound();
 

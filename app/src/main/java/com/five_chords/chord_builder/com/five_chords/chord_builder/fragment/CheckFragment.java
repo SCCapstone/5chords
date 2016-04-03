@@ -23,6 +23,9 @@ public class CheckFragment extends Fragment
     /** The Button for playing the built chord. */
     private Button playBuiltChordButton;
 
+    /** Every button gets a soundHandler **/
+    private static soundHandler[] soundHandlers;
+
     /**
      * Required empty public constructor.
      */
@@ -36,6 +39,14 @@ public class CheckFragment extends Fragment
     public void playBuiltChord(boolean play)
     {
         MainActivity.pressButton(playBuiltChordButton, play);
+    }
+
+    /**
+     * Silence sound from all buttons
+     */
+    public void silenceButtons() {
+        for (soundHandler sH : soundHandlers)
+            sH.stopSound();
     }
 
     /**
@@ -57,18 +68,25 @@ public class CheckFragment extends Fragment
         final Button playBuiltChord = (Button) view.findViewById(R.id.button_playback_slider_chord);
         playBuiltChordButton = playBuiltChord;
 
+        soundHandlers = new soundHandler[2];
+        soundHandlers[0] = new soundHandler(getActivity(), "playButton");
+        soundHandlers[1] = new soundHandler(getActivity(), "randomButton");
+
         // Set the preview button function
         playBuiltChord.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
+                    MainActivity.stopAllSound();
+                    MainActivity.blockAllSound(true);
                     chordHandler.buildCurrentChord(getActivity());
-                    soundHandler.playChord(getActivity(), chordHandler.getCurrentBuiltChordSpelling(),
+                    soundHandlers[0].playChord(getActivity(), chordHandler.getCurrentBuiltChordSpelling(),
                             chordHandler.getCurrentSelectedChord().getNumNotes());
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    soundHandler.stopSound();
+                    MainActivity.blockAllSound(false);
+                    soundHandlers[0].stopSound();
                 }
                 return false;
             }
@@ -80,6 +98,9 @@ public class CheckFragment extends Fragment
             public boolean onTouch(final View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP)
                 {
+                    MainActivity.stopAllSound();
+                    silenceButtons();
+
                     // Momentarily disable the button
                     v.setEnabled(false);
                     v.postDelayed(new Runnable()

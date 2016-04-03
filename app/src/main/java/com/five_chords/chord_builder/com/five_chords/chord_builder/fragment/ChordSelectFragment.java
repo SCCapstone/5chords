@@ -35,6 +35,9 @@ public class ChordSelectFragment extends Fragment
     /** The button for playing the currently selected chord. */
     private Button playSelectedChordButton;
 
+    /** Every button gets a soundHandler **/
+    private static soundHandler[] soundHandlers;
+
     /**
      * Required empty public constructor.
      */
@@ -104,6 +107,14 @@ public class ChordSelectFragment extends Fragment
     }
 
     /**
+     * Silence sound from all buttons
+     */
+    public void silenceButtons() {
+        for (soundHandler sH : soundHandlers)
+            sH.stopSound();
+    }
+
+    /**
      * Called when the Activity containing this Fragment is resumed.
      */
     @Override
@@ -133,6 +144,9 @@ public class ChordSelectFragment extends Fragment
         final Button playSelectedChord = (Button) view.findViewById(R.id.button_select_chord_play);
         playSelectedChordButton = playSelectedChord;
         final Button selectRandomChord = (Button) view.findViewById(R.id.button_select_random_chord);
+        soundHandlers = new soundHandler[2];
+        soundHandlers[0] = new soundHandler(getActivity(), "playButton");
+        soundHandlers[1] = new soundHandler(getActivity(), "randomButton");
 
         // Set the function of the play button
         playSelectedChord.setOnTouchListener(new View.OnTouchListener() {
@@ -140,12 +154,12 @@ public class ChordSelectFragment extends Fragment
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
-                    soundHandler.playChord(getActivity(), chordHandler.getCurrentSelectedChordSpelling(),
+                    soundHandlers[0].playChord(getActivity(), chordHandler.getCurrentSelectedChordSpelling(),
                             chordHandler.getCurrentSelectedChord().getNumNotes());
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP)
                 {
-                    soundHandler.stopSound();
+                    soundHandlers[0].stopSound();
                 }
                 return false;
             }
@@ -157,12 +171,15 @@ public class ChordSelectFragment extends Fragment
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
+                    MainActivity.stopAllSound();
+                    MainActivity.blockAllSound(true);
                     chordHandler.getRandomChord();
-                    soundHandler.playChord(getActivity(), chordHandler.getCurrentSelectedChordSpelling(),
+                    soundHandlers[1].playChord(getActivity(), chordHandler.getCurrentSelectedChordSpelling(),
                             chordHandler.getCurrentSelectedChord().getNumNotes());
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    soundHandler.stopSound();
+                    MainActivity.blockAllSound(false);
+                    soundHandlers[1].stopSound();
                 }
 
                 return false;
