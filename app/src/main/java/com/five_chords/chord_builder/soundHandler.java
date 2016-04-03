@@ -1,9 +1,3 @@
-/***************************************************************************************************
- * soundHandler.java
- * @version 1.1
- * @date 14 February 2015
- * @author: Drea,Zach
- **/
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
@@ -13,6 +7,12 @@ import android.util.Log;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
+/**
+ * soundHandler.java
+ * @version 1.1
+ * @date 3 April 2016
+ * @author: Drea,Zach
+ **/
 public class soundHandler extends MainActivity
 {
     /** The tag for this class. */

@@ -1,12 +1,3 @@
-/***************************************************************************************************
- * chordHandler.java
- * This class will loop through raw folder for each music note. User can pick a chord by either
- * random or their selection check the chord to see if it matches.Play the user chosen chord or at
- * random. Give back the feedback on screen "Correct" or "Wrong" accordingly.
- * @version 1.0
- * @date 06 November 2015
- * @author: Drea,Steven,Zach,Kevin,Bo
- */
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
@@ -19,6 +10,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * Class for handling playing, choosing, building, and checking chords. This class keeps track of two chords, one
+ * which represents the current chord the user has selected and one which represents the current chord that the
+ * user has built on the sliders.
+ * This class also keeps track of a mapping of chords that have been built so far for convenient reference.
+ * @date 04 April 2016
+ * @author Drea,Steven,Zach,Kevin,Bo,Theodore
+ */
 public class chordHandler
 {
     /** Denotes the first level of hints. */
@@ -39,6 +38,7 @@ public class chordHandler
     /** Contains the spelling of the current chord selected on the chord spinner. */
     private static Note[] currentSelectedChordSpelling = new Note[4];
 
+    // Initialize the Note arrays
     static
     {
         for (int i = 0; i < 4; ++i)

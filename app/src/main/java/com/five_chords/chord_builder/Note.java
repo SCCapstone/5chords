@@ -1,10 +1,9 @@
 package com.five_chords.chord_builder;
 
-import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
-
 /**
- * Class representing a Note with an integer in the range [0, 11].
- * Created by Theodore on 3/26/2016.
+ * Class representing a Note with an integer in the range [0, 11]. Notes also have an optional double value which
+ * represents a fractional distance to the integer note value. This distance is typically in the range [-1, 1].
+ * @author tstone95
  */
 public class Note
 {

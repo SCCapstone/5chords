@@ -3,16 +3,14 @@ package com.five_chords.chord_builder;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
-
-import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.PitchBendSettingsFragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Class wrapping handles to the possible option values of the application.
+ * Class wrapping handles to the possible option values of the application. Options has methods to change these values
+ * and notify an optional listener. Options can be saved and loaded.
  */
 public class Options
 {
@@ -331,7 +329,7 @@ public class Options
     }
 
     /**
-     * Interface for listening for chord type changes.
+     * Interface for listening Options changes.
      */
     public interface OptionsChangedListener
     {

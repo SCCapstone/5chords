@@ -1,10 +1,3 @@
-/******************************************************************************************
- * Score.java
- * This class will display how many tries and how many user got it correct by "_/_" format.
- * @version 1.0
- * @date 06 November 2015
- * @author: Drea,Steven,Zach,Kevin,Bo
- **/
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
@@ -19,6 +12,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class encapsulating the Score of a single chord. Each Score keeps track of the total number of correct and
+ * incorrect chord guesses as well as a series of snapshots for a history. Scores can be saved and loaded.
+ * Score also contains a method to clear the entire Score history for the application.
+ * @date 04 April 2016
+ * @author: Drea,Steven,Zach,Kevin,Bo,Theodore
+ **/
 public class Score
 {
     /** The name of the saved chord scores in the SharedPreferences */
@@ -306,7 +306,8 @@ public class Score
     }
 
     /**
-     * Wrapper class for a score history split into bins.
+     * Wrapper class for a score history split into bins.\
+     * @author tstone95
      */
     public static class DiscreteScoreHistory
     {
@@ -486,6 +487,7 @@ public class Score
 
     /**
      * Wrapper class for a score value, measured as the number of correct guesses out the number of total guesses.
+     * @author tstone95
      */
     public static class ScoreValue
     {

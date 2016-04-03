@@ -4,8 +4,9 @@ package com.five_chords.chord_builder;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
 /**
- * Class representing a single Chord.
- * Created by Theodore on 3/24/2016.
+ * Class representing a single Chord. Chord also contains an enum for each Chord type. Chord types are represented
+ * by a series of integer offset values, one integer for each note in the chord.
+ * @author tstone95
  */
 public class Chord
 {
@@ -139,10 +140,6 @@ public class Chord
             if (!foundNote)
                 return false;
         }
-
-//        for (int i = 0; i < length; ++i)
-//            if (Math.abs(chordA[i].getFractionalIndex() - chordB[i].getFractionalIndex()) > maxErr)
-//                return false;
 
         return true;
     }
