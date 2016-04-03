@@ -81,9 +81,9 @@
     <string name="seek_bar_tag">seekBarTag</string>
     <!--<string name="hint_delay_set_submessage">Select the number of incorrect guesses for each hint type below:</string>-->
     <string name="hint_delay_set_message">Three types of hints will appear after some number of incorrect guesses.</string>
-    <string name="first_hint_delay">First Hint Delay:</string>
-    <string name="second_hint_delay">Second Hint Delay:</string>
-    <string name="third_hint_delay">Third Hint Delay:</string>
+    <string name="first_hint_delay">1st Hint Delay:</string>
+    <string name="second_hint_delay">2nd Hint Delay:</string>
+    <string name="third_hint_delay">3rd Hint Delay:</string>
     <string name="title_activity_contact__us">Contact Us</string>
     <string name="change_instrument">Change the instrument</string>
     <string name="contact_developers">Contact Developers</string>
