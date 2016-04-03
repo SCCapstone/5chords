@@ -348,7 +348,7 @@ public class SliderFragment extends Fragment
 
                     int tempProgress = (bar.getMax() - (int) (bar.getMax() * event.getY() / bar.getHeight()));
                     int diff = Math.abs(tempProgress - bar.getProgress());
-                    if (diff < 2) {
+                    if (diff < MainActivity.getOptions().sliderDivisionsPerNote + 1) {
                         isMoving[slider] = true;
                         return false;
                     }
