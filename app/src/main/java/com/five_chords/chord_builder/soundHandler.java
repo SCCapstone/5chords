@@ -13,7 +13,7 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.Main
  * @version 1.1
  * @date 3 April 2016
  * @author: Drea, Zach, Theodore
- **/
+ */
 public class soundHandler extends MainActivity
 {
     /** The tag for this class. */
