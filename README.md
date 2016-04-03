@@ -17,7 +17,7 @@ If the spinner does not contain the chords you want to replicate, navigate to th
 
 A variety of other settings including hints, instrument selection, and slider granularity are also included on the _SETTINGS_ page.
 
-The users current progress in correctly reproducing chords can be viewed at the top of the main screen beneath the chord selection spinner or over time by clicking _VIEW_HISTORY_ on the navigation pane.
+The users current progress in correctly reproducing chords can be viewed at the top of the main screen beneath the chord selection spinner or over time by clicking _VIEW HISTORY_ on the navigation pane.
 
 **_Available Chords_**
 * Major
