@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -218,8 +217,6 @@ public class ChordSelectFragment extends Fragment
         public static String[] CHORD_DESCRIPTION_MATRIX = new String[] {"Not Attempted", "Beginner", "Shows Promise",
                 "Difficult", "Good", "Very Good", "Challenging", "Very Good", "Expert", "Mastered"};
 
-//        /** The name of the Chord */
-//        private String chordName;
         /** The Chord to display. */
         private Chord chord;
 

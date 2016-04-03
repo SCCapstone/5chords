@@ -16,7 +16,7 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.Slid
 
 /**
  * An overridden LinearLayout to contain the chord sliders and a mechanism for drawing hints on top of the sliders.
- * Created by Theodore on 2/28/2016.
+ * @author tstone95
  */
 public class SliderHintView extends LinearLayout
 {
@@ -206,6 +206,7 @@ public class SliderHintView extends LinearLayout
         {
             while (isRunning)
             {
+                // Wait until there is a hint to draw
                 synchronized (HINT_LOCK)
                 {
                     while (hint == null)
@@ -219,6 +220,7 @@ public class SliderHintView extends LinearLayout
                     }
                 }
 
+                // While there is a hint, and while that hint is not done, update the hint
                 synchronized (HINT_LOCK)
                 {
                     if (hint.isDone())
@@ -227,6 +229,7 @@ public class SliderHintView extends LinearLayout
                         hint.update();
                 }
 
+                // Invalidate the fragment so that it redraws
                 post(new Runnable()
                 {
                     @Override
@@ -294,7 +297,7 @@ public class SliderHintView extends LinearLayout
     }
 
     /**
-     * A triangular Hint.
+     * A triangular Hint. Can face up or down.
      */
     private class TriangleHint extends Hint
     {
@@ -365,7 +368,6 @@ public class SliderHintView extends LinearLayout
             this (note, 30, 50);
         }
 
-
         /**
          * Constructs a new Hint.
          * @param note The Note on which this Hint will appear
@@ -420,7 +422,7 @@ public class SliderHintView extends LinearLayout
 
         /**
          * Override to draw this Hint.
-         * @param canvas The drawing Canvas
+         * @param canvas The Canvas to draw on
          */
         public abstract void draw(Canvas canvas);
     }

@@ -1,24 +1,15 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
-import android.app.DialogFragment;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.NumberPicker;
 import android.widget.SeekBar;
-import android.widget.Switch;
 import android.widget.TextView;
 
-import com.five_chords.chord_builder.Options;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
-
-import org.w3c.dom.Text;
 
 /**
  * A Fragment containing the pitch bend settings.
@@ -55,16 +46,6 @@ public class PitchBendSettingsFragment extends Fragment implements SeekBar.OnSee
      */
     public PitchBendSettingsFragment()
     {   }
-
-    /**
-     * Create a new instance of HintSettingsFragment.
-     * @return A new instance of HintSettingsFragment
-     */
-    public static PitchBendSettingsFragment newInstance()
-    {
-        PitchBendSettingsFragment f = new PitchBendSettingsFragment();
-        return f;
-    }
 
     /**
      * Called when the View containing this Fragment has been created.
@@ -163,9 +144,7 @@ public class PitchBendSettingsFragment extends Fragment implements SeekBar.OnSee
      */
     @Override
     public void onStartTrackingTouch(SeekBar seekBar)
-    {
-
-    }
+    {    }
 
     /**
      * Notification that the user has finished a touch gesture. Clients may want to use this
@@ -175,7 +154,5 @@ public class PitchBendSettingsFragment extends Fragment implements SeekBar.OnSee
      */
     @Override
     public void onStopTrackingTouch(SeekBar seekBar)
-    {
-
-    }
+    {    }
 }

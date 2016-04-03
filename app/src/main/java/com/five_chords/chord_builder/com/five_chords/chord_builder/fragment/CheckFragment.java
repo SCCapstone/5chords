@@ -44,7 +44,8 @@ public class CheckFragment extends Fragment
     /**
      * Silence sound from all buttons
      */
-    public void silenceButtons() {
+    public void silenceButtons()
+    {
         for (soundHandler sH : soundHandlers)
             sH.stopSound();
     }
@@ -54,7 +55,7 @@ public class CheckFragment extends Fragment
      * @param inflater The inflater to use to inflate the Fragment
      * @param container The ViewGroup container
      * @param savedInstanceState The saved instance state
-     * @return This Fragmet's layout
+     * @return This Fragment's layout
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

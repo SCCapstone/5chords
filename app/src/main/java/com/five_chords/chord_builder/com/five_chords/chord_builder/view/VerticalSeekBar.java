@@ -1,10 +1,3 @@
-/***************************************************************************************************
- * VerticalSeekBar.java
- * This class creates a vertical scroll bar instead of horizontal
- * @version 1.0
- * @date 06 November 2015
- * @author: Drea,Steven,Zach,Kevin,Bo
- **/
 package com.five_chords.chord_builder.com.five_chords.chord_builder.view;
 
 import android.content.Context;
@@ -13,8 +6,11 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.SeekBar;
 
-import com.five_chords.chord_builder.chordHandler;
-
+/**
+ * Class representing a SeekBar that draws vertically.
+ * @date 4 April 2016
+ * @author Drea,Steven,Zach,Kevin,Bo
+ **/
 public class VerticalSeekBar extends SeekBar
 {
     /**
@@ -106,12 +102,12 @@ public class VerticalSeekBar extends SeekBar
 
         switch (event.getAction())
         {
+            // Update the progress of this VerticalSeekBar on motion events
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
             case MotionEvent.ACTION_UP:
                 setProgress(getMax() - (int) (getMax() * event.getY() / getHeight()));
                 onSizeChanged(getWidth(), getHeight(), 0, 0);
-
                 break;
 
             case MotionEvent.ACTION_CANCEL:

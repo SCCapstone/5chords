@@ -7,17 +7,14 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 
-import java.util.Date;
-import java.util.LinkedList;
-
 /**
- * Extension of View overridden to draw a progress graph for a chords score history.
+ * Extension of View overridden to draw a progress graph for a chord's score history.
+ * @author tstone95
  */
 public class ScoreProgressView extends View
 {
@@ -89,6 +86,7 @@ public class ScoreProgressView extends View
 
         isInitialized = true;
 
+        // Initialise the Paint
         PAINT.setAntiAlias(true);
         PAINT.setTextAlign(Paint.Align.CENTER);
         PAINT.setTextSize(activity.getResources().getDimensionPixelSize(R.dimen.text_size_small));
@@ -203,11 +201,18 @@ public class ScoreProgressView extends View
 
             if (value != null)
             {
+                // Create a new ScorePoint for the value
                 point = new ScorePoint();
+
+                // Set the point's value and position
                 point.percent = value.numTotalGuesses == 0 ? 0.0f : (float) value.numCorrectGuesses / value.numTotalGuesses;
                 point.x = 1.0f - (float)x / width;
                 point.y = yBase + (1.0f - point.percent) * yScale;
+
+                // Set the point's label
                 point.label = Score.HISTORY_TAGS[j];
+
+                // Assign the point to the array and increment the offset counter
                 points[index++] = point;
                 x += historyTagWidth;
             }
@@ -223,6 +228,7 @@ public class ScoreProgressView extends View
     {
         super.onDraw(canvas);
 
+        // Get the canvas size for convenience
         int w = canvas.getWidth();
         int h = canvas.getHeight();
 

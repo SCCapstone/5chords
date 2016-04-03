@@ -75,38 +75,6 @@ public class SliderFragment extends Fragment
         getNoteFromSlider(optionSlider, chord[3]);
     }
 
-//    // TODO
-//    public void test()
-//    {
-//        Note[] chord = new Note[] {new Note(), new Note(), new Note(), new Note()};
-//        buildCurrentChord(chord);
-//
-//        Log.e("SliderFragment", "Test");
-//        Log.e("->", "Min Note on Sliders = " + minNoteOnSlider);
-//        Log.e("->", "Max Note on Sliders = " + maxNoteOnSlider);
-//
-//        String value = "";
-//        for (int i = 0; i < chord.length; ++i)
-//        {
-//            value += chord[i].getFractionalIndex();
-//            if (i != chord.length - 1)
-//                value += "\t";
-//        }
-//
-//        Log.e("->", "Slider Values = " + value);
-//
-//        value = "";
-//        chord = chordHandler.getCurrentSelectedChordSpelling();
-//        for (int i = 0; i < chord.length; ++i)
-//        {
-//            value += chord[i].getFractionalIndex();
-//            if (i != chord.length - 1)
-//                value += "\t";
-//        }
-//
-//        Log.e("->", "Selected Chord Notes = " + value);
-//    }
-
     /**
      * Gets the current note on the slider, taking into account the number of intermediate slider
      * positions.
@@ -272,8 +240,8 @@ public class SliderFragment extends Fragment
     }
 
     /**
-     * Gets a String representantation of this SliderFragment.
-     * @return A String representantation of this SliderFragment
+     * Gets a String representation of this SliderFragment.
+     * @return A String representation of this SliderFragment
      */
     public String toString()
     {
@@ -313,8 +281,6 @@ public class SliderFragment extends Fragment
                     getNoteFromSlider(bar, note);
                     soundHandlers[slider].playNote(activity, note);
                 }
-
-//                test(); // TODO
             }
 
             public void onStartTrackingTouch(SeekBar seekBar)
@@ -370,12 +336,6 @@ public class SliderFragment extends Fragment
         public double fracDistAboveNote;
 
         /**
-         * Constructor.
-         */
-        public SliderNotePosition()
-        {   }
-
-        /**
          * Constructs a new SliderNotePosition for the given SeekBar.
          * @param slider The Seekbar whose position to get
          */
@@ -384,15 +344,6 @@ public class SliderFragment extends Fragment
             calculate(slider);
         }
 
-//        /**
-//         * Gets the Midi pitch of this SliderNotePosition.
-//         * @return The Midi pitch of this SliderNotePosition
-//         */
-//        public int getMidiPitch()
-//        {
-//            return 8192 + (int)Math.round(fracDistAboveNote * 4096);
-//        }
-
         /**
          * Calculates the values of this SliderNotePosition for the given slider.
          * @param slider The slider whose note position to get
@@ -400,8 +351,11 @@ public class SliderFragment extends Fragment
         public void calculate(SeekBar slider)
         {
             Options options = MainActivity.getOptions();
+            // Scale the value to the right range
             note = slider.getProgress() / options.sliderDivisionsPerNote;
+            // Calculate the fractional position of the note
             fracDistAboveNote = slider.getProgress() / ((double)options.sliderDivisionsPerNote) - note;
+            // Shift the value to the right range
             note += minNoteOnSlider;
         }
     }

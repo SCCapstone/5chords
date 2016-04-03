@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -99,9 +98,6 @@ public class ScorePageFragment extends Fragment implements AdapterView.OnItemSel
 
         chordSelectSpinner.setAdapter(adapter);
         chordSelectSpinner.setOnItemSelectedListener(this);
-
-//        // Populate list view of scores
-//        refreshListView();
 
         // Return the created View
         return view;
