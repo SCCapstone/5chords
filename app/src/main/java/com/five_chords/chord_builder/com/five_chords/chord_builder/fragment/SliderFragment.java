@@ -50,6 +50,9 @@ public class SliderFragment extends Fragment
     private static Drawable[] thumbTouched;
     private static soundHandler[] soundHandlers;
 
+    /** If the thumb is touched we can move the slider **/
+    private static boolean isMoving[];
+
     /**
      * Required empty public constructor.
      */
@@ -170,6 +173,7 @@ public class SliderFragment extends Fragment
         thumb = new Drawable[4];
         thumbTouched = new Drawable[4];
         soundHandlers = new soundHandler[4];
+        isMoving = new boolean[4];
 
         for (int i = 0; i < 4; i++) {
             thumb[i] = getResources().getDrawable(R.drawable.eq_slide_knob);
@@ -184,21 +188,25 @@ public class SliderFragment extends Fragment
         rootSlider.initialize();
         rootSlider.setThumb(thumb[0]);
         soundHandlers[0] = new soundHandler(getActivity(), "slider0");
+        isMoving[0] = false;
 
         thirdSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_third);
         thirdSlider.initialize();
         thirdSlider.setThumb(thumb[1]);
         soundHandlers[1] = new soundHandler(getActivity(), "slider1");
+        isMoving[1] = false;
 
         fifthSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_fifth);
         fifthSlider.initialize();
         fifthSlider.setThumb(thumb[2]);
         soundHandlers[2] = new soundHandler(getActivity(), "slider2");
+        isMoving[2] = false;
 
         optionSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_option);
         optionSlider.initialize();
         optionSlider.setThumb(thumb[3]);
         soundHandlers[3] = new soundHandler(getActivity(), "slider3");
+        isMoving[3] = false;
 
 
         // Add the seek bar listeners
@@ -333,9 +341,18 @@ public class SliderFragment extends Fragment
                 else if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandlers[slider].stopSound();
                     bar.setThumb(thumb[slider]);
+                    isMoving[slider] = false;
                 }
-                else if (event.getAction() == MotionEvent.ACTION_MOVE)
-                    return false;
+                else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                    if (isMoving[slider]) return false;
+
+                    int tempProgress = (bar.getMax() - (int) (bar.getMax() * event.getY() / bar.getHeight()));
+                    int diff = Math.abs(tempProgress - bar.getProgress());
+                    if (diff < 2) {
+                        isMoving[slider] = true;
+                        return false;
+                    }
+                }
 
                 return true;
             }

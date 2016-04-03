@@ -190,5 +190,6 @@ public class CheckSettingsActivity extends Activity implements CompoundButton.On
     public void backToMain(View view)
     {
         finish();
+        this.overridePendingTransition(0, 0);
     }
 }

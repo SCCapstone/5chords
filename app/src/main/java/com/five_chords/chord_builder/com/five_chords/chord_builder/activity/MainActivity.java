@@ -692,31 +692,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
             // Stop Correct chord
             chordSelectFragment.playSelectedChord(false);
 
-
-
-
-
-
-            // Play Correct chord
-            checkFragment.playBuiltChord(true);
-            chordSelectFragment.playSelectedChord(true);
-
-            // Sleep
-            try {Thread.sleep(1000L);} catch (InterruptedException e)
-            {
-                checkFragment.playBuiltChord(false);
-                chordSelectFragment.playSelectedChord(false);
-                onEnd();
-                return;
-            }
-
-            // Stop Correct chord
-            checkFragment.playBuiltChord(false);
-            chordSelectFragment.playSelectedChord(false);
-
-
-
-
             onEnd();
         }
 

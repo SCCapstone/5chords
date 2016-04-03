@@ -24,16 +24,11 @@
             android:id="@+id/slider_root"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginLeft="12dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginEnd="12dp"
             android:indeterminate="false"
             android:thumb="@layout/seekbar_thumb"
             android:tag="@string/seek_bar_tag"
-            android:background="@drawable/eq_slide_background"
-            android:progressTint="#000000" />
+            style="@style/styleSeekBar"
+            android:progressDrawable="@android:color/transparent"/>
 
     </com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView>
 
@@ -51,16 +46,11 @@
             android:id="@+id/slider_third"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginLeft="12dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginEnd="12dp"
             android:indeterminate="false"
             android:thumb="@layout/seekbar_thumb"
             android:tag="@string/seek_bar_tag"
-            android:background="@drawable/eq_slide_background"
-            android:progressTint="#000000" />
+            style="@style/styleSeekBar"
+            android:progressDrawable="@android:color/transparent"/>
         <!--android:thumb="@drawable/abc_btn_radio_to_on_mtrl_015"-->
 
     </com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView>
@@ -79,16 +69,11 @@
             android:id="@+id/slider_fifth"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginLeft="12dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginEnd="12dp"
             android:indeterminate="false"
             android:thumb="@layout/seekbar_thumb"
             android:tag="@string/seek_bar_tag"
-            android:background="@drawable/eq_slide_background"
-            android:progressTint="#000000" />
+            style="@style/styleSeekBar"
+            android:progressDrawable="@android:color/transparent"/>
 
     </com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView>
 
@@ -106,16 +91,11 @@
             android:id="@+id/slider_option"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginLeft="12dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginEnd="12dp"
             android:indeterminate="false"
             android:thumb="@layout/seekbar_thumb"
             android:tag="@string/seek_bar_tag"
-            android:background="@drawable/eq_slide_background"
-            android:progressTint="#000000" />
+            style="@style/styleSeekBar"
+            android:progressDrawable="@android:color/transparent"/>
 
     </com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView>
 
