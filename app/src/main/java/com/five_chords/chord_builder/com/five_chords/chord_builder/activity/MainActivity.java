@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         // Display demo if needed
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(this);
         boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
-        if (isFirstRun)
+        if (isFirstRun || true)
         {
             Intent intent = new Intent(this, demo.class);
             startActivity(intent);

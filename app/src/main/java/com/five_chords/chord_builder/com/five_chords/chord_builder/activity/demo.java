@@ -3,26 +3,28 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
 
 import com.five_chords.chord_builder.R;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
-import com.github.amlcurran.showcaseview.targets.ActionViewTarget;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
 /**
  * The startup demo Activity.
- * @version 1.0
- * @date 06 November 2015
- * @author Drea,Steven,Zach,Kevin,Bo
+ * @date 4 April 2016
+ * @author Drea, Steven, Zach, Kevin, Bo
  */
 public class demo extends AppCompatActivity implements View.OnClickListener
 {
+    /** The View containing the tutorial gui. */
     private ShowcaseView showcaseView;
+
+    /** Keeps track of the current tutorial frame. */
     private int count = 0;
-    private Target t0, t1, t2,t3,t4,t5,t6,t7;
+
+    /** The targets to focus on for each tutorial frame. */
+    private Target t0, t1, t2, t3, t4, t5, t6, t7;
+
     /**
      * Activity Create and checks first launch
      * If first launch, go to Tutorial, otherwise
@@ -31,22 +33,10 @@ public class demo extends AppCompatActivity implements View.OnClickListener
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-       super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo);
 
-        final ImageView imageView = (ImageView)findViewById(R.id.imageView);
-/*
-        Button next_button = (Button)findViewById(R.id.next_button);
-
-        next_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v)
-            {
-                imageView.setImageResource(R.drawable.test2);
-                v.setEnabled(false);
-            }
-        }); */
-
+        // Get the focus points
         t0 = new ViewTarget(R.id.button, this);
         t1 = new ViewTarget(R.id.button2, this);
         t2 = new ViewTarget(R.id.button3, this);
@@ -56,7 +46,7 @@ public class demo extends AppCompatActivity implements View.OnClickListener
         t6 = new ViewTarget(R.id.button7, this);
         t7 = new ViewTarget(R.id.button8, this);
 
-
+        // Create the ShowcaseView
         showcaseView = new ShowcaseView.Builder(this)
                 .setTarget(Target.NONE)
                 .setOnClickListener(this)
@@ -66,6 +56,12 @@ public class demo extends AppCompatActivity implements View.OnClickListener
         showcaseView.setButtonText("Next");
 
     }
+
+    /**
+     * Called when a View has been clicked.
+     * @param v The clicked View
+     */
+    @Override
     public void onClick(View v){
         switch(count){
             case 0:
@@ -80,6 +76,7 @@ public class demo extends AppCompatActivity implements View.OnClickListener
                 break;
             case 2:
                 showcaseView.setShowcase(t2,true);
+                showcaseView.forceTextPosition(ShowcaseView.ABOVE_SHOWCASE);
                 showcaseView.setContentTitle("Menu");
                 showcaseView.setContentText("Swipe to the Right here to gain access to more options and more information about the Chord Builder. You can also check your history and adjust the difficulty in the menu.");
                 break;
@@ -106,20 +103,12 @@ public class demo extends AppCompatActivity implements View.OnClickListener
             case 7:
                 showcaseView.setShowcase(t7,true);
                 showcaseView.setContentTitle("Enjoy!");
-                showcaseView.setContentText("Thank you for trying out our appplication and feel free to contact us if you have any questions or comments. Thank you!");
+                showcaseView.setContentText("Thank you for trying out our application and feel free to contact us if you have any questions or comments. Thank you!");
                 break;
 
             case 8:
                 finish();
         }
         count++;
-    }
-    /**
-     * Called to go the MainActivity.
-     * @param view The calling View
-     */
-    public void skip_button(View view)
-    {
-        finish();
     }
 }
