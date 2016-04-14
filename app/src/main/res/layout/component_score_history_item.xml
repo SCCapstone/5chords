@@ -16,7 +16,7 @@
         android:layout_marginRight="8dp">
 
         <!-- Chord description -->
-        <TextView
+        <TextView style="@style/AppText"
             android:id="@+id/score_history_chord_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
             android:textSize="@dimen/text_size_small"/>
 
         <!-- Chord name -->
-        <TextView
+        <TextView style="@style/AppText"
             android:id="@+id/score_history_chord_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

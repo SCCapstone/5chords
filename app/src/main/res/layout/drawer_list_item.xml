@@ -5,7 +5,7 @@
     android:layout_gravity="center"
     android:gravity="center">
 
-    <TextView
+    <TextView style="@style/AppText"
         android:id="@+id/textLabel"
         android:layout_height="?android:attr/listPreferredItemHeight"
         android:layout_width="fill_parent"

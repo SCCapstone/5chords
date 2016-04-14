@@ -2,17 +2,16 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              tools:context=".SettingsChords">
+              tools:context=".com.five_chords.chord_builder.activity.SettingsInstruments">
 
     <!-- Back arrow -->
-    <Button
+    <Button style="@style/AppText"
         android:id="@+id/textview_go_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#00000000"
         android:text="@string/back"
         android:textSize="@dimen/text_size_title"
-        android:textColor="@color/trans_black"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginTop="24dp"
@@ -23,7 +22,7 @@
         android:onClick="backToMain" />
 
     <!-- Title -->
-    <TextView
+    <TextView style="@style/AppText"
         android:id="@+id/textview_settings_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

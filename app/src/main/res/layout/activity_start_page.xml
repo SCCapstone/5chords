@@ -5,7 +5,7 @@
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:scaleType="centerCrop"
-                tools:context=".StartPage">
+                tools:context=".com.five_chords.chord_builder.activity.StartPage">
 
     <!-- Frame Layout to detect touches -->
     <FrameLayout
@@ -15,7 +15,7 @@
     </FrameLayout>
 
     <!-- TextView for page title -->
-    <TextView
+    <TextView style="@style/AppText"
         android:id="@+id/textview_start_page_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
         android:textSize="@dimen/text_size_title" />
 
     <!-- TextView for page subtitle -->
-    <TextView
+    <TextView style="@style/AppText"
         android:id="@+id/textview_start_page_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
         android:textSize="@dimen/text_size_subtitle" />
 
     <!-- TextView for tap to begin text-->
-    <TextView
+    <TextView style="@style/AppText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tap To Begin"

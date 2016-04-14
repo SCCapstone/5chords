@@ -21,6 +21,11 @@
         <item name="android:textSize">10sp</item>
     </style>
 
+    <!-- Style for text -->
+    <style name="AppText">
+        <item name="android:textColor">@color/vlt_gray</item>
+    </style>
+
     <!-- Style for a vertical separator in a ListView -->
     <style name="VerticalSeparator">
         <item name="android:layout_width">match_parent</item>

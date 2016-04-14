@@ -6,7 +6,7 @@
               android:layout_margin="4dp">
 
     <!-- Description -->
-    <TextView
+    <TextView style="@style/AppText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -22,7 +22,7 @@
         android:layout_margin="8dp">
 
         <!-- Label -->
-        <TextView
+        <TextView style="@style/AppText"
             android:id="@+id/textview_pitch_slider_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
     <View style="@style/VerticalSeparator"/>
 
     <!-- Description -->
-    <TextView
+    <TextView style="@style/AppText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
@@ -63,7 +63,7 @@
         android:layout_margin="8dp">
 
         <!-- Label -->
-        <TextView
+        <TextView style="@style/AppText"
             android:id="@+id/textview_pitch_check_error_label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

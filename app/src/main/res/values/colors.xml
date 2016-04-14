@@ -2,5 +2,6 @@
 <resources>
 
     <color name="trans_black">#88000000</color>
+    <color name="vlt_gray">#FFEFEFEF</color>
 
 </resources>

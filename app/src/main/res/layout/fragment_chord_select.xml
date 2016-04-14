@@ -42,7 +42,7 @@
             android:spinnerMode="dialog" />
 
         <!-- Score view -->
-        <TextView
+        <TextView style="@style/AppText"
             android:id="@+id/textview_score_display"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

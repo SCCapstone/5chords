@@ -10,7 +10,7 @@
         android:layout_height="50dp"
         android:layout_weight=".50" />
 
-    <TextView
+    <TextView style="@style/AppText"
         android:id="@+id/txt"
         android:layout_width="0dp"
         android:layout_height="50dp"
