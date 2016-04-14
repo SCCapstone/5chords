@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:descendantFocusability="blocksDescendants">
 
     <!-- Back arrow -->
     <Button style="@style/AppText"
@@ -117,7 +118,7 @@
                         android:textSize="@dimen/text_size_small"/>
 
                     <!-- Level 1 picker -->
-                    <NumberPicker style="@style/AppText"
+                    <NumberPicker
                         android:id="@+id/hint_level1_picker"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -141,7 +142,7 @@
                         android:textSize="@dimen/text_size_small"/>
 
                     <!-- Level 1 picker -->
-                    <NumberPicker style="@style/AppText"
+                    <NumberPicker
                         android:id="@+id/hint_level2_picker"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
@@ -165,7 +166,7 @@
                         android:textSize="@dimen/text_size_small"/>
 
                     <!-- Level 1 picker -->
-                    <NumberPicker style="@style/AppText"
+                    <NumberPicker
                         android:id="@+id/hint_level3_picker"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">

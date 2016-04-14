@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Color scheme colors -->
+    <color name="colorPrimary">#853526</color>
+    <color name="colorPrimaryDark">#581b0f</color>
+    <color name="colorAccent">#853526</color>
+
+    <!-- General Colors -->
     <color name="trans_black">#88000000</color>
     <color name="vlt_gray">#FFEFEFEF</color>
 
