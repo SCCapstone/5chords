@@ -14,15 +14,17 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColor">@color/vlt_gray</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <!-- Alert Dialog Theme-->
+    <style name="AppAlertDialog" parent="@android:style/Holo.ButtonBar.AlertDialog">
+        <item name="android:background">@drawable/wood</item>
+        <item name="android:textColor">@color/vlt_gray</item>
+    </style>
 
     <!-- Style for small tab text -->
     <style name="SmallTabText" parent="TextAppearance.Design.Tab">

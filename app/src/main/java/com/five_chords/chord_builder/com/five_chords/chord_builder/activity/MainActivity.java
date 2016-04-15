@@ -11,6 +11,8 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +30,7 @@ import com.five_chords.chord_builder.Options;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 import com.five_chords.chord_builder.chordHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.AlertFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.CheckFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordSelectFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
@@ -385,42 +388,76 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
             // Play sound
             correctSoundPlayer.start();
 
-            // Launch dialog
-            new AlertDialog.Builder(this)
-                    .setTitle(getString(R.string.thats_correct))
-                    .setMessage("Do you want to try another chord?")
-                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            stopAllSound();
-                            chordHandler.getRandomChord();
-                            getSliderFragment().resetChordSliders();
-                        }
-                    })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which)
-                        {
-                            stopAllSound();
-                            chordHandler.resetCurrentWrongStreak();
-//                            chordHandler.setSelectedChord(chordHandler.getCurrentSelectedChord(), false); // Resets the wrong streak counter
-                            getSliderFragment().resetChordSliders();
-                        }
+            // Launch
+            AlertFragment alert = AlertFragment.newInstance(R.string.thats_correct, R.string.correct_dialog_message);
 
-                    })
-                    .setOnCancelListener(new DialogInterface.OnCancelListener()
-                    {
-                        @Override
-                        public void onCancel(DialogInterface dialog)
-                        {
-                            stopAllSound();
-                            getSliderFragment().resetChordSliders();
-                        }
-                    })
-                    .show();
+            alert.setNoAction(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    chordHandler.resetCurrentWrongStreak();
+                    getSliderFragment().resetChordSliders();
+                }
+            });
+            alert.setYesAction(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    stopAllSound();
+                    chordHandler.getRandomChord();
+                    getSliderFragment().resetChordSliders();
+                }
+            });
+
+            alert.setDismissAction(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    stopAllSound();
+                    getSliderFragment().resetChordSliders();
+                }
+            });
+
+            alert.show(getFragmentManager(), "alert");
+
+//            new AlertDialog.Builder(this, R.style.AppAlertDialog)
+//                    .setTitle(getString(R.string.thats_correct))
+//                    .setMessage("Do you want to try another chord?")
+//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
+//                    {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which)
+//                        {
+//                            stopAllSound();
+//                            chordHandler.getRandomChord();
+//                            getSliderFragment().resetChordSliders();
+//                        }
+//                    })
+//                    .setNegativeButton("No", new DialogInterface.OnClickListener()
+//                    {
+//                        @Override
+//                        public void onClick(DialogInterface dialog, int which)
+//                        {
+//                            stopAllSound();
+//                            chordHandler.resetCurrentWrongStreak();
+////                            chordHandler.setSelectedChord(chordHandler.getCurrentSelectedChord(), false); // Resets the wrong streak counter
+//                            getSliderFragment().resetChordSliders();
+//                        }
+//
+//                    })
+//                    .setOnCancelListener(new DialogInterface.OnCancelListener()
+//                    {
+//                        @Override
+//                        public void onCancel(DialogInterface dialog)
+//                        {
+//                            stopAllSound();
+//                            getSliderFragment().resetChordSliders();
+//                        }
+//                    })
+//                    .show();
         }
         else
         {

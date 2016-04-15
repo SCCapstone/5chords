@@ -22,6 +22,10 @@
     <dimen name="options_dialog_width">320dp</dimen>
     <dimen name="options_dialog_height">320dp</dimen>
 
+    <!-- Size of the alert dialog -->
+    <dimen name="alert_dialog_width">320dp</dimen>
+    <dimen name="alert_dialog_height">280dp</dimen>
+
     <!-- Size of the Score Display -->
     <dimen name="score_display_width">80dp</dimen>
 

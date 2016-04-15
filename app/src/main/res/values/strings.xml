@@ -92,8 +92,12 @@
     <string name="contact_us">Contact Us</string>
     <string name="about_us">About Us</string>
     <string name="created_by">Created By:</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 
     <!-- Long Strings -->
+    <string name="correct_dialog_message">Do you want to try another chord?</string>
+
     <string name="about_page_content">We are 5Chords!\n\nWe are students at the University of South Carolina working on our Capstone Computing Project.
         \n\nTogether we have developed an application that will help music students learn music theory and intonation without the skills required to play an instrument perfectly.
         \n\nOur goal is to give music learners an easier method to learn music theory."</string>

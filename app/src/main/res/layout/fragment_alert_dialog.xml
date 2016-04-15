@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                style="@style/AppAlertDialog"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <!-- Bottom bar containing yes and no buttons -->
+    <LinearLayout style="?android:attr/buttonBarStyle"
+        android:id="@+id/layout_alert_dialog_buttons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true">
+
+        <!-- No Button -->
+        <Button style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/button_alert_dialog_no"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:background="@drawable/button_selector"
+            android:text="@string/no"
+            android:textSize="@dimen/text_size_small"
+            android:textColor="#ffffff"/>
+
+        <!-- Yes Button -->
+        <Button style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/button_alert_dialog_yes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_margin="8dp"
+            android:background="@drawable/button_selector"
+            android:text="@string/yes"
+            android:textSize="@dimen/text_size_small"
+            android:textColor="#ffffff"/>
+
+    </LinearLayout>
+
+    <!-- Title -->
+    <TextView style="@style/AppText"
+        android:id="@+id/textview_alert_dialog_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="bold"
+        android:text="Title"/>
+
+    <!-- Separator -->
+    <View style="@style/VerticalSeparator"
+        android:layout_below="@id/textview_alert_dialog_title"/>
+
+    <!-- Message view -->
+    <TextView style="@style/AppText"
+        android:id="@+id/textview_alert_dialog_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:layout_below="@id/textview_alert_dialog_title"
+        android:layout_above="@id/layout_alert_dialog_buttons"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_medium"
+        android:text="This is text"/>
+
+    <!-- Separator -->
+    <View style="@style/VerticalSeparator"
+          android:layout_below="@id/textview_alert_dialog_message"/>
+
+</RelativeLayout>
