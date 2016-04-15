@@ -11,7 +11,7 @@ import com.five_chords.chord_builder.R;
 
 /**
  * The Help page Activity.
- * @date 31 March 2016
+ * date 31 March 2016
  * @author Drea,Steven,Zach,Kevin,Bo
  */
 public class HelpPage extends AppCompatActivity
@@ -34,7 +34,7 @@ public class HelpPage extends AppCompatActivity
             public void onClick(View v)
             {
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"5chordscontact@gmail.com"});
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"5chordcontactus@gmail.com"});
                 emailIntent.putExtra(Intent.EXTRA_CC, new String[]{""});
 
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject Of Matter");
@@ -50,7 +50,7 @@ public class HelpPage extends AppCompatActivity
             @Override
             public void onClick(View v) {
                 Intent emailIntent = new Intent(Intent.ACTION_SEND);
-                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"Prohelpcontact123@gmail.com"});
+                emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"promusicconactus@gmail.com"});
                 emailIntent.putExtra(Intent.EXTRA_CC, new String[]{""});
 
                 emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Subject Of Matter");
