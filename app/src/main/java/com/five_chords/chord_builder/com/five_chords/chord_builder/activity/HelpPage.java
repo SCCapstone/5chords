@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.five_chords.chord_builder.R;
 
@@ -41,7 +42,15 @@ public class HelpPage extends AppCompatActivity
                 emailIntent.putExtra(Intent.EXTRA_TEXT, "Body");
 
                 emailIntent.setType("message/rfc822");
-                startActivity(Intent.createChooser(emailIntent, "Choose your email client:"));
+                //startActivity(Intent.createChooser(emailIntent, "Choose your email client:"));
+                try {
+                    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+                    finish();
+
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(HelpPage.this,
+                            "There is no email client installed.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -58,8 +67,15 @@ public class HelpPage extends AppCompatActivity
 
                 emailIntent.setType("message/rfc822");
                 //standard ARPA starting
-                startActivity(Intent.createChooser(emailIntent, "Email us with your preferential source"));
+                //startActivity(Intent.createChooser(emailIntent, "Email us with your preferential source"));
+                try {
+                    startActivity(Intent.createChooser(emailIntent, "Send mail..."));
+                    finish();
 
+                } catch (android.content.ActivityNotFoundException ex) {
+                    Toast.makeText(HelpPage.this,
+                            "There is no email client installed.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
