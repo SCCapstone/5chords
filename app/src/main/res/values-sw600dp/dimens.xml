@@ -36,6 +36,15 @@
     <dimen name="instrument_icon_height">64dp</dimen>
 
     <!-- Size of the Chord play buttons -->
-    <dimen name="chord_play_button_size">72dp</dimen>
+    <dimen name="chord_play_button_size">96dp</dimen>
+
+    <!-- Padding of selected chord display -->
+    <dimen name="main_chord_spinner_padding">8dp</dimen>
+
+    <!-- Play and preview button margins -->
+    <dimen name="play_preview_button_margin">16dp</dimen>
+
+    <!-- Slider width -->
+    <dimen name="slider_width">64dp</dimen>
 
 </resources>

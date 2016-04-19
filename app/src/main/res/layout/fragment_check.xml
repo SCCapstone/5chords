@@ -8,7 +8,7 @@
                 android:padding="0dp">
 
     <!-- Button to play the chord the user currently has selected on the sliders -->
-    <Button
+    <Button style="?attr/buttonBarButtonStyle"
         android:id="@+id/button_playback_slider_chord"
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -21,7 +21,7 @@
         android:padding="0dp" />
 
     <!-- Button to check the chord the user currently has selected on the sliders -->
-    <Button
+    <Button style="?attr/buttonBarButtonStyle"
         android:id="@+id/button_check_user_chord"
         android:layout_width="0dp"
         android:layout_height="match_parent"
