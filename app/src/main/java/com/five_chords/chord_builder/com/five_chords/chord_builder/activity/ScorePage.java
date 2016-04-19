@@ -1,11 +1,14 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScorePageFragment;
 
 /**
  * The Score page Activity. ScorePage contains the history view for each chord as well as a slider to select
@@ -41,6 +44,16 @@ public class ScorePage extends AppCompatActivity
      */
     public void clearScores(View view)
     {
-        Score.resetScores(this);
+        final Fragment fragment = getFragmentManager().findFragmentById(R.id.score_activity_score_fragment);
+
+        Score.resetScores(this, new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                if (fragment != null && fragment instanceof ScorePageFragment)
+                    ((ScorePageFragment)fragment).refreshDelayed();
+            }
+        });
     }
 }

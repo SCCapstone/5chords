@@ -99,6 +99,8 @@ public class ScorePageFragment extends Fragment implements AdapterView.OnItemSel
         chordSelectSpinner.setAdapter(adapter);
         chordSelectSpinner.setOnItemSelectedListener(this);
 
+        refreshDelayed();
+
         // Return the created View
         return view;
     }
@@ -128,10 +130,20 @@ public class ScorePageFragment extends Fragment implements AdapterView.OnItemSel
         if (arguments != null)
             arguments.putInt(BUNDLE_ID_DISPLAYED_TYPE, currentType.ordinal());
 
+        // Refresh
+        refreshDelayed();
+    }
+
+    /**
+     * Refreshes this ScorePageFragment after a slight delay.
+     */
+    public void refreshDelayed()
+    {
+        // Refresh list view
         refreshListView();
 
         // Refresh
-        ListView listView = (ListView)ScorePageFragment.this.view.findViewById(R.id.score_page_scorelist);
+        ListView listView = (ListView)view.findViewById(R.id.score_page_scorelist);
         listView.postInvalidateDelayed(10L);
     }
 

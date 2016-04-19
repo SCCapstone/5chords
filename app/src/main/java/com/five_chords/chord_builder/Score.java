@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.RunnableFuture;
 
 /**
  * Class encapsulating the Score of a single chord. Each Score keeps track of the total number of correct and
@@ -126,8 +127,9 @@ public class Score
     /**
      * Called to reset the scores.
      * @param activity The current Activity
+     * @param onScoresReset Optional Runnable to be executed when and if the scores are actually reset
      */
-    public static void resetScores(final Activity activity)
+    public static void resetScores(final Activity activity, final Runnable onScoresReset)
     {
         // Launch confirmation dialog
         new AlertDialog.Builder(activity)
@@ -151,6 +153,10 @@ public class Score
 
                         // Show confirmation toast
                         Toast.makeText(activity, "Scores cleared", Toast.LENGTH_SHORT).show();
+
+                        // Run action
+                        if (onScoresReset != null)
+                            onScoresReset.run();
                     }
 
                 })
