@@ -13,7 +13,10 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.five_chords.chord_builder.Chord;
+import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.R;
+import com.five_chords.chord_builder.soundHandler;
 
 /**
  * Activity containing the instrument selection.
@@ -29,8 +32,45 @@ public class SettingsInstruments extends Activity implements AdapterView.OnItemC
     public static final int[] INSTRUMENT_ICONS = {R.drawable.trumpet, R.drawable.piano, R.drawable.organ,
             R.drawable.violin, R.drawable.flute};
 
+    /** Chord for previewing instruments. */
+    private static final Note[] PREVIEW_CHORD = new Note[3];
+
+    static
+    {
+        for (int i = 0; i < 3; ++i)
+        {
+            PREVIEW_CHORD[i] = new Note();
+            PREVIEW_CHORD[i].set(Chord.ChordType.MAJOR.offsets[i]);
+        }
+    }
+
     /** The array of instrument name view handles. */
     private TextView[] instrumentNames;
+
+    /** SoundHandler to use to preview instruments. */
+    private soundHandler instrumentPreviewer;
+
+    /** Thread for previewing instrument sounds. */
+    private Thread previewThread;
+
+    /** Runnable for previewing instrument sounds. */
+    private Runnable previewRunnable = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            instrumentPreviewer.playChord(SettingsInstruments.this, PREVIEW_CHORD, 3);
+
+            try
+            {
+                Thread.sleep(1000L);
+            }
+            catch (InterruptedException e)
+            {/* Ignore */}
+
+            instrumentPreviewer.stopSound();
+        }
+    };
 
     /**
      * Called when this Activity is created.
@@ -44,11 +84,24 @@ public class SettingsInstruments extends Activity implements AdapterView.OnItemC
         // Create the instrument name array
         instrumentNames = new TextView[INSTRUMENT_NAMES.length];
 
+        // Create the previewer
+        instrumentPreviewer = new soundHandler(this, "instrumentPreview");
+
         // Set content view
         setContentView(R.layout.activity_settings_instrument);
 
         // Populate the instrument select spinner
         populateInstrumentSelector();
+    }
+
+    /**
+     * Called when this Activity is destroyed.
+     */
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        instrumentPreviewer.stopSound();
     }
 
     /**
@@ -75,10 +128,16 @@ public class SettingsInstruments extends Activity implements AdapterView.OnItemC
      * @param id       The row id of the item that was clicked.
      */
     @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+    public void onItemClick(AdapterView<?> parent, View view, final int position, long id)
     {
         MainActivity.getOptions().changeInstrument(position);
         populateInstrumentSelector();
+
+        if (previewThread != null && previewThread.isAlive())
+            previewThread.interrupt();
+
+        previewThread = new Thread(previewRunnable);
+        previewThread.start();
     }
 
     /**

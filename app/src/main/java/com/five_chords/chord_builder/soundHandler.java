@@ -14,7 +14,7 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.Main
  * @date 3 April 2016
  * @author: Drea, Zach, Theodore
  */
-public class soundHandler extends MainActivity
+public class soundHandler
 {
     /** The tag for this class. */
     private static final String TAG = "soundHandler";
