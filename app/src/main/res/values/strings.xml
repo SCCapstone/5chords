@@ -94,9 +94,14 @@
     <string name="created_by">Created By:</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="exit">Exit</string>
 
     <!-- Long Strings -->
     <string name="correct_dialog_message">Do you want to try another chord?</string>
+
+    <string name="exit_dialog_message">Are you sure you want to exit?</string>
+
+    <string name="clearscore_dialog_message">Are you sure you want clear all scores?</string>
 
     <string name="about_page_content">We are 5Chords!\n\nWe are students at the University of South Carolina working on our Capstone Computing Project.
         \n\nTogether we have developed an application that will help music students learn music theory and intonation without the skills required to play an instrument perfectly.

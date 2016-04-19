@@ -79,14 +79,33 @@ public class CheckFragment extends Fragment
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
-                    MainActivity.stopAllSound();
-                    MainActivity.blockAllSound(true);
+                    MainActivity mainActivity = null;
+                    Activity activity = getActivity();
+
+                    if (activity instanceof MainActivity)
+                        mainActivity = (MainActivity)activity;
+
+                    if (mainActivity != null)
+                    {
+                        mainActivity.stopAllSound();
+                        mainActivity.blockAllSound(true);
+                    }
+
                     chordHandler.buildCurrentChord(getActivity());
                     soundHandlers[0].playChord(getActivity(), chordHandler.getCurrentBuiltChordSpelling(),
                             chordHandler.getCurrentSelectedChord().getNumNotes());
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    MainActivity.blockAllSound(false);
+
+                    MainActivity mainActivity = null;
+                    Activity activity = getActivity();
+
+                    if (activity instanceof MainActivity)
+                        mainActivity = (MainActivity)activity;
+
+                    if (mainActivity != null)
+                        mainActivity.blockAllSound(false);
+
                     soundHandlers[0].stopSound();
                 }
                 return false;
@@ -99,7 +118,15 @@ public class CheckFragment extends Fragment
             public boolean onTouch(final View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP)
                 {
-                    MainActivity.stopAllSound();
+                    MainActivity mainActivity = null;
+                    Activity activity = getActivity();
+
+                    if (activity instanceof MainActivity)
+                        mainActivity = (MainActivity)activity;
+
+                    if (mainActivity != null)
+                        mainActivity.blockAllSound(false);
+
                     silenceButtons();
 
                     // Momentarily disable the button
@@ -114,8 +141,6 @@ public class CheckFragment extends Fragment
                     }, 1000L);
 
                     // Check the result
-                    Activity activity = getActivity();
-
                     if (activity instanceof MainActivity)
                         chordHandler.checkCurrentChord((MainActivity)activity);
                 }

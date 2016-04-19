@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.AlertFragment;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -131,37 +133,34 @@ public class Score
      */
     public static void resetScores(final Activity activity, final Runnable onScoresReset)
     {
-        // Launch confirmation dialog
-        new AlertDialog.Builder(activity)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Clear Scores")
-                .setMessage("Are you sure you want clear all scores?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which)
-                    {
-                        // Clear the history
-                        SharedPreferences savedChordScores = getScoreLoader(activity);
-                        SharedPreferences.Editor editor = savedChordScores.edit();
-                        editor.clear();
-                        editor.apply();
-                        scores.clear();
+        // Launch dialog
+        AlertFragment alert = AlertFragment.newInstance(R.string.clear_scores, R.string.clearscore_dialog_message);
 
-                        // Reload scores
-                        loadScores(activity, true);
+        alert.setYesAction(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                // Clear the history
+                SharedPreferences savedChordScores = getScoreLoader(activity);
+                SharedPreferences.Editor editor = savedChordScores.edit();
+                editor.clear();
+                editor.apply();
+                scores.clear();
 
-                        // Show confirmation toast
-                        Toast.makeText(activity, "Scores cleared", Toast.LENGTH_SHORT).show();
+                // Reload scores
+                loadScores(activity, true);
 
-                        // Run action
-                        if (onScoresReset != null)
-                            onScoresReset.run();
-                    }
+                // Show confirmation toast
+                Toast.makeText(activity, "Scores cleared", Toast.LENGTH_SHORT).show();
 
-                })
-                .setNegativeButton("No", null)
-                .show();
+                // Run action
+                if (onScoresReset != null)
+                    onScoresReset.run();
+            }
+        });
+
+        alert.show(activity.getFragmentManager(), "alert");
     }
 
     /**

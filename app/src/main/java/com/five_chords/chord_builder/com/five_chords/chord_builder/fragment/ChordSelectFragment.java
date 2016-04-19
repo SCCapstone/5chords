@@ -170,14 +170,33 @@ public class ChordSelectFragment extends Fragment
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
-                    MainActivity.stopAllSound();
-                    MainActivity.blockAllSound(true);
+                    MainActivity mainActivity = null;
+                    Activity activity = getActivity();
+
+                    if (activity instanceof MainActivity)
+                        mainActivity = (MainActivity)activity;
+
+                    if (mainActivity != null)
+                    {
+                        mainActivity.stopAllSound();
+                        mainActivity.blockAllSound(true);
+                    }
+
                     chordHandler.getRandomChord();
                     soundHandlers[1].playChord(getActivity(), chordHandler.getCurrentSelectedChordSpelling(),
                             chordHandler.getCurrentSelectedChord().getNumNotes());
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    MainActivity.blockAllSound(false);
+
+                    MainActivity mainActivity = null;
+                    Activity activity = getActivity();
+
+                    if (activity instanceof MainActivity)
+                        mainActivity = (MainActivity)activity;
+
+                    if (mainActivity != null)
+                        mainActivity.blockAllSound(false);
+
                     soundHandlers[1].stopSound();
                 }
 

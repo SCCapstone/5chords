@@ -68,16 +68,16 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     private ListView mDrawerList;
 
     /** The Fragment containing the chord build sliders attached to this Activity. */
-    private static SliderFragment sliderFragment;
+    private SliderFragment sliderFragment;
 
     /** The Fragment for selecting chords and instruments attached to this Activity. */
-    private static ChordSelectFragment chordInstrumentSelectFragment;
+    private ChordSelectFragment chordInstrumentSelectFragment;
 
     /** The Fragment containing the chord check button. */
-    private static CheckFragment checkFragment;
+    private CheckFragment checkFragment;
 
     /** The Fragment containing the chord selection interface. */
-    private static ChordSelectFragment chordSelectFragment;
+    private ChordSelectFragment chordSelectFragment;
 
     /** The client to handle contacting the developers. */
     private GoogleApiClient client;
@@ -201,6 +201,10 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         // Clean up sound players
         correctSoundPlayer.release();
         wrongSoundPlayer.release();
+
+        // Remove listeners
+        options.setOptionsChangedListener(null);
+        chordHandler.setOnChordSelectedListener(null);
 
         super.onDestroy();
     }
@@ -388,7 +392,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
             // Play sound
             correctSoundPlayer.start();
 
-            // Launch
+            // Launch dialog
             AlertFragment alert = AlertFragment.newInstance(R.string.thats_correct, R.string.correct_dialog_message);
 
             alert.setNoAction(new Runnable()
@@ -422,42 +426,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
             });
 
             alert.show(getFragmentManager(), "alert");
-
-//            new AlertDialog.Builder(this, R.style.AppAlertDialog)
-//                    .setTitle(getString(R.string.thats_correct))
-//                    .setMessage("Do you want to try another chord?")
-//                    .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-//                    {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which)
-//                        {
-//                            stopAllSound();
-//                            chordHandler.getRandomChord();
-//                            getSliderFragment().resetChordSliders();
-//                        }
-//                    })
-//                    .setNegativeButton("No", new DialogInterface.OnClickListener()
-//                    {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which)
-//                        {
-//                            stopAllSound();
-//                            chordHandler.resetCurrentWrongStreak();
-////                            chordHandler.setSelectedChord(chordHandler.getCurrentSelectedChord(), false); // Resets the wrong streak counter
-//                            getSliderFragment().resetChordSliders();
-//                        }
-//
-//                    })
-//                    .setOnCancelListener(new DialogInterface.OnCancelListener()
-//                    {
-//                        @Override
-//                        public void onCancel(DialogInterface dialog)
-//                        {
-//                            stopAllSound();
-//                            getSliderFragment().resetChordSliders();
-//                        }
-//                    })
-//                    .show();
         }
         else
         {
@@ -617,7 +585,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     /**
      * Called to stop all playback
      */
-    public static void stopAllSound() {
+    public void stopAllSound() {
         sliderFragment.silenceSliders();
         checkFragment.silenceButtons();
         chordSelectFragment.silenceButtons();
@@ -627,7 +595,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * Send signals to block playbask
      * @param blocked is the sound blocked (true) or allowed (false)?
      */
-    public static void blockAllSound(boolean blocked) {
+    public void blockAllSound(boolean blocked) {
         sliderFragment.setIsBlocked(blocked);
     }
 
@@ -639,21 +607,30 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      */
     @Override
     public void onBackPressed() {
-        stopAllSound();
-        new AlertDialog.Builder(this)
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .setTitle("Exit")
-                .setMessage("Are you sure you want to exit?")
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener()
-                {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        finish();
-                    }
 
-                })
-                .setNegativeButton("No", null)
-                .show();
+        // Launch dialog
+        AlertFragment alert = AlertFragment.newInstance(R.string.exit, R.string.exit_dialog_message);
+
+        alert.setYesAction(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                stopAllSound();
+                finish();
+            }
+        });
+
+        alert.setDismissAction(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                stopAllSound();
+            }
+        });
+
+        alert.show(getFragmentManager(), "alert");
     }
 
     /**
