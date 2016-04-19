@@ -24,6 +24,9 @@ import com.five_chords.chord_builder.soundHandler;
  */
 public class SliderFragment extends Fragment
 {
+    /** The thumb offset of the sliders. */
+    public static final int THUMB_OFFSET = 0;
+
     /** The slider for the root note */
     private VerticalSeekBar rootSlider;
 
@@ -155,24 +158,28 @@ public class SliderFragment extends Fragment
         rootSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_root);
         rootSlider.initialize();
         rootSlider.setThumb(thumb[0]);
+        rootSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[0] = new soundHandler(getActivity(), "slider0");
         isMoving[0] = false;
 
         thirdSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_third);
         thirdSlider.initialize();
         thirdSlider.setThumb(thumb[1]);
+        thirdSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[1] = new soundHandler(getActivity(), "slider1");
         isMoving[1] = false;
 
         fifthSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_fifth);
         fifthSlider.initialize();
         fifthSlider.setThumb(thumb[2]);
+        fifthSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[2] = new soundHandler(getActivity(), "slider2");
         isMoving[2] = false;
 
         optionSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_option);
         optionSlider.initialize();
         optionSlider.setThumb(thumb[3]);
+        optionSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[3] = new soundHandler(getActivity(), "slider3");
         isMoving[3] = false;
 
@@ -303,11 +310,15 @@ public class SliderFragment extends Fragment
                     getNoteFromSlider(bar, note);
                     soundHandlers[slider].playNote(activity, note);
                     bar.setThumb(thumbTouched[slider]);
+
+                    bar.setThumbOffset(THUMB_OFFSET);
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP) {
                     soundHandlers[slider].stopSound();
                     bar.setThumb(thumb[slider]);
                     isMoving[slider] = false;
+
+                    bar.setThumbOffset(THUMB_OFFSET);
                 }
                 else if (event.getAction() == MotionEvent.ACTION_MOVE) {
                     if (isMoving[slider]) return false;

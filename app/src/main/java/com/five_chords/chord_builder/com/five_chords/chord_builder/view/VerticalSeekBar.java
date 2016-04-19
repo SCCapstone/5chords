@@ -3,8 +3,11 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.SeekBar;
+
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
 
 /**
  * Class representing a SeekBar that draws vertically.
@@ -54,7 +57,7 @@ public class VerticalSeekBar extends SeekBar
     /**
      * Called when this VerticalSeekBar is measured.
      * @param widthMeasureSpec The measured width
-     * @param heightMeasureSpec The measrued height
+     * @param heightMeasureSpec The measured height
      */
     @Override
     protected synchronized void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
@@ -106,6 +109,7 @@ public class VerticalSeekBar extends SeekBar
             case MotionEvent.ACTION_DOWN:
             case MotionEvent.ACTION_MOVE:
             case MotionEvent.ACTION_UP:
+
                 setProgress(getMax() - (int) (getMax() * event.getY() / getHeight()));
                 onSizeChanged(getWidth(), getHeight(), 0, 0);
                 break;
