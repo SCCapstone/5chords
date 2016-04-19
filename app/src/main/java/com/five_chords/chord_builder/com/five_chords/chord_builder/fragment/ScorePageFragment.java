@@ -128,8 +128,11 @@ public class ScorePageFragment extends Fragment implements AdapterView.OnItemSel
         if (arguments != null)
             arguments.putInt(BUNDLE_ID_DISPLAYED_TYPE, currentType.ordinal());
 
-        // Refresh
         refreshListView();
+
+        // Refresh
+        ListView listView = (ListView)ScorePageFragment.this.view.findViewById(R.id.score_page_scorelist);
+        listView.postInvalidateDelayed(10L);
     }
 
     /**
