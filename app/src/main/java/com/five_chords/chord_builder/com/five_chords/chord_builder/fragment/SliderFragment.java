@@ -54,11 +54,11 @@ public class SliderFragment extends Fragment
     /** The index of the notes at the top of the sliders. */
     private int maxNoteOnSlider;
 
-    /** Thumb drawable for when sliders are not pressed. */
-    private static Drawable thumb;
+    /** Thumb drawables for when sliders are not pressed. */
+    private static Drawable[] thumb;
 
-    /** Thumb drawable for when sliders are pressed. */
-    private static Drawable thumbTouched;
+    /** Thumb drawables for when sliders are pressed. */
+    private static Drawable[] thumbTouched;
 
     /** SoundHandlers for each slider. */
     private static soundHandler[] soundHandlers;
@@ -124,10 +124,16 @@ public class SliderFragment extends Fragment
         View sliders = inflater.inflate(R.layout.fragment_sliders, container, false);
 
         // Every slider needs it's own thumb image
-        thumb = getResources().getDrawable(R.drawable.thumb_icon);
-        thumbTouched = getResources().getDrawable(R.drawable.thumb_icon_pressed);
+        thumb = new Drawable[4];//getResources().getDrawable(R.drawable.thumb_icon);
+        thumbTouched = new Drawable[4];//getResources().getDrawable(R.drawable.thumb_icon_pressed);
         soundHandlers = new soundHandler[4];
         isMoving = new boolean[4];
+
+        for (int i = 0; i < thumb.length; ++i)
+        {
+            thumb[i] = getResources().getDrawable(R.drawable.thumb_icon);
+            thumbTouched[i] = getResources().getDrawable(R.drawable.thumb_icon_pressed);
+        }
 
         // Assign sliders
         rootSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_root);
@@ -355,14 +361,14 @@ public class SliderFragment extends Fragment
                     Note note = new Note();
                     getNoteFromSlider(bar, note);
                     soundHandlers[slider].playNote(activity, note);
-                    bar.setThumb(thumbTouched);
+                    bar.setThumb(thumbTouched[slider]);
                     bar.setThumbOffset(THUMB_OFFSET);
                                     }
                 else if (event.getAction() == MotionEvent.ACTION_UP)
                 {
                     isMoving[slider] = false;
                     soundHandlers[slider].stopSound();
-                    bar.setThumb(thumb);
+                    bar.setThumb(thumb[slider]);
                     bar.setThumbOffset(THUMB_OFFSET);
                 }
                 else if (event.getAction() == MotionEvent.ACTION_MOVE)
