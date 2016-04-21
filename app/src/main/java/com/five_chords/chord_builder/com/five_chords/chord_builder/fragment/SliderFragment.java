@@ -101,6 +101,22 @@ public class SliderFragment extends Fragment
         isBlocked = false;
     }
 
+//    /**
+//     * Blocks this SliderFragment from playing sounds.
+//     */
+//    public void blockSound()
+//    {
+//        isBlocked = true;
+//    }
+//
+//    /**
+//     * Unblocks this SliderFragment from playing sounds.
+//     */
+//    public void unblockSound()
+//    {
+//        isBlocked = false;
+//    }
+
     /**
      * Stop sound from all sliders
      */
@@ -120,6 +136,9 @@ public class SliderFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        // Set blocked
+        isBlocked = true;
+
         // Inflate the layout for this fragment
         View sliders = inflater.inflate(R.layout.fragment_sliders, container, false);
 
@@ -174,7 +193,6 @@ public class SliderFragment extends Fragment
         // Load Slider positions
         if (savedInstanceState != null)
         {
-            Log.d("DEBUG", "onCreate -> Root Pos = " + savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 0));
             rootSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 0));
             thirdSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 1));
             fifthSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 2));
@@ -196,11 +214,13 @@ public class SliderFragment extends Fragment
         if (savedInstanceState == null)
             return;
 
-        Log.d("DEBUG", "viewStateRestored -> Root Pos = " + savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 0));
         rootSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 0));
         thirdSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 1));
         fifthSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 2));
         optionSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 3));
+
+        // Unblock sounds
+        isBlocked = false;
     }
 
     /**
@@ -211,7 +231,6 @@ public class SliderFragment extends Fragment
     public void onSaveInstanceState(Bundle bundle)
     {
         super.onSaveInstanceState(bundle);
-        Log.d("DEBUG", "saveInstanceState -> Root Pos = " + rootSlider.getProgress());
 
         // Save slider positions
         bundle.putInt(SLIDER_POSITION_BUNDLE_ID + 0, rootSlider.getProgress());
@@ -330,7 +349,8 @@ public class SliderFragment extends Fragment
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser)
             {
-                if (isBlocked) return;
+                if (isBlocked)
+                    return;
 
                 // Only play note if progress change is from user
                 if (seekBar instanceof VerticalSeekBar)
