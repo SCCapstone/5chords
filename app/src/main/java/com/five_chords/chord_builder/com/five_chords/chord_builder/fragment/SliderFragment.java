@@ -27,6 +27,9 @@ import com.five_chords.chord_builder.soundHandler;
  */
 public class SliderFragment extends Fragment
 {
+    /** Bundle Id for the slider positions. */
+    private static final String SLIDER_POSITION_BUNDLE_ID = "SliderFragment.sliderPos";
+
     /** The thumb offset of the sliders. */
     public static final int THUMB_OFFSET = 0;
 
@@ -51,11 +54,13 @@ public class SliderFragment extends Fragment
     /** The index of the notes at the top of the sliders. */
     private int maxNoteOnSlider;
 
-    /** Every slider gets it's own thumb image and soundHandler **/
-//    private static Drawable[] thumb;
-//    private static Drawable[] thumbTouched;
+    /** Thumb drawable for when sliders are not pressed. */
     private static Drawable thumb;
+
+    /** Thumb drawable for when sliders are pressed. */
     private static Drawable thumbTouched;
+
+    /** SoundHandlers for each slider. */
     private static soundHandler[] soundHandlers;
 
     /** If the thumb is touched we can move the slider **/
@@ -84,34 +89,6 @@ public class SliderFragment extends Fragment
     }
 
     /**
-     * Gets the current note on the slider, taking into account the number of intermediate slider
-     * positions.
-     * @param slider The slider to test
-     * @param note A Note Object in which to put the value
-     */
-    private void getNoteFromSlider(VerticalSeekBar slider, Note note)
-    {
-        SliderNotePosition position = new SliderNotePosition(slider);
-
-        int nearestNote;
-        double fracDistToNearestNote;
-
-        if (position.fracDistAboveNote > 0.5)
-        {
-            nearestNote = position.note + 1;
-            fracDistToNearestNote = position.fracDistAboveNote - 1.0;
-        }
-        else
-        {
-            nearestNote = position.note;
-            fracDistToNearestNote = position.fracDistAboveNote;
-        }
-
-        note.index = nearestNote;
-        note.distanceToIndex = fracDistToNearestNote;
-    }
-
-    /**
      * Called to reset the positions of the chord sliders.
      */
     public void resetChordSliders()
@@ -127,7 +104,8 @@ public class SliderFragment extends Fragment
     /**
      * Stop sound from all sliders
      */
-    public void silenceSliders() {
+    public void silenceSliders()
+    {
         for (soundHandler sH : soundHandlers)
             sH.stopSound();
     }
@@ -146,49 +124,32 @@ public class SliderFragment extends Fragment
         View sliders = inflater.inflate(R.layout.fragment_sliders, container, false);
 
         // Every slider needs it's own thumb image
-//        thumb = new Drawable[4];
-//        thumbTouched = new Drawable[4];
         thumb = getResources().getDrawable(R.drawable.thumb_icon);
         thumbTouched = getResources().getDrawable(R.drawable.thumb_icon_pressed);
         soundHandlers = new soundHandler[4];
         isMoving = new boolean[4];
 
-//        thumbTouched.setBounds(-100,-100,100, 100);
-
-//        for (int i = 0; i < 4; i++)
-//        {
-//            thumb[i] = getResources().getDrawable(R.drawable.thumb_icon);
-//            thumb[i].setBounds(new Rect(0, 0, thumb[i].getIntrinsicWidth(), thumb[i].getIntrinsicHeight()));
-//
-//            thumbTouched[i] = getResources().getDrawable(R.drawable.thumb_icon_pressed);
-//            thumbTouched[i].setBounds(new Rect(0, 0, thumbTouched[i].getIntrinsicWidth(), thumbTouched[i].getIntrinsicHeight()));
-//        }
-
         // Assign sliders
         rootSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_root);
-        rootSlider.initialize();
-//        rootSlider.setThumb(thumb[0]);
+//        rootSlider.initialize();
         rootSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[0] = new soundHandler(getActivity(), "slider0");
         isMoving[0] = false;
 
         thirdSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_third);
-        thirdSlider.initialize();
-//        thirdSlider.setThumb(thumb[1]);
+//        thirdSlider.initialize();
         thirdSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[1] = new soundHandler(getActivity(), "slider1");
         isMoving[1] = false;
 
         fifthSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_fifth);
-        fifthSlider.initialize();
-//        fifthSlider.setThumb(thumb[2]);
+//        fifthSlider.initialize();
         fifthSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[2] = new soundHandler(getActivity(), "slider2");
         isMoving[2] = false;
 
         optionSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_option);
-        optionSlider.initialize();
-//        optionSlider.setThumb(thumb[3]);
+//        optionSlider.initialize();
         optionSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[3] = new soundHandler(getActivity(), "slider3");
         isMoving[3] = false;
@@ -204,7 +165,53 @@ public class SliderFragment extends Fragment
         // Hide fourth slider by default
         sliders.findViewById(R.id.slider_option_layout).setVisibility(View.GONE);
 
+        // Load Slider positions
+        if (savedInstanceState != null)
+        {
+            Log.d("DEBUG", "onCreate -> Root Pos = " + savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 0));
+            rootSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 0));
+            thirdSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 1));
+            fifthSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 2));
+            optionSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 3));
+        }
+
         return sliders;
+    }
+
+    /**
+     * Called when the view state of this Fragment is restored.
+     * @param savedInstanceState The Bundle from which to restore the view state
+     */
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState)
+    {
+        super.onViewStateRestored(savedInstanceState);
+
+        if (savedInstanceState == null)
+            return;
+
+        Log.d("DEBUG", "viewStateRestored -> Root Pos = " + savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 0));
+        rootSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 0));
+        thirdSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 1));
+        fifthSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 2));
+        optionSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 3));
+    }
+
+    /**
+     * Called when the instance state of this Fragment should be saved.
+     * @param bundle The Bundle in which to save the instance state
+     */
+    @Override
+    public void onSaveInstanceState(Bundle bundle)
+    {
+        super.onSaveInstanceState(bundle);
+        Log.d("DEBUG", "saveInstanceState -> Root Pos = " + rootSlider.getProgress());
+
+        // Save slider positions
+        bundle.putInt(SLIDER_POSITION_BUNDLE_ID + 0, rootSlider.getProgress());
+        bundle.putInt(SLIDER_POSITION_BUNDLE_ID + 1, thirdSlider.getProgress());
+        bundle.putInt(SLIDER_POSITION_BUNDLE_ID + 2, fifthSlider.getProgress());
+        bundle.putInt(SLIDER_POSITION_BUNDLE_ID + 3, optionSlider.getProgress());
     }
 
     /**
@@ -279,6 +286,34 @@ public class SliderFragment extends Fragment
     }
 
     /**
+     * Gets the current note on the slider, taking into account the number of intermediate slider
+     * positions.
+     * @param slider The slider to test
+     * @param note A Note Object in which to put the value
+     */
+    private void getNoteFromSlider(VerticalSeekBar slider, Note note)
+    {
+        SliderNotePosition position = new SliderNotePosition(slider);
+
+        int nearestNote;
+        double fracDistToNearestNote;
+
+        if (position.fracDistAboveNote > 0.5)
+        {
+            nearestNote = position.note + 1;
+            fracDistToNearestNote = position.fracDistAboveNote - 1.0;
+        }
+        else
+        {
+            nearestNote = position.note;
+            fracDistToNearestNote = position.fracDistAboveNote;
+        }
+
+        note.index = nearestNote;
+        note.distanceToIndex = fracDistToNearestNote;
+    }
+
+    /**
      * Called to add the seek bar listener to a single seek bar.
      * @param bar The VerticalSeekBar to add listeners to
      */
@@ -320,7 +355,6 @@ public class SliderFragment extends Fragment
                     Note note = new Note();
                     getNoteFromSlider(bar, note);
                     soundHandlers[slider].playNote(activity, note);
-//                    bar.setThumb(thumbTouched[slider]);
                     bar.setThumb(thumbTouched);
                     bar.setThumbOffset(THUMB_OFFSET);
                                     }
@@ -328,7 +362,6 @@ public class SliderFragment extends Fragment
                 {
                     isMoving[slider] = false;
                     soundHandlers[slider].stopSound();
-//                    bar.setThumb(thumb[slider]);
                     bar.setThumb(thumb);
                     bar.setThumbOffset(THUMB_OFFSET);
                 }

@@ -46,13 +46,13 @@ public class VerticalSeekBar extends SeekBar
         super(context, attrs);
     }
 
-    /**
-     * Initializes this VerticalSeekBar.
-     */
-    public void initialize()
-    {
-        setProgress(0);
-    }
+//    /**
+//     * Initializes this VerticalSeekBar.
+//     */
+//    public void initialize()
+//    {
+//        setProgress(0);
+//    }
 
     /**
      * Called when this VerticalSeekBar is measured.

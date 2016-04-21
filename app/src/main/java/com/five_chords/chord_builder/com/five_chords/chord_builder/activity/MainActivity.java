@@ -491,7 +491,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * Called when a new chord is selected.
      */
     @Override
-    public void onChordSelected(boolean random) {
+    public void onChordSelected(boolean random)
+    {
         // Update current chord score
         updateDisplayedScore();
 
@@ -499,7 +500,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         sliderFragment.setSliderBoundsToFitChord(chordHandler.getCurrentSelectedChordSpelling());
 
         // Reset chord sliders
-        sliderFragment.resetChordSliders();
+//        sliderFragment.resetChordSliders(); TODO
 
         // Update ChordInstrumentSelectFragment
         chordInstrumentSelectFragment.setDisplayedChord(chordHandler.getCurrentSelectedChord(), random);
