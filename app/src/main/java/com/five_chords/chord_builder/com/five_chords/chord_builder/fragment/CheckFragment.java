@@ -12,7 +12,7 @@ import android.widget.Button;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.chordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
-import com.five_chords.chord_builder.soundHandler;
+import com.five_chords.chord_builder.SoundHandler;
 
 /**
  * A Fragment containing the chord check buttons.
@@ -23,8 +23,8 @@ public class CheckFragment extends Fragment
     /** The Button for playing the built chord. */
     private Button playBuiltChordButton;
 
-    /** Every button gets a soundHandler **/
-    private static soundHandler[] soundHandlers;
+    /** The soundHandler for the play built chord button. **/
+    private static SoundHandler soundHandler;
 
     /**
      * Required empty public constructor.
@@ -46,8 +46,10 @@ public class CheckFragment extends Fragment
      */
     public void silenceButtons()
     {
-        for (soundHandler sH : soundHandlers)
-            sH.stopSound();
+        soundHandler.stopSound();
+
+//        for (soundHandler sH : soundHandlers)
+//            sH.stopSound();
     }
 
     /**
@@ -69,9 +71,18 @@ public class CheckFragment extends Fragment
         final Button playBuiltChord = (Button) view.findViewById(R.id.button_playback_slider_chord);
         playBuiltChordButton = playBuiltChord;
 
-        soundHandlers = new soundHandler[2];
-        soundHandlers[0] = new soundHandler(getActivity(), "playButton");
-        soundHandlers[1] = new soundHandler(getActivity(), "randomButton");
+        soundHandler = new SoundHandler(getActivity(), "playButton");
+//        soundHandlers = new SoundHandler[2];
+//
+//        if (soundHandlers[0] != null)
+//            soundHandlers[0].stopSound();
+//        else
+//            soundHandlers[0] = new SoundHandler(getActivity(), "playButton");
+//
+//        if (soundHandlers[1] != null)
+//            soundHandlers[1].stopSound();
+//        else
+//            soundHandlers[1] = new SoundHandler(getActivity(), "randomButton");
 
         // Set the preview button function
         playBuiltChord.setOnTouchListener(new View.OnTouchListener() {
@@ -91,8 +102,9 @@ public class CheckFragment extends Fragment
                         mainActivity.blockAllSound(true);
                     }
 
+
                     chordHandler.buildCurrentChord(getActivity());
-                    soundHandlers[0].playChord(getActivity(), chordHandler.getCurrentBuiltChordSpelling(),
+                    soundHandler.playChord(getActivity(), chordHandler.getCurrentBuiltChordSpelling(),
                             chordHandler.getCurrentSelectedChord().getNumNotes());
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
@@ -106,7 +118,7 @@ public class CheckFragment extends Fragment
                     if (mainActivity != null)
                         mainActivity.blockAllSound(false);
 
-                    soundHandlers[0].stopSound();
+                    soundHandler.stopSound();
                 }
                 return false;
             }
@@ -150,5 +162,53 @@ public class CheckFragment extends Fragment
 
         // Return the view
         return view;
+    }
+
+    /**
+     * Called when the view of this Fragment is destroyed.
+     */
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+
+        soundHandler.stopSound();
+    }
+
+    /**
+     * Called when the view state of this Fragment is restored.
+     * @param savedInstanceState The Bundle from which to restore the view state
+     */
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState)
+    {
+        super.onViewStateRestored(savedInstanceState);
+
+        // Stop sounds
+        silenceButtons();
+    }
+
+    /**
+     * Called when the Fragment is Paused.
+     */
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+
+        // Stop sounds
+        silenceButtons();
+    }
+
+    /**
+     * Called when the Fragment is resumed.
+     */
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        // Stop sounds
+        silenceButtons();
     }
 }

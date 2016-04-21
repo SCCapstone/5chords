@@ -14,7 +14,7 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.Main
  * @date 3 April 2016
  * @author: Drea, Zach, Theodore
  */
-public class soundHandler
+public class SoundHandler
 {
     /** The tag for this class. */
     private static final String TAG = "soundHandler";
@@ -66,7 +66,7 @@ public class soundHandler
      * @param main The current Activity
      * @param midiFileName The name of the MIDI file to use
      */
-    public soundHandler(Activity main, String midiFileName)
+    public SoundHandler(Activity main, String midiFileName)
     {
         midiFile = main.getFilesDir() + midiFileName + ".mid";
         midi = new soundHandlerMidi();

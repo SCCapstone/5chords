@@ -11,17 +11,13 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.content.DialogInterface;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.app.AlertDialog;
 
 
 import com.five_chords.chord_builder.Chord;
@@ -36,7 +32,7 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.Chor
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView;
-import com.five_chords.chord_builder.soundHandler;
+import com.five_chords.chord_builder.SoundHandler;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -178,7 +174,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         // Initialize Static Classes
         chordHandler.initialize();
         chordHandler.setOnChordSelectedListener(this);
-        soundHandler.switchInstrument(options.instrument);
+        SoundHandler.switchInstrument(options.instrument);
         Score.loadScores(this, false);
 
         // Create the client to handle contacting the developers
@@ -556,7 +552,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     public void onInstrumentChanged(int instrument) {
         // Save options
         options.save(this);
-        soundHandler.switchInstrument(instrument);
+        SoundHandler.switchInstrument(instrument);
     }
 
     /**

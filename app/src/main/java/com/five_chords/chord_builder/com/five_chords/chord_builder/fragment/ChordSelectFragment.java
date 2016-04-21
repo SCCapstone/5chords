@@ -20,7 +20,7 @@ import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 import com.five_chords.chord_builder.chordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
-import com.five_chords.chord_builder.soundHandler;
+import com.five_chords.chord_builder.SoundHandler;
 
 /**
  * A Fragment containing the chord select slider and the instrument select slider.
@@ -35,7 +35,7 @@ public class ChordSelectFragment extends Fragment
     private Button playSelectedChordButton;
 
     /** Every button gets a soundHandler **/
-    private static soundHandler[] soundHandlers;
+    private SoundHandler[] soundHandlers;
 
     /**
      * Required empty public constructor.
@@ -108,8 +108,9 @@ public class ChordSelectFragment extends Fragment
     /**
      * Silence sound from all buttons
      */
-    public void silenceButtons() {
-        for (soundHandler sH : soundHandlers)
+    public void silenceButtons()
+    {
+        for (SoundHandler sH : soundHandlers)
             sH.stopSound();
     }
 
@@ -120,6 +121,9 @@ public class ChordSelectFragment extends Fragment
     public void onResume()
     {
         super.onResume();
+
+        // Stop sounds
+        silenceButtons();
 
         // Update the available chord types
         updateAvailableChordTypes(getActivity());
@@ -143,9 +147,9 @@ public class ChordSelectFragment extends Fragment
         final Button playSelectedChord = (Button) view.findViewById(R.id.button_select_chord_play);
         playSelectedChordButton = playSelectedChord;
         final Button selectRandomChord = (Button) view.findViewById(R.id.button_select_random_chord);
-        soundHandlers = new soundHandler[2];
-        soundHandlers[0] = new soundHandler(getActivity(), "playButton");
-        soundHandlers[1] = new soundHandler(getActivity(), "randomButton");
+        soundHandlers = new SoundHandler[2];
+        soundHandlers[0] = new SoundHandler(getActivity(), "playButton");
+        soundHandlers[1] = new SoundHandler(getActivity(), "randomButton");
 
         // Set the function of the play button
         playSelectedChord.setOnTouchListener(new View.OnTouchListener() {
@@ -225,6 +229,17 @@ public class ChordSelectFragment extends Fragment
 
         // Inflate the layout for this fragment
         return view;
+    }
+
+    /**
+     * Called when the view of this Fragment is destroyed.
+     */
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+
+        silenceButtons();
     }
 
     /**

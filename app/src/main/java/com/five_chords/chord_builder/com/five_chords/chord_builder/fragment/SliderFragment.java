@@ -1,13 +1,9 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
 import android.app.Activity;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LevelListDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -20,7 +16,7 @@ import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.chordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar;
-import com.five_chords.chord_builder.soundHandler;
+import com.five_chords.chord_builder.SoundHandler;
 
 /**
  * A Fragment containing the chord select sliders.
@@ -61,7 +57,7 @@ public class SliderFragment extends Fragment
     private static Drawable[] thumbTouched;
 
     /** SoundHandlers for each slider. */
-    private static soundHandler[] soundHandlers;
+    private static SoundHandler[] soundHandlers;
 
     /** If the thumb is touched we can move the slider **/
     private static boolean isMoving[];
@@ -122,7 +118,7 @@ public class SliderFragment extends Fragment
      */
     public void silenceSliders()
     {
-        for (soundHandler sH : soundHandlers)
+        for (SoundHandler sH : soundHandlers)
             sH.stopSound();
     }
 
@@ -145,7 +141,7 @@ public class SliderFragment extends Fragment
         // Every slider needs it's own thumb image
         thumb = new Drawable[4];//getResources().getDrawable(R.drawable.thumb_icon);
         thumbTouched = new Drawable[4];//getResources().getDrawable(R.drawable.thumb_icon_pressed);
-        soundHandlers = new soundHandler[4];
+        soundHandlers = new SoundHandler[4];
         isMoving = new boolean[4];
 
         for (int i = 0; i < thumb.length; ++i)
@@ -158,25 +154,25 @@ public class SliderFragment extends Fragment
         rootSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_root);
 //        rootSlider.initialize();
         rootSlider.setThumbOffset(THUMB_OFFSET);
-        soundHandlers[0] = new soundHandler(getActivity(), "slider0");
+        soundHandlers[0] = new SoundHandler(getActivity(), "slider0");
         isMoving[0] = false;
 
         thirdSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_third);
 //        thirdSlider.initialize();
         thirdSlider.setThumbOffset(THUMB_OFFSET);
-        soundHandlers[1] = new soundHandler(getActivity(), "slider1");
+        soundHandlers[1] = new SoundHandler(getActivity(), "slider1");
         isMoving[1] = false;
 
         fifthSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_fifth);
 //        fifthSlider.initialize();
         fifthSlider.setThumbOffset(THUMB_OFFSET);
-        soundHandlers[2] = new soundHandler(getActivity(), "slider2");
+        soundHandlers[2] = new SoundHandler(getActivity(), "slider2");
         isMoving[2] = false;
 
         optionSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_option);
 //        optionSlider.initialize();
         optionSlider.setThumbOffset(THUMB_OFFSET);
-        soundHandlers[3] = new soundHandler(getActivity(), "slider3");
+        soundHandlers[3] = new SoundHandler(getActivity(), "slider3");
         isMoving[3] = false;
 
 

@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.five_chords.chord_builder.Chord;
 import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.R;
-import com.five_chords.chord_builder.soundHandler;
+import com.five_chords.chord_builder.SoundHandler;
 
 /**
  * Activity containing the instrument selection.
@@ -48,7 +48,7 @@ public class SettingsInstruments extends Activity implements AdapterView.OnItemC
     private TextView[] instrumentNames;
 
     /** SoundHandler to use to preview instruments. */
-    private soundHandler instrumentPreviewer;
+    private SoundHandler instrumentPreviewer;
 
     /** Thread for previewing instrument sounds. */
     private Thread previewThread;
@@ -85,7 +85,7 @@ public class SettingsInstruments extends Activity implements AdapterView.OnItemC
         instrumentNames = new TextView[INSTRUMENT_NAMES.length];
 
         // Create the previewer
-        instrumentPreviewer = new soundHandler(this, "instrumentPreview");
+        instrumentPreviewer = new SoundHandler(this, "instrumentPreview");
 
         // Set content view
         setContentView(R.layout.activity_settings_instrument);
