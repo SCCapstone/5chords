@@ -47,4 +47,10 @@
     <!-- Slider width -->
     <dimen name="slider_width">64dp</dimen>
 
+    <!-- Thumb Sizes -->
+    <dimen name="thumb_width">64dp</dimen>
+    <dimen name="thumb_height">48dp</dimen>
+    <dimen name="thumb_width_pressed">96dp</dimen>
+    <dimen name="thumb_height_pressed">72dp</dimen>
+
 </resources>

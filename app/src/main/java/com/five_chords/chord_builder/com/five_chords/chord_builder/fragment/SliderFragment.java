@@ -3,8 +3,11 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 import android.app.Activity;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LevelListDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,8 +52,10 @@ public class SliderFragment extends Fragment
     private int maxNoteOnSlider;
 
     /** Every slider gets it's own thumb image and soundHandler **/
-    private static Drawable[] thumb;
-    private static Drawable[] thumbTouched;
+//    private static Drawable[] thumb;
+//    private static Drawable[] thumbTouched;
+    private static Drawable thumb;
+    private static Drawable thumbTouched;
     private static soundHandler[] soundHandlers;
 
     /** If the thumb is touched we can move the slider **/
@@ -141,44 +146,49 @@ public class SliderFragment extends Fragment
         View sliders = inflater.inflate(R.layout.fragment_sliders, container, false);
 
         // Every slider needs it's own thumb image
-        thumb = new Drawable[4];
-        thumbTouched = new Drawable[4];
+//        thumb = new Drawable[4];
+//        thumbTouched = new Drawable[4];
+        thumb = getResources().getDrawable(R.drawable.thumb_icon);
+        thumbTouched = getResources().getDrawable(R.drawable.thumb_icon_pressed);
         soundHandlers = new soundHandler[4];
         isMoving = new boolean[4];
 
-        for (int i = 0; i < 4; i++) {
-            thumb[i] = getResources().getDrawable(R.drawable.eq_slide_knob);
-            thumb[i].setBounds(new Rect(0, 0, thumb[i].getIntrinsicWidth(), thumb[i].getIntrinsicHeight()));
+//        thumbTouched.setBounds(-100,-100,100, 100);
 
-            thumbTouched[i] = getResources().getDrawable(R.drawable.eq_slide_knob_touched);
-            thumbTouched[i].setBounds(new Rect(0, 0, thumbTouched[i].getIntrinsicWidth(), thumbTouched[i].getIntrinsicHeight()));
-        }
+//        for (int i = 0; i < 4; i++)
+//        {
+//            thumb[i] = getResources().getDrawable(R.drawable.thumb_icon);
+//            thumb[i].setBounds(new Rect(0, 0, thumb[i].getIntrinsicWidth(), thumb[i].getIntrinsicHeight()));
+//
+//            thumbTouched[i] = getResources().getDrawable(R.drawable.thumb_icon_pressed);
+//            thumbTouched[i].setBounds(new Rect(0, 0, thumbTouched[i].getIntrinsicWidth(), thumbTouched[i].getIntrinsicHeight()));
+//        }
 
         // Assign sliders
         rootSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_root);
         rootSlider.initialize();
-        rootSlider.setThumb(thumb[0]);
+//        rootSlider.setThumb(thumb[0]);
         rootSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[0] = new soundHandler(getActivity(), "slider0");
         isMoving[0] = false;
 
         thirdSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_third);
         thirdSlider.initialize();
-        thirdSlider.setThumb(thumb[1]);
+//        thirdSlider.setThumb(thumb[1]);
         thirdSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[1] = new soundHandler(getActivity(), "slider1");
         isMoving[1] = false;
 
         fifthSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_fifth);
         fifthSlider.initialize();
-        fifthSlider.setThumb(thumb[2]);
+//        fifthSlider.setThumb(thumb[2]);
         fifthSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[2] = new soundHandler(getActivity(), "slider2");
         isMoving[2] = false;
 
         optionSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_option);
         optionSlider.initialize();
-        optionSlider.setThumb(thumb[3]);
+//        optionSlider.setThumb(thumb[3]);
         optionSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[3] = new soundHandler(getActivity(), "slider3");
         isMoving[3] = false;
@@ -302,36 +312,50 @@ public class SliderFragment extends Fragment
             @Override
             public boolean onTouch(View v, MotionEvent event)
             {
-                if (isBlocked) return true;
+                if (isBlocked)
+                    return true;
 
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
                     Note note = new Note();
                     getNoteFromSlider(bar, note);
                     soundHandlers[slider].playNote(activity, note);
-                    bar.setThumb(thumbTouched[slider]);
-
+//                    bar.setThumb(thumbTouched[slider]);
+                    bar.setThumb(thumbTouched);
                     bar.setThumbOffset(THUMB_OFFSET);
-                }
-                else if (event.getAction() == MotionEvent.ACTION_UP) {
-                    soundHandlers[slider].stopSound();
-                    bar.setThumb(thumb[slider]);
+                                    }
+                else if (event.getAction() == MotionEvent.ACTION_UP)
+                {
                     isMoving[slider] = false;
-
+                    soundHandlers[slider].stopSound();
+//                    bar.setThumb(thumb[slider]);
+                    bar.setThumb(thumb);
                     bar.setThumbOffset(THUMB_OFFSET);
                 }
-                else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                    if (isMoving[slider]) return false;
-
-                    int tempProgress = (bar.getMax() - (int) (bar.getMax() * event.getY() / bar.getHeight()));
-                    int diff = Math.abs(tempProgress - bar.getProgress());
-                    if (diff < MainActivity.getOptions().sliderDivisionsPerNote + 1) {
-                        isMoving[slider] = true;
+                else if (event.getAction() == MotionEvent.ACTION_MOVE)
+                {
+                    if (isMoving[slider])
                         return false;
-                    }
+
+//                    int verticalPadding = bar.getBaseline() + bar.getPaddingBottom() + bar.getWidth();
+//                    int tempProgress = (bar.getMax() - (int) (bar.getMax() * (event.getY() - verticalPadding) / (bar.getHeight() - verticalPadding * 2)));
+//
+////                    int tempProgress = (bar.getMax() - (int) (bar.getMax() * event.getY() / bar.getHeight()));
+//                    int diff = Math.abs(tempProgress - bar.getProgress());
+//
+//                    if (diff < MainActivity.getOptions().sliderDivisionsPerNote + 1)
+//                    {
+//                        isMoving[slider] = true;
+//                        return false;
+//                    }
+//                    else
+//                    {
+//                        isMoving[slider] = false;
+//                        return true;
+//                    }
                 }
 
-                return true;
+                return false;
             }
         });
     }

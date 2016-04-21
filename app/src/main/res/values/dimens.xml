@@ -54,6 +54,13 @@
     <dimen name="play_preview_button_margin">8dp</dimen>
 
     <!-- Slider width -->
-    <dimen name="slider_width">24dp</dimen>
+    <dimen name="slider_width">48dp</dimen>
+    <dimen name="slider_padding">16dp</dimen>
+
+    <!-- Thumb Sizes -->
+    <dimen name="thumb_width">24dp</dimen>
+    <dimen name="thumb_height">32dp</dimen>
+    <dimen name="thumb_width_pressed">36dp</dimen>
+    <dimen name="thumb_height_pressed">48dp</dimen>
 
 </resources>

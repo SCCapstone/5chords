@@ -110,7 +110,8 @@ public class VerticalSeekBar extends SeekBar
             case MotionEvent.ACTION_MOVE:
             case MotionEvent.ACTION_UP:
 
-                setProgress(getMax() - (int) (getMax() * event.getY() / getHeight()));
+                int verticalPadding = getBaseline() + getPaddingBottom() + getWidth();
+                setProgress(getMax() - (int) (getMax() * (event.getY() - verticalPadding) / (getHeight() - verticalPadding * 2)));
                 onSizeChanged(getWidth(), getHeight(), 0, 0);
                 break;
 

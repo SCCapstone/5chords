@@ -20,6 +20,15 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="NoActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
     <!-- Alert Dialog Theme-->
     <style name="AppAlertDialog" parent="@android:style/Holo.ButtonBar.AlertDialog">
         <item name="android:background">@drawable/wood</item>
@@ -44,23 +53,18 @@
         <item name="android:layout_margin">4dp</item>
     </style>
 
+    <!-- Style for the Vertical Seek Bars-->
     <style name="styleSeekBar" parent="@android:style/Widget.SeekBar">
-        <!--<item name="android:layout_width">@dimen/slider_width</item>-->
-        <!--<item name="android:padding">24dp</item>-->
         <item name="android:background">@drawable/eq_slide_background</item>
-        <item name="android:scaleType">fitXY</item>
         <item name="android:layout_gravity">center</item>
+        <item name="android:minHeight">@dimen/slider_width</item>
+        <item name="android:maxHeight">@dimen/slider_width</item>
+        <item name="android:paddingLeft">@dimen/slider_padding</item>
+        <item name="android:paddingRight">@dimen/slider_padding</item>
+        <item name="android:progressDrawable">@android:color/transparent</item>
+        <item name="android:indeterminate">false</item>
+        <item name="android:thumb">@drawable/thumb_icon</item>
     </style>
 
-    <!--<item name="android:background">?android:attr/listDivider</item>-->
-
-    <style name="NoActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 </resources>
