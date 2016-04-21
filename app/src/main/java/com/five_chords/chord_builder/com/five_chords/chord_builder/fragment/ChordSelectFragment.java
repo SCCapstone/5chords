@@ -18,7 +18,7 @@ import com.five_chords.chord_builder.Chord;
 import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
-import com.five_chords.chord_builder.chordHandler;
+import com.five_chords.chord_builder.ChordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.SoundHandler;
 
@@ -85,7 +85,7 @@ public class ChordSelectFragment extends Fragment
         {
             for (int i = 0; i < Note.NUM_NOTES; ++i)
             {
-                adapter.add(new ChordDisplayItem(chordHandler.getChord(i, type)));
+                adapter.add(new ChordDisplayItem(ChordHandler.getChord(i, type)));
             }
         }
 
@@ -157,8 +157,8 @@ public class ChordSelectFragment extends Fragment
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
-                    soundHandlers[0].playChord(getActivity(), chordHandler.getCurrentSelectedChordSpelling(),
-                            chordHandler.getCurrentSelectedChord().getNumNotes());
+                    soundHandlers[0].playChord(getActivity(), ChordHandler.getCurrentSelectedChordSpelling(),
+                            ChordHandler.getCurrentSelectedChord().getNumNotes());
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP)
                 {
@@ -186,9 +186,9 @@ public class ChordSelectFragment extends Fragment
                         mainActivity.blockAllSound(true);
                     }
 
-                    chordHandler.getRandomChord();
-                    soundHandlers[1].playChord(getActivity(), chordHandler.getCurrentSelectedChordSpelling(),
-                            chordHandler.getCurrentSelectedChord().getNumNotes());
+                    ChordHandler.getRandomChord();
+                    soundHandlers[1].playChord(getActivity(), ChordHandler.getCurrentSelectedChordSpelling(),
+                            ChordHandler.getCurrentSelectedChord().getNumNotes());
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP) {
 
@@ -219,7 +219,7 @@ public class ChordSelectFragment extends Fragment
 
                 // Update the selected chord
                 ChordDisplayItem item = (ChordDisplayItem)parentView.getItemAtPosition(position);
-                chordHandler.setSelectedChord(item.chord, false);
+                ChordHandler.setSelectedChord(item.chord, false);
             }
 
             @Override

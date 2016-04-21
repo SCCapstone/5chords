@@ -67,10 +67,10 @@ public class chordHandlerTest
             setCurrentBuiltChord(spelling);
 
             // Build the chord in the chordHandler
-            chordHandler.buildCurrentChord(mActivityRule.getActivity());
+            ChordHandler.buildCurrentChord(mActivityRule.getActivity());
 
             // Test
-            assertTrue(Chord.compareChords(spelling, chordHandler.getCurrentBuiltChordSpelling(), type.offsets.length));
+            assertTrue(Chord.compareChords(spelling, ChordHandler.getCurrentBuiltChordSpelling(), type.offsets.length));
         }
     }
 }

@@ -3,7 +3,6 @@ package com.five_chords.chord_builder;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,24 +39,24 @@ public class chordHandlerUnitTest
     @Test
     public void testResetCurrentWrongStreak() throws Exception
     {
-        int current = chordHandler.getCurrentWrongStreak();
+        int current = ChordHandler.getCurrentWrongStreak();
 
         if (current != 0)
         {
-            chordHandler.resetCurrentWrongStreak();
-            assertEquals(0, chordHandler.getCurrentWrongStreak());
+            ChordHandler.resetCurrentWrongStreak();
+            assertEquals(0, ChordHandler.getCurrentWrongStreak());
         }
 
         try
         {
-            chordHandler.makeHints(null);
+            ChordHandler.makeHints(null);
         }
         catch (NullPointerException e)
         {/* Ignore */ }
 
-        assertNotEquals(0, chordHandler.getCurrentWrongStreak());
-        chordHandler.resetCurrentWrongStreak();
-        assertEquals(0, chordHandler.getCurrentWrongStreak());
+        assertNotEquals(0, ChordHandler.getCurrentWrongStreak());
+        ChordHandler.resetCurrentWrongStreak();
+        assertEquals(0, ChordHandler.getCurrentWrongStreak());
     }
 
     /**
@@ -76,10 +75,10 @@ public class chordHandlerUnitTest
             for (int i = 0; i < Note.NUM_NOTES; ++i)
             {
                 // Select the chord
-                chordHandler.setSelectedChord(new Chord(i, type), false);
+                ChordHandler.setSelectedChord(new Chord(i, type), false);
 
                 // Get the spelling
-                spelling = chordHandler.getCurrentSelectedChordSpelling();
+                spelling = ChordHandler.getCurrentSelectedChordSpelling();
 
                 // Test the spelling
                 for (int j = 0; j < type.offsets.length; ++j)
@@ -102,10 +101,10 @@ public class chordHandlerUnitTest
             for (int i = 0; i < Note.NUM_NOTES; ++i)
             {
                 // Build the chord
-                new Chord(i, type).getRootPosition(chordHandler.getCurrentBuiltChordSpelling());
+                new Chord(i, type).getRootPosition(ChordHandler.getCurrentBuiltChordSpelling());
 
                 // Get the spelling
-                spelling = chordHandler.getCurrentBuiltChordSpelling();
+                spelling = ChordHandler.getCurrentBuiltChordSpelling();
 
                 // Test the spelling
                 for (int j = 0; j < type.offsets.length; ++j)
@@ -130,10 +129,10 @@ public class chordHandlerUnitTest
             for (int i = 0; i < Note.NUM_NOTES; ++i)
             {
                 // Select the chord
-                chordHandler.setSelectedChord(new Chord(i, type), false);
+                ChordHandler.setSelectedChord(new Chord(i, type), false);
 
                 // Get the chord
-                get = chordHandler.getCurrentSelectedChord();
+                get = ChordHandler.getCurrentSelectedChord();
 
                 // Test equality
                 assertEquals(get.ID, Chord.getChordId(i, type));
@@ -157,8 +156,8 @@ public class chordHandlerUnitTest
             for (int i = 0; i < Note.NUM_NOTES; ++i)
             {
                 // Get the chord
-                get1 = chordHandler.getChord(i, type);
-                get2 = chordHandler.getChord(Chord.getChordId(i, type));
+                get1 = ChordHandler.getChord(i, type);
+                get2 = ChordHandler.getChord(Chord.getChordId(i, type));
                 compare = new Chord(i, type);
 
                 // Test equality
@@ -185,10 +184,10 @@ public class chordHandlerUnitTest
             for (int i = 0; i < Note.NUM_NOTES; ++i)
             {
                 // Select the chord
-                chordHandler.setSelectedChord(new Chord(i, type), false);
+                ChordHandler.setSelectedChord(new Chord(i, type), false);
 
                 // Get the chord
-                get = chordHandler.getCurrentSelectedChord();
+                get = ChordHandler.getCurrentSelectedChord();
 
                 // Test equality
                 assertEquals(get.ID, Chord.getChordId(i, type));
@@ -213,11 +212,11 @@ public class chordHandlerUnitTest
             {
                 // Select the chord
                 compare = new Chord(i, type);
-                chordHandler.setSelectedChord(compare, false);
+                ChordHandler.setSelectedChord(compare, false);
 
                 // Get a random chord
-                chordHandler.getRandomChord();
-                get = chordHandler.getCurrentSelectedChord();
+                ChordHandler.getRandomChord();
+                get = ChordHandler.getCurrentSelectedChord();
 
                 // Test
                 assertNotEquals(get.ID, compare.ID);
@@ -244,24 +243,24 @@ public class chordHandlerUnitTest
                 built = new Chord(i, type);
 
                 // Get the compare chord
-                chordHandler.setSelectedChord(built, false);
-                chordHandler.getRandomChord();
-                compare = chordHandler.getCurrentSelectedChord();
+                ChordHandler.setSelectedChord(built, false);
+                ChordHandler.getRandomChord();
+                compare = ChordHandler.getCurrentSelectedChord();
 
                 // Get the spellings
-                built.getRootPosition(chordHandler.getCurrentBuiltChordSpelling());
-                compare.getRootPosition(chordHandler.getCurrentSelectedChordSpelling());
+                built.getRootPosition(ChordHandler.getCurrentBuiltChordSpelling());
+                compare.getRootPosition(ChordHandler.getCurrentSelectedChordSpelling());
 
                 // Test
-                assertFalse(chordHandler.testCurrentChords());
+                assertFalse(ChordHandler.testCurrentChords());
 
                 // Now set the same
-                built.getRootPosition(chordHandler.getCurrentBuiltChordSpelling());
-                built.getRootPosition(chordHandler.getCurrentSelectedChordSpelling());
-                chordHandler.setSelectedChord(built, false);
+                built.getRootPosition(ChordHandler.getCurrentBuiltChordSpelling());
+                built.getRootPosition(ChordHandler.getCurrentSelectedChordSpelling());
+                ChordHandler.setSelectedChord(built, false);
 
                 // Test
-                assertTrue(chordHandler.testCurrentChords());
+                assertTrue(ChordHandler.testCurrentChords());
             }
         }
     }

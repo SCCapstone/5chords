@@ -18,7 +18,7 @@ import com.five_chords.chord_builder.Chord;
 import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
-import com.five_chords.chord_builder.chordHandler;
+import com.five_chords.chord_builder.ChordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
 
 /**
@@ -69,7 +69,7 @@ public class ScorePageFragment extends Fragment implements AdapterView.OnItemSel
 
         // Loop over each note
         for (int i = 0; i < Note.NUM_NOTES; ++i)
-            adapter.add(Score.getScore(chordHandler.getChord(i, currentType)));
+            adapter.add(Score.getScore(ChordHandler.getChord(i, currentType)));
 
         // Set the adapter
         listView.setAdapter(adapter);
@@ -199,7 +199,7 @@ public class ScorePageFragment extends Fragment implements AdapterView.OnItemSel
             ScoreProgressView progressView = (ScoreProgressView)view.findViewById(R.id.score_history_progress_view);
 
             // Set chord text
-            nameView.setText(chordHandler.getChord(item.CHORD_ID).toString());
+            nameView.setText(ChordHandler.getChord(item.CHORD_ID).toString());
             descriptionView.setText(getLabel(item));
 
             // Set size

@@ -18,12 +18,6 @@ import com.five_chords.chord_builder.R;
  */
 public class AlertFragment extends DialogFragment implements View.OnClickListener
 {
-    /** The id of the title resource of this fragment. */
-    private int titleResourceId;
-
-    /** The id of the message resource of this fragment. */
-    private int messageResourceId;
-
     /** The action to occur when yes is selected. */
     private Runnable yesAction;
 

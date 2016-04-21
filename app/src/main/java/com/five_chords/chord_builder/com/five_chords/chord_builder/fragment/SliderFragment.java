@@ -13,7 +13,7 @@ import android.widget.SeekBar;
 import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.Options;
 import com.five_chords.chord_builder.R;
-import com.five_chords.chord_builder.chordHandler;
+import com.five_chords.chord_builder.ChordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar;
 import com.five_chords.chord_builder.SoundHandler;
@@ -51,16 +51,16 @@ public class SliderFragment extends Fragment
     private int maxNoteOnSlider;
 
     /** Thumb drawables for when sliders are not pressed. */
-    private static Drawable[] thumb;
+    private Drawable[] thumb;
 
     /** Thumb drawables for when sliders are pressed. */
-    private static Drawable[] thumbTouched;
+    private Drawable[] thumbTouched;
 
     /** SoundHandlers for each slider. */
-    private static SoundHandler[] soundHandlers;
+    private SoundHandler[] soundHandlers;
 
     /** If the thumb is touched we can move the slider **/
-    private static boolean isMoving[];
+    private boolean isMoving[];
 
     /**
      * Required empty public constructor.
@@ -75,7 +75,7 @@ public class SliderFragment extends Fragment
     public void buildCurrentChord(Note[] chord)
     {
         // Set slider bounds to fit chord
-        setSliderBoundsToFitChord(chordHandler.getCurrentSelectedChordSpelling());
+        setSliderBoundsToFitChord(ChordHandler.getCurrentSelectedChordSpelling());
 
         // Assign values
         getNoteFromSlider(rootSlider, chord[0]);
@@ -96,22 +96,6 @@ public class SliderFragment extends Fragment
         optionSlider.setProgress(0);
         isBlocked = false;
     }
-
-//    /**
-//     * Blocks this SliderFragment from playing sounds.
-//     */
-//    public void blockSound()
-//    {
-//        isBlocked = true;
-//    }
-//
-//    /**
-//     * Unblocks this SliderFragment from playing sounds.
-//     */
-//    public void unblockSound()
-//    {
-//        isBlocked = false;
-//    }
 
     /**
      * Stop sound from all sliders
@@ -152,29 +136,24 @@ public class SliderFragment extends Fragment
 
         // Assign sliders
         rootSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_root);
-//        rootSlider.initialize();
         rootSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[0] = new SoundHandler(getActivity(), "slider0");
         isMoving[0] = false;
 
         thirdSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_third);
-//        thirdSlider.initialize();
         thirdSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[1] = new SoundHandler(getActivity(), "slider1");
         isMoving[1] = false;
 
         fifthSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_fifth);
-//        fifthSlider.initialize();
         fifthSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[2] = new SoundHandler(getActivity(), "slider2");
         isMoving[2] = false;
 
         optionSlider = (VerticalSeekBar) sliders.findViewById(R.id.slider_option);
-//        optionSlider.initialize();
         optionSlider.setThumbOffset(THUMB_OFFSET);
         soundHandlers[3] = new SoundHandler(getActivity(), "slider3");
         isMoving[3] = false;
-
 
         // Add the seek bar listeners
         Activity activity = getActivity();
@@ -196,6 +175,18 @@ public class SliderFragment extends Fragment
         }
 
         return sliders;
+    }
+
+    /**
+     * Called when the view of this Fragment is destroyed.
+     */
+    @Override
+    public void onDestroyView()
+    {
+        super.onDestroyView();
+
+        for (SoundHandler soundHandler: soundHandlers)
+            soundHandler.stopSound();
     }
 
     /**

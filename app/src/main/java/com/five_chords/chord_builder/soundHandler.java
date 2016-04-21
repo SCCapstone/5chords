@@ -5,8 +5,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 
-import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
-
 /**
  * Class to handle playing sounds. Sounds are played as MIDI files, which are created with one or more
  * notes using the functions of this class.
@@ -56,7 +54,7 @@ public class SoundHandler
     private MediaPlayer mediaPlayer;
 
     /** The soundHandlerMidi to use to create the MIDI files. */
-    private soundHandlerMidi midi;
+    private SoundHandlerMidi midi;
 
     /** The name of the current MIDI file. */
     private String midiFile;
@@ -69,7 +67,7 @@ public class SoundHandler
     public SoundHandler(Activity main, String midiFileName)
     {
         midiFile = main.getFilesDir() + midiFileName + ".mid";
-        midi = new soundHandlerMidi();
+        midi = new SoundHandlerMidi();
     }
 
     /**

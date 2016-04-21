@@ -11,7 +11,8 @@ import java.util.Vector;
  * @date 3 April 2016
  * @author: Drea, Zach, Theodore
  */
-public class soundHandlerMidi {
+public class SoundHandlerMidi
+{
 
     /** The channel of this soundHandlerMidi. */
     private int channel;

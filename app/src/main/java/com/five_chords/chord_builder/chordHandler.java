@@ -18,7 +18,7 @@ import java.util.Random;
  * @date 04 April 2016
  * @author Drea,Steven,Zach,Kevin,Bo,Theodore
  */
-public class chordHandler
+public class ChordHandler
 {
     /** Denotes the first level of hints. */
     public static final byte HINT_ONE = 1;
@@ -60,7 +60,7 @@ public class chordHandler
     /**
      * Static class.
      */
-    private chordHandler()
+    private ChordHandler()
     {    }
 
     /**

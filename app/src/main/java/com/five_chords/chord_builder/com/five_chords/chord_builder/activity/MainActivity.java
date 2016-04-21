@@ -25,7 +25,7 @@ import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.Options;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
-import com.five_chords.chord_builder.chordHandler;
+import com.five_chords.chord_builder.ChordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.AlertFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.CheckFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordSelectFragment;
@@ -52,7 +52,7 @@ import android.widget.Toast;
  * @author Drea,Steven,Zach,Kevin,Bo,Theodore
  */
 public class MainActivity extends AppCompatActivity implements Options.OptionsChangedListener,
-        chordHandler.OnChordSelectedListener, View.OnClickListener
+        ChordHandler.OnChordSelectedListener, View.OnClickListener
 {
     /** The current options selected in this MainActivity. */
     private static Options options;
@@ -172,8 +172,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         }
 
         // Initialize Static Classes
-        chordHandler.initialize();
-        chordHandler.setOnChordSelectedListener(this);
+        ChordHandler.initialize();
+        ChordHandler.setOnChordSelectedListener(this);
         SoundHandler.switchInstrument(options.instrument);
         Score.loadScores(this, false);
 
@@ -200,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
 
         // Remove listeners
         options.setOptionsChangedListener(null);
-        chordHandler.setOnChordSelectedListener(null);
+        ChordHandler.setOnChordSelectedListener(null);
 
         super.onDestroy();
     }
@@ -373,10 +373,10 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     public void showChordCheckResult()
     {
         // Make sure the current Chord is built
-        chordHandler.buildCurrentChord(this);
+        ChordHandler.buildCurrentChord(this);
 
         // Test correctness
-        boolean isCorrect = chordHandler.testCurrentChords();
+        boolean isCorrect = ChordHandler.testCurrentChords();
 
         // Set the score
         Score.getCurrentScore().update(this, isCorrect);
@@ -396,7 +396,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
                 @Override
                 public void run()
                 {
-                    chordHandler.resetCurrentWrongStreak();
+                    ChordHandler.resetCurrentWrongStreak();
                     getSliderFragment().resetChordSliders();
                 }
             });
@@ -406,7 +406,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
                 public void run()
                 {
                     stopAllSound();
-                    chordHandler.getRandomChord();
+                    ChordHandler.getRandomChord();
                     getSliderFragment().resetChordSliders();
                 }
             });
@@ -429,7 +429,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
             wrongSoundPlayer.start();
 
             // Show hints if needed
-            chordHandler.makeHints(this);
+            ChordHandler.makeHints(this);
 
             // Show toast
             Toast toast = Toast.makeText(this, this.getString(R.string.thats_incorrect), Toast.LENGTH_SHORT);
@@ -445,8 +445,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      */
     public void makeHint(final byte type) {
         // Calculate the chord differences
-        final Note[] builtChord = chordHandler.getCurrentBuiltChordSpelling();
-        final Note[] selectedChord = chordHandler.getCurrentSelectedChordSpelling();
+        final Note[] builtChord = ChordHandler.getCurrentBuiltChordSpelling();
+        final Note[] selectedChord = ChordHandler.getCurrentSelectedChordSpelling();
 
         // Add hints
         SliderHintView view;
@@ -464,7 +464,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         view.setHint(type, builtChord[2], selectedChord[2], sliderFragment, 500L);
 
         // Option slider
-        if (chordHandler.getCurrentSelectedChord().TYPE.offsets.length == 4)
+        if (ChordHandler.getCurrentSelectedChord().TYPE.offsets.length == 4)
         {
             view = (SliderHintView) findViewById(R.id.slider_option_layout);
             view.setHint(type, builtChord[3], selectedChord[3], sliderFragment, 500L);
@@ -493,16 +493,16 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         updateDisplayedScore();
 
         // Update slider bounds
-        sliderFragment.setSliderBoundsToFitChord(chordHandler.getCurrentSelectedChordSpelling());
+        sliderFragment.setSliderBoundsToFitChord(ChordHandler.getCurrentSelectedChordSpelling());
 
         // Reset chord sliders
 //        sliderFragment.resetChordSliders(); TODO
 
         // Update ChordInstrumentSelectFragment
-        chordInstrumentSelectFragment.setDisplayedChord(chordHandler.getCurrentSelectedChord(), random);
+        chordInstrumentSelectFragment.setDisplayedChord(ChordHandler.getCurrentSelectedChord(), random);
 
         // Hide fourth slider if needed
-        if (chordHandler.getCurrentSelectedChord().getNumNotes() != 4)
+        if (ChordHandler.getCurrentSelectedChord().getNumNotes() != 4)
             findViewById(R.id.slider_option_layout).setVisibility(View.GONE);
         else
             findViewById(R.id.slider_option_layout).setVisibility(View.VISIBLE);
@@ -573,7 +573,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     @Override
     public void onPitchBendSettingsChanged(int incrementsPerNote, double maxCheckError){
         // Update SliderFragment
-        sliderFragment.setSliderBoundsToFitChord(chordHandler.getCurrentSelectedChordSpelling());
+        sliderFragment.setSliderBoundsToFitChord(ChordHandler.getCurrentSelectedChordSpelling());
 
         // Save options
         options.save(this);

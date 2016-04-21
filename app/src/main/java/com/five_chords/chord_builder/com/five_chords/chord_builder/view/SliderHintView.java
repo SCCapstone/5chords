@@ -10,7 +10,7 @@ import android.widget.LinearLayout;
 
 import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.R;
-import com.five_chords.chord_builder.chordHandler;
+import com.five_chords.chord_builder.ChordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
 
@@ -110,16 +110,16 @@ public class SliderHintView extends LinearLayout
             if (Math.abs(diff) < MainActivity.getOptions().allowableCheckError)
                 diff = 0.0;
 
-            if (type == chordHandler.HINT_ONE)
+            if (type == ChordHandler.HINT_ONE)
                 hint = new CircleHint(testNote, diff == 0.0 ? Color.GREEN : Color.RED);
-            else if (type == chordHandler.HINT_TWO)
+            else if (type == ChordHandler.HINT_TWO)
             {
                 if (diff == 0.0)
                     hint = new CircleHint(testNote, Color.GREEN);
                 else
                     hint = new TriangleHint(testNote, diff < 0.0);
             }
-            else if (type == chordHandler.HINT_THREE)
+            else if (type == ChordHandler.HINT_THREE)
                 hint = new CircleHint(actualNote, diff == 0.0 ? Color.GREEN : Color.BLUE);
 
             HINT_LOCK.notify();

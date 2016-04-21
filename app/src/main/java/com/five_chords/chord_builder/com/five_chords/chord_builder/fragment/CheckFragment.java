@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.five_chords.chord_builder.R;
-import com.five_chords.chord_builder.chordHandler;
+import com.five_chords.chord_builder.ChordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.SoundHandler;
 
@@ -24,7 +24,7 @@ public class CheckFragment extends Fragment
     private Button playBuiltChordButton;
 
     /** The soundHandler for the play built chord button. **/
-    private static SoundHandler soundHandler;
+    private SoundHandler soundHandler;
 
     /**
      * Required empty public constructor.
@@ -47,9 +47,6 @@ public class CheckFragment extends Fragment
     public void silenceButtons()
     {
         soundHandler.stopSound();
-
-//        for (soundHandler sH : soundHandlers)
-//            sH.stopSound();
     }
 
     /**
@@ -103,9 +100,9 @@ public class CheckFragment extends Fragment
                     }
 
 
-                    chordHandler.buildCurrentChord(getActivity());
-                    soundHandler.playChord(getActivity(), chordHandler.getCurrentBuiltChordSpelling(),
-                            chordHandler.getCurrentSelectedChord().getNumNotes());
+                    ChordHandler.buildCurrentChord(getActivity());
+                    soundHandler.playChord(getActivity(), ChordHandler.getCurrentBuiltChordSpelling(),
+                            ChordHandler.getCurrentSelectedChord().getNumNotes());
                 }
                 if (event.getAction() == MotionEvent.ACTION_UP) {
 
@@ -154,7 +151,7 @@ public class CheckFragment extends Fragment
 
                     // Check the result
                     if (activity instanceof MainActivity)
-                        chordHandler.checkCurrentChord((MainActivity)activity);
+                        ChordHandler.checkCurrentChord((MainActivity)activity);
                 }
                 return false;
             }

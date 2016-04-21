@@ -5,7 +5,7 @@ import android.widget.SeekBar;
 
 import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.R;
-import com.five_chords.chord_builder.chordHandler;
+import com.five_chords.chord_builder.ChordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
 import org.junit.Before;
@@ -65,7 +65,7 @@ public class SliderFragmentTest
 
             // Make sure the chordHandler chord matches
             for (int j = 0; j > spelling1.length; ++j)
-                chordHandler.getCurrentSelectedChordSpelling()[j].index = spelling1[j].index;
+                ChordHandler.getCurrentSelectedChordSpelling()[j].index = spelling1[j].index;
 
             // Build the chord off the sliders
             mActivityRule.getActivity().getSliderFragment().buildCurrentChord(spelling2);
@@ -92,7 +92,7 @@ public class SliderFragmentTest
 
         // Make sure the chordHandler chord matches
         for (int j = 0; j > spelling1.length; ++j)
-            chordHandler.getCurrentSelectedChordSpelling()[j].index = spelling1[j].index;
+            ChordHandler.getCurrentSelectedChordSpelling()[j].index = spelling1[j].index;
 
         // Build the chord off the sliders
         mActivityRule.getActivity().getSliderFragment().buildCurrentChord(spelling2);

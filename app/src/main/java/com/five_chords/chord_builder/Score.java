@@ -1,9 +1,7 @@
 package com.five_chords.chord_builder;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.widget.Toast;
 
@@ -13,7 +11,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.RunnableFuture;
 
 /**
  * Class encapsulating the Score of a single chord. Each Score keeps track of the total number of correct and
@@ -108,7 +105,7 @@ public class Score
      */
     public static Score getCurrentScore()
     {
-        return getScore(chordHandler.getCurrentSelectedChord());
+        return getScore(ChordHandler.getCurrentSelectedChord());
     }
 
     /**
@@ -190,7 +187,7 @@ public class Score
 
             if (id != -1L)
             {
-                chord = chordHandler.getChord(id);
+                chord = ChordHandler.getChord(id);
                 score = new Score(chord);
                 score.load(savedChordScores);
                 scores.put(id, score);

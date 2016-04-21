@@ -1,10 +1,7 @@
 /**
  * Unit Tests
  */
-import com.five_chords.chord_builder.chordHandler;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class UnitTest {
 
