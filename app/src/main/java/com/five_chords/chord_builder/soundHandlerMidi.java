@@ -9,11 +9,10 @@ import java.util.Vector;
  * Class representing a MIDI sound file. This class contains functionality to create and play MIDI sound files.
  * @version 1.1
  * @date 3 April 2016
- * @author: Drea, Zach, Theodore
+ * @author Drea, Zach, Theodore
  */
 public class SoundHandlerMidi
 {
-
     /** The channel of this soundHandlerMidi. */
     private int channel;
 
@@ -21,14 +20,10 @@ public class SoundHandlerMidi
     private int header[] = new int[] {};
 
     /** The standard MIDI file footer. */
-    private int footer[] = new int[] {
-            0x01, 0xFF, 0x2F, 0x00
-    };
+    private int footer[] = new int[] {0x01, 0xFF, 0x2F, 0x00};
 
     /** Definition for a new track chunk. */
-    private int MTrk[] = new int[] {
-            0x4d, 0x54, 0x72, 0x6B
-    };
+    private int MTrk[] = new int[] {0x4d, 0x54, 0x72, 0x6B};
 
     /** Vector to hold the MIDI events. */
     private Vector<int[]> midiEvents;
@@ -41,7 +36,8 @@ public class SoundHandlerMidi
      * @param ints The int array to convert
      * @return A new byte array created by casting each int of the int array to a byte
      */
-    public static byte[] intArrayToByteArray (int[] ints) {
+    public static byte[] intArrayToByteArray (int[] ints)
+    {
         int l = ints.length;
         byte[] out = new byte[ints.length];
 
@@ -56,8 +52,8 @@ public class SoundHandlerMidi
      * @param filename The name of the file to write to
      * @throws IOException If there is an error writing to the file
      */
-    public void writeToFile (String filename) throws IOException {
-
+    public void writeToFile (String filename) throws IOException
+    {
         // Open midi file
         FileOutputStream fos = new FileOutputStream (filename);
 
@@ -103,8 +99,10 @@ public class SoundHandlerMidi
      * @param tracks The number of tracks
      * @param format 0 for single track, 1 for multi track, or 2 for multi song
      */
-    public void setHeader (int tracks, int format) {
-        header = new int[] {
+    public void setHeader (int tracks, int format)
+    {
+        header = new int[]
+        {
                 0x4d, 0x54, 0x68, 0x64, // "MThd"
                 0x00, 0x00, 0x00, 0x06, // header length, always 6 bytes
                 0x00, format, // MIDI tracks format
@@ -117,7 +115,8 @@ public class SoundHandlerMidi
      * Sets the current channel in the MIDI file.
      * @param channel The new channel
      */
-    public void setChannel(int channel) {
+    public void setChannel(int channel)
+    {
         this.channel = channel;
     }
 
@@ -127,7 +126,8 @@ public class SoundHandlerMidi
      * @param note The note to play
      * @param velocity The note velocity
      */
-    public void noteOn (int delta, int note, int velocity) {
+    public void noteOn (int delta, int note, int velocity)
+    {
         int[] data = new int[4];
         data[0] = delta;
         data[1] = 0x90 + channel;
@@ -141,7 +141,8 @@ public class SoundHandlerMidi
      * @param delta The delta value
      * @param note The note to stop
      */
-    public void noteOff (int delta, int note) {
+    public void noteOff (int delta, int note)
+    {
         int[] data = new int[4];
         data[0] = delta;
         data[1] = 0x80 + channel;
@@ -155,7 +156,8 @@ public class SoundHandlerMidi
      * @param msig The most significant byte of the MIDI pitch bend amount
      * @param lsig The least significant byte of the MIDI pitch bend amount
      */
-    public void bendPitch (int msig, int lsig) {
+    public void bendPitch (int msig, int lsig)
+    {
         int[] data = new int[4];
         data[0] = 0;
         data[1] = 0xE0 + channel;
@@ -168,7 +170,8 @@ public class SoundHandlerMidi
      * Creates a program-change MIDI event (instruments).
      * @param prog The new program
      */
-    public void progChange (int prog) {
+    public void progChange (int prog)
+    {
         int[] data = new int[3];
         data[0] = 0;
         data[1] = 0xC0 + channel;
@@ -179,7 +182,8 @@ public class SoundHandlerMidi
     /**
      * Commits the current MIDI track.
      */
-    public void commitTrack() {
+    public void commitTrack()
+    {
         midiTracks.add(midiEvents);
         midiEvents = new Vector<>();
     }
@@ -189,7 +193,8 @@ public class SoundHandlerMidi
      * @param tracks The number of tracks to include
      * @param format The format of the MIDI file
      */
-    public void newMidi(int tracks, int format) {
+    public void newMidi(int tracks, int format)
+    {
         setHeader(tracks, format);
         midiEvents = new Vector<>();
         midiTracks = new Vector<>();

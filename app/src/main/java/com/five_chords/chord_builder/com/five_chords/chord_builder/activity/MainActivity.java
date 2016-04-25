@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -124,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -204,6 +206,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         options.setOptionsChangedListener(null);
         ChordHandler.setOnChordSelectedListener(null);
         mDrawerList.setOnItemClickListener(null);
+        mDrawerLayout.setOnFocusChangeListener(null);
 
         super.onDestroy();
     }
@@ -621,7 +624,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     @Override
     public void onBackPressed()
     {
-
         // Launch dialog
         AlertFragment alert = AlertFragment.newInstance(R.string.exit, R.string.exit_dialog_message);
 

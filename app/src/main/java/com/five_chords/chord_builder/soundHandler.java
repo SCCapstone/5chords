@@ -10,7 +10,7 @@ import android.util.Log;
  * notes using the functions of this class.
  * @version 1.1
  * @date 3 April 2016
- * @author: Drea, Zach, Theodore
+ * @author Drea, Zach, Theodore
  */
 public class SoundHandler
 {
@@ -18,37 +18,37 @@ public class SoundHandler
     private static final String TAG = "soundHandler";
 
     /** Constant representing full volume. */
-    static final int FULL_VOLUME = 127;
+    private static final int FULL_VOLUME = 127;
 
     /** Constant denoting that a note should be sustained. */
-    static final int SUSTAIN_NOTE = 128;
+    private static final int SUSTAIN_NOTE = 128;
 
     /** Constant denoting that a note should be ended. */
-    static final int RELEASE_NOTE = 0;
+    private static final int RELEASE_NOTE = 0;
 
     /** The offset in notes of the third octave. */
-    static final int NOTE_OFFSET_OCTAVE3 = 60;
+    private static final int NOTE_OFFSET_OCTAVE3 = 60;
 
     /** The offset in notes of the fourth octave. */
-    static final int NOTE_OFFSET_OCTAVE4 = 72;
+    private static final int NOTE_OFFSET_OCTAVE4 = 72;
 
     /** Constant id representing a Trumpet. */
-    static final int TRUMPET = 57;
+    private static final int TRUMPET = 57;
 
     /** Constant id representing a Piano. */
-    static final int PIANO = 2;
+    private static final int PIANO = 2;
 
     /** Constant id representing an organ. */
-    static final int ORGAN = 16;
+    private static final int ORGAN = 16;
 
     /** Constant id representing a Violin. */
-    static final int VIOLIN = 41;
+    private static final int VIOLIN = 41;
 
     /** Constant id representing a Flute. */
-    static final int FLUTE = 74;
+    private static final int FLUTE = 74;
 
     /** Reference to the current instrument being used to create sounds. */
-    static int instrument = PIANO;
+    private static int instrument = PIANO;
 
     /** The MediaPlayer to use to play the MIDI files. */
     private MediaPlayer mediaPlayer;
@@ -77,10 +77,10 @@ public class SoundHandler
     public static void switchInstrument(int i)
     {
         if(i == 0) instrument = TRUMPET;
-        if(i == 1) instrument = PIANO;
-        if(i == 2) instrument = ORGAN;
-        if(i == 3) instrument = VIOLIN;
-        if(i == 4) instrument = FLUTE;
+        else if(i == 1) instrument = PIANO;
+        else if(i == 2) instrument = ORGAN;
+        else if(i == 3) instrument = VIOLIN;
+        else if(i == 4) instrument = FLUTE;
     }
 
     /**
@@ -95,13 +95,15 @@ public class SoundHandler
     /**
      * Stops the media player for this soundHandler.
      */
-    public void stopSound() {
-        Log.d(TAG, "Stop Sound");
-        try {
+    public void stopSound()
+    {
+        try
+        {
+            mediaPlayer.stop();
             mediaPlayer.release();
-        } catch (Exception e) {
-            /* Ignore */
         }
+        catch (Exception e)
+        {/* Ignore */}
     }
 
     /**
@@ -131,7 +133,8 @@ public class SoundHandler
         int midiOffSet = NOTE_OFFSET_OCTAVE3;
 
         // If needed, change the note offset to compensate for the unique sound of the current instrument
-        switch (instrument) {
+        switch (instrument)
+        {
             case TRUMPET: midiOffSet = NOTE_OFFSET_OCTAVE3;
                           break;
             case PIANO:   midiOffSet = NOTE_OFFSET_OCTAVE3;

@@ -93,8 +93,8 @@ public class CheckFragment extends Fragment
                     soundHandler.playChord(getActivity(), ChordHandler.getCurrentBuiltChordSpelling(),
                             ChordHandler.getCurrentSelectedChord().getNumNotes());
                 }
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-
+                if (event.getAction() == MotionEvent.ACTION_UP)
+                {
                     MainActivity mainActivity = null;
                     Activity activity = getActivity();
 
