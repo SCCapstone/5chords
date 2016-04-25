@@ -69,17 +69,6 @@ public class CheckFragment extends Fragment
         playBuiltChordButton = playBuiltChord;
 
         soundHandler = new SoundHandler(getActivity(), "playButton");
-//        soundHandlers = new SoundHandler[2];
-//
-//        if (soundHandlers[0] != null)
-//            soundHandlers[0].stopSound();
-//        else
-//            soundHandlers[0] = new SoundHandler(getActivity(), "playButton");
-//
-//        if (soundHandlers[1] != null)
-//            soundHandlers[1].stopSound();
-//        else
-//            soundHandlers[1] = new SoundHandler(getActivity(), "randomButton");
 
         // Set the preview button function
         playBuiltChord.setOnTouchListener(new View.OnTouchListener() {

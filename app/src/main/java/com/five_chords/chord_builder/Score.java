@@ -17,7 +17,7 @@ import java.util.Map;
  * incorrect chord guesses as well as a series of snapshots for a history. Scores can be saved and loaded.
  * Score also contains a method to clear the entire Score history for the application.
  * @date 04 April 2016
- * @author: Drea,Steven,Zach,Kevin,Bo,Theodore
+ * @author Drea,Steven,Zach,Kevin,Bo,Theodore
  **/
 public class Score
 {

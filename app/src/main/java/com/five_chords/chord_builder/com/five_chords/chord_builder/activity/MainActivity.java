@@ -92,7 +92,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      *
      * @return The current global Options wrapper
      */
-    public static Options getOptions() {
+    public static Options getOptions()
+    {
         if (options == null)
             options = new Options();
 
@@ -120,7 +121,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * @param savedInstanceState Bundle containing the saved instance state
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -189,10 +191,10 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * Called when this Activity is destroyed.
      */
     @Override
-    protected void onDestroy() {
+    protected void onDestroy()
+    {
         // Make sure sound stops
         sliderFragment.silenceSliders();
-        //Buttons.silenceButtons();
 
         // Clean up sound players
         correctSoundPlayer.release();
@@ -201,6 +203,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         // Remove listeners
         options.setOptionsChangedListener(null);
         ChordHandler.setOnChordSelectedListener(null);
+        mDrawerList.setOnItemClickListener(null);
 
         super.onDestroy();
     }
@@ -209,7 +212,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * Called when this Activity is started.
      */
     @Override
-    public void onStart() {
+    public void onStart()
+    {
         super.onStart();
 
         // Setup the system for contacting the developers
@@ -224,7 +228,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * Called when this Activity is stopped.
      */
     @Override
-    public void onStop() {
+    public void onStop()
+    {
         super.onStop();
 
         // Clean up the system for contacting the developers
@@ -239,10 +244,11 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * Called when this Activity is resumed.
      */
     @Override
-    protected void onResume() {
+    protected void onResume()
+    {
         super.onResume();
 
-        // Set listener to Views
+        // Add listener to main layout to use for stopping the playback sequence
         findViewById(R.id.MainLayout).setOnClickListener(this);
 
         // Get references to fragments
@@ -261,6 +267,9 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     {
         super.onPause();
 
+        // Remove listener from main layout uses for stopping the playback sequence
+        findViewById(R.id.MainLayout).setOnClickListener(null);
+
         // Stop the playback thread if needed
         if (playbackThread != null && playbackThread.isAlive())
             playbackThread.interrupt();
@@ -272,8 +281,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * @param savedInstanceState The Bundle to which to save
      */
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-
+    public void onSaveInstanceState(Bundle savedInstanceState)
+    {
         // Save options
         options.save(this);
 
@@ -287,8 +296,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * @param savedInstanceState The Bundle from which to read
      */
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-
+    public void onRestoreInstanceState(Bundle savedInstanceState)
+    {
         // Call superclass method
         super.onRestoreInstanceState(savedInstanceState);
 
@@ -310,7 +319,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     /**
      * Goes to Help page.
      */
-    public void toHelpPage() {
+    public void toHelpPage()
+    {
         Intent intent = new Intent(this, HelpPage.class);
         startActivity(intent);
     }
@@ -318,7 +328,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     /**
      * Goes to the About page.
      */
-    public void toAboutPage() {
+    public void toAboutPage()
+    {
         Intent intent = new Intent(this, AboutPage.class);
         startActivity(intent);
     }
@@ -326,7 +337,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     /**
      * Goes to the Settings page.
      */
-    public void toSettingsPage() {
+    public void toSettingsPage()
+    {
         Intent intent = new Intent(this, SettingsPage.class);
         startActivity(intent);
     }
@@ -334,7 +346,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     /**
      * Goes to the Score page.
      */
-    public void toScorePage() {
+    public void toScorePage()
+    {
         Intent intent = new Intent(this, ScorePage.class);
         startActivity(intent);
     }
@@ -342,8 +355,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     /**
      * Called to update the displayed score.
      */
-    public void updateDisplayedScore() {
-
+    public void updateDisplayedScore()
+    {
         // Get the TextView
         TextView currentProgress = (TextView) findViewById(R.id.textview_score_display);
 
@@ -443,7 +456,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      *
      * @param type The Hint type
      */
-    public void makeHint(final byte type) {
+    public void makeHint(final byte type)
+    {
         // Calculate the chord differences
         final Note[] builtChord = ChordHandler.getCurrentBuiltChordSpelling();
         final Note[] selectedChord = ChordHandler.getCurrentSelectedChordSpelling();
@@ -495,9 +509,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         // Update slider bounds
         sliderFragment.setSliderBoundsToFitChord(ChordHandler.getCurrentSelectedChordSpelling());
 
-        // Reset chord sliders
-//        sliderFragment.resetChordSliders(); TODO
-
         // Update ChordInstrumentSelectFragment
         chordInstrumentSelectFragment.setDisplayedChord(ChordHandler.getCurrentSelectedChord(), random);
 
@@ -514,7 +525,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * @param chordTypesInUse A List containing the ChordTypes that are now in use
      */
     @Override
-    public void onChordTypeOptionsChanged(List<Chord.ChordType> chordTypesInUse) {
+    public void onChordTypeOptionsChanged(List<Chord.ChordType> chordTypesInUse)
+    {
         // Save options
         options.save(this);
 
@@ -528,7 +540,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * @param useHints Whether or not hints are now enabled.
      */
     @Override
-    public void onHintsOptionsChanged(boolean useHints) {
+    public void onHintsOptionsChanged(boolean useHints)
+    {
         // Save options
         options.save(this);
     }
@@ -538,7 +551,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * @param showAnswerSeq The new value of the showAnswerSequence flag
      */
     @Override
-    public void onShowAnswerSequenceChanged(boolean showAnswerSeq) {
+    public void onShowAnswerSequenceChanged(boolean showAnswerSeq)
+    {
         // Save options
         options.save(this);
     }
@@ -549,7 +563,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * @param instrument The new instrument
      */
     @Override
-    public void onInstrumentChanged(int instrument) {
+    public void onInstrumentChanged(int instrument)
+    {
         // Save options
         options.save(this);
         SoundHandler.switchInstrument(instrument);
@@ -560,7 +575,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * @param inversions The new inversion selection
      */
     @Override
-    public void onInversionSelectionChanged(List<Byte> inversions){
+    public void onInversionSelectionChanged(List<Byte> inversions)
+    {
         // Save options
         options.save(this);
     }
@@ -571,7 +587,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      * @param maxCheckError The new max check error
      */
     @Override
-    public void onPitchBendSettingsChanged(int incrementsPerNote, double maxCheckError){
+    public void onPitchBendSettingsChanged(int incrementsPerNote, double maxCheckError)
+    {
         // Update SliderFragment
         sliderFragment.setSliderBoundsToFitChord(ChordHandler.getCurrentSelectedChordSpelling());
 
@@ -582,7 +599,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     /**
      * Called to stop all playback
      */
-    public void stopAllSound() {
+    public void stopAllSound()
+    {
         sliderFragment.silenceSliders();
         checkFragment.silenceButtons();
         chordSelectFragment.silenceButtons();
@@ -596,14 +614,13 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         sliderFragment.setIsBlocked(blocked);
     }
 
-
-
     /**
      * Called when the user attempts to back out of the MainActivity to launch a dialog
      * confirming this action.
      */
     @Override
-    public void onBackPressed() {
+    public void onBackPressed()
+    {
 
         // Launch dialog
         AlertFragment alert = AlertFragment.newInstance(R.string.exit, R.string.exit_dialog_message);
@@ -633,10 +650,13 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     /**
      * Class for listening for clicks on the Options drawer.
      */
-    public class DrawerItemClickListener implements ListView.OnItemClickListener {
+    public class DrawerItemClickListener implements ListView.OnItemClickListener
+    {
         @Override
-        public void onItemClick(AdapterView parent, View view, int position, long id) {
-            switch (position) {
+        public void onItemClick(AdapterView parent, View view, int position, long id)
+        {
+            switch (position)
+            {
                 case 0: toScorePage();
                     break;
                 case 1: toSettingsPage();

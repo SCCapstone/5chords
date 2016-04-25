@@ -2,7 +2,6 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.NumberPicker;

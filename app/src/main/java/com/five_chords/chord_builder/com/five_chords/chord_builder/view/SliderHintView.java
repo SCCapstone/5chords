@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import com.five_chords.chord_builder.Note;
@@ -34,6 +35,9 @@ public class SliderHintView extends LinearLayout
 
     /** The current on this SliderHintView */
     private Hint hint;
+
+    /** The Thread to handle updating and drawing hints. */
+    private HintUpdater updater;
 
     /** The current SliderFragment. */
     private SliderFragment sliderFragment;
@@ -72,6 +76,24 @@ public class SliderHintView extends LinearLayout
     {
         super (context, attrs, defStyleAttr);
         initialize();
+    }
+
+    @Override
+    public void onDetachedFromWindow()
+    {
+        // Delete updater thread if needed
+        if (updater != null)
+        {
+            updater.isRunning = false;
+            updater = null;
+        }
+
+        synchronized (HINT_LOCK)
+        {
+            HINT_LOCK.notifyAll();
+        }
+
+        super.onDetachedFromWindow();
     }
 
     /**
@@ -151,7 +173,7 @@ public class SliderHintView extends LinearLayout
     private void initialize()
     {
         setWillNotDraw(false);
-        HintUpdater updater = new HintUpdater();
+        updater = new HintUpdater();
         updater.isRunning = true;
 
         new Thread(updater).start();
@@ -209,25 +231,34 @@ public class SliderHintView extends LinearLayout
                 // Wait until there is a hint to draw
                 synchronized (HINT_LOCK)
                 {
-                    while (hint == null)
+                    while (hint == null && isRunning)
                     {
                         try
                         {
                             HINT_LOCK.wait();
                         }
                         catch (InterruptedException e)
-                        {/* Ignore */}
+                        {
+                            if (!isRunning)
+                                return;
+                        }
                     }
                 }
 
                 // While there is a hint, and while that hint is not done, update the hint
                 synchronized (HINT_LOCK)
                 {
-                    if (hint.isDone())
-                        hint = null;
-                    else
-                        hint.update();
+                    if (hint != null)
+                    {
+                        if (hint.isDone())
+                            hint = null;
+                        else
+                            hint.update();
+                    }
                 }
+
+                if (!isRunning)
+                    return;
 
                 // Invalidate the fragment so that it redraws
                 post(new Runnable()
@@ -245,7 +276,10 @@ public class SliderHintView extends LinearLayout
                     Thread.sleep(HINT_UPDATE_DELAY);
                 }
                 catch (InterruptedException e)
-                {/* Ignore */}
+                {
+                    if (!isRunning)
+                        return;
+                }
             }
         }
     }
