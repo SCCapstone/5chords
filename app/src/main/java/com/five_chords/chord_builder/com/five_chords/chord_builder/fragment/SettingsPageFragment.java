@@ -95,7 +95,7 @@ public class SettingsPageFragment extends Fragment
         {
             try
             {
-                getFragmentManager().beginTransaction().detach(currentSubFragment).commit();
+                getFragmentManager().beginTransaction().remove(currentSubFragment).commit();
             }
             catch (Exception e)
             {/* Ignore */}
@@ -146,7 +146,12 @@ public class SettingsPageFragment extends Fragment
 //        if (previousFragmentDef != SettingsSubFragmentDef.MAIN)
 //            transaction.addToBackStack(null);
 
-        transaction.commit();
+        try
+        {
+            transaction.commit();
+        }
+        catch (Exception e)
+        {/* Ignore */}
     }
 
     /**

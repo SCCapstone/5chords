@@ -259,6 +259,20 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
         mDrawerList.setOnItemClickListener(null);
         mDrawerLayout.setOnFocusChangeListener(null);
 
+        // Detach drawer fragment
+        if (drawerFragment != null)
+        {
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.remove(drawerFragment);
+
+            try
+            {
+                transaction.commit();
+            }
+            catch (Exception e)
+            {/* Ignore */}
+        }
+
         super.onDestroy();
     }
 
@@ -328,6 +342,9 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
             savedInstanceState.putBundle(DRAWER_BUNDLE_BUNDLE_ID + entry.getKey(), entry.getValue());
         }
 
+        // Save drawer fragment index
+        savedInstanceState.putInt(DRAWER_INDEX_BUNDLE_ID, drawerIndex);
+
         // Call superclass method
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -358,6 +375,13 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
             if (argument != null)
                 drawerFragmentArguments.put(i, argument);
         }
+
+        // Load drawer index
+        int previousIndex = drawerIndex;
+        drawerIndex = savedInstanceState.getInt(DRAWER_INDEX_BUNDLE_ID);
+
+        if (previousIndex != drawerIndex)
+            setCurrentDrawer(drawerIndex, false);
     }
 
     /**
