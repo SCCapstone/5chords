@@ -29,18 +29,6 @@ import com.five_chords.chord_builder.SoundHandler;
  */
 public class ChordSelectFragment extends Fragment
 {
-//    /** The Bundle id of the currently displayed chord. */
-//    private static final String DISPLAYED_CHORD_ID_BUNDLE_ID = "ChordSelectFragment.displayedChordBundleId";
-//
-//    /** The Bundle id of the flag denoting whether or not the displayed chord is random. */
-//    private static final String DISPLAYED_CHORD_RAN_BUNDLE_ID = "ChordSelectFragment.displayedChordRanBundleId";
-//
-//    /** The id of the currently displayed chord. */
-//    private long displayedChordId;
-//
-//    /** Whether or not the displayed chord is random. */
-//    private boolean displayedChordIsRandom;
-
     /** Reference to the Spinner for selecting chords contained in this Fragment. */
     private Spinner chordSelectSpinner;
 
@@ -62,9 +50,6 @@ public class ChordSelectFragment extends Fragment
      */
     public void setDisplayedChord(Chord chord, boolean random)
     {
-//        displayedChordId = chord.ID;
-//        displayedChordIsRandom = random;
-
         Log.d("ChordSelectFragment", "setDisplayedChord to " + chord + ", Is random = " + random);
 
         if (random)
@@ -290,6 +275,17 @@ public class ChordSelectFragment extends Fragment
 
         // Stop sounds
         silenceButtons();
+
+        // Remove listeners
+        chordSelectSpinner.setOnItemSelectedListener(null);
+        chordSelectSpinner = null;
+        playSelectedChordButton.setOnTouchListener(null);
+        playSelectedChordButton = null;
+
+        for (int i = 0; i < soundHandlers.length; ++i)
+        {
+            soundHandlers[i] = null;
+        }
 
         // Call super method
         super.onDestroyView();

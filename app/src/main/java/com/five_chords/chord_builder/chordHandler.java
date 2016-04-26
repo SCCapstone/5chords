@@ -8,6 +8,8 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.Main
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -179,13 +181,25 @@ public class ChordHandler
         // Set the value of the chord
         Options options = MainActivity.getOptions();
 
-        if (options.chordInversionsToUse.isEmpty())
+        int numInversions = 0;
+        boolean[] inversionsInUse = options.chordInversionsToUse;
+
+        for (boolean b: inversionsInUse)
+            if (b)
+                ++numInversions;
+
+        if (numInversions == 0)
             currentSelectedChord.getRootPosition(currentSelectedChordSpelling);
         else
         {
-            int maxInversions = Math.min(options.chordInversionsToUse.size(), currentSelectedChord.getNumNotes() - 1);
+            List<Byte> inversions = new LinkedList<>();
+            for (byte i = 0; i < inversionsInUse.length; ++i)
+                if (inversionsInUse[i])
+                    inversions.add(i);
+
+            int maxInversions = Math.min(inversions.size(), currentSelectedChord.getNumNotes() - 1);
             int inversionToUse = new Random().nextInt(maxInversions);
-            currentSelectedChord.getInversion(currentSelectedChordSpelling, options.chordInversionsToUse.get(inversionToUse));
+            currentSelectedChord.getInversion(currentSelectedChordSpelling, inversions.get(inversionToUse));
         }
 
         // Call the listener

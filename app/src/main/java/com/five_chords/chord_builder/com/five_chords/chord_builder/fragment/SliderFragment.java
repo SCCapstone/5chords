@@ -216,8 +216,31 @@ public class SliderFragment extends Fragment
             arguments.putInt(SLIDER_POSITION_BUNDLE_ID + 3, optionSlider.getProgress());
         }
 
+        // Remove the seek bar listeners
+        removeSeekBarListener(rootSlider);
+        removeSeekBarListener(thirdSlider);
+        removeSeekBarListener(fifthSlider);
+        removeSeekBarListener(optionSlider);
+
+        rootSlider = null;
+        thirdSlider = null;
+        fifthSlider = null;
+        optionSlider = null;
+
         // Stop Sound
         silenceSliders();
+
+        // Delete arrays
+        for (int i = 0; i < 4; ++i)
+        {
+            thumb[i] = null;
+            thumbTouched[i] = null;
+            soundHandlers[i] = null;
+        }
+
+        thumb = null;
+        thumbTouched = null;
+        soundHandlers = null;
 
         // Call super method
         super.onDestroyView();
@@ -328,9 +351,10 @@ public class SliderFragment extends Fragment
         isBlocked = wasBlocked;
     }
 
-    public void setIsBlocked(boolean blocked) {
-        isBlocked = blocked;
-    }
+//    public void setIsBlocked(boolean blocked)
+//    {
+//        isBlocked = blocked;
+//    }
 
     /**
      * Gets a String representation of this SliderFragment.
@@ -380,6 +404,17 @@ public class SliderFragment extends Fragment
 
         note.index = nearestNote;
         note.distanceToIndex = fracDistToNearestNote;
+    }
+
+    /**
+     * Called to remove the seek bar listener from a single seek bar which were added with addSeekBarListener().
+     * @param bar The VerticalSeekBar to remove listeners from
+     */
+    private void removeSeekBarListener(VerticalSeekBar bar)
+    {
+        bar.setOnClickListener(null);
+        bar.setOnSeekBarChangeListener(null);
+        bar.setOnTouchListener(null);
     }
 
     /**

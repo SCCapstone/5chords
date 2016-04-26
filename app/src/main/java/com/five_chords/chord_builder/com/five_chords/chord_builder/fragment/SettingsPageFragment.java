@@ -85,11 +85,13 @@ public class SettingsPageFragment extends Fragment
     }
 
     /**
-     * Called when the view of this Fragment is destroyed.
+     * Called when this Fragment is paused.
      */
     @Override
-    public void onDestroyView()
+    public void onPause()
     {
+        super.onPause();
+
         // Destroy the current sub fragment, if applicable
         if (currentSubFragment != null)
         {
@@ -103,9 +105,30 @@ public class SettingsPageFragment extends Fragment
             currentSubFragment.setSettingsPageFragment(null);
             currentSubFragment = null;
         }
-
-        super.onDestroyView();
     }
+
+//    /**
+//     * Called when the view of this Fragment is destroyed.
+//     */
+//    @Override
+//    public void onDestroyView()
+//    {
+////        // Destroy the current sub fragment, if applicable
+////        if (currentSubFragment != null)
+////        {
+////            try
+////            {
+////                getFragmentManager().beginTransaction().remove(currentSubFragment).commit();
+////            }
+////            catch (Exception e)
+////            {/* Ignore */}
+////
+////            currentSubFragment.setSettingsPageFragment(null);
+////            currentSubFragment = null;
+////        }
+//
+//        super.onDestroyView();
+//    }
 
     /**
      * Sets the settings sub fragment of the given index.

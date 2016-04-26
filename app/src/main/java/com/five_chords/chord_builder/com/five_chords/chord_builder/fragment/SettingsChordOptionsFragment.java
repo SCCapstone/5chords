@@ -67,19 +67,27 @@ public class SettingsChordOptionsFragment extends SettingsPageFragment.SettingsS
     }
 
     /**
-     * Called when this Fragment's view is destroyed.
+     * Called when this Fragment is paused.
      */
     @Override
-    public void onDestroyView()
+    public void onPause()
     {
+        super.onPause();
+
         // Destroy Fragments
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         if (pitchBendSettingsFragment != null)
+        {
             transaction.detach(pitchBendSettingsFragment);
+            transaction.remove(pitchBendSettingsFragment);
+        }
 
         if (chordInversionSettingsFragment != null)
+        {
             transaction.detach(chordInversionSettingsFragment);
+            transaction.remove(pitchBendSettingsFragment);
+        }
 
         try
         {
@@ -87,23 +95,18 @@ public class SettingsChordOptionsFragment extends SettingsPageFragment.SettingsS
         }
         catch (Exception e)
         {/* Ignore */}
+    }
 
+    /**
+     * Called when this Fragment's view is destroyed.
+     */
+    @Override
+    public void onDestroyView()
+    {
         // Set Fragments to null
         pitchBendSettingsFragment = null;
         chordInversionSettingsFragment = null;
 
         super.onDestroyView();
     }
-
-//    /**
-//     * Called to return to the MainActivity.
-//     * @param view The calling View
-//     */
-//    public void backToMain(View view)
-//    {
-//        finish();
-//        this.overridePendingTransition(0, 0);
-//    }
-
-
 }

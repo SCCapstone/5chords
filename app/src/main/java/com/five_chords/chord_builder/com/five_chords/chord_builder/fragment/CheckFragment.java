@@ -2,6 +2,7 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;

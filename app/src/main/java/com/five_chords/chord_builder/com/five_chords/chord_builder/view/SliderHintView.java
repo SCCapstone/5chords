@@ -6,6 +6,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import com.five_chords.chord_builder.Note;
@@ -42,7 +44,7 @@ public class SliderHintView extends LinearLayout
     private SliderFragment sliderFragment;
 
     /** The lock to use for synchronization */
-    private final Object HINT_LOCK = new Object();
+    private static final Object HINT_LOCK = new Object();
 
     /**
      * Constructs a new SliderHintView with the given Context.
@@ -222,6 +224,7 @@ public class SliderHintView extends LinearLayout
         pos[1] += mx + Math.round(my * (1.0f - (float) desiredProgress / bar.getMax()));
         pos[2] = mx;
     }
+
 
     /**
      * Class to handle updating any hints on the SliderHintView.

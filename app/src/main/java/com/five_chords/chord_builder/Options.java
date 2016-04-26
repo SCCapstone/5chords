@@ -53,6 +53,9 @@ public class Options
     /** The array of default hint delays. */
     private static final int[] DEFAULT_HINT_DELAYS = new int[] {2, 6, 10};
 
+    /** The maximum number of chord inversions. */
+    private static final int NUM_INVERSIONS = 4;
+
     /** Whether or not hints are enabled */
     public boolean useHints;
 
@@ -71,8 +74,10 @@ public class Options
     /** The maximum allowable error for checking notes on the Chord sliders as a fraction. */
     public double allowableCheckError;
 
+//    /** The chord inversions to use. */
+//    public List<Byte> chordInversionsToUse;
     /** The chord inversions to use. */
-    public List<Byte> chordInversionsToUse;
+    public boolean[] chordInversionsToUse;
 
     /** Array denoting what chord types are being used. */
     public boolean[] chordTypesInUseArray;
@@ -104,7 +109,8 @@ public class Options
         chordTypesInUseArray[Chord.ChordType.MAJOR.ordinal()] = true;
 
         // Chord Inversions to use
-        chordInversionsToUse = new ArrayList<>();
+        chordInversionsToUse = new boolean[NUM_INVERSIONS];
+//        chordInversionsToUse = new ArrayList<>();
     }
 
     /**
@@ -160,13 +166,14 @@ public class Options
      */
     public void addChordInversion(byte inversion)
     {
-        if (!chordInversionsToUse.contains(inversion))
-        {
-            chordInversionsToUse.add(inversion);
 
-            if (optionsChangedListener != null)
-                optionsChangedListener.onInversionSelectionChanged(chordInversionsToUse);
-        }
+//        if (!chordInversionsToUse.contains(inversion))
+//        {
+//            chordInversionsToUse.add(inversion);
+//
+//            if (optionsChangedListener != null)
+//                optionsChangedListener.onInversionSelectionChanged(chordInversionsToUse);
+//        }
     }
 
     /**
@@ -175,9 +182,9 @@ public class Options
      */
     public void removeChordInversion(byte inversion)
     {
-        if (!chordInversionsToUse.remove(Byte.valueOf(inversion)))
+        if (!chordInversionsToUse[inversion])
         {
-            chordInversionsToUse.add(inversion);
+            chordInversionsToUse[inversion] = true;
 
             if (optionsChangedListener != null)
                 optionsChangedListener.onInversionSelectionChanged(chordInversionsToUse);
@@ -277,9 +284,9 @@ public class Options
             editor.putBoolean(CHORDS_IN_USE_BUNDLE_ID + i, chordTypesInUseArray[i]);
 
         // Save chord inversions to use
-        editor.putInt(CHORDS_INVERSIONS_SIZE_BUNDLE_ID, chordInversionsToUse.size());
-        for (int i = 0; i < chordInversionsToUse.size(); ++i)
-            editor.putInt(CHORDS_INVERSIONS_BUNDLE_ID + i, chordInversionsToUse.get(i));
+//        editor.putInt(CHORDS_INVERSIONS_SIZE_BUNDLE_ID, chordInversionsToUse.size());
+        for (int i = 0; i < NUM_INVERSIONS; ++i)
+            editor.putBoolean(CHORDS_INVERSIONS_BUNDLE_ID + i, chordInversionsToUse[i]);
 
         editor.apply();
     }
@@ -308,9 +315,17 @@ public class Options
             chordTypesInUseArray[i] = preferences.getBoolean(CHORDS_IN_USE_BUNDLE_ID + i, chordTypesInUseArray[i]);
 
         // Load chord inversions to use
-        int size = preferences.getInt(CHORDS_INVERSIONS_SIZE_BUNDLE_ID, 0);
-        for (int i = 0; i < size; ++i)
-            chordInversionsToUse.add((byte)preferences.getInt(CHORDS_INVERSIONS_BUNDLE_ID + i, 0));
+//        int size = preferences.getInt(CHORDS_INVERSIONS_SIZE_BUNDLE_ID, 0);
+        for (int i = 0; i < NUM_INVERSIONS; ++i)
+        {
+            try
+            {
+                chordInversionsToUse[i] = preferences.getBoolean(CHORDS_INVERSIONS_BUNDLE_ID + i, false);
+            }
+            catch (Exception e)
+            {/* Ignore */}
+        }
+//            chordInversionsToUse.add((byte)preferences.getInt(CHORDS_INVERSIONS_BUNDLE_ID + i, 0));
 
         // Populate ChordType List
         populateChordTypesInUse();
@@ -361,7 +376,7 @@ public class Options
          * Called when the chord inversion selection changes.
          * @param inversions The new inversion selection
          */
-        void onInversionSelectionChanged(List<Byte> inversions);
+        void onInversionSelectionChanged(boolean[] inversions);
 
         /**
          * Called when the pitch bend settings change.

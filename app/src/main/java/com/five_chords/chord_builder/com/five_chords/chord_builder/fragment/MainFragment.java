@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -94,33 +95,7 @@ public class MainFragment extends Fragment implements ChordHandler.OnChordSelect
     @Override
     public void onDestroyView()
     {
-        // Destroy Fragments
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-
-        if (checkFragment != null)
-        {
-            checkFragment.silenceButtons();
-            transaction.detach(checkFragment);
-        }
-
-        if (sliderFragment != null)
-        {
-            sliderFragment.silenceSliders();
-            transaction.detach(sliderFragment);
-        }
-
-        if (chordSelectFragment != null)
-        {
-            chordSelectFragment.silenceButtons();
-            transaction.detach(chordSelectFragment);
-        }
-
-        try
-        {
-            transaction.commit();
-        }
-        catch (Exception e)
-        {/* Ignore */}
+        Log.w("MAIN_FRAGMENT", "onDestroyView");
 
         // Set Fragments to null
         checkFragment = null;
@@ -141,24 +116,43 @@ public class MainFragment extends Fragment implements ChordHandler.OnChordSelect
     }
 
     /**
-     * Called when this Fragment is resumed.
-     */
-    @Override
-    public void onResume()
-    {
-        super.onResume();
-
-//        // Initialize Slider Fragment
-//        ChordHandler.buildCurrentChord(this);
-    }
-
-    /**
      * Called when this Fragment is paused.
      */
     @Override
     public void onPause()
     {
         super.onPause();
+
+        // Destroy Fragments
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+        if (checkFragment != null)
+        {
+            checkFragment.silenceButtons();
+            transaction.detach(checkFragment);
+            transaction.remove(checkFragment);
+        }
+
+        if (sliderFragment != null)
+        {
+            sliderFragment.silenceSliders();
+            transaction.detach(sliderFragment);
+            transaction.remove(sliderFragment);
+        }
+
+        if (chordSelectFragment != null)
+        {
+            chordSelectFragment.silenceButtons();
+            transaction.detach(chordSelectFragment);
+            transaction.remove(chordSelectFragment);
+        }
+
+        try
+        {
+            transaction.commit();
+        }
+        catch (Exception e)
+        {/* Ignore */}
 
         // Stop the playback thread if needed
         if (playbackThread != null && playbackThread.isAlive())

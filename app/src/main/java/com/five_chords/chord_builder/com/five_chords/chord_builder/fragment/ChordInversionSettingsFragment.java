@@ -53,7 +53,7 @@ public class ChordInversionSettingsFragment extends Fragment
         for (final String type: INVERSION_TYPES)
         {
             optionsAdapter.add(new SettingsPageFragment.SettingsOption(
-                    type + " Inversions are " + (options.chordInversionsToUse.contains(i++) ? "Enabled" : "Disabled")) {
+                    type + " Inversions are " + (options.chordInversionsToUse[(i++)] ? "Enabled" : "Disabled")) {
                 @Override
                 public void performAction()
                 {

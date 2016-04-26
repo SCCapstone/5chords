@@ -5,7 +5,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.media.AudioManager;
@@ -43,7 +42,6 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -177,9 +175,9 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
         options.load(this);
         options.setOptionsChangedListener(this);
 
-        // Lock orientation in portrait mode with small screen devices
-        if (!getResources().getBoolean(R.bool.isTablet))
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        // Lock orientation in portrait mode with small screen devices
+//        if (!getResources().getBoolean(R.bool.isTablet))
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Create Navigation Drawer fragment argument map
         drawerFragmentArguments = new HashMap<>();
@@ -438,7 +436,7 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
      * @param inversions The new inversion selection
      */
     @Override
-    public void onInversionSelectionChanged(List<Byte> inversions)
+    public void onInversionSelectionChanged(boolean[] inversions)
     {
         // Save options
         options.save(this);
