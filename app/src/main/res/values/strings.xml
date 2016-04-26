@@ -23,6 +23,19 @@
         <item>B</item>
     </string-array>
 
+    <!-- Drawer Fragment names -->
+    <string name="drawer_frag_build">Build Chords</string>
+    <string name="drawer_frag_history">Score History</string>
+    <string name="drawer_frag_setting">Settings</string>
+    <string name="drawer_frag_about">About</string>
+    <string name="drawer_frag_help">Help</string>
+
+    <!-- Settings Sub Fragment names -->
+    <string name="settings_choose_chords">Choose Chords</string>
+    <string name="settings_chord_options">Chord Options</string>
+    <string name="settings_check_options">Check Options</string>
+    <string name="settings_change_instrument">Change Instrument</string>
+
     <!-- General Strings -->
     <string name="app_name">Chord Builder</string>
     <string name="action_settings">Settings</string>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.MainFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
 
 import java.util.HashMap;
@@ -219,24 +220,21 @@ public class ChordHandler
 
     /**
      * Builds the current chord that the user has defined on the sliders.
-     * @param activity The current Activity
+     * @param mainFragment The current MainFragment
      */
-    public static void buildCurrentChord(Activity activity)
+    public static void buildCurrentChord(MainFragment mainFragment)
     {
-        Fragment fragment = activity.getFragmentManager().findFragmentById(R.id.fragment_sliders);
+        SliderFragment sliderFragment = mainFragment.getSliderFragment();
 
-        if (fragment != null && fragment instanceof SliderFragment)
-        {
-            SliderFragment sliderFragment = (SliderFragment)fragment;
+        if (sliderFragment != null)
             sliderFragment.buildCurrentChord(currentBuiltChordSpelling);
-        }
     }
 
     /**
      * Called when Hints should be displayed.
-     * @param activity The current MainActivity
+     * @param fragment The current MainFragment
      */
-    public static void makeHints(MainActivity activity)
+    public static void makeHints(MainFragment fragment)
     {
         // Increment the wrong streak counter
         currentWrongStreak++;
@@ -247,11 +245,11 @@ public class ChordHandler
             int[] hintDelays = MainActivity.getOptions().hintTypeDelays;
 
             if (currentWrongStreak > hintDelays[2])
-                activity.makeHint(HINT_THREE);
+                fragment.makeHint(HINT_THREE);
             else if (currentWrongStreak > hintDelays[1])
-                activity.makeHint(HINT_TWO);
+                fragment.makeHint(HINT_TWO);
             else if (currentWrongStreak > hintDelays[0])
-                activity.makeHint(HINT_ONE);
+                fragment.makeHint(HINT_ONE);
         }
     }
 
@@ -267,15 +265,15 @@ public class ChordHandler
 
     /**
      * Called when the user checks the current chord.
-     * @param activity Handle to the MainActivity
+     * @param fragment Handle to the MainFragment
      */
-    public static void checkCurrentChord(final MainActivity activity)
+    public static void checkCurrentChord(final MainFragment fragment)
     {
         // Either show the answer sequence or go right to the answer
         if (MainActivity.getOptions().showAnswerSequence)
-            activity.showChordSequence();
+            fragment.showChordSequence();
         else
-            activity.showChordCheckResult();
+            fragment.showChordCheckResult();
     }
 
     /**

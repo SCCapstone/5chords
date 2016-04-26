@@ -1,18 +1,19 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.media.AudioManager;
 import android.preference.PreferenceManager;
+import android.support.annotation.StringRes;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,27 +23,28 @@ import android.widget.ListView;
 
 
 import com.five_chords.chord_builder.Chord;
-import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.Options;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 import com.five_chords.chord_builder.ChordHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.AboutPageFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.AlertFragment;
-import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.CheckFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordSelectFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.HelpPageFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.MainFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ScorePageFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SettingsPageFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
-import com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView;
 import com.five_chords.chord_builder.SoundHandler;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
-import android.widget.TextView;
-import android.widget.Toast;
+import java.util.Map;
 
 /**
  * The Main Activity. This class contains callbacks to handle the majority of the
@@ -52,11 +54,28 @@ import android.widget.Toast;
  * @date 31 March 2016
  * @author Drea,Steven,Zach,Kevin,Bo,Theodore
  */
-public class MainActivity extends AppCompatActivity implements Options.OptionsChangedListener,
-        ChordHandler.OnChordSelectedListener, View.OnClickListener
+public class MainActivity extends AppCompatActivity implements Options.OptionsChangedListener
 {
+    /** The tag for this class. */
+    private static final String TAG = "MainActivity";
+
+    /** The Bundle id of the drawer index field. */
+    private static final String DRAWER_INDEX_BUNDLE_ID = "MainActivity.drawerIndex";
+
+    /** The Bundle id of the drawer fragment Bundles. */
+    private static final String DRAWER_BUNDLE_BUNDLE_ID = "MainActivity.drawerBundle";
+
     /** The current options selected in this MainActivity. */
     private static Options options;
+
+    /** The index of the currently selected navigation drawer. */
+    private int drawerIndex;
+
+    /** The current fragment selected by the navigation drawer. */
+    private Fragment drawerFragment;
+
+    /** Map containing the Bundle arguments for each Fragment available in the navigation drawer. */
+    private Map<Integer, Bundle> drawerFragmentArguments;
 
     /** The DrawerLayout containing the navigation pane. */
     private DrawerLayout mDrawerLayout;
@@ -64,29 +83,33 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     /** The List of items in the navigation pane. */
     private ListView mDrawerList;
 
-    /** The Fragment containing the chord build sliders attached to this Activity. */
-    private SliderFragment sliderFragment;
-
-    /** The Fragment for selecting chords and instruments attached to this Activity. */
-    private ChordSelectFragment chordInstrumentSelectFragment;
-
-    /** The Fragment containing the chord check button. */
-    private CheckFragment checkFragment;
-
-    /** The Fragment containing the chord selection interface. */
-    private ChordSelectFragment chordSelectFragment;
-
     /** The client to handle contacting the developers. */
     private GoogleApiClient client;
 
-    /** Thread to use for chord playback when the user guesses incorrectly. */
-    private Thread playbackThread;
+    /** Enum containing the fragments available in the navigation drawer. */
+    public enum DrawerFragment
+    {
+        MAIN (R.string.drawer_frag_build, MainFragment.class),
+        HISTORY (R.string.drawer_frag_history, ScorePageFragment.class),
+        SETTINGS (R.string.drawer_frag_setting, SettingsPageFragment.class),
+        ABOUT (R.string.drawer_frag_about, AboutPageFragment.class),
+        HELP (R.string.drawer_frag_help, HelpPageFragment.class);
 
-    /** The MediaPlayer to use for playing the correct sound. */
-    private MediaPlayer correctSoundPlayer;
+        /** String resource id for the name of this Drawer */
+        public final int NAME_RES_ID;
 
-    /** The MediaPlayer to use for playing the wrong sound. */
-    private MediaPlayer wrongSoundPlayer;
+        // Fragment represented by this drawer
+        private final Class<? extends Fragment> FRAGMENT_CLASS;
+
+        /**
+         * Creates a DrawerFragment.
+         */
+        DrawerFragment(@StringRes int nameResId, Class<? extends Fragment> fragmentClass)
+        {
+            NAME_RES_ID = nameResId;
+            FRAGMENT_CLASS = fragmentClass;
+        }
+    }
 
     /**
      * Gets the current global Options wrapper, creating a default Options if the global is null.
@@ -118,6 +141,15 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     }
 
     /**
+     * Gets the current Fragment selected in the navigation drawer.
+     * @return The current Fragment selected in the navigation drawer
+     */
+    public Fragment getCurrentDrawerFragment()
+    {
+        return drawerFragment;
+    }
+
+    /**
      * Called when this Activity is created.
      * @param savedInstanceState Bundle containing the saved instance state
      */
@@ -126,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.content_main);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         // Initialize ScoreProgressView paint
@@ -138,18 +170,35 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         options.load(this);
         options.setOptionsChangedListener(this);
 
-        // Lock orientation in portrait mode with small screen devices
-        if (!getResources().getBoolean(R.bool.isTablet))
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        // Lock orientation in portrait mode with small screen devices
+//        if (!getResources().getBoolean(R.bool.isTablet))
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        // Load Navigation Drawer
+        // Create Navigation Drawer fragment argument map
+        drawerFragmentArguments = new HashMap<>();
+
+        // Load drawer fragment arguments
+        if (savedInstanceState != null)
+        {
+            Bundle argument;
+            for (int i = 0; i < DrawerFragment.values().length; ++i)
+            {
+                argument = savedInstanceState.getBundle(DRAWER_BUNDLE_BUNDLE_ID + i);
+
+                if (argument != null)
+                    drawerFragmentArguments.put(i, argument);
+            }
+        }
+
+        // Create Navigation Drawer
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
+
         ArrayList<String> drawerOptions = new ArrayList<>();
-        drawerOptions.add("View History");
-        drawerOptions.add("Settings");
-        drawerOptions.add("About");
-        drawerOptions.add("Help");
+
+        for (DrawerFragment drawerFragment: DrawerFragment.values())
+            drawerOptions.add(getString(drawerFragment.NAME_RES_ID));
+
         mDrawerList.setAdapter(new ArrayAdapter<>(this, R.layout.drawer_list_item, R.id.textLabel, drawerOptions));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         mDrawerLayout.setOnFocusChangeListener(new View.OnFocusChangeListener()
@@ -161,6 +210,14 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
                 stopAllSound();
             }
         });
+
+        // Load saved drawer
+        if (savedInstanceState != null)
+            drawerIndex = savedInstanceState.getInt(DRAWER_INDEX_BUNDLE_ID);
+        else
+            drawerIndex = 0;
+
+        setCurrentDrawer(drawerIndex);
 
         // Display demo if needed
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(this);
@@ -177,16 +234,11 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
 
         // Initialize Static Classes
         ChordHandler.initialize();
-        ChordHandler.setOnChordSelectedListener(this);
         SoundHandler.switchInstrument(options.instrument);
         Score.loadScores(this, false);
 
         // Create the client to handle contacting the developers
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
-
-        // Create the sound player
-        correctSoundPlayer = MediaPlayer.create(this, R.raw.correct);
-        wrongSoundPlayer = MediaPlayer.create(this, R.raw.wrong);
     }
 
     /**
@@ -195,13 +247,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     @Override
     protected void onDestroy()
     {
-        // Make sure sound stops
-        sliderFragment.silenceSliders();
-
-        // Clean up sound players
-        correctSoundPlayer.release();
-        wrongSoundPlayer.release();
-
         // Remove listeners
         options.setOptionsChangedListener(null);
         ChordHandler.setOnChordSelectedListener(null);
@@ -251,32 +296,14 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     {
         super.onResume();
 
-        // Add listener to main layout to use for stopping the playback sequence
-        findViewById(R.id.MainLayout).setOnClickListener(this);
-
-        // Get references to fragments
-        sliderFragment = (SliderFragment)getFragmentManager().findFragmentById(R.id.fragment_sliders);
-        chordInstrumentSelectFragment =
-                (ChordSelectFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_select);
-        checkFragment = (CheckFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_check);
-        chordSelectFragment = (ChordSelectFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_select);
+//        // Get references to fragments
+//        sliderFragment = (SliderFragment)getFragmentManager().findFragmentById(R.id.fragment_sliders);
+//        chordInstrumentSelectFragment =
+//                (ChordSelectFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_select);
+//        checkFragment = (CheckFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_check);
+//        chordSelectFragment = (ChordSelectFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_select);
     }
 
-    /**
-     * Called when this Activity is paused.
-     */
-    @Override
-    protected void onPause()
-    {
-        super.onPause();
-
-        // Remove listener from main layout uses for stopping the playback sequence
-        findViewById(R.id.MainLayout).setOnClickListener(null);
-
-        // Stop the playback thread if needed
-        if (playbackThread != null && playbackThread.isAlive())
-            playbackThread.interrupt();
-    }
 
     /**
      * Called when the state of this Activity should be saved.
@@ -288,6 +315,12 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     {
         // Save options
         options.save(this);
+
+        // Save drawer fragment arguments
+        for (Map.Entry<Integer, Bundle> entry: drawerFragmentArguments.entrySet())
+        {
+            savedInstanceState.putBundle(DRAWER_BUNDLE_BUNDLE_ID + entry.getKey(), entry.getValue());
+        }
 
         // Call superclass method
         super.onSaveInstanceState(savedInstanceState);
@@ -309,217 +342,16 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
             options = new Options();
         options.load(this);
         options.setOptionsChangedListener(this);
-    }
 
-    /**
-     * Gets the SliderFragment within this MainActivity.
-     * @return The SliderFragment within this MainActivity
-     */
-    public SliderFragment getSliderFragment() {
-        return sliderFragment;
-    }
-
-    /**
-     * Goes to Help page.
-     */
-    public void toHelpPage()
-    {
-        Intent intent = new Intent(this, HelpPage.class);
-        startActivity(intent);
-    }
-
-    /**
-     * Goes to the About page.
-     */
-    public void toAboutPage()
-    {
-        Intent intent = new Intent(this, AboutPage.class);
-        startActivity(intent);
-    }
-
-    /**
-     * Goes to the Settings page.
-     */
-    public void toSettingsPage()
-    {
-        Intent intent = new Intent(this, SettingsPage.class);
-        startActivity(intent);
-    }
-
-    /**
-     * Goes to the Score page.
-     */
-    public void toScorePage()
-    {
-        Intent intent = new Intent(this, ScorePage.class);
-        startActivity(intent);
-    }
-
-    /**
-     * Called to update the displayed score.
-     */
-    public void updateDisplayedScore()
-    {
-        // Get the TextView
-        TextView currentProgress = (TextView) findViewById(R.id.textview_score_display);
-
-        // Get the current Score
-        Score current = Score.getCurrentScore();
-
-        // Set the Views
-        currentProgress.setText(current.getCurrentValue().getDisplayString());
-    }
-
-    /**
-     * Shows the chord sequence.
-     */
-    public void showChordSequence()
-    {
-        // Stop the playback thread if needed
-        if (playbackThread != null && playbackThread.isAlive())
-            playbackThread.interrupt();
-
-        playbackThread = new PlaybackSequence();
-        playbackThread.start();
-    }
-
-    /**
-     * Shows the chord check result dialog.
-     */
-    public void showChordCheckResult()
-    {
-        // Make sure the current Chord is built
-        ChordHandler.buildCurrentChord(this);
-
-        // Test correctness
-        boolean isCorrect = ChordHandler.testCurrentChords();
-
-        // Set the score
-        Score.getCurrentScore().update(this, isCorrect);
-        updateDisplayedScore();
-
-        // Handle result
-        if (isCorrect)
+        // Load drawer fragment arguments
+        Bundle argument;
+        for (int i = 0; i < DrawerFragment.values().length; ++i)
         {
-            // Play sound
-            correctSoundPlayer.start();
+            argument = savedInstanceState.getBundle(DRAWER_BUNDLE_BUNDLE_ID + i);
 
-            // Launch dialog
-            AlertFragment alert = AlertFragment.newInstance(R.string.thats_correct, R.string.correct_dialog_message);
-
-            alert.setNoAction(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    ChordHandler.resetCurrentWrongStreak();
-                    getSliderFragment().resetChordSliders();
-                }
-            });
-            alert.setYesAction(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    stopAllSound();
-                    ChordHandler.getRandomChord();
-                    getSliderFragment().resetChordSliders();
-                }
-            });
-
-            alert.setDismissAction(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    stopAllSound();
-                    getSliderFragment().resetChordSliders();
-                }
-            });
-
-            alert.show(getFragmentManager(), "alert");
+            if (argument != null)
+                drawerFragmentArguments.put(i, argument);
         }
-        else
-        {
-            // Play sound
-            wrongSoundPlayer.start();
-
-            // Show hints if needed
-            ChordHandler.makeHints(this);
-
-            // Show toast
-            Toast toast = Toast.makeText(this, this.getString(R.string.thats_incorrect), Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.CENTER, 0, 0);
-            toast.show();
-        }
-    }
-
-    /**
-     * Generates one instance of the given type of hint.
-     *
-     * @param type The Hint type
-     */
-    public void makeHint(final byte type)
-    {
-        // Calculate the chord differences
-        final Note[] builtChord = ChordHandler.getCurrentBuiltChordSpelling();
-        final Note[] selectedChord = ChordHandler.getCurrentSelectedChordSpelling();
-
-        // Add hints
-        SliderHintView view;
-
-        // Root slider
-        view = (SliderHintView) findViewById(R.id.slider_root_layout);
-        view.setHint(type, builtChord[0], selectedChord[0], sliderFragment, 500L);
-
-        // Third slider
-        view = (SliderHintView) findViewById(R.id.slider_third_layout);
-        view.setHint(type, builtChord[1], selectedChord[1], sliderFragment, 500L);
-
-        // Fifth slider
-        view = (SliderHintView) findViewById(R.id.slider_fifth_layout);
-        view.setHint(type, builtChord[2], selectedChord[2], sliderFragment, 500L);
-
-        // Option slider
-        if (ChordHandler.getCurrentSelectedChord().TYPE.offsets.length == 4)
-        {
-            view = (SliderHintView) findViewById(R.id.slider_option_layout);
-            view.setHint(type, builtChord[3], selectedChord[3], sliderFragment, 500L);
-        }
-    }
-
-    /**
-     * Called when a view has been clicked.
-     *
-     * @param v The view that was clicked.
-     */
-    @Override
-    public void onClick(View v)
-    {
-        if (playbackThread != null && !playbackThread.isInterrupted())
-            playbackThread.interrupt();
-    }
-
-    /**
-     * Called when a new chord is selected.
-     */
-    @Override
-    public void onChordSelected(boolean random)
-    {
-        // Update current chord score
-        updateDisplayedScore();
-
-        // Update slider bounds
-        sliderFragment.setSliderBoundsToFitChord(ChordHandler.getCurrentSelectedChordSpelling());
-
-        // Update ChordInstrumentSelectFragment
-        chordInstrumentSelectFragment.setDisplayedChord(ChordHandler.getCurrentSelectedChord(), random);
-
-        // Hide fourth slider if needed
-        if (ChordHandler.getCurrentSelectedChord().getNumNotes() != 4)
-            findViewById(R.id.slider_option_layout).setVisibility(View.GONE);
-        else
-            findViewById(R.id.slider_option_layout).setVisibility(View.VISIBLE);
     }
 
     /**
@@ -534,7 +366,13 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         options.save(this);
 
         // Update the spinners
-        chordInstrumentSelectFragment.updateAvailableChordTypes(this);
+        if (drawerFragment != null && drawerFragment instanceof MainFragment)
+        {
+            ChordSelectFragment chordSelectFragment = ((MainFragment)drawerFragment).getChordSelectFragment();
+
+            if (chordSelectFragment != null)
+                chordSelectFragment.updateAvailableChordTypes(this);
+        }
     }
 
     /**
@@ -559,7 +397,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         // Save options
         options.save(this);
     }
-
 
     /**
      * Called when the instrument selection changes.
@@ -593,7 +430,13 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     public void onPitchBendSettingsChanged(int incrementsPerNote, double maxCheckError)
     {
         // Update SliderFragment
-        sliderFragment.setSliderBoundsToFitChord(ChordHandler.getCurrentSelectedChordSpelling());
+        if (drawerFragment != null && drawerFragment instanceof MainFragment)
+        {
+            SliderFragment sliderFragment = ((MainFragment)drawerFragment).getSliderFragment();
+
+            if (sliderFragment != null)
+                sliderFragment.setSliderBoundsToFitChord(ChordHandler.getCurrentSelectedChordSpelling());
+        }
 
         // Save options
         options.save(this);
@@ -604,18 +447,31 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
      */
     public void stopAllSound()
     {
-        sliderFragment.silenceSliders();
-        checkFragment.silenceButtons();
-        chordSelectFragment.silenceButtons();
+        if (drawerFragment != null && drawerFragment instanceof MainFragment)
+        {
+            MainFragment mainFragment = (MainFragment)drawerFragment;
+
+            if (mainFragment.getChordSelectFragment() != null)
+                mainFragment.getChordSelectFragment().silenceButtons();
+            if (mainFragment.getSliderFragment() != null)
+                mainFragment.getSliderFragment().silenceSliders();
+            if (mainFragment.getCheckFragment() != null)
+                mainFragment.getCheckFragment().silenceButtons();
+        }
+
+//        sliderFragment.silenceSliders();
+//        checkFragment.silenceButtons();
+//        chordSelectFragment.silenceButtons();
     }
 
-    /**
-     * Send signals to block playbask
-     * @param blocked is the sound blocked (true) or allowed (false)?
-     */
-    public void blockAllSound(boolean blocked) {
-        sliderFragment.setIsBlocked(blocked);
-    }
+//    /**
+//     * Send signals to block playbask
+//     * @param blocked is the sound blocked (true) or allowed (false)?
+//     */
+//    public void blockAllSound(boolean blocked)
+//    {
+////        sliderFragment.setIsBlocked(blocked);
+//    }
 
     /**
      * Called when the user attempts to back out of the MainActivity to launch a dialog
@@ -650,6 +506,51 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     }
 
     /**
+     * Swaps fragments in the main content view.
+     * @param position The selected position
+     */
+    public void setCurrentDrawer(int position)
+    {
+        // Select the new Fragment to show based on selected position
+        Fragment fragment;
+
+        try
+        {
+            fragment = DrawerFragment.values()[position].FRAGMENT_CLASS.newInstance();
+        }
+        catch (Exception e)
+        {
+            Log.e(TAG, "Error setting current navigation drawer: " + e.getMessage());
+            return;
+        }
+
+        // Update drawer index and current fragment
+        drawerIndex = position;
+        drawerFragment = fragment;
+
+        // Set Fragment arguments
+        Bundle arguments = drawerFragmentArguments.get(drawerIndex);
+
+        if (arguments == null)
+        {
+            arguments = new Bundle();
+            drawerFragmentArguments.put(drawerIndex, arguments);
+        }
+
+        drawerFragment.setArguments(arguments);
+
+        // Insert the fragment by replacing any existing fragments
+        FragmentManager fragmentManager = getFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content_main, fragment)
+                .commit();
+
+        // Highlight the selected item, update the title, and close the drawer
+        mDrawerList.setItemChecked(position, true);
+        mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+    /**
      * Class for listening for clicks on the Options drawer.
      */
     public class DrawerItemClickListener implements ListView.OnItemClickListener
@@ -657,92 +558,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id)
         {
-            switch (position)
-            {
-                case 0: toScorePage();
-                    break;
-                case 1: toSettingsPage();
-                    break;
-                case 2: toAboutPage();
-                    break;
-                case 3: toHelpPage();
-                    break;
-            }
-            mDrawerLayout.closeDrawer(mDrawerList);
-        }
-    }
-
-    /**
-     * A Thread to handle the playback sequence.
-     */
-    private class PlaybackSequence extends Thread
-    {
-        /**
-         * Starts executing the active part of the class' code. This method is
-         * called when a thread is started that has been created with a class which
-         * implements {@code Runnable}.
-         */
-        @Override
-        public void run()
-        {
-            // Sleep
-            try {Thread.sleep(50L);} catch (InterruptedException e)
-            {
-                onEnd();
-                return;
-            }
-
-            // Play Built chord
-            checkFragment.playBuiltChord(true);
-
-            // Sleep
-            try {Thread.sleep(1000L);} catch (InterruptedException e)
-            {
-                checkFragment.playBuiltChord(false);
-                onEnd();
-                return;
-            }
-
-            // Stop Built chord
-            checkFragment.playBuiltChord(false);
-
-            // Sleep
-            try {Thread.sleep(250L);} catch (InterruptedException e)
-            {
-                onEnd();
-                return;
-            }
-
-            // Play Correct chord
-            chordSelectFragment.playSelectedChord(true);
-
-            // Sleep
-            try {Thread.sleep(1000L);} catch (InterruptedException e)
-            {
-                chordSelectFragment.playSelectedChord(false);
-                onEnd();
-                return;
-            }
-
-            // Stop Correct chord
-            chordSelectFragment.playSelectedChord(false);
-
-            onEnd();
-        }
-
-        /**
-         * Called when this PlaybackSequence ends.
-         */
-        public void onEnd()
-        {
-            runOnUiThread(new Runnable()
-            {
-                @Override
-                public void run()
-                {
-                    showChordCheckResult();
-                }
-            });
+            setCurrentDrawer(position);
         }
     }
 }

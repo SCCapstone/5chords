@@ -20,6 +20,9 @@ import com.five_chords.chord_builder.SoundHandler;
  */
 public class CheckFragment extends Fragment
 {
+    /** The MainFragment to which this CheckFragment is attached. */
+    private MainFragment mainFragment;
+
     /** The Button for playing the built chord. */
     private Button playBuiltChordButton;
 
@@ -46,7 +49,8 @@ public class CheckFragment extends Fragment
      */
     public void silenceButtons()
     {
-        soundHandler.stopSound();
+        if (soundHandler != null)
+            soundHandler.stopSound();
     }
 
     /**
@@ -57,8 +61,7 @@ public class CheckFragment extends Fragment
      * @return This Fragment's layout
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_check, container, false);
@@ -71,38 +74,31 @@ public class CheckFragment extends Fragment
         soundHandler = new SoundHandler(getActivity(), "playButton");
 
         // Set the preview button function
-        playBuiltChord.setOnTouchListener(new View.OnTouchListener() {
+        playBuiltChord.setOnTouchListener(new View.OnTouchListener()
+        {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public boolean onTouch(View v, MotionEvent event)
+            {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
-                    MainActivity mainActivity = null;
-                    Activity activity = getActivity();
+//                    if (mainFragment != null)
+//                    {
+//                        mainFragment.stopAllSound();
+//                        mainFragment.blockAllSound(true);
+//                    }
 
-                    if (activity instanceof MainActivity)
-                        mainActivity = (MainActivity)activity;
+                    soundHandler.stopSound();
 
-                    if (mainActivity != null)
-                    {
-                        mainActivity.stopAllSound();
-                        mainActivity.blockAllSound(true);
-                    }
+                    if (mainFragment != null)
+                        ChordHandler.buildCurrentChord(mainFragment);
 
-
-                    ChordHandler.buildCurrentChord(getActivity());
                     soundHandler.playChord(getActivity(), ChordHandler.getCurrentBuiltChordSpelling(),
                             ChordHandler.getCurrentSelectedChord().getNumNotes());
                 }
-                if (event.getAction() == MotionEvent.ACTION_UP)
+                else if (event.getAction() == MotionEvent.ACTION_UP)
                 {
-                    MainActivity mainActivity = null;
-                    Activity activity = getActivity();
-
-                    if (activity instanceof MainActivity)
-                        mainActivity = (MainActivity)activity;
-
-                    if (mainActivity != null)
-                        mainActivity.blockAllSound(false);
+//                    if (mainFragment != null)
+//                        mainFragment.blockAllSound(false);
 
                     soundHandler.stopSound();
                 }
@@ -111,19 +107,15 @@ public class CheckFragment extends Fragment
         });
 
         // Set the check button function
-        checkChord.setOnTouchListener(new View.OnTouchListener() {
+        checkChord.setOnTouchListener(new View.OnTouchListener()
+        {
             @Override
-            public boolean onTouch(final View v, MotionEvent event) {
+            public boolean onTouch(final View v, MotionEvent event)
+            {
                 if (event.getAction() == MotionEvent.ACTION_UP)
                 {
-                    MainActivity mainActivity = null;
-                    Activity activity = getActivity();
-
-                    if (activity instanceof MainActivity)
-                        mainActivity = (MainActivity)activity;
-
-                    if (mainActivity != null)
-                        mainActivity.blockAllSound(false);
+//                    if (mainFragment != null)
+//                        mainFragment.blockAllSound(false);
 
                     silenceButtons();
 
@@ -139,8 +131,8 @@ public class CheckFragment extends Fragment
                     }, 1000L);
 
                     // Check the result
-                    if (activity instanceof MainActivity)
-                        ChordHandler.checkCurrentChord((MainActivity)activity);
+                    if (mainFragment != null)
+                        ChordHandler.checkCurrentChord(mainFragment);
                 }
                 return false;
             }
@@ -196,5 +188,14 @@ public class CheckFragment extends Fragment
 
         // Stop sounds
         silenceButtons();
+    }
+
+    /**
+     * Sets the MainFragment reference in this CheckFragment.
+     * @param mainFragment The new MainFragment reference
+     */
+    protected void setMainFragment(MainFragment mainFragment)
+    {
+        this.mainFragment = mainFragment;
     }
 }

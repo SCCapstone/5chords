@@ -1,6 +1,8 @@
-package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
+package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -11,69 +13,87 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.five_chords.chord_builder.Chord;
 import com.five_chords.chord_builder.R;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
 /**
- * Activity containing the chord type selection. This Activity ensures that at least one chord type will
+ * Fragment containing the chord type selection. This Activity ensures that at least one chord type will
  * always be selected.
  * @date 06 November 2015
  * @author Drea,Steven,Zach,Kevin,Bo,Theodore
  */
-public class SettingsChords extends Activity implements AdapterView.OnItemClickListener
+public class SettingsChooseChordFragment extends SettingsPageFragment.SettingsSubFragment
+        implements AdapterView.OnItemClickListener
 {
     /** The chords the user wants to use. */
     private boolean[] chordOptions;
 
-    /** The ChordSelectAdapter containing the tabs to select chords. */
-//    private ChordSelectAdapter chordSelectAdapter;
-
     /**
-     * Called when this Activity is created.
-     * @param savedInstanceState Bundle containing the saved instance state
+     * Called when the View containing this Fragment has been created.
+     * @param inflater The inflater to use to inflate the Fragment
+     * @param container The ViewGroup container
+     * @param savedInstanceState The saved instance state
+     * @return This Fragment's layout
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_chords);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_settings_chords, container, false);
 
         // Get the reference to the chord type usage array
         chordOptions = MainActivity.getOptions().chordTypesInUseArray;
 
         // Get the chord ListView
-        ListView chordListView = (ListView) findViewById(R.id.settings_content);
+        ListView chordListView = (ListView) view.findViewById(R.id.settings_content);
         chordListView.setOnItemClickListener(null);
 
         // Populate the instrument select spinner
-        ChordSelectAdapter chordSelectAdapter =  new ChordSelectAdapter(this, R.layout.centered_list_items);
+        ChordSelectAdapter chordSelectAdapter =  new ChordSelectAdapter(getActivity(), R.layout.centered_list_items);
         chordSelectAdapter.addAll(Chord.ChordType.values());
         chordListView.setAdapter(chordSelectAdapter);
 
         // Set click listener
         chordListView.setOnItemClickListener(this);
-    }
 
-    /**
-     * Called to return to the MainActivity.
-     * @param view The calling View
-     */
-    public void backToMain(View view)
-    {
-        // Update chord types in use
-        for (Chord.ChordType type: Chord.ChordType.values())
+        // Set Done Button action
+        Button doneButton = (Button)view.findViewById(R.id.button_settings_chords_done);
+        doneButton.setOnClickListener(new View.OnClickListener()
         {
-            MainActivity.getOptions().setChordTypeUse(type.ordinal(), chordOptions[type.ordinal()]);
-            Log.d("this", type.ordinal() + " " + chordOptions[type.ordinal()]);
-        }
+            @Override
+            public void onClick(View v)
+            {
+                if (SettingsChooseChordFragment.this.getSettingsPageFragment() != null)
+                    SettingsChooseChordFragment.this.getSettingsPageFragment().
+                        setSettingsSubFragment(SettingsPageFragment.SettingsSubFragmentDef.MAIN.ordinal());
+            }
+        });
 
-        finish();
-        this.overridePendingTransition(0, 0);
+        return view;
     }
+
+//    /**
+//     * Called to return to the MainActivity.
+//     * @param view The calling View
+//     */
+//    public void backToMain(View view)
+//    {
+//        // Update chord types in use
+//        for (Chord.ChordType type: Chord.ChordType.values())
+//        {
+//            MainActivity.getOptions().setChordTypeUse(type.ordinal(), chordOptions[type.ordinal()]);
+//            Log.d("this", type.ordinal() + " " + chordOptions[type.ordinal()]);
+//        }
+//
+//        finish();
+//        this.overridePendingTransition(0, 0);
+//    }
 
     /**
      * Tests whether or not at least one chord type is enabled.
@@ -87,7 +107,7 @@ public class SettingsChords extends Activity implements AdapterView.OnItemClickL
                 return true;
 
         // Otherwise show toast
-        Toast toast = Toast.makeText(this, getString(R.string.settingsChordsInvalid), Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(getActivity(), getString(R.string.settingsChordsInvalid), Toast.LENGTH_SHORT);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
 

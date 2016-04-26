@@ -1,23 +1,28 @@
-package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
+package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.NumberPicker;
 import android.widget.Switch;
 
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Options;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
 /**
- * Activity containing the interface for changing the check settings. This Activity contains a switch to toggle
+ * Fragment containing the interface for changing the check settings. This Activity contains a switch to toggle
  * the check sequence and a switch to toggle showing hints, as well as the number pickers for selecting
  * the delays between hint types.
  * @author tstone95
  */
-public class CheckSettingsActivity extends Activity implements CompoundButton.OnCheckedChangeListener,
-        NumberPicker.OnValueChangeListener
+public class CheckSettingsFragment extends SettingsPageFragment.SettingsSubFragment
+        implements CompoundButton.OnCheckedChangeListener, NumberPicker.OnValueChangeListener
 {
     /** The available hint delay settings. */
     private static final String[] PICKER_DISPLAY_VALUES = new String[25];
@@ -135,26 +140,27 @@ public class CheckSettingsActivity extends Activity implements CompoundButton.On
     }
 
     /**
-     * Called when the Activity has been created.
+     * Called when the View containing this Fragment has been created.
+     * @param inflater The inflater to use to inflate the Fragment
+     * @param container The ViewGroup container
      * @param savedInstanceState The saved instance state
+     * @return This Fragment's layout
      */
     @Override
-    public void onCreate(Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-
         // Inflate the layout for this fragment
-        setContentView(R.layout.fragment_check_settings);
+        View view = inflater.inflate(R.layout.fragment_check_settings, container, false);
 
         // Get Views
-        showAnswerSeqSwitch = (Switch) findViewById(R.id.switch_check_sequence);
-        hintsSwitch = (Switch) findViewById(R.id.switch_hints);
+        showAnswerSeqSwitch = (Switch) view.findViewById(R.id.switch_check_sequence);
+        hintsSwitch = (Switch) view.findViewById(R.id.switch_hints);
 
-        hintDelay1Picker = (NumberPicker) findViewById(R.id.hint_level1_picker);
+        hintDelay1Picker = (NumberPicker) view.findViewById(R.id.hint_level1_picker);
         initPicker(hintDelay1Picker);
-        hintDelay2Picker = (NumberPicker) findViewById(R.id.hint_level2_picker);
+        hintDelay2Picker = (NumberPicker) view.findViewById(R.id.hint_level2_picker);
         initPicker(hintDelay2Picker);
-        hintDelay3Picker = (NumberPicker) findViewById(R.id.hint_level3_picker);
+        hintDelay3Picker = (NumberPicker) view.findViewById(R.id.hint_level3_picker);
         initPicker(hintDelay3Picker);
 
         // Set default values
@@ -168,6 +174,21 @@ public class CheckSettingsActivity extends Activity implements CompoundButton.On
         // Add listeners
         showAnswerSeqSwitch.setOnCheckedChangeListener(this);
         hintsSwitch.setOnCheckedChangeListener(this);
+
+        // Set Done Button action
+        Button doneButton = (Button)view.findViewById(R.id.button_settings_check_settings_done);
+        doneButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (CheckSettingsFragment.this.getSettingsPageFragment() != null)
+                    CheckSettingsFragment.this.getSettingsPageFragment().
+                            setSettingsSubFragment(SettingsPageFragment.SettingsSubFragmentDef.MAIN.ordinal());
+            }
+        });
+
+        return view;
     }
 
     /**
@@ -182,13 +203,13 @@ public class CheckSettingsActivity extends Activity implements CompoundButton.On
         picker.setOnValueChangedListener(this);
     }
 
-    /**
-     * Called to return to the MainActivity.
-     * @param view The calling View
-     */
-    public void backToMain(View view)
-    {
-        finish();
-        this.overridePendingTransition(0, 0);
-    }
+//    /**
+//     * Called to return to the MainActivity.
+//     * @param view The calling View
+//     */
+//    public void backToMain(View view)
+//    {
+//        finish();
+//        this.overridePendingTransition(0, 0);
+//    }
 }

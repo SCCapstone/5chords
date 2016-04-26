@@ -1,5 +1,6 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.HorizontalScrollView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -19,6 +21,7 @@ import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
 import com.five_chords.chord_builder.ChordHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
 
 /**
@@ -88,6 +91,37 @@ public class ScorePageFragment extends Fragment implements AdapterView.OnItemSel
     {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_score_page, container, false);
+
+        // Get Buttons
+        Button resetScoreButton = (Button) view.findViewById(R.id.button_score_page_score_reset);
+        resetScoreButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Score.resetScores(ScorePageFragment.this.getActivity(), new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                        ScorePageFragment.this.refreshDelayed();
+                    }
+                });
+            }
+        });
+
+//        Button doneButton = (Button) view.findViewById(R.id.button_score_page_done);
+//        doneButton.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View v)
+//            {
+//                Activity activity = ScorePageFragment.this.getActivity();
+//
+//                if (activity instanceof MainActivity)
+//                    ((MainActivity)activity).setCurrentDrawer(MainActivity.DrawerFragment.MAIN.ordinal());
+//            }
+//        });
 
         // Populate ChordType Spinner
         Spinner chordSelectSpinner = (Spinner)view.findViewById(R.id.spinner_score_page);

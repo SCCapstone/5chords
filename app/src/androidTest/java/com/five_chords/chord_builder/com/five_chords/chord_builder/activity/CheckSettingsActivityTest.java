@@ -4,6 +4,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.widget.NumberPicker;
 
 import com.five_chords.chord_builder.R;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.CheckSettingsFragment;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -24,7 +25,7 @@ public class CheckSettingsActivityTest
 
     /** The Activity rule. */
     @Rule
-    public ActivityTestRule<CheckSettingsActivity> mActivityRule = new ActivityTestRule<>(CheckSettingsActivity.class);
+    public ActivityTestRule<CheckSettingsFragment> mActivityRule = new ActivityTestRule<>(CheckSettingsFragment.class);
 
     @Before
     public void setUp() throws Exception
@@ -40,7 +41,7 @@ public class CheckSettingsActivityTest
     public void testSetHintDelays() throws Exception
     {
         // Get the Activity
-        final CheckSettingsActivity activity = mActivityRule.getActivity();
+        final CheckSettingsFragment activity = mActivityRule.getActivity();
 
         // Get the number pickers
         final NumberPicker hintDelay1Picker = (NumberPicker) activity.findViewById(R.id.hint_level1_picker);

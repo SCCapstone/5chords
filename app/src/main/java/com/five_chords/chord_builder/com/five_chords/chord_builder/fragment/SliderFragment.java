@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -42,7 +43,7 @@ public class SliderFragment extends Fragment
     private VerticalSeekBar optionSlider;
 
     /** Don't use onTouch methods when blocking */
-    private boolean isBlocked = false;
+    private boolean isBlocked;
 
     /** The index of the notes at the bottom of the sliders. */
     private int minNoteOnSlider;
@@ -78,10 +79,17 @@ public class SliderFragment extends Fragment
         setSliderBoundsToFitChord(ChordHandler.getCurrentSelectedChordSpelling());
 
         // Assign values
-        getNoteFromSlider(rootSlider, chord[0]);
-        getNoteFromSlider(thirdSlider, chord[1]);
-        getNoteFromSlider(fifthSlider, chord[2]);
-        getNoteFromSlider(optionSlider, chord[3]);
+        if (rootSlider != null)
+            getNoteFromSlider(rootSlider, chord[0]);
+
+        if (thirdSlider != null)
+            getNoteFromSlider(thirdSlider, chord[1]);
+
+        if (fifthSlider != null)
+            getNoteFromSlider(fifthSlider, chord[2]);
+
+        if (optionSlider != null)
+            getNoteFromSlider(optionSlider, chord[3]);
     }
 
     /**
@@ -95,6 +103,16 @@ public class SliderFragment extends Fragment
         fifthSlider.setProgress(0);
         optionSlider.setProgress(0);
         isBlocked = false;
+
+        // Save Slider positions
+        Bundle arguments = getArguments();
+        if (arguments != null)
+        {
+            arguments.putInt(SLIDER_POSITION_BUNDLE_ID + 0, rootSlider.getProgress());
+            arguments.putInt(SLIDER_POSITION_BUNDLE_ID + 1, thirdSlider.getProgress());
+            arguments.putInt(SLIDER_POSITION_BUNDLE_ID + 2, fifthSlider.getProgress());
+            arguments.putInt(SLIDER_POSITION_BUNDLE_ID + 3, optionSlider.getProgress());
+        }
     }
 
     /**
@@ -102,8 +120,9 @@ public class SliderFragment extends Fragment
      */
     public void silenceSliders()
     {
-        for (SoundHandler sH : soundHandlers)
-            sH.stopSound();
+        if (soundHandlers != null)
+            for (SoundHandler sH : soundHandlers)
+                sH.stopSound();
     }
 
     /**
@@ -165,13 +184,17 @@ public class SliderFragment extends Fragment
         // Hide fourth slider by default
         sliders.findViewById(R.id.slider_option_layout).setVisibility(View.GONE);
 
+        // Initialize Slider sizes
+        setSliderBoundsToFitChord(ChordHandler.getCurrentSelectedChordSpelling());
+
         // Load Slider positions
-        if (savedInstanceState != null)
+        Bundle arguments = getArguments();
+        if (arguments != null)
         {
-            rootSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 0));
-            thirdSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 1));
-            fifthSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 2));
-            optionSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 3));
+            rootSlider.setProgress(arguments.getInt(SLIDER_POSITION_BUNDLE_ID + 0));
+            thirdSlider.setProgress(arguments.getInt(SLIDER_POSITION_BUNDLE_ID + 1));
+            fifthSlider.setProgress(arguments.getInt(SLIDER_POSITION_BUNDLE_ID + 2));
+            optionSlider.setProgress(arguments.getInt(SLIDER_POSITION_BUNDLE_ID + 3));
         }
 
         return sliders;
@@ -183,10 +206,21 @@ public class SliderFragment extends Fragment
     @Override
     public void onDestroyView()
     {
-        super.onDestroyView();
+        // Save Slider positions
+        Bundle arguments = getArguments();
+        if (arguments != null)
+        {
+            arguments.putInt(SLIDER_POSITION_BUNDLE_ID + 0, rootSlider.getProgress());
+            arguments.putInt(SLIDER_POSITION_BUNDLE_ID + 1, thirdSlider.getProgress());
+            arguments.putInt(SLIDER_POSITION_BUNDLE_ID + 2, fifthSlider.getProgress());
+            arguments.putInt(SLIDER_POSITION_BUNDLE_ID + 3, optionSlider.getProgress());
+        }
 
-        for (SoundHandler soundHandler: soundHandlers)
-            soundHandler.stopSound();
+        // Stop Sound
+        silenceSliders();
+
+        // Call super method
+        super.onDestroyView();
     }
 
     /**
@@ -198,13 +232,15 @@ public class SliderFragment extends Fragment
     {
         super.onViewStateRestored(savedInstanceState);
 
-        if (savedInstanceState == null)
-            return;
-
-        rootSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 0));
-        thirdSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 1));
-        fifthSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 2));
-        optionSlider.setProgress(savedInstanceState.getInt(SLIDER_POSITION_BUNDLE_ID + 3));
+        // Load Slider positions
+        Bundle arguments = getArguments();
+        if (arguments != null)
+        {
+            rootSlider.setProgress(arguments.getInt(SLIDER_POSITION_BUNDLE_ID + 0));
+            thirdSlider.setProgress(arguments.getInt(SLIDER_POSITION_BUNDLE_ID + 1));
+            fifthSlider.setProgress(arguments.getInt(SLIDER_POSITION_BUNDLE_ID + 2));
+            optionSlider.setProgress(arguments.getInt(SLIDER_POSITION_BUNDLE_ID + 3));
+        }
 
         // Unblock sounds
         isBlocked = false;
@@ -219,11 +255,22 @@ public class SliderFragment extends Fragment
     {
         super.onSaveInstanceState(bundle);
 
-        // Save slider positions
-        bundle.putInt(SLIDER_POSITION_BUNDLE_ID + 0, rootSlider.getProgress());
-        bundle.putInt(SLIDER_POSITION_BUNDLE_ID + 1, thirdSlider.getProgress());
-        bundle.putInt(SLIDER_POSITION_BUNDLE_ID + 2, fifthSlider.getProgress());
-        bundle.putInt(SLIDER_POSITION_BUNDLE_ID + 3, optionSlider.getProgress());
+        // Save Slider positions
+        Bundle arguments = getArguments();
+        if (arguments != null)
+        {
+            if (rootSlider != null)
+                arguments.putInt(SLIDER_POSITION_BUNDLE_ID + 0, rootSlider.getProgress());
+
+            if (thirdSlider != null)
+                arguments.putInt(SLIDER_POSITION_BUNDLE_ID + 1, thirdSlider.getProgress());
+
+            if (fifthSlider != null)
+                arguments.putInt(SLIDER_POSITION_BUNDLE_ID + 2, fifthSlider.getProgress());
+
+            if (optionSlider != null)
+                arguments.putInt(SLIDER_POSITION_BUNDLE_ID + 3, optionSlider.getProgress());
+        }
     }
 
     /**
@@ -263,12 +310,22 @@ public class SliderFragment extends Fragment
         max = (maxNoteOnSlider - minNoteOnSlider - 1) * MainActivity.getOptions().sliderDivisionsPerNote;
 
         // Set values
+        boolean wasBlocked = isBlocked;
         isBlocked = true;
-        rootSlider.setMax(max);
-        thirdSlider.setMax(max);
-        fifthSlider.setMax(max);
-        optionSlider.setMax(max);
-        isBlocked = false;
+
+        if (rootSlider != null)
+            rootSlider.setMax(max);
+
+        if (thirdSlider != null)
+            thirdSlider.setMax(max);
+
+        if (fifthSlider != null)
+            fifthSlider.setMax(max);
+
+        if (optionSlider != null)
+            optionSlider.setMax(max);
+
+        isBlocked = wasBlocked;
     }
 
     public void setIsBlocked(boolean blocked) {

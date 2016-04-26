@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +29,18 @@ import com.five_chords.chord_builder.SoundHandler;
  */
 public class ChordSelectFragment extends Fragment
 {
+//    /** The Bundle id of the currently displayed chord. */
+//    private static final String DISPLAYED_CHORD_ID_BUNDLE_ID = "ChordSelectFragment.displayedChordBundleId";
+//
+//    /** The Bundle id of the flag denoting whether or not the displayed chord is random. */
+//    private static final String DISPLAYED_CHORD_RAN_BUNDLE_ID = "ChordSelectFragment.displayedChordRanBundleId";
+//
+//    /** The id of the currently displayed chord. */
+//    private long displayedChordId;
+//
+//    /** Whether or not the displayed chord is random. */
+//    private boolean displayedChordIsRandom;
+
     /** Reference to the Spinner for selecting chords contained in this Fragment. */
     private Spinner chordSelectSpinner;
 
@@ -49,7 +62,13 @@ public class ChordSelectFragment extends Fragment
      */
     public void setDisplayedChord(Chord chord, boolean random)
     {
-        if (random) {
+//        displayedChordId = chord.ID;
+//        displayedChordIsRandom = random;
+
+        Log.d("ChordSelectFragment", "setDisplayedChord to " + chord + ", Is random = " + random);
+
+        if (random)
+        {
             chordSelectSpinner.setSelection(chordSelectSpinner.getCount() - 1);
             return;
         }
@@ -110,8 +129,9 @@ public class ChordSelectFragment extends Fragment
      */
     public void silenceButtons()
     {
-        for (SoundHandler sH : soundHandlers)
-            sH.stopSound();
+        if (soundHandlers != null)
+            for (SoundHandler sH : soundHandlers)
+                sH.stopSound();
     }
 
     /**
@@ -137,8 +157,7 @@ public class ChordSelectFragment extends Fragment
      * @return This Fragment's layout
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
         // Inflate the View
         View view = inflater.inflate(R.layout.fragment_chord_select, container, false);
@@ -146,21 +165,24 @@ public class ChordSelectFragment extends Fragment
         // Initialize Buttons
         final Button playSelectedChord = (Button) view.findViewById(R.id.button_select_chord_play);
         playSelectedChordButton = playSelectedChord;
+
         final Button selectRandomChord = (Button) view.findViewById(R.id.button_select_random_chord);
         soundHandlers = new SoundHandler[2];
         soundHandlers[0] = new SoundHandler(getActivity(), "playButton");
         soundHandlers[1] = new SoundHandler(getActivity(), "randomButton");
 
         // Set the function of the play button
-        playSelectedChord.setOnTouchListener(new View.OnTouchListener() {
+        playSelectedChord.setOnTouchListener(new View.OnTouchListener()
+        {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public boolean onTouch(View v, MotionEvent event)
+            {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
                     soundHandlers[0].playChord(getActivity(), ChordHandler.getCurrentSelectedChordSpelling(),
                             ChordHandler.getCurrentSelectedChord().getNumNotes());
                 }
-                if (event.getAction() == MotionEvent.ACTION_UP)
+                else if (event.getAction() == MotionEvent.ACTION_UP)
                 {
                     soundHandlers[0].stopSound();
                 }
@@ -169,37 +191,40 @@ public class ChordSelectFragment extends Fragment
         });
 
         // Set the function of the random button
-        selectRandomChord.setOnTouchListener(new View.OnTouchListener() {
+        selectRandomChord.setOnTouchListener(new View.OnTouchListener()
+        {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public boolean onTouch(View v, MotionEvent event)
+            {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
-                    MainActivity mainActivity = null;
-                    Activity activity = getActivity();
-
-                    if (activity instanceof MainActivity)
-                        mainActivity = (MainActivity)activity;
-
-                    if (mainActivity != null)
-                    {
-                        mainActivity.stopAllSound();
-                        mainActivity.blockAllSound(true);
-                    }
+//                    MainActivity mainActivity = null;
+//                    Activity activity = getActivity();
+//
+//                    if (activity instanceof MainActivity)
+//                        mainActivity = (MainActivity)activity;
+//
+//                    if (mainActivity != null)
+//                    {
+//                        mainActivity.stopAllSound();
+//                        mainActivity.blockAllSound(true);
+//                    }
 
                     ChordHandler.getRandomChord();
                     soundHandlers[1].playChord(getActivity(), ChordHandler.getCurrentSelectedChordSpelling(),
                             ChordHandler.getCurrentSelectedChord().getNumNotes());
                 }
-                else if (event.getAction() == MotionEvent.ACTION_UP) {
+                else if (event.getAction() == MotionEvent.ACTION_UP)
+                {
 
-                    MainActivity mainActivity = null;
-                    Activity activity = getActivity();
-
-                    if (activity instanceof MainActivity)
-                        mainActivity = (MainActivity)activity;
-
-                    if (mainActivity != null)
-                        mainActivity.blockAllSound(false);
+//                    MainActivity mainActivity = null;
+//                    Activity activity = getActivity();
+//
+//                    if (activity instanceof MainActivity)
+//                        mainActivity = (MainActivity)activity;
+//
+//                    if (mainActivity != null)
+//                        mainActivity.blockAllSound(false);
 
                     soundHandlers[1].stopSound();
                 }
@@ -215,17 +240,28 @@ public class ChordSelectFragment extends Fragment
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
             {
-                if (position == chordSelectSpinner.getCount() - 1) return;
+//                if (position == chordSelectSpinner.getCount() - 1)
+//                    return; TODO
 
                 // Update the selected chord
                 ChordDisplayItem item = (ChordDisplayItem)parentView.getItemAtPosition(position);
-                ChordHandler.setSelectedChord(item.chord, false);
+                ChordHandler.setSelectedChord(item.chord, position == chordSelectSpinner.getCount() - 1);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView)
             { /* Ignore */ }
         });
+
+//        // Load the previously displayed chord
+//        Bundle arguments = getArguments();
+//        Log.d("DEBUG", "ChordSelectFrag Args = " + arguments);
+//        if (arguments != null)
+//        {
+//            displayedChordId = arguments.getLong(DISPLAYED_CHORD_ID_BUNDLE_ID);
+//            displayedChordIsRandom = arguments.getBoolean(DISPLAYED_CHORD_RAN_BUNDLE_ID);
+//            setDisplayedChord(ChordHandler.getChord(displayedChordId), displayedChordIsRandom);
+//        }
 
         // Inflate the layout for this fragment
         return view;
@@ -237,9 +273,56 @@ public class ChordSelectFragment extends Fragment
     @Override
     public void onDestroyView()
     {
-        super.onDestroyView();
+//        // Save displayed chord setting
+//        Bundle arguments = getArguments();
+//        if (arguments != null)
+//        {
+//            arguments.putLong(DISPLAYED_CHORD_ID_BUNDLE_ID, displayedChordId);
+//            arguments.putBoolean(DISPLAYED_CHORD_RAN_BUNDLE_ID, displayedChordIsRandom);
+//        }
 
+        // Stop sounds
         silenceButtons();
+
+        // Call super method
+        super.onDestroyView();
+    }
+
+    /**
+     * Called when the view state of this Fragment is restored.
+     * @param savedInstanceState The Bundle from which to restore the view state
+     */
+    @Override
+    public void onViewStateRestored(Bundle savedInstanceState)
+    {
+        super.onViewStateRestored(savedInstanceState);
+
+//        // Load the previously displayed chord
+//        Bundle arguments = getArguments();
+//        if (arguments != null)
+//        {
+//            displayedChordId = arguments.getLong(DISPLAYED_CHORD_ID_BUNDLE_ID);
+//            displayedChordIsRandom = arguments.getBoolean(DISPLAYED_CHORD_RAN_BUNDLE_ID);
+//            setDisplayedChord(ChordHandler.getChord(displayedChordId), displayedChordIsRandom);
+//        }
+    }
+
+    /**
+     * Called when the instance state of this Fragment should be saved.
+     * @param bundle The Bundle in which to save the instance state
+     */
+    @Override
+    public void onSaveInstanceState(Bundle bundle)
+    {
+        super.onSaveInstanceState(bundle);
+
+//        // Save displayed chord setting
+//        Bundle arguments = getArguments();
+//        if (arguments != null)
+//        {
+//            arguments.putLong(DISPLAYED_CHORD_ID_BUNDLE_ID, displayedChordId);
+//            arguments.putBoolean(DISPLAYED_CHORD_RAN_BUNDLE_ID, displayedChordIsRandom);
+//        }
     }
 
     /**

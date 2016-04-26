@@ -27,7 +27,7 @@
 
         <!-- Settings Page Activity -->
         <activity
-            android:name=".com.five_chords.chord_builder.activity.SettingsPage"
+            android:name=".com.five_chords.chord_builder.fragment.SettingsPageFragment"
             android:label="Settings"
             android:parentActivityName=".com.five_chords.chord_builder.activity.MainActivity">
 
@@ -40,28 +40,28 @@
 
         <!-- Chords Settings Page Activity -->
         <activity
-            android:name=".com.five_chords.chord_builder.activity.SettingsChords"
+            android:name=".com.five_chords.chord_builder.fragment.SettingsChooseChordFragment"
             android:label="Settings for Chords" />
 
 
         <!-- Chords Settings Page Activity -->
         <activity
-            android:name=".com.five_chords.chord_builder.activity.SettingsChordOptions"
+            android:name=".com.five_chords.chord_builder.fragment.SettingsChordOptionsFragment"
             android:label="Advanced Settings for Chords" />
 
         <!-- Chords Settings Page Activity -->
         <activity
-            android:name=".com.five_chords.chord_builder.activity.SettingsInstruments"
+            android:name=".com.five_chords.chord_builder.fragment.SettingsPickInstrumentFragment"
             android:label="Insturment Selection" />
 
         <!-- Hint Settings Page Activity -->
         <activity
-            android:name=".com.five_chords.chord_builder.activity.CheckSettingsActivity"
+            android:name=".com.five_chords.chord_builder.fragment.CheckSettingsFragment"
             android:label="Hint Options" />
 
         <!-- Help Page Activity -->
         <activity
-            android:name=".com.five_chords.chord_builder.activity.HelpPage"
+            android:name=".com.five_chords.chord_builder.fragment.HelpPageFragment"
             android:label="Help"
             android:parentActivityName=".com.five_chords.chord_builder.activity.MainActivity">
 
@@ -73,7 +73,7 @@
 
         <!-- About Page Activity -->
         <activity
-            android:name=".com.five_chords.chord_builder.activity.AboutPage"
+            android:name=".com.five_chords.chord_builder.fragment.AboutPageFragment"
             android:label="About"
             android:parentActivityName=".com.five_chords.chord_builder.activity.MainActivity">
 
@@ -84,16 +84,6 @@
         </activity>
 
         <!-- Score Page Activity -->
-        <activity
-            android:name=".com.five_chords.chord_builder.activity.ScorePage"
-            android:label="Scores"
-            android:parentActivityName=".com.five_chords.chord_builder.activity.MainActivity">
-
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".com.five_chords.chord_builder.activity.MainActivity" />
-        </activity>
 
         <activity android:name=".com.five_chords.chord_builder.activity.demo" />
         <!-- ATTENTION: This was auto-generated to add Google Play services to your project for

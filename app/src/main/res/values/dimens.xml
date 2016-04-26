@@ -33,7 +33,7 @@
     <dimen name="chord_progress_history_height">64dp</dimen>
 
     <!-- Height of the chord select spinner -->
-    <dimen name="chord_select_spinner_height">48dp</dimen>
+    <dimen name="chord_select_spinner_height">42dp</dimen>
 
     <!-- Minimum size of the chord dropdown menu -->
     <dimen name="min_chord_dropdown_menu_size">240dp</dimen>
@@ -48,7 +48,7 @@
     <dimen name="instrument_icon_height">48dp</dimen>
 
     <!-- Size of the Chord play buttons -->
-    <dimen name="chord_play_button_size">50dp</dimen>
+    <dimen name="chord_play_button_size">64dp</dimen>
 
     <!-- Padding of selected chord display -->
     <dimen name="main_chord_spinner_padding">4dp</dimen>

@@ -1,34 +1,41 @@
-package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
+package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
+import android.app.Activity;
+import android.app.Fragment;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
 import com.five_chords.chord_builder.R;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
 
 /**
- * The Help page Activity.
+ * The Help page Fragment.
  * date 31 March 2016
- * @author Drea,Steven,Zach,Kevin,Bo
+ * @author Drea,Steven,Zach,Kevin,Bo,Theodore
  */
-public class HelpPage extends AppCompatActivity
+public class HelpPageFragment extends Fragment
 {
     /**
-     * Called when this Activity is created.
-     * @param savedInstanceState Bundle containing the saved instance state
+     * Called when the View containing this Fragment has been created.
+     * @param inflater The inflater to use to inflate the Fragment
+     * @param container The ViewGroup container
+     * @param savedInstanceState The saved instance state
+     * @return This Fragment's layout
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_help_page);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_help_page, container, false);
 
         // Set up Buttons
-        Button button = (Button) findViewById(R.id.contact_dev);
+        Button button = (Button) view.findViewById(R.id.contact_dev);
         button.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -43,18 +50,19 @@ public class HelpPage extends AppCompatActivity
 
                 emailIntent.setType("message/rfc822");
                 //startActivity(Intent.createChooser(emailIntent, "Choose your email client:"));
-                try {
+                try
+                {
                     startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-                    finish();
-
-                } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(HelpPage.this,
+                }
+                catch (android.content.ActivityNotFoundException ex)
+                {
+                    Toast.makeText(HelpPageFragment.this.getActivity(),
                             "There is no email client installed.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        button = (Button) findViewById(R.id.contact_pro);
+        button = (Button) view.findViewById(R.id.contact_pro);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -68,24 +76,32 @@ public class HelpPage extends AppCompatActivity
                 emailIntent.setType("message/rfc822");
                 //standard ARPA starting
                 //startActivity(Intent.createChooser(emailIntent, "Email us with your preferential source"));
-                try {
+                try
+                {
                     startActivity(Intent.createChooser(emailIntent, "Send mail..."));
-                    finish();
-
-                } catch (android.content.ActivityNotFoundException ex) {
-                    Toast.makeText(HelpPage.this,
+                }
+                catch (android.content.ActivityNotFoundException ex)
+                {
+                    Toast.makeText(HelpPageFragment.this.getActivity(),
                             "There is no email client installed.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-    }
 
-    /**
-     * Called to return to the MainActivity.
-     * @param view The calling View
-     */
-    public void backToMain(View view)
-    {
-        finish();
+//        // Set Done Button action
+//        Button doneButton = (Button) view.findViewById(R.id.button_help_page_done);
+//        doneButton.setOnClickListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View v)
+//            {
+//                Activity activity = HelpPageFragment.this.getActivity();
+//
+//                if (activity instanceof MainActivity)
+//                    ((MainActivity)activity).setCurrentDrawer(MainActivity.DrawerFragment.MAIN.ordinal());
+//            }
+//        });
+
+        return view;
     }
 }

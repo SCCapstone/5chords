@@ -1,6 +1,5 @@
-package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
+package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -9,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -17,13 +17,15 @@ import com.five_chords.chord_builder.Chord;
 import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.SoundHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
 /**
- * Activity containing the instrument selection.
+ * Fragment containing the instrument selection.
  * @date 31 March 2016
  * @author Drea,Steven,Zach,Kevin,Bo,Theodore
  */
-public class SettingsInstruments extends Activity implements AdapterView.OnItemClickListener
+public class SettingsPickInstrumentFragment extends SettingsPageFragment.SettingsSubFragment
+        implements AdapterView.OnItemClickListener
 {
     /** The available instruments names */
     public static final String[] INSTRUMENT_NAMES = {"Trumpet", "Piano", "Organ", "Violin", "Flute"};
@@ -44,6 +46,9 @@ public class SettingsInstruments extends Activity implements AdapterView.OnItemC
         }
     }
 
+    /** The main content view of this Fragment. */
+    private View view;
+
     /** The array of instrument name view handles. */
     private TextView[] instrumentNames;
 
@@ -59,7 +64,7 @@ public class SettingsInstruments extends Activity implements AdapterView.OnItemC
         @Override
         public void run()
         {
-            instrumentPreviewer.playChord(SettingsInstruments.this, PREVIEW_CHORD, 3);
+            instrumentPreviewer.playChord(SettingsPickInstrumentFragment.this.getActivity(), PREVIEW_CHORD, 3);
 
             try
             {
@@ -73,46 +78,63 @@ public class SettingsInstruments extends Activity implements AdapterView.OnItemC
     };
 
     /**
-     * Called when this Activity is created.
-     * @param savedInstanceState Bundle containing the saved instance state
+     * Called when the View containing this Fragment has been created.
+     * @param inflater The inflater to use to inflate the Fragment
+     * @param container The ViewGroup container
+     * @param savedInstanceState The saved instance state
+     * @return This Fragment's layout
      */
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
+        // Inflate the layout for this fragment
+        view = inflater.inflate(R.layout.fragment_settings_instrument, container, false);
 
         // Create the instrument name array
         instrumentNames = new TextView[INSTRUMENT_NAMES.length];
 
         // Create the previewer
-        instrumentPreviewer = new SoundHandler(this, "instrumentPreview");
-
-        // Set content view
-        setContentView(R.layout.activity_settings_instrument);
+        instrumentPreviewer = new SoundHandler(getActivity(), "instrumentPreview");
 
         // Populate the instrument select spinner
         populateInstrumentSelector();
+
+        // Set Done Button action
+        Button doneButton = (Button)view.findViewById(R.id.button_settings_instruments_done);
+        doneButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                if (SettingsPickInstrumentFragment.this.getSettingsPageFragment() != null)
+                    SettingsPickInstrumentFragment.this.getSettingsPageFragment().
+                            setSettingsSubFragment(SettingsPageFragment.SettingsSubFragmentDef.MAIN.ordinal());
+            }
+        });
+
+        return view;
     }
 
     /**
-     * Called when this Activity is destroyed.
+     * Called when this Fragment's view is destroyed.
      */
     @Override
-    protected void onDestroy()
+    public void onDestroyView()
     {
-        super.onDestroy();
         instrumentPreviewer.stopSound();
+
+        super.onDestroyView();
     }
 
-    /**
-     * Called to return to the MainActivity.
-     * @param view The calling View
-     */
-    public void backToMain(View view)
-    {
-        finish();
-        this.overridePendingTransition(0, 0);
-    }
+//    /**
+//     * Called to return to the MainActivity.
+//     * @param view The calling View
+//     */
+//    public void backToMain(View view)
+//    {
+//        finish();
+//        this.overridePendingTransition(0, 0);
+//    }
 
     /**
      * Callback method to be invoked when an item in this AdapterView has
@@ -145,11 +167,14 @@ public class SettingsInstruments extends Activity implements AdapterView.OnItemC
      */
     private void populateInstrumentSelector()
     {
-        ListView instrumentListView = (ListView) findViewById(R.id.instruments);
+        if (view == null)
+            return;
+
+        ListView instrumentListView = (ListView) view.findViewById(R.id.instruments);
         instrumentListView.setOnItemClickListener(null);
 
         // Populate the instrument select spinner
-        CustomList adapter = new CustomList(this, R.layout.list_item_text_with_image);
+        CustomList adapter = new CustomList(getActivity(), R.layout.list_item_text_with_image);
         adapter.addAll(INSTRUMENT_NAMES);
         instrumentListView.setAdapter(adapter);
 

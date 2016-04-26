@@ -5,50 +5,23 @@
               android:layout_height="match_parent"
               android:descendantFocusability="blocksDescendants">
 
-    <!-- Back arrow -->
-    <Button style="@style/AppText"
-        android:id="@+id/textview_go_back"
-        android:layout_width="wrap_content"
+    <!-- Done Button -->
+    <Button
+        android:id="@+id/button_settings_check_settings_done"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#00000000"
-        android:text="@string/back"
-        android:textSize="@dimen/text_size_title"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:textStyle="bold"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="false"
-        android:onClick="backToMain" />
-
-    <!-- Title -->
-    <TextView style="@style/AppText"
-        android:id="@+id/textview_settings_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/check_options"
-        android:textSize="@dimen/text_size_title"
-        android:singleLine="false"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:layout_marginLeft="42dp"
-        android:layout_marginRight="42dp"
-        android:gravity="center_horizontal"
-        android:textStyle="bold|italic"
-        android:layout_centerHorizontal="true" />
-
-    <!-- Separator -->
-    <View style="@style/VerticalSeparator"
-        android:id="@+id/settings_top_separator"
-        android:layout_below="@id/textview_settings_title"/>
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/button_selector"
+        android:text="@string/done"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="#ffffff"/>
 
     <!-- Content -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/settings_top_separator"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentTop="true"
+        android:layout_above="@id/button_settings_check_settings_done">
 
         <LinearLayout
             android:layout_width="match_parent"

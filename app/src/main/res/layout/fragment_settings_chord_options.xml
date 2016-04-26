@@ -1,0 +1,48 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:context=".com.five_chords.chord_builder.fragment.SettingsChordOptionsFragment">
+
+    <!-- Fragment containing the chord select spinner -->
+    <FrameLayout
+        android:id="@+id/fragment_pitch_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:name="com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.PitchBendSettingsFragment"
+        tools:layout="@layout/fragment_pitch_bend_settings"
+        android:layout_margin="0dp">
+    </FrameLayout>
+
+    <!-- Separator -->
+    <View style="@style/VerticalSeparator"
+        android:id="@+id/settings_fragment_separator"
+        android:layout_below="@id/fragment_pitch_select"/>
+
+    <!-- Done Button -->
+    <Button
+        android:id="@+id/button_settings_chord_options_done"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/button_selector"
+        android:text="@string/done"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="#ffffff"/>
+
+     <!-- Fragment containing the chord select spinner -->
+    <FrameLayout
+        android:id="@+id/fragment_inversion_select"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/settings_fragment_separator"
+        android:layout_above="@id/button_settings_chord_options_done"
+        android:name="com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordInversionSettingsFragment"
+        tools:layout="@layout/fragment_chord_inversion_settings"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="0dp">
+    </FrameLayout>
+
+
+</RelativeLayout>

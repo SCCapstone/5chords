@@ -91,7 +91,8 @@ public class VerticalSeekBar extends SeekBar
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        if (!isEnabled()) {
+        if (!isEnabled())
+        {
             return false;
         }
 

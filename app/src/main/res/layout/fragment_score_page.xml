@@ -21,12 +21,51 @@
           android:id="@+id/score_page_top_separator"
           android:layout_below="@id/spinner_score_page"/>
 
+    <LinearLayout style="?android:attr/buttonBarStyle"
+        android:id="@+id/score_page_button_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true">
+
+        <!-- Reset score button -->
+        <Button style="?android:attr/buttonBarButtonStyle"
+            android:id="@+id/button_score_page_score_reset"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="@drawable/button_selector"
+            android:text="@string/clear_scores"
+            android:textSize="@dimen/text_size_small"
+            android:textColor="#ffffff"/>
+
+        <!--&lt;!&ndash; Done Button &ndash;&gt;-->
+        <!--<Button-->
+            <!--android:id="@+id/button_score_page_done"-->
+            <!--style="?android:attr/buttonBarButtonStyle"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@drawable/button_selector"-->
+            <!--android:text="@string/done"-->
+            <!--android:textSize="@dimen/text_size_small"-->
+            <!--android:textColor="#ffffff"/>-->
+
+    </LinearLayout>
+
+
     <!-- Fragment containing the ListView for each chord's score -->
     <ListView
         android:id="@+id/score_page_scorelist"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/score_page_top_separator"
+        android:layout_above="@id/score_page_button_bar"
+        android:padding="4dp"
         android:layout_centerHorizontal="true">
     </ListView>
 

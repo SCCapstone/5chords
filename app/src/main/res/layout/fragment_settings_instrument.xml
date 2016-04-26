@@ -1,0 +1,31 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:context=".com.five_chords.chord_builder.fragment.SettingsPickInstrumentFragment">
+
+    <!-- Done Button -->
+    <Button
+        android:id="@+id/button_settings_instruments_done"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/button_selector"
+        android:text="@string/done"
+        android:textSize="@dimen/text_size_small"
+        android:textColor="#ffffff"/>
+
+    <!-- Instrument list -->
+    <ListView
+        android:id="@+id/instruments"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_below="@id/button_settings_instruments_done"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"/>
+
+</RelativeLayout>
