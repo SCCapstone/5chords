@@ -28,6 +28,9 @@ public class SettingsPageFragment extends Fragment
     /** The tag of this class. */
     private static final String TAG = "SettingsPageFragment";
 
+    /** The Bundle id for the current sub fragment index. */
+    private static final String SUB_FRAGMENT_INDEX_BUNDLE_ID = "SettingsPageFragment.subFragIndex";
+
     /** The TextView containing the title of this Fragment. */
     private TextView titleView;
 
@@ -78,8 +81,14 @@ public class SettingsPageFragment extends Fragment
         // Get the title view
         titleView = (TextView) view.findViewById(R.id.textview_settings_title);
 
+        // Get the last sub fragment
+        int index = SettingsSubFragmentDef.MAIN.ordinal();
+
+        if (getArguments() != null)
+            index = getArguments().getInt(SUB_FRAGMENT_INDEX_BUNDLE_ID);
+
         // Set the default sub fragment
-        setSettingsSubFragment(SettingsSubFragmentDef.MAIN.ordinal());
+        setSettingsSubFragment(index);
 
         return view;
     }
@@ -91,6 +100,10 @@ public class SettingsPageFragment extends Fragment
     public void onPause()
     {
         super.onPause();
+
+        // Save the index of the current displayed fragment
+        if (getArguments() != null)
+            getArguments().putInt(SUB_FRAGMENT_INDEX_BUNDLE_ID, currentSubFragmentDef.ordinal());
 
         // Destroy the current sub fragment, if applicable
         if (currentSubFragment != null)
