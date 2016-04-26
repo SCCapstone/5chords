@@ -2,6 +2,7 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.StringRes;
 import android.util.Log;
@@ -29,6 +30,9 @@ public class SettingsPageFragment extends Fragment
 
     /** The TextView containing the title of this Fragment. */
     private TextView titleView;
+
+    /** The definition of the currently selected sub fragment on the Settings page. */
+    private SettingsSubFragmentDef currentSubFragmentDef;
 
     /** The currently selected sub fragment on the Settings page. */
     private SettingsSubFragment currentSubFragment;
@@ -111,13 +115,16 @@ public class SettingsPageFragment extends Fragment
     {
         // Select the new Fragment to show based on selected position
         SettingsSubFragment fragment;
+        SettingsSubFragmentDef previousFragmentDef = currentSubFragmentDef;
 
         try
         {
-            fragment = SettingsSubFragmentDef.values()[index].FRAGMENT_CLASS.newInstance();
+            currentSubFragmentDef = SettingsSubFragmentDef.values()[index];
+            fragment = currentSubFragmentDef.FRAGMENT_CLASS.newInstance();
         }
         catch (Exception e)
         {
+            currentSubFragmentDef = previousFragmentDef;
             Log.e(TAG, "Error setting settings sub fragment: " + e.getMessage());
             return;
         }
@@ -132,96 +139,15 @@ public class SettingsPageFragment extends Fragment
 
         // Insert the fragment by replacing any existing fragments
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.settings_content, fragment)
-                .commit();
-    }
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-//    /**
-//     * The SettingsOption for choosing chords.
-//     */
-//    private final SettingsOption CHOOSE_CHORD_TYPES = new SettingsOption("Choose Chords")
-//    {
-//        @Override
-//        public void performAction()
-//        {
-//            toChordSettings();
-//        }
-//    };
-//
-//    /**
-//     * The SettingsOption for choosing the chord options.
-//     */
-//    private final SettingsOption CHOOSE_CHORD_OPTIONS = new SettingsOption("Chord Options") {
-//        @Override
-//        public void performAction() {
-//            toChordOptions();
-//        }
-//    };
-//
-//    /**
-//     * The SettingsOption for choosing the check options.
-//     */
-//    private final SettingsOption CHOOSE_CHECK_OPTIONS = new SettingsOption("Check Options")
-//    {
-//        @Override
-//        public void performAction()
-//        {
-//            toCheckOptions();
-//        }
-//    };
-//
-//    /**
-//     * The SettingsOption for changing the instrument.
-//     */
-//    private final SettingsOption INSTRUMENT_OPTIONS = new SettingsOption("Change Instrument")
-//    {
-//        @Override
-//        public void performAction()
-//        {
-//            toInstrumentSelection();
-//        }
-//    };
-//
-//    /**
-//     * Called to launch the choose chords dialog.
-//     */
-//    public void toChordSettings()
-//    {
-////        Intent intent = new Intent(this, SettingsChords.class);
-////        startActivity(intent);
-////        this.overridePendingTransition(0, 0);
-//    }
-//
-//    /**
-//     * Called to goto the choose chord options.
-//     */
-//    public void toChordOptions()
-//    {
-////        Intent intent = new Intent(this, SettingsChordOptions.class);
-////        startActivity(intent);
-////        this.overridePendingTransition(0, 0);
-//    }
-//
-//    /**
-//     * Called to goto the choose check options.
-//     */
-//    public void toCheckOptions()
-//    {
-////        Intent intent = new Intent(this, CheckSettingsActivity.class);
-////        startActivity(intent);
-////        this.overridePendingTransition(0, 0);
-//    }
-//
-//    /**
-//     * Called to goto the instrument selection activity.
-//     */
-//    public void toInstrumentSelection()
-//    {
-////        Intent intent = new Intent(this, SettingsInstruments.class);
-////        startActivity(intent);
-////        this.overridePendingTransition(0, 0);
-//    }
+        transaction.replace(R.id.settings_content, fragment);
+
+//        if (previousFragmentDef != SettingsSubFragmentDef.MAIN)
+//            transaction.addToBackStack(null);
+
+        transaction.commit();
+    }
 
     /**
      * Class representing an object in the SettingsPage list of options.

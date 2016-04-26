@@ -2,6 +2,7 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -10,6 +11,7 @@ import android.os.SystemClock;
 import android.media.AudioManager;
 import android.preference.PreferenceManager;
 import android.support.annotation.StringRes;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -54,7 +56,8 @@ import java.util.Map;
  * @date 31 March 2016
  * @author Drea,Steven,Zach,Kevin,Bo,Theodore
  */
-public class MainActivity extends AppCompatActivity implements Options.OptionsChangedListener
+public class MainActivity extends FragmentActivity implements Options.OptionsChangedListener,
+        FragmentManager.OnBackStackChangedListener
 {
     /** The tag for this class. */
     private static final String TAG = "MainActivity";
@@ -138,7 +141,6 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
                 0.0f, 0.0f, 1.0f, 1.0f, 0, 0.0f, 0.0f, 0, 0
         );
 
-
         button.dispatchTouchEvent(motionEvent);
     }
 
@@ -219,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         else
             drawerIndex = 0;
 
-        setCurrentDrawer(drawerIndex);
+        setCurrentDrawer(drawerIndex, true);
 
         // Display demo if needed
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(this);
@@ -238,6 +240,9 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         ChordHandler.initialize();
         SoundHandler.switchInstrument(options.instrument);
         Score.loadScores(this, false);
+
+        // Set back stack listener
+        getFragmentManager().addOnBackStackChangedListener(this);
 
         // Create the client to handle contacting the developers
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
@@ -460,20 +465,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
             if (mainFragment.getCheckFragment() != null)
                 mainFragment.getCheckFragment().silenceButtons();
         }
-
-//        sliderFragment.silenceSliders();
-//        checkFragment.silenceButtons();
-//        chordSelectFragment.silenceButtons();
     }
-
-//    /**
-//     * Send signals to block playbask
-//     * @param blocked is the sound blocked (true) or allowed (false)?
-//     */
-//    public void blockAllSound(boolean blocked)
-//    {
-////        sliderFragment.setIsBlocked(blocked);
-//    }
 
     /**
      * Called when the user attempts to back out of the MainActivity to launch a dialog
@@ -482,37 +474,52 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
     @Override
     public void onBackPressed()
     {
-        // Launch dialog
-        AlertFragment alert = AlertFragment.newInstance(R.string.exit, R.string.exit_dialog_message);
-
-        alert.setYesAction(new Runnable()
+        if (getFragmentManager().getBackStackEntryCount() > 1)
         {
-            @Override
-            public void run()
-            {
-                stopAllSound();
-                finish();
-            }
-        });
-
-        alert.setDismissAction(new Runnable()
+            getFragmentManager().popBackStack();
+        }
+        else
         {
-            @Override
-            public void run()
-            {
-                stopAllSound();
-            }
-        });
+            // Launch dialog
+            AlertFragment alert = AlertFragment.newInstance(R.string.exit, R.string.exit_dialog_message);
 
-        alert.show(getFragmentManager(), "alert");
+            alert.setYesAction(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    stopAllSound();
+                    MainActivity.this.onBackPressed();
+                }
+            });
+
+            alert.setDismissAction(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    stopAllSound();
+                }
+            });
+
+            alert.show(getFragmentManager(), "alert");
+        }
     }
 
     /**
      * Swaps fragments in the main content view.
      * @param position The selected position
+     * @param firstTime True if this is the first transaction to occue
      */
-    public void setCurrentDrawer(int position)
+    public void setCurrentDrawer(int position, boolean firstTime)
     {
+        // Don't go to the fragment if you are already there
+        if (!firstTime && position == drawerIndex)
+        {
+            mDrawerLayout.closeDrawer(mDrawerList);
+            return;
+        }
+
         // Select the new Fragment to show based on selected position
         Fragment fragment;
 
@@ -542,14 +549,34 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         drawerFragment.setArguments(arguments);
 
         // Insert the fragment by replacing any existing fragments
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.content_main, fragment)
-                .commit();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_main, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
 
         // Highlight the selected item, update the title, and close the drawer
         mDrawerList.setItemChecked(position, true);
         mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+    /**
+     * Called whenever the contents of the back stack change.
+     */
+    @Override
+    public void onBackStackChanged()
+    {
+        // Get the new fragment in the content layout
+        Fragment fragment = getFragmentManager().findFragmentById(R.id.content_main);
+
+        // Update the current fragment index and reference
+        for (DrawerFragment drawerFragment: DrawerFragment.values())
+        {
+            if (drawerFragment.FRAGMENT_CLASS.isInstance(fragment))
+            {
+                this.drawerFragment = fragment;
+                drawerIndex = drawerFragment.ordinal();
+            }
+        }
     }
 
     /**
@@ -560,7 +587,7 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         @Override
         public void onItemClick(AdapterView parent, View view, int position, long id)
         {
-            setCurrentDrawer(position);
+            setCurrentDrawer(position, false);
         }
     }
 }
