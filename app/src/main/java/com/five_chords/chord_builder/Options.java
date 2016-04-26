@@ -3,9 +3,12 @@ package com.five_chords.chord_builder;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
+
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.PitchBendSettingsFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -24,7 +27,7 @@ public class Options
     private static final String HINT_DELAYS_BUNDLE_ID = "OptionsFragment.Options.HINT_DELAYS";
 
     /** Bundle id for the number of chord inversions in use flag. */
-    private static final String CHORDS_INVERSIONS_SIZE_BUNDLE_ID = "OptionsFragment.Options.CHORDS_INVERSIONS_SIZE";
+//    private static final String CHORDS_INVERSIONS_SIZE_BUNDLE_ID = "OptionsFragment.Options.CHORDS_INVERSIONS_SIZE";
 
     /** Bundle id for used Chord inversions. */
     private static final String CHORDS_INVERSIONS_BUNDLE_ID = "OptionsFragment.Options.CHORDS_INVERSIONS";
@@ -166,14 +169,14 @@ public class Options
      */
     public void addChordInversion(byte inversion)
     {
+        chordInversionsToUse[inversion] = true;
+        if (!chordInversionsToUse[inversion])
+        {
+            chordInversionsToUse[inversion] = true;
 
-//        if (!chordInversionsToUse.contains(inversion))
-//        {
-//            chordInversionsToUse.add(inversion);
-//
-//            if (optionsChangedListener != null)
-//                optionsChangedListener.onInversionSelectionChanged(chordInversionsToUse);
-//        }
+            if (optionsChangedListener != null)
+                optionsChangedListener.onInversionSelectionChanged(chordInversionsToUse);
+        }
     }
 
     /**
@@ -182,9 +185,9 @@ public class Options
      */
     public void removeChordInversion(byte inversion)
     {
-        if (!chordInversionsToUse[inversion])
+        if (chordInversionsToUse[inversion])
         {
-            chordInversionsToUse[inversion] = true;
+            chordInversionsToUse[inversion] = false;
 
             if (optionsChangedListener != null)
                 optionsChangedListener.onInversionSelectionChanged(chordInversionsToUse);
@@ -243,12 +246,30 @@ public class Options
     }
 
     /**
+     * Sets the chord types in use array of this Options.
+     * @param chordTypesInUseArray The new array defining which chord types are in use
+     */
+    public void setChordTypesInUse(boolean[] chordTypesInUseArray)
+    {
+        this.chordTypesInUseArray = chordTypesInUseArray;
+
+        // Reset ChordType List
+        populateChordTypesInUse();
+
+        // Notify Listener that changes were made
+        if (optionsChangedListener != null)
+            optionsChangedListener.onChordTypeOptionsChanged(chordTypesInUse);
+    }
+
+    /**
      * Sets whether or not the ChordType of the given index should be used.
      * @param index The index of the ChordType
      * @param use Whether or not the ChordType should be used
      */
     public void setChordTypeUse(int index, boolean use)
     {
+        Log.d("Options", "Chord type " + index + " set: " + use);
+
         // Set new value
         chordTypesInUseArray[index] = use;
 
@@ -315,7 +336,6 @@ public class Options
             chordTypesInUseArray[i] = preferences.getBoolean(CHORDS_IN_USE_BUNDLE_ID + i, chordTypesInUseArray[i]);
 
         // Load chord inversions to use
-//        int size = preferences.getInt(CHORDS_INVERSIONS_SIZE_BUNDLE_ID, 0);
         for (int i = 0; i < NUM_INVERSIONS; ++i)
         {
             try
@@ -325,7 +345,6 @@ public class Options
             catch (Exception e)
             {/* Ignore */}
         }
-//            chordInversionsToUse.add((byte)preferences.getInt(CHORDS_INVERSIONS_BUNDLE_ID + i, 0));
 
         // Populate ChordType List
         populateChordTypesInUse();
@@ -336,6 +355,8 @@ public class Options
      */
     private void populateChordTypesInUse()
     {
+        Log.d("Options", "Chord types in use re-populated"); // TODO
+
         chordTypesInUse.clear();
 
         for (int i = 0; i < chordTypesInUseArray.length; ++i)

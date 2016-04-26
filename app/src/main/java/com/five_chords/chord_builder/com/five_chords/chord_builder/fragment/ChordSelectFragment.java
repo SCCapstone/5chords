@@ -23,6 +23,8 @@ import com.five_chords.chord_builder.ChordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.SoundHandler;
 
+import java.util.Arrays;
+
 /**
  * A Fragment containing the chord select slider and the instrument select slider.
  * @author tstone95
@@ -77,6 +79,9 @@ public class ChordSelectFragment extends Fragment
      */
     public void updateAvailableChordTypes(final Activity activity)
     {
+        if (chordSelectSpinner == null)
+            return;
+
         // Populate the chord select spinner
         ChordDisplayItemAdapter adapter =
                 new ChordDisplayItemAdapter(activity, android.R.layout.simple_spinner_dropdown_item);
@@ -190,34 +195,12 @@ public class ChordSelectFragment extends Fragment
             {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
-//                    MainActivity mainActivity = null;
-//                    Activity activity = getActivity();
-//
-//                    if (activity instanceof MainActivity)
-//                        mainActivity = (MainActivity)activity;
-//
-//                    if (mainActivity != null)
-//                    {
-//                        mainActivity.stopAllSound();
-//                        mainActivity.blockAllSound(true);
-//                    }
-
                     ChordHandler.getRandomChord();
                     soundHandlers[1].playChord(getActivity(), ChordHandler.getCurrentSelectedChordSpelling(),
                             ChordHandler.getCurrentSelectedChord().getNumNotes());
                 }
                 else if (event.getAction() == MotionEvent.ACTION_UP)
                 {
-
-//                    MainActivity mainActivity = null;
-//                    Activity activity = getActivity();
-//
-//                    if (activity instanceof MainActivity)
-//                        mainActivity = (MainActivity)activity;
-//
-//                    if (mainActivity != null)
-//                        mainActivity.blockAllSound(false);
-
                     soundHandlers[1].stopSound();
                 }
 
@@ -232,9 +215,6 @@ public class ChordSelectFragment extends Fragment
             @Override
             public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id)
             {
-//                if (position == chordSelectSpinner.getCount() - 1)
-//                    return; TODO
-
                 // Update the selected chord
                 ChordDisplayItem item = (ChordDisplayItem)parentView.getItemAtPosition(position);
                 ChordHandler.setSelectedChord(item.chord, position == chordSelectSpinner.getCount() - 1);
@@ -244,16 +224,6 @@ public class ChordSelectFragment extends Fragment
             public void onNothingSelected(AdapterView<?> parentView)
             { /* Ignore */ }
         });
-
-//        // Load the previously displayed chord
-//        Bundle arguments = getArguments();
-//        Log.d("DEBUG", "ChordSelectFrag Args = " + arguments);
-//        if (arguments != null)
-//        {
-//            displayedChordId = arguments.getLong(DISPLAYED_CHORD_ID_BUNDLE_ID);
-//            displayedChordIsRandom = arguments.getBoolean(DISPLAYED_CHORD_RAN_BUNDLE_ID);
-//            setDisplayedChord(ChordHandler.getChord(displayedChordId), displayedChordIsRandom);
-//        }
 
         // Inflate the layout for this fragment
         return view;
@@ -265,14 +235,6 @@ public class ChordSelectFragment extends Fragment
     @Override
     public void onDestroyView()
     {
-//        // Save displayed chord setting
-//        Bundle arguments = getArguments();
-//        if (arguments != null)
-//        {
-//            arguments.putLong(DISPLAYED_CHORD_ID_BUNDLE_ID, displayedChordId);
-//            arguments.putBoolean(DISPLAYED_CHORD_RAN_BUNDLE_ID, displayedChordIsRandom);
-//        }
-
         // Stop sounds
         silenceButtons();
 
@@ -291,42 +253,25 @@ public class ChordSelectFragment extends Fragment
         super.onDestroyView();
     }
 
-    /**
-     * Called when the view state of this Fragment is restored.
-     * @param savedInstanceState The Bundle from which to restore the view state
-     */
-    @Override
-    public void onViewStateRestored(Bundle savedInstanceState)
-    {
-        super.onViewStateRestored(savedInstanceState);
+//    /**
+//     * Called when the view state of this Fragment is restored.
+//     * @param savedInstanceState The Bundle from which to restore the view state
+//     */
+//    @Override
+//    public void onViewStateRestored(Bundle savedInstanceState)
+//    {
+//        super.onViewStateRestored(savedInstanceState);
+//    }
 
-//        // Load the previously displayed chord
-//        Bundle arguments = getArguments();
-//        if (arguments != null)
-//        {
-//            displayedChordId = arguments.getLong(DISPLAYED_CHORD_ID_BUNDLE_ID);
-//            displayedChordIsRandom = arguments.getBoolean(DISPLAYED_CHORD_RAN_BUNDLE_ID);
-//            setDisplayedChord(ChordHandler.getChord(displayedChordId), displayedChordIsRandom);
-//        }
-    }
-
-    /**
-     * Called when the instance state of this Fragment should be saved.
-     * @param bundle The Bundle in which to save the instance state
-     */
-    @Override
-    public void onSaveInstanceState(Bundle bundle)
-    {
-        super.onSaveInstanceState(bundle);
-
-//        // Save displayed chord setting
-//        Bundle arguments = getArguments();
-//        if (arguments != null)
-//        {
-//            arguments.putLong(DISPLAYED_CHORD_ID_BUNDLE_ID, displayedChordId);
-//            arguments.putBoolean(DISPLAYED_CHORD_RAN_BUNDLE_ID, displayedChordIsRandom);
-//        }
-    }
+//    /**
+//     * Called when the instance state of this Fragment should be saved.
+//     * @param bundle The Bundle in which to save the instance state
+//     */
+//    @Override
+//    public void onSaveInstanceState(Bundle bundle)
+//    {
+//        super.onSaveInstanceState(bundle);
+//    }
 
     /**
      * Wrapper class containing a information to be displayed with the Chord names.

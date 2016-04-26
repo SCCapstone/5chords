@@ -79,6 +79,18 @@ public class SettingsChooseChordFragment extends SettingsPageFragment.SettingsSu
     }
 
     /**
+     * Called when the View of this Fragment is destroyed.
+     */
+    @Override
+    public void onDestroyView()
+    {
+        // Update options
+        MainActivity.getOptions().setChordTypesInUse(chordOptions);
+
+        super.onDestroyView();
+    }
+
+    /**
      * Tests whether or not at least one chord type is enabled.
      * @return Whether or not at least one chord type is enabled
      */
@@ -122,7 +134,6 @@ public class SettingsChooseChordFragment extends SettingsPageFragment.SettingsSu
 
         // Update the label on the View
         TextView nameView = (TextView)view;
-//        nameView.setTextSize(getResources().getDimension(R.dimen.text_size_small));
         nameView.setText(getChordTypeLabel(Chord.ChordType.values()[position], chordOptions[position]));
         nameView.setTypeface(null, chordOptions[position] ? Typeface.BOLD : Typeface.NORMAL);
     }
@@ -180,7 +191,6 @@ public class SettingsChooseChordFragment extends SettingsPageFragment.SettingsSu
             boolean enabled = MainActivity.getOptions().chordTypesInUseArray[item.ordinal()];
 
             // Set Text
-//            nameView.setTextSize(getResources().getDimension(R.dimen.text_size_small));
             nameView.setText(getChordTypeLabel(item, enabled));
             nameView.setTypeface(null, enabled ? Typeface.BOLD : Typeface.NORMAL);
 
