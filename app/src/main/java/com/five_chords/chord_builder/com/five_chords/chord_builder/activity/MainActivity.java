@@ -13,7 +13,6 @@ import android.preference.PreferenceManager;
 import android.support.annotation.StringRes;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -144,14 +143,14 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
         button.dispatchTouchEvent(motionEvent);
     }
 
-    /**
-     * Gets the current Fragment selected in the navigation drawer.
-     * @return The current Fragment selected in the navigation drawer
-     */
-    public Fragment getCurrentDrawerFragment()
-    {
-        return drawerFragment;
-    }
+//    /**
+//     * Gets the current Fragment selected in the navigation drawer.
+//     * @return The current Fragment selected in the navigation drawer
+//     */
+//    public Fragment getCurrentDrawerFragment()
+//    {
+//        return drawerFragment;
+//    }
 
     /**
      * Called when this Activity is created.
@@ -489,7 +488,7 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
                 public void run()
                 {
                     stopAllSound();
-                    MainActivity.this.onBackPressed();
+                    MainActivity.this.superBackPressed();
                 }
             });
 
@@ -504,6 +503,14 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
 
             alert.show(getFragmentManager(), "alert");
         }
+    }
+
+    /**
+     * Used as a handle to the super version of onBackPressed for the alert dialog.
+     */
+    private void superBackPressed()
+    {
+        super.onBackPressed();
     }
 
     /**
