@@ -47,6 +47,9 @@
                 android:layout_margin="8dp"
                 android:text="@string/enable_hints"/>
 
+            <!-- Separator -->
+            <View style="@style/VerticalSeparator"/>
+
             <!-- Hint text -->
             <TextView style="@style/AppText"
                 android:id="@+id/hint_text"

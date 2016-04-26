@@ -5,6 +5,5 @@
     android:layout_height="wrap_content"
     android:layout_width="fill_parent"
     android:textSize="@dimen/text_size_medium"
-    android:paddingLeft="6dip"
-    android:paddingRight="6dip"
+    android:padding="@dimen/list_item_padding"
     android:gravity="center" />

@@ -63,6 +63,9 @@
     <!-- Width of Navigation Drawer -->
     <dimen name="navigation_drawer_width">200dp</dimen>
 
+    <!-- List item padding -->
+    <dimen name="list_item_padding">8dp</dimen>
+
     <!-- Thumb Sizes -->
     <dimen name="thumb_width">24dp</dimen>
     <dimen name="thumb_height">32dp</dimen>
