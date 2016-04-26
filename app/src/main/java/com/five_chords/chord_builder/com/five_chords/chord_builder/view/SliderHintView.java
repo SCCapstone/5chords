@@ -41,7 +41,7 @@ public class SliderHintView extends LinearLayout
     private HintUpdater updater;
 
     /** The current SliderFragment. */
-    private SliderFragment sliderFragment;
+    private SliderFragment.SingleSliderFragment sliderFragment;
 
     /** The lock to use for synchronization */
     private static final Object HINT_LOCK = new Object();
@@ -110,7 +110,7 @@ public class SliderHintView extends LinearLayout
      * @param delay The delay to display the hint, in milliseconds
      */
     public void setHint(final byte type, final Note testNote,
-                        final Note actualNote, final SliderFragment sliderFragment, long delay)
+                        final Note actualNote, final SliderFragment.SingleSliderFragment sliderFragment, long delay)
     {
         postDelayed(new Runnable() {
             @Override
@@ -126,7 +126,7 @@ public class SliderHintView extends LinearLayout
      * @param testNote The test Note
      * @param actualNote The actual Note
      */
-    private void setHint(byte type, Note testNote, Note actualNote, SliderFragment sliderFragment)
+    private void setHint(byte type, Note testNote, Note actualNote, SliderFragment.SingleSliderFragment sliderFragment)
     {
         this.sliderFragment = sliderFragment;
 

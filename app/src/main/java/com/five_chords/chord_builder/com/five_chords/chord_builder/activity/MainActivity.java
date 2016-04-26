@@ -176,9 +176,9 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
         options.load(this);
         options.setOptionsChangedListener(this);
 
-        // Lock orientation in portrait mode with small screen devices
-        if (!getResources().getBoolean(R.bool.isTablet))
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+//        // Lock orientation in portrait mode with small screen devices
+//        if (!getResources().getBoolean(R.bool.isTablet))
+//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Create Navigation Drawer fragment argument map
         drawerFragmentArguments = new HashMap<>();

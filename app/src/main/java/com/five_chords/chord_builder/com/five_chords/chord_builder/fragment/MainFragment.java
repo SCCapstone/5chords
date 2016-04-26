@@ -57,6 +57,8 @@ public class MainFragment extends Fragment implements ChordHandler.OnChordSelect
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
+        Log.w("MAIN_FRAGMENT", "onCreateView");
+
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -95,8 +97,6 @@ public class MainFragment extends Fragment implements ChordHandler.OnChordSelect
     @Override
     public void onDestroyView()
     {
-        Log.w("MAIN_FRAGMENT", "onDestroyView");
-
         // Set Fragments to null
         checkFragment = null;
         sliderFragment = null;
@@ -157,6 +157,18 @@ public class MainFragment extends Fragment implements ChordHandler.OnChordSelect
         // Stop the playback thread if needed
         if (playbackThread != null && playbackThread.isAlive())
             playbackThread.interrupt();
+    }
+
+    /**
+     * Called when this Fragment is resumed.
+     */
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        if (sliderFragment != null)
+            sliderFragment.loadSliderPositions();
     }
 
     /**
@@ -292,31 +304,32 @@ public class MainFragment extends Fragment implements ChordHandler.OnChordSelect
      */
     public void makeHint(final byte type)
     {
-        // Calculate the chord differences
-        final Note[] builtChord = ChordHandler.getCurrentBuiltChordSpelling();
-        final Note[] selectedChord = ChordHandler.getCurrentSelectedChordSpelling();
-
-        // Add hints
-        SliderHintView view;
-
-        // Root slider
-        view = (SliderHintView) this.view.findViewById(R.id.slider_root_layout);
-        view.setHint(type, builtChord[0], selectedChord[0], sliderFragment, 500L);
-
-        // Third slider
-        view = (SliderHintView) this.view.findViewById(R.id.slider_third_layout);
-        view.setHint(type, builtChord[1], selectedChord[1], sliderFragment, 500L);
-
-        // Fifth slider
-        view = (SliderHintView) this.view.findViewById(R.id.slider_fifth_layout);
-        view.setHint(type, builtChord[2], selectedChord[2], sliderFragment, 500L);
-
-        // Option slider
-        if (ChordHandler.getCurrentSelectedChord().TYPE.offsets.length == 4)
-        {
-            view = (SliderHintView) this.view.findViewById(R.id.slider_option_layout);
-            view.setHint(type, builtChord[3], selectedChord[3], sliderFragment, 500L);
-        }
+        sliderFragment.makeHint(type);
+//        // Calculate the chord differences
+//        final Note[] builtChord = ChordHandler.getCurrentBuiltChordSpelling();
+//        final Note[] selectedChord = ChordHandler.getCurrentSelectedChordSpelling();
+//
+//        // Add hints
+//        SliderHintView view;
+//
+//        // Root slider
+//        view = (SliderHintView) this.view.findViewById(R.id.slider_root_layout);
+//        view.setHint(type, builtChord[0], selectedChord[0], sliderFragment, 500L);
+//
+//        // Third slider
+//        view = (SliderHintView) this.view.findViewById(R.id.slider_third_layout);
+//        view.setHint(type, builtChord[1], selectedChord[1], sliderFragment, 500L);
+//
+//        // Fifth slider
+//        view = (SliderHintView) this.view.findViewById(R.id.slider_fifth_layout);
+//        view.setHint(type, builtChord[2], selectedChord[2], sliderFragment, 500L);
+//
+//        // Option slider
+//        if (ChordHandler.getCurrentSelectedChord().TYPE.offsets.length == 4)
+//        {
+//            view = (SliderHintView) this.view.findViewById(R.id.slider_option_layout);
+//            view.setHint(type, builtChord[3], selectedChord[3], sliderFragment, 500L);
+//        }
     }
 
     /**
@@ -349,10 +362,7 @@ public class MainFragment extends Fragment implements ChordHandler.OnChordSelect
         // Hide fourth slider if needed
         try
         {
-            if (ChordHandler.getCurrentSelectedChord().getNumNotes() != 4)
-                view.findViewById(R.id.slider_option_layout).setVisibility(View.GONE);
-            else
-                view.findViewById(R.id.slider_option_layout).setVisibility(View.VISIBLE);
+            sliderFragment.showFourthSlider(ChordHandler.getCurrentSelectedChord().getNumNotes() == 4);
         }
         catch (Exception e)
         {/* Ignore */}

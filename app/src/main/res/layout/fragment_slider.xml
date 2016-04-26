@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    android:id="@+id/fragment_slider"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Up Button -->
+    <Button style="?attr/buttonBarButtonStyle"
+            android:id="@+id/button_slider_up"
+            android:layout_width="@dimen/slider_incr_button_size"
+            android:layout_height="@dimen/slider_incr_button_size"
+            android:layout_margin="4dp"
+            android:background="@drawable/up_button_selector"
+            android:padding="0dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"/>
+
+    <!-- Preview Button -->
+    <Button style="?attr/buttonBarButtonStyle"
+            android:id="@+id/button_slider_play"
+            android:layout_width="@dimen/slider_play_button_size"
+            android:layout_height="@dimen/slider_play_button_size"
+            android:layout_margin="6dp"
+            android:background="@drawable/play_slider_button_selector"
+            android:padding="0dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"/>
+
+    <!-- Down Button -->
+    <Button style="?attr/buttonBarButtonStyle"
+            android:id="@+id/button_slider_down"
+            android:layout_width="@dimen/slider_incr_button_size"
+            android:layout_height="@dimen/slider_incr_button_size"
+            android:layout_margin="4dp"
+            android:background="@drawable/down_button_selector"
+            android:padding="0dp"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@id/button_slider_play"/>
+
+    <!-- Slider Hint View -->
+    <com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView
+        android:id="@+id/slider_fragment_hint_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/button_slider_down"
+        android:layout_below="@id/button_slider_up">
+
+            <!-- The Slider itself-->
+            <com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar style="@style/styleSeekBar"
+                android:id="@+id/slider_fragment_slider"
+                android:tag="@string/seek_bar_tag"
+                android:layout_width="@dimen/slider_width"
+                android:layout_height="match_parent"/>
+
+    </com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView>
+
+</RelativeLayout>

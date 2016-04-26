@@ -47,6 +47,16 @@ public class VerticalSeekBar extends SeekBar
     }
 
     /**
+     * Increments the progress of this VerticalSeekBar by the given amount.
+     * @param amount The amount to increment the progress
+     */
+    public void incrementProgress(int amount)
+    {
+        setProgress(getProgress() + amount);
+        onSizeChanged(getWidth(), getHeight(), 0, 0);
+    }
+
+    /**
      * Called when this VerticalSeekBar is measured.
      * @param widthMeasureSpec The measured width
      * @param heightMeasureSpec The measured height

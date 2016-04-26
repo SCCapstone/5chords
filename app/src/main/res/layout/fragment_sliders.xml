@@ -5,81 +5,36 @@
               android:layout_height="match_parent"
               android:layout_gravity="center"
               android:background="@drawable/wood"
+              android:baselineAligned="false"
               android:id="@+id/fragment_sliders">
 
     <!-- Note selection sliders -->
-
-    <!-- Root -->
-    <com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView
-        android:id="@+id/slider_root_layout"
+    <FrameLayout
+        android:id="@+id/slider_root_frame"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp">
+        android:layout_weight="1">
+    </FrameLayout>
 
-        <com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar style="@style/styleSeekBar"
-            android:id="@+id/slider_root"
-            android:tag="@string/seek_bar_tag"
-            android:layout_width="@dimen/slider_width"
-            android:layout_height="match_parent"/>
-
-    </com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView>
-
-    <!-- Third -->
-    <com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView
-        android:id="@+id/slider_third_layout"
+    <FrameLayout
+        android:id="@+id/slider_third_frame"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp">
+        android:layout_weight="1">
+    </FrameLayout>
 
-        <com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar style="@style/styleSeekBar"
-            android:id="@+id/slider_third"
-            android:tag="@string/seek_bar_tag"
-            android:layout_width="@dimen/slider_width"
-            android:layout_height="match_parent"/>
-
-    </com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView>
-
-    <!-- Fifth -->
-    <com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView
-        android:id="@+id/slider_fifth_layout"
+    <FrameLayout
+        android:id="@+id/slider_fifth_frame"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp">
+        android:layout_weight="1">
+    </FrameLayout>
 
-        <com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar style="@style/styleSeekBar"
-            android:id="@+id/slider_fifth"
-            android:tag="@string/seek_bar_tag"
-            android:layout_width="@dimen/slider_width"
-            android:layout_height="match_parent"/>
-
-    </com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView>
-
-    <!-- Option -->
-    <com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView
-        android:id="@+id/slider_option_layout"
+    <FrameLayout
+        android:id="@+id/slider_option_frame"
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp">
-
-        <com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar style="@style/styleSeekBar"
-            android:id="@+id/slider_option"
-            android:tag="@string/seek_bar_tag"
-            android:layout_width="@dimen/slider_width"
-            android:layout_height="match_parent"/>
-
-    </com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView>
-
+        android:layout_weight="1">
+    </FrameLayout>
 
 </LinearLayout>
