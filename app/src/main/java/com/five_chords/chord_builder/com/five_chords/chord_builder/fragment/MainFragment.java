@@ -203,7 +203,8 @@ public class MainFragment extends Fragment implements ChordHandler.OnChordSelect
         Score current = Score.getCurrentScore();
 
         // Set the Views
-        currentProgress.setText(current.getCurrentValue().getDisplayString());
+        if (currentProgress != null)
+            currentProgress.setText(current.getCurrentValue().getDisplayString());
     }
 
     /**
@@ -352,10 +353,15 @@ public class MainFragment extends Fragment implements ChordHandler.OnChordSelect
         chordSelectFragment.setDisplayedChord(ChordHandler.getCurrentSelectedChord(), random);
 
         // Hide fourth slider if needed
-        if (ChordHandler.getCurrentSelectedChord().getNumNotes() != 4)
-            view.findViewById(R.id.slider_option_layout).setVisibility(View.GONE);
-        else
-            view.findViewById(R.id.slider_option_layout).setVisibility(View.VISIBLE);
+        try
+        {
+            if (ChordHandler.getCurrentSelectedChord().getNumNotes() != 4)
+                view.findViewById(R.id.slider_option_layout).setVisibility(View.GONE);
+            else
+                view.findViewById(R.id.slider_option_layout).setVisibility(View.VISIBLE);
+        }
+        catch (Exception e)
+        {/* Ignore */}
     }
 
     /**

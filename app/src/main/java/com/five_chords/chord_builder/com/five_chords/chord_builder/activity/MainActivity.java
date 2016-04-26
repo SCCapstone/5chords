@@ -43,6 +43,7 @@ import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -66,6 +67,9 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
 
     /** The Bundle id of the drawer fragment Bundles. */
     private static final String DRAWER_BUNDLE_BUNDLE_ID = "MainActivity.drawerBundle";
+
+    /** Int to keep track of the last drawer fragment index. */
+    private static int lastDrawerFragmentIndex = -1;
 
     /** The current options selected in this MainActivity. */
     private static Options options;
@@ -220,7 +224,8 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
         else
             drawerIndex = 0;
 
-        setCurrentDrawer(drawerIndex, true);
+        if (lastDrawerFragmentIndex == -1)
+            setCurrentDrawer(drawerIndex, true);
 
         // Display demo if needed
         SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(this);
@@ -258,11 +263,13 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
         ChordHandler.setOnChordSelectedListener(null);
         mDrawerList.setOnItemClickListener(null);
         mDrawerLayout.setOnFocusChangeListener(null);
+        getFragmentManager().removeOnBackStackChangedListener(this);
 
         // Detach drawer fragment
         if (drawerFragment != null)
         {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.detach(drawerFragment);
             transaction.remove(drawerFragment);
 
             try
@@ -309,23 +316,6 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
     }
 
     /**
-     * Called when this Activity is resumed.
-     */
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-
-//        // Get references to fragments
-//        sliderFragment = (SliderFragment)getFragmentManager().findFragmentById(R.id.fragment_sliders);
-//        chordInstrumentSelectFragment =
-//                (ChordSelectFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_select);
-//        checkFragment = (CheckFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_check);
-//        chordSelectFragment = (ChordSelectFragment)getFragmentManager().findFragmentById(R.id.fragment_chord_select);
-    }
-
-
-    /**
      * Called when the state of this Activity should be saved.
      *
      * @param savedInstanceState The Bundle to which to save
@@ -333,6 +323,9 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
+//        // Clear the fragment back stack
+//        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
         // Save options
         options.save(this);
 
@@ -501,6 +494,10 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
         {
             getFragmentManager().popBackStack();
         }
+        else if (drawerIndex != DrawerFragment.MAIN.ordinal())
+        {
+            setCurrentDrawer(DrawerFragment.MAIN.ordinal(), false);
+        }
         else
         {
             // Launch dialog
@@ -582,7 +579,13 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
         // Insert the fragment by replacing any existing fragments
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.content_main, fragment);
-        transaction.addToBackStack(null);
+
+        if (lastDrawerFragmentIndex != drawerIndex)
+        {
+            transaction.addToBackStack(null);
+            lastDrawerFragmentIndex = drawerIndex;
+        }
+
         transaction.commit();
 
         // Highlight the selected item, update the title, and close the drawer
