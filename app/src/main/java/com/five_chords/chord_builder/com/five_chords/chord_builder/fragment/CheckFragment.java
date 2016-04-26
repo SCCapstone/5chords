@@ -1,6 +1,5 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -41,7 +40,14 @@ public class CheckFragment extends Fragment
      */
     public void playBuiltChord(boolean play)
     {
-        MainActivity.pressButton(playBuiltChordButton, play);
+        try
+        {
+            MainActivity.pressButton(playBuiltChordButton, play);
+        }
+        catch (Exception e)
+        {
+            silenceButtons();
+        }
     }
 
     /**

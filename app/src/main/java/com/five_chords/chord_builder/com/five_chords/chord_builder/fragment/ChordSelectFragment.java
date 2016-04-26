@@ -121,7 +121,14 @@ public class ChordSelectFragment extends Fragment
      */
     public void playSelectedChord(boolean play)
     {
-        MainActivity.pressButton(playSelectedChordButton, play);
+        try
+        {
+            MainActivity.pressButton(playSelectedChordButton, play);
+        }
+        catch (Exception e)
+        {
+            silenceButtons();
+        }
     }
 
     /**

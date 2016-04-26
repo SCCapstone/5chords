@@ -137,6 +137,8 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
                 press ? MotionEvent.ACTION_DOWN : MotionEvent.ACTION_UP,
                 0.0f, 0.0f, 1.0f, 1.0f, 0, 0.0f, 0.0f, 0, 0
         );
+
+
         button.dispatchTouchEvent(motionEvent);
     }
 
@@ -170,9 +172,9 @@ public class MainActivity extends AppCompatActivity implements Options.OptionsCh
         options.load(this);
         options.setOptionsChangedListener(this);
 
-//        // Lock orientation in portrait mode with small screen devices
-//        if (!getResources().getBoolean(R.bool.isTablet))
-//            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        // Lock orientation in portrait mode with small screen devices
+        if (!getResources().getBoolean(R.bool.isTablet))
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
         // Create Navigation Drawer fragment argument map
         drawerFragmentArguments = new HashMap<>();

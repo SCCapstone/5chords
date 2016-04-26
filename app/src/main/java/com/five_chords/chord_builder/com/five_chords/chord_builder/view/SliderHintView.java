@@ -77,6 +77,9 @@ public class SliderHintView extends LinearLayout
         initialize();
     }
 
+    /**
+     * Called when this View is detached from the Window.
+     */
     @Override
     public void onDetachedFromWindow()
     {
@@ -84,6 +87,7 @@ public class SliderHintView extends LinearLayout
         if (updater != null)
         {
             updater.isRunning = false;
+            updater.interrupt();
             updater = null;
         }
 
@@ -143,7 +147,7 @@ public class SliderHintView extends LinearLayout
             else if (type == ChordHandler.HINT_THREE)
                 hint = new CircleHint(actualNote, diff == 0.0 ? Color.GREEN : Color.BLUE);
 
-            HINT_LOCK.notify();
+            HINT_LOCK.notifyAll();
         }
     }
 
@@ -172,10 +176,20 @@ public class SliderHintView extends LinearLayout
     private void initialize()
     {
         setWillNotDraw(false);
+
+        if (updater != null)
+        {
+            updater.isRunning = false;
+            updater.interrupt();
+            synchronized (HINT_LOCK)
+            {
+                HINT_LOCK.notifyAll();
+            }
+        }
+
         updater = new HintUpdater();
         updater.isRunning = true;
-
-        new Thread(updater).start();
+        updater.start();
     }
 
     /**
@@ -212,7 +226,7 @@ public class SliderHintView extends LinearLayout
     /**
      * Class to handle updating any hints on the SliderHintView.
      */
-    private class HintUpdater implements Runnable
+    private class HintUpdater extends Thread
     {
         /** Denotes whether or not this Runnable is running */
         private boolean isRunning;
