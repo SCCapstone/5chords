@@ -86,7 +86,8 @@
     <string name="settingsChordsInvalid">You must have at least one chord type selected</string>
     <string name="pitch_bend_settings">Select Pitch Bend Settings</string>
     <string name="chord_inversion_settings">Select Chord Inversions</string>
-    <string name="enable_hints">Toggle Hints</string>
+    <string name="enable_hints">Show Hints</string>
+    <string name="enable_hint_percent_errors">Show Percent Errors</string>
     <string name="edit_hint_settings">Edit Hint Settings</string>
     <string name="edit">Edit</string>
     <string name="choose_chords">Choose Chords</string>

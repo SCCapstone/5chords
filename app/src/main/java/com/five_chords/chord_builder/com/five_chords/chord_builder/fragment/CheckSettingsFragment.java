@@ -40,6 +40,9 @@ public class CheckSettingsFragment extends SettingsPageFragment.SettingsSubFragm
     /** The hints switch. */
     private Switch hintsSwitch;
 
+    /** The hint percent errors switch. */
+    private Switch hintPercentErrorSwitch;
+
     /** The NumberPicker for type 1 hint delays. */
     private NumberPicker hintDelay1Picker;
 
@@ -86,13 +89,15 @@ public class CheckSettingsFragment extends SettingsPageFragment.SettingsSubFragm
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
     {
         // Use Hints were changed
-        if (buttonView.getId() == R.id.switch_hints)
+        if (buttonView.getId() == R.id.switch_hints || buttonView.getId() == R.id.switch_hints_percent_errors)
         {
-            MainActivity.getOptions().changeHints(isChecked, getHintDelay1(), getHintDelay2(), getHintDelay3());
+            MainActivity.getOptions().changeHints(hintsSwitch.isChecked(), hintPercentErrorSwitch.isChecked(),
+                    getHintDelay1(), getHintDelay2(), getHintDelay3());
 
-            hintDelay1Picker.setEnabled(isChecked);
-            hintDelay2Picker.setEnabled(isChecked);
-            hintDelay3Picker.setEnabled(isChecked);
+            hintPercentErrorSwitch.setEnabled(hintsSwitch.isChecked());
+            hintDelay1Picker.setEnabled(hintsSwitch.isChecked());
+            hintDelay2Picker.setEnabled(hintsSwitch.isChecked());
+            hintDelay3Picker.setEnabled(hintsSwitch.isChecked());
         }
         // Show answer sequence was changed
         else if (buttonView.getId() == R.id.switch_check_sequence)
@@ -136,7 +141,8 @@ public class CheckSettingsFragment extends SettingsPageFragment.SettingsSubFragm
             }
         }
 
-        MainActivity.getOptions().changeHints(hintsSwitch.isChecked(), getHintDelay1(), getHintDelay2(), getHintDelay3());
+        MainActivity.getOptions().changeHints(hintsSwitch.isChecked(), hintPercentErrorSwitch.isChecked(),
+                getHintDelay1(), getHintDelay2(), getHintDelay3());
     }
 
     /**
@@ -155,6 +161,7 @@ public class CheckSettingsFragment extends SettingsPageFragment.SettingsSubFragm
         // Get Views
         showAnswerSeqSwitch = (Switch) view.findViewById(R.id.switch_check_sequence);
         hintsSwitch = (Switch) view.findViewById(R.id.switch_hints);
+        hintPercentErrorSwitch = (Switch) view.findViewById(R.id.switch_hints_percent_errors);
 
         hintDelay1Picker = (NumberPicker) view.findViewById(R.id.hint_level1_picker);
         initPicker(hintDelay1Picker);
@@ -167,6 +174,7 @@ public class CheckSettingsFragment extends SettingsPageFragment.SettingsSubFragm
         Options options = MainActivity.getOptions();
         showAnswerSeqSwitch.setChecked(options.showAnswerSequence);
         hintsSwitch.setChecked(options.useHints);
+        hintPercentErrorSwitch.setChecked(options.useHintPercentErrors);
         hintDelay1Picker.setValue(options.hintTypeDelays[0]);
         hintDelay2Picker.setValue(options.hintTypeDelays[1]);
         hintDelay3Picker.setValue(options.hintTypeDelays[2]);
@@ -174,6 +182,7 @@ public class CheckSettingsFragment extends SettingsPageFragment.SettingsSubFragm
         // Add listeners
         showAnswerSeqSwitch.setOnCheckedChangeListener(this);
         hintsSwitch.setOnCheckedChangeListener(this);
+        hintPercentErrorSwitch.setOnCheckedChangeListener(this);
 
         // Set Done Button action
         Button doneButton = (Button)view.findViewById(R.id.button_settings_check_settings_done);

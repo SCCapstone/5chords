@@ -137,7 +137,7 @@ public class SliderHintView extends LinearLayout
 
             if (Math.abs(diff) < MainActivity.getOptions().allowableCheckError)
                 diff = 0.0;
-            else
+            else if (MainActivity.getOptions().useHintPercentErrors)
                 percentError = 100.0 * diff;
 
             if (type == ChordHandler.HINT_ONE)

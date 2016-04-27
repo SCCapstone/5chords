@@ -39,13 +39,24 @@
             <!-- Separator -->
             <View style="@style/VerticalSeparator"/>
 
-            <!-- Enable hints checkbox -->
+            <!-- Enable hints switch -->
             <Switch style="@style/AppText"
                 android:id="@+id/switch_hints"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
                 android:text="@string/enable_hints"/>
+
+            <!-- Separator -->
+            <View style="@style/VerticalSeparator"/>
+
+            <!-- Enable hints percent errors switch -->
+            <Switch style="@style/AppText"
+                    android:id="@+id/switch_hints_percent_errors"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:text="@string/enable_hint_percent_errors"/>
 
             <!-- Separator -->
             <View style="@style/VerticalSeparator"/>

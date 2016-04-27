@@ -23,6 +23,9 @@ public class Options
     /** Bundle id for the useHints flag. */
     private static final String HINTS_BUNDLE_ID = "OptionsFragment.Options.HINT";
 
+    /** Bundle id for the useHintsPercentError flag. */
+    private static final String HINTS_PERCENT_ERROR_BUNDLE_ID = "OptionsFragment.Options.HINTPE";
+
     /** Bundle id for the hintTypeDelays settings. */
     private static final String HINT_DELAYS_BUNDLE_ID = "OptionsFragment.Options.HINT_DELAYS";
 
@@ -62,6 +65,9 @@ public class Options
     /** Whether or not hints are enabled */
     public boolean useHints;
 
+    /** Whether or not hint percent errors are enabled */
+    public boolean useHintPercentErrors;
+
     /** The number of wrong attempts to wait between hint types. */
     public int[] hintTypeDelays;
 
@@ -98,6 +104,7 @@ public class Options
     {
         // Hints
         useHints = true;
+        useHintPercentErrors = true;
         hintTypeDelays = new int[3];
 
         // Show answer sequence
@@ -230,13 +237,15 @@ public class Options
      * @param hintDelay2 The delay for the second hint type
      * @param hintDelay3 The delay for the third hint type
      */
-    public void changeHints(boolean useHints, int hintDelay1, int hintDelay2, int hintDelay3)
+    public void changeHints(boolean useHints, boolean useHintPercentErrors, int hintDelay1, int hintDelay2, int hintDelay3)
     {
-        if (useHints == this.useHints && hintTypeDelays[0] == hintDelay1 &&
+        if (useHints == this.useHints && useHintPercentErrors == this.useHintPercentErrors &&
+                hintTypeDelays[0] == hintDelay1 &&
                 hintTypeDelays[1] == hintDelay2 && hintTypeDelays[2] == hintDelay3)
             return;
 
         this.useHints = useHints;
+        this.useHintPercentErrors = useHintPercentErrors;
         this.hintTypeDelays[0] = hintDelay1;
         this.hintTypeDelays[1] = hintDelay2;
         this.hintTypeDelays[2] = hintDelay3;
@@ -291,6 +300,7 @@ public class Options
 
         // Save flags
         editor.putBoolean(HINTS_BUNDLE_ID, useHints);
+        editor.putBoolean(HINTS_PERCENT_ERROR_BUNDLE_ID, useHintPercentErrors);
         editor.putInt(NUM_SLIDER_DIVISIONS_BUNDLE_ID, sliderDivisionsPerNote);
         editor.putFloat(CHECK_ERROR_BUNDLE_ID, (float) allowableCheckError);
         editor.putInt(INSTRUMENT_BUNDLE_ID, instrument);
@@ -322,6 +332,7 @@ public class Options
 
         // Read flags
         useHints = preferences.getBoolean(HINTS_BUNDLE_ID, true);
+        useHintPercentErrors = preferences.getBoolean(HINTS_PERCENT_ERROR_BUNDLE_ID, true);
         instrument = preferences.getInt(INSTRUMENT_BUNDLE_ID, 0);
         sliderDivisionsPerNote = preferences.getInt(NUM_SLIDER_DIVISIONS_BUNDLE_ID, DEFAULT_SLIDER_DIVISIONS_PER_NOTE);
         allowableCheckError = preferences.getFloat(CHECK_ERROR_BUNDLE_ID, DEFAULT_CHECK_ERROR);
