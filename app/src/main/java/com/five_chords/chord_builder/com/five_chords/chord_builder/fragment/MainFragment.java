@@ -305,31 +305,6 @@ public class MainFragment extends Fragment implements ChordHandler.OnChordSelect
     public void makeHint(final byte type)
     {
         sliderFragment.makeHint(type);
-//        // Calculate the chord differences
-//        final Note[] builtChord = ChordHandler.getCurrentBuiltChordSpelling();
-//        final Note[] selectedChord = ChordHandler.getCurrentSelectedChordSpelling();
-//
-//        // Add hints
-//        SliderHintView view;
-//
-//        // Root slider
-//        view = (SliderHintView) this.view.findViewById(R.id.slider_root_layout);
-//        view.setHint(type, builtChord[0], selectedChord[0], sliderFragment, 500L);
-//
-//        // Third slider
-//        view = (SliderHintView) this.view.findViewById(R.id.slider_third_layout);
-//        view.setHint(type, builtChord[1], selectedChord[1], sliderFragment, 500L);
-//
-//        // Fifth slider
-//        view = (SliderHintView) this.view.findViewById(R.id.slider_fifth_layout);
-//        view.setHint(type, builtChord[2], selectedChord[2], sliderFragment, 500L);
-//
-//        // Option slider
-//        if (ChordHandler.getCurrentSelectedChord().TYPE.offsets.length == 4)
-//        {
-//            view = (SliderHintView) this.view.findViewById(R.id.slider_option_layout);
-//            view.setHint(type, builtChord[3], selectedChord[3], sliderFragment, 500L);
-//        }
     }
 
     /**
@@ -355,6 +330,8 @@ public class MainFragment extends Fragment implements ChordHandler.OnChordSelect
 
         // Update slider bounds
         sliderFragment.setSliderBoundsToFitChord(ChordHandler.getCurrentSelectedChordSpelling());
+        if (random)
+            sliderFragment.resetChordSliders();
 
         // Update ChordInstrumentSelectFragment
         chordSelectFragment.setDisplayedChord(ChordHandler.getCurrentSelectedChord(), random);

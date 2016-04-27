@@ -195,6 +195,7 @@ public class ChordSelectFragment extends Fragment
             {
                 if (event.getAction() == MotionEvent.ACTION_DOWN)
                 {
+
                     ChordHandler.getRandomChord();
                     soundHandlers[1].playChord(getActivity(), ChordHandler.getCurrentSelectedChordSpelling(),
                             ChordHandler.getCurrentSelectedChord().getNumNotes());
