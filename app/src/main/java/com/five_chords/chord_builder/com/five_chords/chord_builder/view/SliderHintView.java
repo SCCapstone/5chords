@@ -133,21 +133,24 @@ public class SliderHintView extends LinearLayout
         synchronized (HINT_LOCK)
         {
             double diff = testNote.getFractionalIndex() - actualNote.getFractionalIndex();
+            double percentError = 0.0;
 
             if (Math.abs(diff) < MainActivity.getOptions().allowableCheckError)
                 diff = 0.0;
+            else
+                percentError = 100.0 * diff / MainActivity.getOptions().sliderDivisionsPerNote;
 
             if (type == ChordHandler.HINT_ONE)
-                hint = new CircleHint(testNote, diff == 0.0 ? Color.GREEN : Color.RED);
+                hint = new CircleHint(testNote, percentError, diff == 0.0 ? Color.GREEN : Color.RED);
             else if (type == ChordHandler.HINT_TWO)
             {
                 if (diff == 0.0)
-                    hint = new CircleHint(testNote, Color.GREEN);
+                    hint = new CircleHint(testNote, percentError, Color.GREEN);
                 else
-                    hint = new TriangleHint(testNote, diff < 0.0);
+                    hint = new TriangleHint(testNote, percentError, diff < 0.0);
             }
             else if (type == ChordHandler.HINT_THREE)
-                hint = new CircleHint(actualNote, diff == 0.0 ? Color.GREEN : Color.BLUE);
+                hint = new CircleHint(actualNote, percentError, diff == 0.0 ? Color.GREEN : Color.BLUE);
 
             HINT_LOCK.notifyAll();
         }
@@ -314,11 +317,12 @@ public class SliderHintView extends LinearLayout
         /**
          * Constructs a new CircleHint
          * @param note The Note on which this Hint will appear
+         * @param percentError The percent error
          * @param color The color of this CircleHint
          */
-        public CircleHint(Note note, int color)
+        public CircleHint(Note note, double percentError, int color)
         {
-            super (note);
+            super (note, percentError);
             this.color = color;
             radius = position[2] * 0.5f;
         }
@@ -343,6 +347,8 @@ public class SliderHintView extends LinearLayout
             PAINT.setAlpha(Math.round(alpha * 255.0f));
             PAINT.setStyle(Paint.Style.FILL);
             canvas.drawCircle(position[0], position[1], radius, PAINT);
+
+            super.draw(canvas);
         }
     }
 
@@ -357,11 +363,12 @@ public class SliderHintView extends LinearLayout
         /**
          * Constructs a new TriangleHint
          * @param note The Note on which this Hint will appear
+         * @param percentError The percent error
          * @param up Whether or not this TriangleHint faces up
          */
-        public TriangleHint(Note note, boolean up)
+        public TriangleHint(Note note, double percentError, boolean up)
         {
-            super(note, 20, 40);
+            super(note, 20, 40, percentError);
 
             final float sign = up ? 1.0f : -1.0f;
             final float x = position[0];
@@ -386,14 +393,19 @@ public class SliderHintView extends LinearLayout
             PAINT.setAlpha(Math.round(alpha * 255.0f));
             PAINT.setStyle(Paint.Style.FILL);
             canvas.drawPath(TRIANGLE, PAINT);
+
+            super.draw(canvas);
         }
     }
 
     /**
      * Class representing a hint which will be drawn on the SliderHintView and fade out.
      */
-    public abstract class Hint
+    public class Hint
     {
+        /** The percent error associated with the hint. */
+        protected final double PERCENT_ERROR;
+
         /** A timer for drawing */
         private int timer;
 
@@ -412,10 +424,11 @@ public class SliderHintView extends LinearLayout
         /**
          * Constructs a new Hint.
          * @param note The Note on which this Hint will appear
+         * @param percentError The percent error
          */
-        public Hint(Note note)
+        public Hint(Note note, double percentError)
         {
-            this (note, 30, 50);
+            this (note, 30, 50, percentError);
         }
 
         /**
@@ -423,14 +436,16 @@ public class SliderHintView extends LinearLayout
          * @param note The Note on which this Hint will appear
          * @param growTime The grow time
          * @param fadeTime The fade time
+         * @param percentError The percent error
          */
-        public Hint(Note note, int growTime, int fadeTime)
+        public Hint(Note note, int growTime, int fadeTime, double percentError)
         {
             GROW_TIME = growTime;
             FADE_TIME = fadeTime;
             timer = 0;
             alpha = 1.0f;
             position = new int[3];
+            PERCENT_ERROR = percentError;
 
             getThumbPosition(position, sliderFragment.getSliderProgressForNote(note));
         }
@@ -474,6 +489,17 @@ public class SliderHintView extends LinearLayout
          * Override to draw this Hint.
          * @param canvas The Canvas to draw on
          */
-        public abstract void draw(Canvas canvas);
+        public void draw(Canvas canvas)
+        {
+            // Draw percent error
+            if (PERCENT_ERROR != 0.0)
+            {
+                PAINT.setColor(Color.WHITE);
+                PAINT.setTextAlign(Paint.Align.CENTER);
+                PAINT.setTextSize(48.0f);
+                canvas.drawText((PERCENT_ERROR > 0.0 ? "+" : "") +
+                        Math.round(PERCENT_ERROR) + " %", position[0], position[1], PAINT);
+            }
+        }
     }
 }
