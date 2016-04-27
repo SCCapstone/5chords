@@ -1,9 +1,11 @@
 package com.five_chords.chord_builder;
 
+import android.app.Fragment;
 import android.support.test.rule.ActivityTestRule;
 import android.widget.SeekBar;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.MainFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
 
 import org.junit.Before;
@@ -41,15 +43,32 @@ public class chordHandlerTest
     public void setCurrentBuiltChord(Note[] chord)
     {
         MainActivity activity = mActivityRule.getActivity();
-        SliderFragment sliderFragment = activity.getSliderFragment();
-        sliderFragment.setSliderBoundsToFitChord(chord);
+        Fragment current = activity.getCurrentDrawerFragment();
 
-        ((SeekBar) activity.findViewById(R.id.slider_root)).setProgress(sliderFragment.getSliderProgressForNote(chord[0]));
-        ((SeekBar) activity.findViewById(R.id.slider_third)).setProgress(sliderFragment.getSliderProgressForNote(chord[1]));
-        ((SeekBar) activity.findViewById(R.id.slider_fifth)).setProgress(sliderFragment.getSliderProgressForNote(chord[2]));
+        if (current instanceof MainFragment)
+        {
+            MainFragment mainFragment = (MainFragment) current;
+            SliderFragment sliderFragment = mainFragment.getSliderFragment();
 
-        if (chord[3].index >= 0)
-            ((SeekBar) activity.findViewById(R.id.slider_option)).setProgress(sliderFragment.getSliderProgressForNote(chord[3]));
+            if (sliderFragment != null)
+            {
+                sliderFragment.setSliderBoundsToFitChord(chord);
+
+                sliderFragment.getRootSliderFragment().getSlider()
+                        .setProgress(sliderFragment.getRootSliderFragment().getSliderProgressForNote(chord[0]));
+
+                sliderFragment.getThirdSliderFragment().getSlider()
+                        .setProgress(sliderFragment.getThirdSliderFragment().getSliderProgressForNote(chord[1]));
+
+                sliderFragment.getFifthSliderFragment().getSlider()
+                        .setProgress(sliderFragment.getFifthSliderFragment().getSliderProgressForNote(chord[2]));
+
+                if (chord[3].index >= 0)
+                    sliderFragment.getOptionSliderFragment().getSlider()
+                            .setProgress(sliderFragment.getOptionSliderFragment().getSliderProgressForNote(chord[4]));
+
+            }
+        }
     }
 
     /**
@@ -67,7 +86,10 @@ public class chordHandlerTest
             setCurrentBuiltChord(spelling);
 
             // Build the chord in the chordHandler
-            ChordHandler.buildCurrentChord(mActivityRule.getActivity());
+            Fragment fragment = mActivityRule.getActivity().getCurrentDrawerFragment();
+
+            if (fragment instanceof MainFragment)
+                ChordHandler.buildCurrentChord((MainFragment)fragment);
 
             // Test
             assertTrue(Chord.compareChords(spelling, ChordHandler.getCurrentBuiltChordSpelling(), type.offsets.length));

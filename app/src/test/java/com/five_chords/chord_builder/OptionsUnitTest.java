@@ -85,7 +85,7 @@ public class OptionsUnitTest implements Options.OptionsChangedListener
         callbackCalled = false;
 
         // Set to false
-        options.setShowAnswerSequence(true);
+        options.setShowAnswerSequence(false);
 
         // Make sure the callback was called
         assertTrue(callbackCalled);
@@ -114,7 +114,7 @@ public class OptionsUnitTest implements Options.OptionsChangedListener
             assertTrue(callbackCalled);
 
             // Make sure the inversion is included
-            assertTrue(options.chordInversionsToUse.contains(i));
+            assertTrue(options.chordInversionsToUse[i]);
         }
 
         // Remove conversions 0 to 3
@@ -130,7 +130,7 @@ public class OptionsUnitTest implements Options.OptionsChangedListener
             assertTrue(callbackCalled);
 
             // Make sure the inversion is not included
-            assertFalse(options.chordInversionsToUse.contains(i));
+            assertFalse(options.chordInversionsToUse[i]);
         }
     }
 
@@ -205,7 +205,7 @@ public class OptionsUnitTest implements Options.OptionsChangedListener
                     callbackCalled = false;
 
                     // Set the hint delays
-                    options.changeHints(true, i, j, k);
+                    options.changeHints(true, false, i, j, k);
 
                     // Make sure the callback was called
                     assertTrue(callbackCalled);
@@ -224,7 +224,7 @@ public class OptionsUnitTest implements Options.OptionsChangedListener
         callbackCalled = false;
 
         // Disable hints
-        options.changeHints(false, 0, 0, 0);
+        options.changeHints(false, false, 0, 0, 0);
 
         // Make sure the callback was called
         assertTrue(callbackCalled);
@@ -236,7 +236,7 @@ public class OptionsUnitTest implements Options.OptionsChangedListener
         callbackCalled = false;
 
         // Enable
-        options.changeHints(true, 0, 0, 0);
+        options.changeHints(true, false, 0, 0, 0);
 
         // Make sure the callback was called
         assertTrue(callbackCalled);
@@ -295,7 +295,7 @@ public class OptionsUnitTest implements Options.OptionsChangedListener
      * @param inversions The new inversion selection
      */
     @Override
-    public void onInversionSelectionChanged(List<Byte> inversions)
+    public void onInversionSelectionChanged(boolean[] inversions)
     {
         callbackCalled = true;
     }

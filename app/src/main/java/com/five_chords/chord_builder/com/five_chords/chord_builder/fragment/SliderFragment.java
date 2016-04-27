@@ -172,6 +172,42 @@ public class SliderFragment extends Fragment
     }
 
     /**
+     * Gets the root slider fragment attached to this SliderFragment.
+     * @return The root slider fragment attached to this SliderFragment
+     */
+    public SingleSliderFragment getRootSliderFragment()
+    {
+        return rootSliderFragment;
+    }
+
+    /**
+     * Gets the third slider fragment attached to this SliderFragment.
+     * @return The third slider fragment attached to this SliderFragment
+     */
+    public SingleSliderFragment getThirdSliderFragment()
+    {
+        return thirdSliderFragment;
+    }
+
+    /**
+     * Gets the fifth slider fragment attached to this SliderFragment.
+     * @return The fifth slider fragment attached to this SliderFragment
+     */
+    public SingleSliderFragment getFifthSliderFragment()
+    {
+        return fifthSliderFragment;
+    }
+
+    /**
+     * Gets the option slider fragment attached to this SliderFragment.
+     * @return The option slider fragment attached to this SliderFragment
+     */
+    public SingleSliderFragment getOptionSliderFragment()
+    {
+        return optionSliderFragment;
+    }
+
+    /**
      * Called to reset the positions of the chord sliders.
      */
     public void resetChordSliders()
@@ -603,6 +639,15 @@ public class SliderFragment extends Fragment
         }
 
         /**
+         * Gets the slider on this SingleSliderFragment.
+         * @return The slider on this SingleSliderFragment
+         */
+        public VerticalSeekBar getSlider()
+        {
+            return slider;
+        }
+
+        /**
          * Called to create the View of this SliderFragment.
          * @param inflater The LayoutInflater to use to inflate the View
          * @param container The ViewGroup containing the View
@@ -834,7 +879,10 @@ public class SliderFragment extends Fragment
             isBlocked = true;
 
             if (slider != null)
+            {
                 slider.setMax(max);
+                slider.incrementProgress(0);
+            }
 
             isBlocked = wasBlocked;
         }

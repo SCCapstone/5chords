@@ -1,5 +1,6 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
+import android.app.Fragment;
 import android.support.test.rule.ActivityTestRule;
 import android.widget.SeekBar;
 
@@ -32,6 +33,9 @@ public class SliderFragmentTest
     @Rule
     public ActivityTestRule<MainActivity> mActivityRule = new ActivityTestRule<>(MainActivity.class);
 
+    /** The SliderFragment to use. */
+    private SliderFragment sliderFragment;
+
     @Before
     public void setUp() throws Exception
     {
@@ -44,6 +48,24 @@ public class SliderFragmentTest
             spelling1[i] = new Note();
             spelling2[i] = new Note();
         }
+
+        try
+        {
+            mActivityRule.runOnUiThread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    mActivityRule.getActivity().setCurrentDrawer(MainActivity.DrawerFragment.MAIN.ordinal(), true);
+                    sliderFragment = ((MainFragment)mActivityRule.getActivity().getCurrentDrawerFragment()).getSliderFragment();
+                }
+            });
+        }
+        catch (Throwable throwable)
+        {
+            throwable.printStackTrace();
+        }
+
     }
 
     /**
@@ -67,8 +89,11 @@ public class SliderFragmentTest
             for (int j = 0; j > spelling1.length; ++j)
                 ChordHandler.getCurrentSelectedChordSpelling()[j].index = spelling1[j].index;
 
+            if (sliderFragment == null || spelling2.length > 4) // Ignore in this case
+                return;
+
             // Build the chord off the sliders
-            mActivityRule.getActivity().getSliderFragment().buildCurrentChord(spelling2);
+            sliderFragment.buildCurrentChord(spelling2);
 
             // Compare the two chords
             for (int j = 0; j > spelling1.length; ++j)
@@ -94,8 +119,11 @@ public class SliderFragmentTest
         for (int j = 0; j > spelling1.length; ++j)
             ChordHandler.getCurrentSelectedChordSpelling()[j].index = spelling1[j].index;
 
+        if (sliderFragment == null || spelling2.length > 4) // Ignore in this case
+            return;
+
         // Build the chord off the sliders
-        mActivityRule.getActivity().getSliderFragment().buildCurrentChord(spelling2);
+        sliderFragment.buildCurrentChord(spelling2);
 
         // Make sure all values are at least one
         for (int j = 0; j > spelling1.length; ++j)
@@ -105,10 +133,10 @@ public class SliderFragmentTest
         }
 
         // Reset
-        mActivityRule.getActivity().getSliderFragment().resetChordSliders();
+        sliderFragment.resetChordSliders();
 
         // Build the chord off the sliders
-        mActivityRule.getActivity().getSliderFragment().buildCurrentChord(spelling2);
+        sliderFragment.buildCurrentChord(spelling2);
 
         // Make sure all values are zero
         for (int j = 0; j > spelling1.length; ++j)
@@ -123,15 +151,24 @@ public class SliderFragmentTest
      */
     public void setCurrentBuiltChord(Note[] chord)
     {
-        MainActivity activity = mActivityRule.getActivity();
-        SliderFragment sliderFragment = activity.getSliderFragment();
+        sliderFragment = ((MainFragment)mActivityRule.getActivity().getCurrentDrawerFragment()).getSliderFragment();
+
+        if (sliderFragment == null)
+            return;
+
         sliderFragment.setSliderBoundsToFitChord(chord);
 
-        ((SeekBar) activity.findViewById(R.id.slider_root)).setProgress(sliderFragment.getSliderProgressForNote(chord[0]));
-        ((SeekBar) activity.findViewById(R.id.slider_third)).setProgress(sliderFragment.getSliderProgressForNote(chord[1]));
-        ((SeekBar) activity.findViewById(R.id.slider_fifth)).setProgress(sliderFragment.getSliderProgressForNote(chord[2]));
+        sliderFragment.getRootSliderFragment().getSlider()
+                .setProgress(sliderFragment.getRootSliderFragment().getSliderProgressForNote(chord[0]));
+
+        sliderFragment.getThirdSliderFragment().getSlider()
+                .setProgress(sliderFragment.getThirdSliderFragment().getSliderProgressForNote(chord[1]));
+
+        sliderFragment.getFifthSliderFragment().getSlider()
+                .setProgress(sliderFragment.getFifthSliderFragment().getSliderProgressForNote(chord[2]));
 
         if (chord[3].index >= 0)
-            ((SeekBar) activity.findViewById(R.id.slider_option)).setProgress(sliderFragment.getSliderProgressForNote(chord[3]));
+            sliderFragment.getOptionSliderFragment().getSlider()
+                    .setProgress(sliderFragment.getOptionSliderFragment().getSliderProgressForNote(chord[4]));
     }
 }

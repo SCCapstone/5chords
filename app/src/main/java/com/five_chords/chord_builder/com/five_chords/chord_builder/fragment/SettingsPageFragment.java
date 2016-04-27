@@ -120,29 +120,6 @@ public class SettingsPageFragment extends Fragment
         }
     }
 
-//    /**
-//     * Called when the view of this Fragment is destroyed.
-//     */
-//    @Override
-//    public void onDestroyView()
-//    {
-////        // Destroy the current sub fragment, if applicable
-////        if (currentSubFragment != null)
-////        {
-////            try
-////            {
-////                getFragmentManager().beginTransaction().remove(currentSubFragment).commit();
-////            }
-////            catch (Exception e)
-////            {/* Ignore */}
-////
-////            currentSubFragment.setSettingsPageFragment(null);
-////            currentSubFragment = null;
-////        }
-//
-//        super.onDestroyView();
-//    }
-
     /**
      * Sets the settings sub fragment of the given index.
      * @param index The index of the sub fragment
@@ -275,7 +252,7 @@ public class SettingsPageFragment extends Fragment
 
                 // Populate the list
                 ArrayAdapter<String> optionsAdapter =
-                        new ArrayAdapter<>(getActivity(), R.layout.centered_list_items);
+                        new ArrayAdapter<>(getActivity(), R.layout.centered_list_items_large);
 
                 for (SettingsSubFragmentDef f: SettingsSubFragmentDef.values())
                 {

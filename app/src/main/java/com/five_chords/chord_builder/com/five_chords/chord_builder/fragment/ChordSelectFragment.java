@@ -126,9 +126,14 @@ public class ChordSelectFragment extends Fragment
      */
     public void silenceButtons()
     {
-        if (soundHandlers != null)
-            for (SoundHandler sH : soundHandlers)
-                sH.stopSound();
+        try
+        {
+            if (soundHandlers != null)
+                for (SoundHandler sH : soundHandlers)
+                    sH.stopSound();
+        }
+        catch (Exception e)
+        {/* Ignore */}
     }
 
     /**
@@ -253,26 +258,6 @@ public class ChordSelectFragment extends Fragment
         // Call super method
         super.onDestroyView();
     }
-
-//    /**
-//     * Called when the view state of this Fragment is restored.
-//     * @param savedInstanceState The Bundle from which to restore the view state
-//     */
-//    @Override
-//    public void onViewStateRestored(Bundle savedInstanceState)
-//    {
-//        super.onViewStateRestored(savedInstanceState);
-//    }
-
-//    /**
-//     * Called when the instance state of this Fragment should be saved.
-//     * @param bundle The Bundle in which to save the instance state
-//     */
-//    @Override
-//    public void onSaveInstanceState(Bundle bundle)
-//    {
-//        super.onSaveInstanceState(bundle);
-//    }
 
     /**
      * Wrapper class containing a information to be displayed with the Chord names.
@@ -399,6 +384,10 @@ public class ChordSelectFragment extends Fragment
         {
             View view = getView(position, convertView, parent);
             view.setMinimumWidth((int) getContext().getResources().getDimension(R.dimen.min_chord_dropdown_menu_size));
+
+            TextView descriptionView = (TextView)view.findViewById(R.id.chord_display_chord_description);
+            descriptionView.setVisibility(View.GONE);
+
             return view;
         }
     }

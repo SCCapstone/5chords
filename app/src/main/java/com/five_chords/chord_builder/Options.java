@@ -176,7 +176,6 @@ public class Options
      */
     public void addChordInversion(byte inversion)
     {
-        chordInversionsToUse[inversion] = true;
         if (!chordInversionsToUse[inversion])
         {
             chordInversionsToUse[inversion] = true;
@@ -277,8 +276,6 @@ public class Options
      */
     public void setChordTypeUse(int index, boolean use)
     {
-        Log.d("Options", "Chord type " + index + " set: " + use);
-
         // Set new value
         chordTypesInUseArray[index] = use;
 
@@ -366,8 +363,6 @@ public class Options
      */
     private void populateChordTypesInUse()
     {
-        Log.d("Options", "Chord types in use re-populated"); // TODO
-
         chordTypesInUse.clear();
 
         for (int i = 0; i < chordTypesInUseArray.length; ++i)

@@ -55,6 +55,13 @@
 
     <!-- List item padding -->
     <dimen name="list_item_padding">16dp</dimen>
+    <dimen name="list_item_padding_large">32dp</dimen>
+
+    <!-- Up and Down button sizes -->
+    <dimen name="slider_incr_button_size">48dp</dimen>
+
+    <!-- Slider play button size -->
+    <dimen name="slider_play_button_size">64dp</dimen>
 
     <!-- Thumb Sizes -->
     <dimen name="thumb_width">64dp</dimen>

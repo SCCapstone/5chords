@@ -146,14 +146,14 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
         button.dispatchTouchEvent(motionEvent);
     }
 
-//    /**
-//     * Gets the current Fragment selected in the navigation drawer.
-//     * @return The current Fragment selected in the navigation drawer
-//     */
-//    public Fragment getCurrentDrawerFragment()
-//    {
-//        return drawerFragment;
-//    }
+    /**
+     * Gets the current Fragment selected in the navigation drawer.
+     * @return The current Fragment selected in the navigation drawer
+     */
+    public Fragment getCurrentDrawerFragment()
+    {
+        return drawerFragment;
+    }
 
     /**
      * Called when this Activity is created.

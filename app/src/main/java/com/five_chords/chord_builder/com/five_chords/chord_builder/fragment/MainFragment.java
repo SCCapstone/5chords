@@ -57,8 +57,6 @@ public class MainFragment extends Fragment implements ChordHandler.OnChordSelect
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        Log.w("MAIN_FRAGMENT", "onCreateView");
-
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -330,6 +328,7 @@ public class MainFragment extends Fragment implements ChordHandler.OnChordSelect
 
         // Update slider bounds
         sliderFragment.setSliderBoundsToFitChord(ChordHandler.getCurrentSelectedChordSpelling());
+
         if (random)
             sliderFragment.resetChordSliders();
 

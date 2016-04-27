@@ -65,6 +65,7 @@
 
     <!-- List item padding -->
     <dimen name="list_item_padding">8dp</dimen>
+    <dimen name="list_item_padding_large">16dp</dimen>
 
     <!-- Up and Down button sizes -->
     <dimen name="slider_incr_button_size">32dp</dimen>

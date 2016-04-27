@@ -87,8 +87,8 @@ public class OptionsTest
         assertEquals(options1.allowableCheckError, options2.allowableCheckError, 0.001);
 
         // Chord inversions
-        for (byte b: options1.chordInversionsToUse)
-            assertTrue(options2.chordInversionsToUse.contains(b));
+        for (int i = 0; i < options1.chordInversionsToUse.length; ++i)
+            assertEquals(options1.chordInversionsToUse[i], options2.chordInversionsToUse[i]);
 
         // Chord types in use
         for (Chord.ChordType type: options1.getChordTypesInUse())
@@ -105,7 +105,7 @@ public class OptionsTest
     private void setTestValues(Options options)
     {
         // Hints
-        options.changeHints(random.nextBoolean(), random.nextInt(24), random.nextInt(24), random.nextInt(24));
+        options.changeHints(random.nextBoolean(), random.nextBoolean(), random.nextInt(24), random.nextInt(24), random.nextInt(24));
 
         // Instrument
         options.changeInstrument(random.nextInt(10));
