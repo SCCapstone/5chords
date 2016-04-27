@@ -724,7 +724,8 @@ public class SliderFragment extends Fragment
                     if (slider != null)
                     {
                         isBlocked = true;
-                        slider.incrementProgress(1);
+                        int moveAmount = MainActivity.getOptions().sliderDivisionsPerNote / 4;
+                        slider.incrementProgress(Math.max(1, moveAmount));
                         isBlocked = false;
                     }
                 }
@@ -739,7 +740,8 @@ public class SliderFragment extends Fragment
                     if (slider != null)
                     {
                         isBlocked = true;
-                        slider.incrementProgress(-1);
+                        int moveAmount = -MainActivity.getOptions().sliderDivisionsPerNote / 4;
+                        slider.incrementProgress(Math.min(-1, moveAmount));
                         isBlocked = false;
                     }
                 }
