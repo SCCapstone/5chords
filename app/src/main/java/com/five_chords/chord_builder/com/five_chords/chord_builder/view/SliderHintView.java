@@ -138,7 +138,7 @@ public class SliderHintView extends LinearLayout
             if (Math.abs(diff) < MainActivity.getOptions().allowableCheckError)
                 diff = 0.0;
             else
-                percentError = 100.0 * diff / MainActivity.getOptions().sliderDivisionsPerNote;
+                percentError = 100.0 * diff;
 
             if (type == ChordHandler.HINT_ONE)
                 hint = new CircleHint(testNote, percentError, diff == 0.0 ? Color.GREEN : Color.RED);
@@ -496,7 +496,7 @@ public class SliderHintView extends LinearLayout
             {
                 PAINT.setColor(Color.WHITE);
                 PAINT.setTextAlign(Paint.Align.CENTER);
-                PAINT.setTextSize(48.0f);
+                PAINT.setTextSize(position[2] * 0.5f);
                 canvas.drawText((PERCENT_ERROR > 0.0 ? "+" : "") +
                         Math.round(PERCENT_ERROR) + " %", position[0], position[1], PAINT);
             }
