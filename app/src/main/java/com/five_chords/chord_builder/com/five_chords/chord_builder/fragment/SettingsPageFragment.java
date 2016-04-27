@@ -66,6 +66,24 @@ public class SettingsPageFragment extends Fragment
     }
 
     /**
+     * Gets the current SettingsSubFragmentDef on this SettingsPageFragment.
+     * @return The current SettingsSubFragmentDef on this SettingsPageFragment
+     */
+    public SettingsSubFragmentDef getCurrentSubFragmentDef()
+    {
+        return currentSubFragmentDef;
+    }
+
+    /**
+     * Gets the current SettingsSubFragment on this SettingsPageFragment.
+     * @return The current SettingsSubFragment on this SettingsPageFragment
+     */
+    public SettingsSubFragment getCurrentSubFragment()
+    {
+        return currentSubFragment;
+    }
+
+    /**
      * Called when the View containing this Fragment has been created.
      * @param inflater The inflater to use to inflate the Fragment
      * @param container The ViewGroup container
@@ -155,9 +173,6 @@ public class SettingsPageFragment extends Fragment
         FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         transaction.replace(R.id.settings_content, fragment);
-
-//        if (previousFragmentDef != SettingsSubFragmentDef.MAIN)
-//            transaction.addToBackStack(null);
 
         try
         {

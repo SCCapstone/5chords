@@ -118,6 +118,9 @@ public class CheckSettingsFragment extends SettingsPageFragment.SettingsSubFragm
     {
         if (picker == hintDelay1Picker)
         {
+            if (oldVal >= hintDelay2Picker.getValue())
+                oldVal = hintDelay2Picker.getValue() - 1;
+
             if (newVal >= hintDelay2Picker.getValue())
             {
                 hintDelay1Picker.setValue(oldVal);
@@ -126,6 +129,11 @@ public class CheckSettingsFragment extends SettingsPageFragment.SettingsSubFragm
         }
         else if (picker == hintDelay2Picker)
         {
+            if (oldVal >= hintDelay3Picker.getValue())
+                oldVal = hintDelay3Picker.getValue() - 1;
+            else if (oldVal <= hintDelay1Picker.getValue())
+                oldVal = hintDelay1Picker.getValue() + 1;
+
             if (newVal >= hintDelay3Picker.getValue() || newVal <= hintDelay1Picker.getValue())
             {
                 hintDelay2Picker.setValue(oldVal);
@@ -134,6 +142,9 @@ public class CheckSettingsFragment extends SettingsPageFragment.SettingsSubFragm
         }
         else
         {
+            if (oldVal <= hintDelay2Picker.getValue())
+                oldVal = hintDelay2Picker.getValue() + 1;
+
             if (newVal <= hintDelay2Picker.getValue())
             {
                 hintDelay3Picker.setValue(oldVal);

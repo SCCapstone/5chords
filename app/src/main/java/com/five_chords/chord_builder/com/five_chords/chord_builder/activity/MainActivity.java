@@ -44,6 +44,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -489,7 +490,14 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
     @Override
     public void onBackPressed()
     {
-        if (getFragmentManager().getBackStackEntryCount() > 1)
+        if (getCurrentDrawerFragment() instanceof SettingsPageFragment &&
+                ((SettingsPageFragment)getCurrentDrawerFragment()).getCurrentSubFragmentDef() !=
+                        SettingsPageFragment.SettingsSubFragmentDef.MAIN)
+        {
+            ((SettingsPageFragment)getCurrentDrawerFragment()).setSettingsSubFragment(
+                    SettingsPageFragment.SettingsSubFragmentDef.MAIN.ordinal());
+        }
+        else if (getFragmentManager().getBackStackEntryCount() > 1)
         {
             getFragmentManager().popBackStack();
         }
@@ -579,11 +587,11 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.replace(R.id.content_main, fragment);
 
-        if (lastDrawerFragmentIndex != drawerIndex)
-        {
+//        if (lastDrawerFragmentIndex != drawerIndex)
+//        {
             transaction.addToBackStack(null);
             lastDrawerFragmentIndex = drawerIndex;
-        }
+//        }
 
         transaction.commit();
 
