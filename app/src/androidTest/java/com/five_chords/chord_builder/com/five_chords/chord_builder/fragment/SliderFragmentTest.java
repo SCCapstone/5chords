@@ -1,12 +1,9 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
-import android.app.Fragment;
 import android.support.test.rule.ActivityTestRule;
-import android.widget.SeekBar;
 
 import com.five_chords.chord_builder.Note;
-import com.five_chords.chord_builder.R;
-import com.five_chords.chord_builder.ChordHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.util.ChordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
 import org.junit.Before;

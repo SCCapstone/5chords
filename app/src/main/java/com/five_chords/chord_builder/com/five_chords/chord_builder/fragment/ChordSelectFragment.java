@@ -19,11 +19,9 @@ import com.five_chords.chord_builder.Chord;
 import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
-import com.five_chords.chord_builder.ChordHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.util.ChordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
-import com.five_chords.chord_builder.SoundHandler;
-
-import java.util.Arrays;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.util.SoundHandler;
 
 /**
  * A Fragment containing the chord select slider and the instrument select slider.

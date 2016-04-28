@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.five_chords.chord_builder.Chord;
 import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.R;
-import com.five_chords.chord_builder.SoundHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.util.SoundHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
 /**

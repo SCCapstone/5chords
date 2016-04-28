@@ -5,15 +5,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
 
-import com.five_chords.chord_builder.ChordHandler;
-import com.five_chords.chord_builder.Options;
 import com.five_chords.chord_builder.R;
-import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 
 /**
  * Activity containing the App settings user interface.

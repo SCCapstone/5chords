@@ -16,11 +16,11 @@ import android.widget.SeekBar;
 import com.five_chords.chord_builder.Note;
 import com.five_chords.chord_builder.Options;
 import com.five_chords.chord_builder.R;
-import com.five_chords.chord_builder.ChordHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.util.ChordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.VerticalSeekBar;
-import com.five_chords.chord_builder.SoundHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.util.SoundHandler;
 
 /**
  * A Fragment containing the chord select sliders.

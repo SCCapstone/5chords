@@ -2,7 +2,6 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,9 +9,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.five_chords.chord_builder.R;
-import com.five_chords.chord_builder.ChordHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.util.ChordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
-import com.five_chords.chord_builder.SoundHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.util.SoundHandler;
 
 /**
  * A Fragment containing the chord check buttons.

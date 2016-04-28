@@ -4,7 +4,6 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,11 +11,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.five_chords.chord_builder.ChordHandler;
-import com.five_chords.chord_builder.Note;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.util.ChordHandler;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
-import com.five_chords.chord_builder.com.five_chords.chord_builder.view.SliderHintView;
 
 /**
  * Fragment containing the main GUI components of the application, including the chord sliders, the chord

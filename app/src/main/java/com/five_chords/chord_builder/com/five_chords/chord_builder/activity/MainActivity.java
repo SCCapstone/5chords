@@ -3,13 +3,10 @@ package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.SystemClock;
 import android.media.AudioManager;
-import android.preference.PreferenceManager;
 import android.support.annotation.StringRes;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
@@ -27,7 +24,7 @@ import com.five_chords.chord_builder.Chord;
 import com.five_chords.chord_builder.Options;
 import com.five_chords.chord_builder.R;
 import com.five_chords.chord_builder.Score;
-import com.five_chords.chord_builder.ChordHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.util.ChordHandler;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.AboutPageFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.AlertFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.ChordSelectFragment;
@@ -37,14 +34,13 @@ import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.Scor
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SettingsPageFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.view.ScoreProgressView;
-import com.five_chords.chord_builder.SoundHandler;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.util.SoundHandler;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 

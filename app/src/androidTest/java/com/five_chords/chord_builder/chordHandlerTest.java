@@ -2,11 +2,11 @@ package com.five_chords.chord_builder;
 
 import android.app.Fragment;
 import android.support.test.rule.ActivityTestRule;
-import android.widget.SeekBar;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.MainFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.util.ChordHandler;
 
 import org.junit.Before;
 import org.junit.Rule;

@@ -1,8 +1,11 @@
-package com.five_chords.chord_builder;
+package com.five_chords.chord_builder.com.five_chords.chord_builder.util;
 
 import android.app.Activity;
 import android.app.Fragment;
 
+import com.five_chords.chord_builder.Chord;
+import com.five_chords.chord_builder.Note;
+import com.five_chords.chord_builder.Options;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.activity.MainActivity;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.MainFragment;
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.SliderFragment;

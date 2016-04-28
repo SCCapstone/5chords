@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.widget.Toast;
 
 import com.five_chords.chord_builder.com.five_chords.chord_builder.fragment.AlertFragment;
+import com.five_chords.chord_builder.com.five_chords.chord_builder.util.ChordHandler;
 
 import java.util.HashMap;
 import java.util.LinkedList;

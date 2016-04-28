@@ -1,4 +1,4 @@
-package com.five_chords.chord_builder;
+package com.five_chords.chord_builder.com.five_chords.chord_builder.util;
 
 import java.io.FileOutputStream;
 import java.io.IOException;

@@ -1,9 +1,10 @@
-package com.five_chords.chord_builder;
+package com.five_chords.chord_builder.com.five_chords.chord_builder.util;
 
 import android.app.Activity;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.util.Log;
+
+import com.five_chords.chord_builder.Note;
 
 /**
  * Class to handle playing sounds. Sounds are played as MIDI files, which are created with one or more
