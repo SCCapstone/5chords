@@ -1,8 +1,10 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
@@ -37,8 +39,24 @@ public class StartPage extends AppCompatActivity
      */
     public void backToMain(View view)
     {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        // Display demo if needed
+        SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
+
+        if (isFirstRun)
+        {
+            Intent intent = new Intent(this, demo.class);
+            startActivity(intent);
+
+            SharedPreferences.Editor editor = wmbPreference.edit();
+            editor.putBoolean("FIRSTRUN", false);
+            editor.apply();
+        }
+        else
+        {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.five_chords.chord_builder.com.five_chords.chord_builder.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -58,6 +59,16 @@ public class demo extends AppCompatActivity implements View.OnClickListener
     }
 
     /**
+     * Called to go to the MainActivity.
+     */
+    public void toMainActivity()
+    {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    /**
      * Called when a View has been clicked.
      * @param v The clicked View
      */
@@ -107,7 +118,7 @@ public class demo extends AppCompatActivity implements View.OnClickListener
                 break;
 
             case 8:
-                finish();
+                toMainActivity();
         }
         count++;
     }

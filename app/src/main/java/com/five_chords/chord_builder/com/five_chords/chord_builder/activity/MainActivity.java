@@ -227,19 +227,6 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
         if (lastDrawerFragmentIndex == -1)
             setCurrentDrawer(drawerIndex, true);
 
-        // Display demo if needed
-        SharedPreferences wmbPreference = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean isFirstRun = wmbPreference.getBoolean("FIRSTRUN", true);
-        if (isFirstRun)
-        {
-            Intent intent = new Intent(this, demo.class);
-            startActivity(intent);
-
-            SharedPreferences.Editor editor = wmbPreference.edit();
-            editor.putBoolean("FIRSTRUN", false);
-            editor.apply();
-        }
-
         // Initialize Static Classes
         ChordHandler.initialize();
         SoundHandler.switchInstrument(options.instrument);
@@ -316,6 +303,18 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
     }
 
     /**
+     * Called when this Activity is resumed.
+     */
+    @Override
+    public void onResume()
+    {
+        super.onResume();
+
+        // Make sure the app is on the correct drawer
+        setCurrentDrawer(drawerIndex, true);
+    }
+
+    /**
      * Called when the state of this Activity should be saved.
      *
      * @param savedInstanceState The Bundle to which to save
@@ -323,9 +322,6 @@ public class MainActivity extends FragmentActivity implements Options.OptionsCha
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState)
     {
-//        // Clear the fragment back stack
-//        getFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-
         // Save options
         options.save(this);
 
