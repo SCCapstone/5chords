@@ -1,5 +1,5 @@
 ####
-# 5chords, Beta
+# 5chords
 #
 
 **Purpose and Description**
